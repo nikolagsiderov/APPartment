@@ -4,6 +4,6 @@ APPartment is an ASP.NET Core Blazor SPA project for sharing with your housemate
 
 # What I Have Learned
 
-* Working with Blazoe components
+* Working with Blazor components
 * Understanding SPA architecture
 * Further experience with Entity Framework Core
