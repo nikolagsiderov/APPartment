@@ -26,8 +26,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BlazorWithIdentity.Client\APPartment.Client.csproj" />
-    <ProjectReference Include="..\BlazorWithIdentity.Shared\APPartment.Shared.csproj" />
+    <ProjectReference Include="..\APPartment.Client\APPartment.Client.csproj" />
+    <ProjectReference Include="..\APPartment.Shared\APPartment.Shared.csproj" />
   </ItemGroup>
 
 </Project>
