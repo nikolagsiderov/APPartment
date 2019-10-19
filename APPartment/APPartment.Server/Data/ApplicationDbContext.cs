@@ -16,6 +16,11 @@ namespace APPartment.Server.Data
         {
         }
 
+        public DbSet<House> Houses { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<Hygiene> Hygienes { get; set; }
+        public DbSet<Issue> Issues { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -28,6 +33,10 @@ namespace APPartment.Server.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
 
+            builder.Entity<House>().ToTable("House");
+            builder.Entity<Inventory>().ToTable("Inventory");
+            builder.Entity<Hygiene>().ToTable("Hygiene");
+            builder.Entity<Issue>().ToTable("Issue");
         }
 
     }
