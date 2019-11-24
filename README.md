@@ -1,9 +1,8 @@
 # APPartment
 
-APPartment is an ASP.NET Core Blazor SPA project for sharing with your housemate/s and keeping track of everything at the apartment, simplifying the whole process of living with people under a common roof.
+APPartment is an ASP.NET Core MVC project for sharing with your housemate/s and keeping track of everything at the apartment, simplifying the whole process of living with people under a common roof.
 
 # What I Have Learned
 
-* Working with Blazor components
-* Understanding SPA architecture
+* Further use of MVC arhitecture
 * Further experience with Entity Framework Core
