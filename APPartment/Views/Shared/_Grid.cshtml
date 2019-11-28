@@ -1,0 +1,53 @@
+﻿@model IEnumerable<APPartment.Models.Base.BaseObject>
+
+<br />
+
+<h2>@ViewData["Title"]</h2>
+
+<hr />
+
+<p>
+    <a asp-action="Create"><button type="button" class="btn btn-primary"><i class="fas fa-plus"></i> Add</button></a>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Search: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <a asp-action="Create"><button type="button" class="btn btn-primary"><i class="fas fa-search"></i></button></a>
+            <a asp-action="Index" class="btn btn-primary"><i class="far fa-eye"></i> All</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["BrandSortParm"]">Name</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["ModelSortParm"]">Details</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Details)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-primary"><i class="fas fa-edit"></i></button></a> &nbsp;
+                    <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info"><i class="fas fa-info-circle"></i></button></a> &nbsp;
+                    <a asp-action="Delete" asp-route-id="@item.Id"><button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

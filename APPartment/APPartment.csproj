@@ -5,41 +5,6 @@
     <UserSecretsId>aspnet-APPartment-34E657CB-677A-464A-8FD8-AFCED3C6B442</UserSecretsId>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\assets\images\avatar-1.jpg" />
-    <None Include="wwwroot\assets\images\avatar-2.jpg" />
-    <None Include="wwwroot\assets\images\avatar-3.jpg" />
-    <None Include="wwwroot\assets\images\avatar-4.jpg" />
-    <None Include="wwwroot\assets\images\avatar-5.jpg" />
-    <None Include="wwwroot\assets\images\bitbucket.png" />
-    <None Include="wwwroot\assets\images\card-img-1.jpg" />
-    <None Include="wwwroot\assets\images\card-img-2.jpg" />
-    <None Include="wwwroot\assets\images\card-img-3.jpg" />
-    <None Include="wwwroot\assets\images\card-img.jpg" />
-    <None Include="wwwroot\assets\images\down-arrow.png" />
-    <None Include="wwwroot\assets\images\drag-indicator.png" />
-    <None Include="wwwroot\assets\images\dribbble.png" />
-    <None Include="wwwroot\assets\images\dropbox.png" />
-    <None Include="wwwroot\assets\images\eco-product-img-1.png" />
-    <None Include="wwwroot\assets\images\eco-product-img-2.png" />
-    <None Include="wwwroot\assets\images\eco-product-img-3.png" />
-    <None Include="wwwroot\assets\images\eco-product-img-4.png" />
-    <None Include="wwwroot\assets\images\eco-slider-img-1.png" />
-    <None Include="wwwroot\assets\images\eco-slider-img-2.png" />
-    <None Include="wwwroot\assets\images\eco-slider-img-3.png" />
-    <None Include="wwwroot\assets\images\error-img.png" />
-    <None Include="wwwroot\assets\images\github.png" />
-    <None Include="wwwroot\assets\images\loader.svg" />
-    <None Include="wwwroot\assets\images\logo.png" />
-    <None Include="wwwroot\assets\images\mail_chimp.png" />
-    <None Include="wwwroot\assets\images\product-pic-2.jpg" />
-    <None Include="wwwroot\assets\images\product-pic-3.jpg" />
-    <None Include="wwwroot\assets\images\product-pic-4.jpg" />
-    <None Include="wwwroot\assets\images\product-pic.jpg" />
-    <None Include="wwwroot\assets\images\slack.png" />
-    <None Include="wwwroot\assets\images\switch.png" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.0.0" />
@@ -47,6 +12,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
   </ItemGroup>
 
 </Project>

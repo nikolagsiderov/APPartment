@@ -1,0 +1,33 @@
+﻿@model APPartment.Models.Base.BaseObject
+
+<br />
+
+<h2>Details</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Name
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            Details
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Details)
+        </dd>
+        <dt>
+            Status
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+    </dl>
+
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"><i class="fas fa-edit"></i> Edit</a>
+    </div>
+</div>
