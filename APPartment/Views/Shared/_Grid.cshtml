@@ -2,7 +2,7 @@
 
 <br />
 
-<h2>@ViewData["Title"]</h2>
+<h2>Breadcrumb \ TBD</h2>
 
 <hr />
 
@@ -13,23 +13,23 @@
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
-            Search: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
-            <a asp-action="Create"><button type="button" class="btn btn-primary"><i class="fas fa-search"></i></button></a>
-            <a asp-action="Index" class="btn btn-primary"><i class="far fa-eye"></i> All</a>
+            Search: <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" />
+            <a asp-action="Index" class="btn btn-primary btn-sm"><i class="fas fa-search"></i></a>
+            <a asp-action="Index" class="btn btn-primary btn-sm"><i class="far fa-eye"></i> All</a>
         </p>
     </div>
 </form>
 
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["BrandSortParm"]">Name</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">Name</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["ModelSortParm"]">Details</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DetailsSortParm"]">Details</a>
             </th>
-            <th></th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -43,9 +43,9 @@
                     @Html.DisplayFor(modelItem => item.Details)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-primary"><i class="fas fa-edit"></i></button></a> &nbsp;
-                    <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info"><i class="fas fa-info-circle"></i></button></a> &nbsp;
-                    <a asp-action="Delete" asp-route-id="@item.Id"><button type="button" class="btn btn-danger"><i class="far fa-trash-alt"></i></button></a>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button></a> &nbsp;
+                    <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i></button></a> &nbsp;
+                    <a asp-action="Delete" asp-route-id="@item.Id"><button type="button" class="btn btn-danger btn-sm"><i class="far fa-trash-alt"></i></button></a>
                 </td>
             </tr>
         }

@@ -1,19 +1,11 @@
-﻿using APPartment.Models.Declaration;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 
-namespace APPartment.Models.Base
+namespace APPartment.Models.Declaration
 {
-    public abstract class BaseObject : IBaseObject
+    public interface IBaseObject
     {
-        [Key]
         public long Id { get; set; }
 
-        [Required]
         public string Name { get; set; }
 
         public string Details { get; set; }
@@ -28,7 +20,6 @@ namespace APPartment.Models.Base
 
         public DateTime? ModifiedDate { get; set; }
 
-        [ForeignKey("House")]
         public long? HouseId { get; set; }
     }
 }
