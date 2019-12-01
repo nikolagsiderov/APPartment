@@ -57,6 +57,9 @@
                     </ul>
                 </div>
             </nav>
+
+            <breadcrumb></breadcrumb>
+
             <div class="container-fluid">
                 @RenderBody()
                 <hr />
@@ -94,3 +97,9 @@
     </script>
 </body>
 </html>
+
+<style>
+    ol.breadcrumb {
+        background-color: unset;
+    }
+</style>

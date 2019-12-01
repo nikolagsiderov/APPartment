@@ -5,6 +5,7 @@ using APPartment.Data;
 using APPartment.Models.Declaration;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SmartBreadcrumbs.Attributes;
 
 namespace APPartment.Controllers.Base
 {
@@ -18,7 +19,8 @@ namespace APPartment.Controllers.Base
             _context = context;
         }
 
-        public async Task<IActionResult> Index(string sortOrder, string searchString)
+        [Breadcrumb("Base")]
+        public virtual async Task<IActionResult> Index(string sortOrder, string searchString)
         {
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DetailsSortParm"] = sortOrder == "details_asc" ? "details_desc" : "details_asc";
@@ -51,6 +53,7 @@ namespace APPartment.Controllers.Base
             return View("_Grid", modelObjects);
         }
 
+        [Breadcrumb("<i class='fas fa-info-circle'></i> Details")]
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -69,11 +72,13 @@ namespace APPartment.Controllers.Base
             return View("_Details", model);
         }
 
+        [Breadcrumb("<i class='fas fa-plus'></i> Create")]
         public IActionResult Create()
         {
             return View("_Create");
         }
 
+        [Breadcrumb("<i class='fas fa-plus'></i> Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Details,Status,CreatedBy,ModifiedBy,CreatedDate,ModifiedDate,HouseId")] T model)
@@ -88,6 +93,7 @@ namespace APPartment.Controllers.Base
             return View("_Create", model);
         }
 
+        [Breadcrumb("<i class='fas fa-edit'></i> Edit")]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -105,6 +111,7 @@ namespace APPartment.Controllers.Base
             return View("_Edit", model);
         }
 
+        [Breadcrumb("<i class='fas fa-edit'></i> Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, [Bind("Id,Name,Details,Status,CreatedBy,ModifiedBy,CreatedDate,ModifiedDate,HouseId")] T model)
@@ -162,5 +169,8 @@ namespace APPartment.Controllers.Base
         {
             return _context.Set<T>().Any(e => e.Id == id);
         }
+
+        public virtual void PopulateViewData()
+        { }
     }
 }

@@ -12,6 +12,7 @@ using APPartment.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SmartBreadcrumbs.Extensions;
 
 namespace APPartment
 {
@@ -34,6 +35,8 @@ namespace APPartment
                 .AddEntityFrameworkStores<DataAccessContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddBreadcrumbs(GetType().Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

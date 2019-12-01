@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using APPartment.Models;
+using SmartBreadcrumbs.Attributes;
 
 namespace APPartment.Controllers
 {
@@ -18,6 +19,7 @@ namespace APPartment.Controllers
             _logger = logger;
         }
 
+        [DefaultBreadcrumb("<i class='fas fa-home' style='font-size:20px'></i> My Home")]
         public IActionResult Index()
         {
             return View();
