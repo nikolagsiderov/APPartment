@@ -7,13 +7,14 @@ using APPartment.Models;
 
 namespace APPartment.Data
 {
-    public class DataAccessContext : IdentityDbContext
+    public class DataAccessContext : DbContext
     {
         public DataAccessContext(DbContextOptions<DataAccessContext> options)
             : base(options)
         {
         }
 
+        public DbSet<APPartment.Models.User> User { get; set; }
         public DbSet<APPartment.Models.House> House { get; set; }
         public DbSet<APPartment.Models.Inventory> Inventory { get; set; }
         public DbSet<APPartment.Models.Hygiene> Hygiene { get; set; }
@@ -23,6 +24,7 @@ namespace APPartment.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<House>().ToTable("House");
             modelBuilder.Entity<Inventory>().ToTable("Inventory");
             modelBuilder.Entity<Hygiene>().ToTable("Hygiene");

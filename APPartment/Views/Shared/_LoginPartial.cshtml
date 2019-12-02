@@ -1,8 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc;
+@using Microsoft.AspNetCore.Http;
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
-@if (SignInManager.IsSignedIn(User))
+@if (Context.Session.GetString("UserId") != null)
 {
     <span>&nbsp;&nbsp;</span>
     <a class="nav-link text-dark dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)</a>
@@ -12,6 +14,6 @@
 }
 else
 {
-    <a class="nav-link text-dark dropdown-item" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    <a class="nav-link text-dark dropdown-item" asp-area="Identity" asp-page="/Account/Login">Login</a>
+    <a class="nav-link text-dark dropdown-item" asp-controller="Account" asp-action="Register">Register</a>
+    <a class="nav-link text-dark dropdown-item" asp-controller="Account" asp-action="Login">Login</a>
 }
