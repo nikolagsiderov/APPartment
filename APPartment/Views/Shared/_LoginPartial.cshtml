@@ -6,9 +6,8 @@
 
 @if (Context.Session.GetString("UserId") != null)
 {
-    <span>&nbsp;&nbsp;</span>
-    <a class="nav-link text-dark dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">@UserManager.GetUserName(User)</a>
-    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+    <a class="nav-link text-dark dropdown-item">@Context.Session.GetString("Username")</a>
+    <form class="form-inline">
         <button type="submit" class="nav-link btn btn-link text-dark dropdown-item">Logout</button>
     </form>
 }

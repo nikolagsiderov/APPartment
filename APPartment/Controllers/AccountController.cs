@@ -37,7 +37,11 @@ namespace APPartment.Controllers
                 _context.SaveChanges();
 
                 ModelState.Clear();
-                ViewBag.Message = $"{user.Username} successfully registered.";
+
+                HttpContext.Session.SetString("UserId", user.UserId.ToString());
+                HttpContext.Session.SetString("Username", user.Username.ToString());
+
+                return RedirectToAction("Index", "Home");
             }
 
             return View();
