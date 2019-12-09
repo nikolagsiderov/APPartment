@@ -1,19 +1,19 @@
-﻿@model APPartment.Models.User
+﻿@model APPartment.Models.House
 
 @{
     ViewData["Title"] = "Login";
 }
 
-<h1>Login</h1>
+<h1>Log in to home</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Login">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
@@ -28,7 +28,7 @@
 </div>
 
 <div>
-    <p>Don't have an account yet? <a asp-action="Register" asp-controller="Account">Register</a> now!</p>
+    <p>Don't have a home yet? <a asp-action="Register" asp-controller="Home">Register</a> now!</p>
 </div>
 
 @section Scripts {

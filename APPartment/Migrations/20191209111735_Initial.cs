@@ -14,9 +14,11 @@ namespace APPartment.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(nullable: false),
+                    ConfirmPassword = table.Column<string>(nullable: true),
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
                     ModifiedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     ModifiedDate = table.Column<DateTime>(nullable: false)

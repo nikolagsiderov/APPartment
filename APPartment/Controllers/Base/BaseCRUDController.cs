@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using APPartment.Data;
 using APPartment.Models.Declaration;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartBreadcrumbs.Attributes;
@@ -26,7 +27,9 @@ namespace APPartment.Controllers.Base
             ViewData["DetailsSortParm"] = sortOrder == "details_asc" ? "details_desc" : "details_asc";
             ViewData["CurrentFilter"] = searchString;
 
-            var modelObjects = await _context.Set<T>().ToListAsync();
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId).ToListAsync();
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -85,6 +88,10 @@ namespace APPartment.Controllers.Base
         {
             if (ModelState.IsValid)
             {
+                var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+                model.HouseId = currentHouseId;
+
                 _context.Add(model);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

@@ -41,7 +41,7 @@ namespace APPartment.Controllers
                 HttpContext.Session.SetString("UserId", user.UserId.ToString());
                 HttpContext.Session.SetString("Username", user.Username.ToString());
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Login", "Home");
             }
 
             return View();
@@ -62,7 +62,7 @@ namespace APPartment.Controllers
                 HttpContext.Session.SetString("UserId", usr.UserId.ToString());
                 HttpContext.Session.SetString("Username", usr.Username.ToString());
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Login", "Home");
             }
             else
             {
