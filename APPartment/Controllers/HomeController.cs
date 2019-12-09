@@ -29,13 +29,13 @@ namespace APPartment.Controllers
             return View();
         }
 
-        public IActionResult Register()
+        public IActionResult Register2()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Register(House house)
+        public IActionResult Register2(House house)
         {
             if (ModelState.IsValid)
             {
@@ -53,13 +53,13 @@ namespace APPartment.Controllers
             return View();
         }
 
-        public IActionResult Login()
+        public IActionResult Login2()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Login(House house)
+        public IActionResult Login2(House house)
         {
             var home = _context.House.Single(h => h.Name == house.Name && h.Password == house.Password);
 
