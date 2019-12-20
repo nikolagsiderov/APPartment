@@ -15,7 +15,7 @@
     @model APPartment.Models.User
 
     <div class="wrapper">
-        <form asp-action="Register">
+        <form asp-action="Register2">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Username" class="control-label"></label>
@@ -34,6 +34,10 @@
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+
+            <div>
+                <p>Already have an account? <a asp-action="Login2" asp-controller="Account">Login</a> now!</p>
             </div>
         </form>
     </div>

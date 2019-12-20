@@ -26,6 +26,11 @@ namespace APPartment.Controllers
         [DefaultBreadcrumb("<i class='fas fa-home' style='font-size:20px'></i> My Home")]
         public IActionResult Index()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                return RedirectToAction("Login2", "Account");
+            }
+
             return View();
         }
 

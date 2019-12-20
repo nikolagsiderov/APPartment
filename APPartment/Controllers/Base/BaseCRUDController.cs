@@ -23,6 +23,11 @@ namespace APPartment.Controllers.Base
         [Breadcrumb("Base")]
         public virtual async Task<IActionResult> Index(string sortOrder, string searchString)
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                return RedirectToAction("Login2", "Account");
+            }
+
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DetailsSortParm"] = sortOrder == "details_asc" ? "details_desc" : "details_asc";
             ViewData["CurrentFilter"] = searchString;
