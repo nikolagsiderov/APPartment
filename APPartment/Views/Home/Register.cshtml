@@ -1,13 +1,20 @@
-﻿@model APPartment.Models.House
-
+﻿
 @{
-    ViewData["Title"] = "Register";
+    Layout = null;
 }
 
-<h1>Register a home</h1>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>APPartment</title>
+    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    @model APPartment.Models.House
+
+    <div class="wrapper">
         <form asp-action="Register">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -28,10 +35,32 @@
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
+
+            <div>
+                <p>Already have a home? <a asp-action="Login" asp-controller="Home">Login</a> now!</p>
+            </div>
         </form>
     </div>
-</div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    <style>
+        @@import "bourbon";
+
+        body {
+            background: #eee !important;
+        }
+
+        .wrapper {
+            margin-top: 80px;
+            margin-bottom: 80px;
+        }
+
+        form {
+            max-width: 380px;
+            padding: 15px 35px 45px;
+            margin: 0 auto;
+            background-color: #fff;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+    </style>
+</body>
+</html>

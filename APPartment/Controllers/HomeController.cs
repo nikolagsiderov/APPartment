@@ -29,7 +29,7 @@ namespace APPartment.Controllers
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
             {
-                return RedirectToAction("Login2", "Account");
+                return RedirectToAction("Login", "Account");
             }
 
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
@@ -39,13 +39,13 @@ namespace APPartment.Controllers
             return View(displayObjects);
         }
 
-        public IActionResult Register2()
+        public IActionResult Register()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Register2(House house)
+        public IActionResult Register(House house)
         {
             if (ModelState.IsValid)
             {
@@ -63,13 +63,13 @@ namespace APPartment.Controllers
             return View();
         }
 
-        public IActionResult Login2()
+        public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Login2(House house)
+        public IActionResult Login(House house)
         {
             var home = _context.House.Single(h => h.Name == house.Name && h.Password == house.Password);
 

@@ -25,7 +25,7 @@ namespace APPartment.Controllers.Base
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
             {
-                return RedirectToAction("Login2", "Account");
+                return RedirectToAction("Login", "Account");
             }
 
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";

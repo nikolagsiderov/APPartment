@@ -38,43 +38,19 @@ namespace APPartment.Controllers
                 HttpContext.Session.SetString("UserId", user.UserId.ToString());
                 HttpContext.Session.SetString("Username", user.Username.ToString());
 
-                return RedirectToAction("Login2", "Home");
+                return RedirectToAction("Login", "Home");
             }
 
             return View();
         }
 
-        public IActionResult Register2()
+        public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult Register2(User user)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.User.Add(user);
-                _context.SaveChanges();
-
-                ModelState.Clear();
-
-                HttpContext.Session.SetString("UserId", user.UserId.ToString());
-                HttpContext.Session.SetString("Username", user.Username.ToString());
-
-                return RedirectToAction("Login2", "Home");
-            }
-
-            return View();
-        }
-
-        public IActionResult Login2()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Login2(User user)
+        public IActionResult Login(User user)
         {
             var usr = _context.User.Single(u => u.Username == user.Username && u.Password == user.Password);
 
@@ -83,7 +59,7 @@ namespace APPartment.Controllers
                 HttpContext.Session.SetString("UserId", usr.UserId.ToString());
                 HttpContext.Session.SetString("Username", usr.Username.ToString());
 
-                return RedirectToAction("Login2", "Home");
+                return RedirectToAction("Login", "Home");
             }
             else
             {
@@ -101,7 +77,7 @@ namespace APPartment.Controllers
             }
             else
             {
-                return RedirectToAction("Login2");
+                return RedirectToAction("Login");
             }
         }
     }
