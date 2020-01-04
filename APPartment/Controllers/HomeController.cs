@@ -9,6 +9,7 @@ using APPartment.Models;
 using SmartBreadcrumbs.Attributes;
 using APPartment.Data;
 using Microsoft.AspNetCore.Http;
+using APPartment.Models.Base;
 
 namespace APPartment.Controllers
 {
@@ -31,7 +32,11 @@ namespace APPartment.Controllers
                 return RedirectToAction("Login2", "Account");
             }
 
-            return View();
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            var displayObjects = GetDisplayObject(currentHouseId);
+
+            return View(displayObjects);
         }
 
         public IActionResult Register2()
@@ -92,6 +97,41 @@ namespace APPartment.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public List<BaseObject> GetDisplayObject(long? currentHouseId)
+        {
+            var displayObjects = new List<BaseObject>();
+            var lastInventoryObject = new Inventory();
+            var lastHygieneObject = new Hygiene();
+            var lastIssueObject = new Issue();
+
+            var inventoryObjects = _context.Set<Inventory>().Where(x => x.HouseId == currentHouseId);
+
+            if (inventoryObjects.Count() > 0)
+            {
+                lastInventoryObject = inventoryObjects.OrderByDescending(x => x.Id).First();
+            }
+
+            var hygieneObjects = _context.Set<Hygiene>().Where(x => x.HouseId == currentHouseId);
+
+            if (inventoryObjects.Count() > 0)
+            {
+                lastHygieneObject = hygieneObjects.OrderByDescending(x => x.Id).First();
+            }
+
+            var issueObjects = _context.Set<Issue>().Where(x => x.HouseId == currentHouseId);
+
+            if (issueObjects.Count() > 0)
+            {
+                lastIssueObject = issueObjects.OrderByDescending(x => x.Id).First();
+            }
+
+            displayObjects.Add(lastInventoryObject);
+            displayObjects.Add(lastHygieneObject);
+            displayObjects.Add(lastIssueObject);
+
+            return displayObjects;
         }
     }
 }

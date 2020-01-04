@@ -2,7 +2,49 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+@model List<APPartment.Models.Base.BaseObject>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-header">
+                <h5>Inventory - Last updates</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text"><strong>Name</strong>: @Model[0].Name <br /> <strong>Details</strong>: @Model[0].Details</p>
+                <a href="#" class="btn btn-primary">Go to inventory</a>
+            </div>
+            <div class="card-footer text-muted">
+                2 days ago
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-header">
+                <h5>Hygiene - Last updates</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text"><strong>Name</strong>: @Model[1].Name <br /> <strong>Details</strong>: @Model[1].Details</p>
+                <a href="#" class="btn btn-primary">Go to hygiene</a>
+            </div>
+            <div class="card-footer text-muted">
+                Just now
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-header">
+                <h5>Issues - Last updates</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text"><strong>Name</strong>: @Model[2].Name <br /> <strong>Details</strong>: @Model[2].Details</p>
+                <a href="#" class="btn btn-primary">Go to issues</a>
+            </div>
+            <div class="card-footer text-muted">
+                5 days ago
+            </div>
+        </div>
+    </div>
 </div>
