@@ -135,6 +135,10 @@ namespace APPartment.Controllers.Base
 
             if (ModelState.IsValid)
             {
+                var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+                model.HouseId = currentHouseId;
+
                 try
                 {
                     _context.Update(model);
