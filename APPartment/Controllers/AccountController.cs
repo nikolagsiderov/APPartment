@@ -47,10 +47,12 @@ namespace APPartment.Controllers
         [HttpPost]
         public IActionResult Login(User user)
         {
-            var usr = _context.User.Single(u => u.Username == user.Username && u.Password == user.Password);
-
-            if (usr != null)
+            var userIsContainedInDb = _context.User.Any(x => x.Username == user.Username && x.Password == user.Password);
+            
+            if (userIsContainedInDb)
             {
+                var usr = _context.User.Single(u => u.Username == user.Username && u.Password == user.Password);
+
                 HttpContext.Session.SetString("UserId", usr.UserId.ToString());
                 HttpContext.Session.SetString("Username", usr.Username.ToString());
 

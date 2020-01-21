@@ -75,10 +75,12 @@ namespace APPartment.Controllers
         [HttpPost]
         public IActionResult Login(House house)
         {
-            var home = _context.House.Single(h => h.Name == house.Name && h.Password == house.Password);
+            var houseIsContainedInDb = _context.House.Any(x => x.Name == house.Name && x.Password == house.Password);
 
-            if (home != null)
+            if (houseIsContainedInDb)
             {
+                var home = _context.House.Single(h => h.Name == house.Name && h.Password == house.Password);
+
                 HttpContext.Session.SetString("HouseId", home.Id.ToString());
                 HttpContext.Session.SetString("HouseName", home.Name.ToString());
 
