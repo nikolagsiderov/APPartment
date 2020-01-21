@@ -15,11 +15,6 @@ namespace APPartment.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
-        {
-            return View(_context.User.ToList());
-        }
-
         public IActionResult Register()
         {
             return View();
