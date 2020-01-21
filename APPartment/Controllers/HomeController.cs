@@ -49,6 +49,11 @@ namespace APPartment.Controllers
         {
             if (ModelState.IsValid)
             {
+                house.CreatedBy = _context.User.Find(long.Parse(HttpContext.Session.GetString("UserId"))).Username;
+                house.CreatedDate = DateTime.Now;
+                house.ModifiedBy = house.CreatedBy;
+                house.ModifiedDate = house.CreatedDate;
+
                 _context.Add(house);
                 _context.SaveChanges();
 

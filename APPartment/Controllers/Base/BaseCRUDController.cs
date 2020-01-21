@@ -97,6 +97,12 @@ namespace APPartment.Controllers.Base
 
                 model.HouseId = currentHouseId;
 
+                // Base History Properties
+                model.CreatedBy = _context.User.Find(long.Parse(HttpContext.Session.GetString("UserId"))).Username;
+                model.CreatedDate = DateTime.Now;
+                model.ModifiedBy = model.CreatedBy;
+                model.ModifiedDate = model.CreatedDate;
+
                 _context.Add(model);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -138,6 +144,10 @@ namespace APPartment.Controllers.Base
                 var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
                 model.HouseId = currentHouseId;
+
+                // Base History Properties
+                model.ModifiedBy = _context.User.Find(long.Parse(HttpContext.Session.GetString("UserId"))).Username;
+                model.ModifiedDate = DateTime.Now;
 
                 try
                 {
