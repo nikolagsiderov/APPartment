@@ -119,7 +119,7 @@ namespace APPartment.Controllers
 
             var hygieneObjects = _context.Set<Hygiene>().Where(x => x.HouseId == currentHouseId);
 
-            if (inventoryObjects.Count() > 0)
+            if (hygieneObjects.Count() > 0)
             {
                 lastHygieneObject = hygieneObjects.OrderByDescending(x => x.Id).First();
             }

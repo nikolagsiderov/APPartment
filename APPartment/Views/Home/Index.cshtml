@@ -4,6 +4,16 @@
 
 @model List<APPartment.Models.Base.BaseObject>
 
+@{ 
+    string inventoryModifiedDate = Model[0].ModifiedDate == null ? string.Empty : Model[0].ModifiedDate.Value.ToLongDateString();
+    string hygieneModifiedDate = Model[1].ModifiedDate == null ? string.Empty : Model[1].ModifiedDate.Value.ToLongDateString();
+    string issueModifiedDate = Model[2].ModifiedDate == null ? string.Empty : Model[2].ModifiedDate.Value.ToLongDateString();
+
+    string inventoryModifiedBy = Model[0].ModifiedBy == null ? string.Empty : Model[0].ModifiedBy;
+    string hygieneModifiedBy = Model[1].ModifiedBy == null ? string.Empty : Model[1].ModifiedBy;
+    string issueModifiedBy = Model[2].ModifiedBy == null ? string.Empty : Model[2].ModifiedBy;
+}
+
 <div class="row">
     <div class="col-md-4">
         <div class="card text-center">
@@ -15,7 +25,7 @@
                 <a href="#" class="btn btn-primary">Go to inventory</a>
             </div>
             <div class="card-footer text-muted">
-                2 days ago
+                Last update: @inventoryModifiedDate by @inventoryModifiedBy
             </div>
         </div>
     </div>
@@ -29,7 +39,7 @@
                 <a href="#" class="btn btn-primary">Go to hygiene</a>
             </div>
             <div class="card-footer text-muted">
-                Just now
+                Last update: @hygieneModifiedDate by @hygieneModifiedBy
             </div>
         </div>
     </div>
@@ -43,7 +53,7 @@
                 <a href="#" class="btn btn-primary">Go to issues</a>
             </div>
             <div class="card-footer text-muted">
-                5 days ago
+                Last update: @issueModifiedDate by @issueModifiedBy
             </div>
         </div>
     </div>
