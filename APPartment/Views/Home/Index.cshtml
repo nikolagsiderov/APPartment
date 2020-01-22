@@ -4,14 +4,58 @@
 
 @model List<APPartment.Models.Base.BaseObject>
 
-@{ 
-    string inventoryModifiedDate = Model[0].ModifiedDate == null ? string.Empty : Model[0].ModifiedDate.Value.ToLongDateString();
-    string hygieneModifiedDate = Model[1].ModifiedDate == null ? string.Empty : Model[1].ModifiedDate.Value.ToLongDateString();
-    string issueModifiedDate = Model[2].ModifiedDate == null ? string.Empty : Model[2].ModifiedDate.Value.ToLongDateString();
+@{
+    string inventoryModifiedDate = Model[0].ModifiedDate == null ? string.Empty : CalculateRelativeTime(Model[0].ModifiedDate.Value);
+    string hygieneModifiedDate = Model[1].ModifiedDate == null ? string.Empty : CalculateRelativeTime(Model[1].ModifiedDate.Value);
+    string issueModifiedDate = Model[2].ModifiedDate == null ? string.Empty : CalculateRelativeTime(Model[2].ModifiedDate.Value);
 
     string inventoryModifiedBy = Model[0].ModifiedBy == null ? string.Empty : Model[0].ModifiedBy;
     string hygieneModifiedBy = Model[1].ModifiedBy == null ? string.Empty : Model[1].ModifiedBy;
     string issueModifiedBy = Model[2].ModifiedBy == null ? string.Empty : Model[2].ModifiedBy;
+
+    string CalculateRelativeTime(DateTime objectLastUpdate)
+    {
+        const int SECOND = 1;
+        const int MINUTE = 60 * SECOND;
+        const int HOUR = 60 * MINUTE;
+        const int DAY = 24 * HOUR;
+        const int MONTH = 30 * DAY;
+
+        var ts = new TimeSpan(DateTime.Now.Ticks - objectLastUpdate.Ticks);
+        double delta = Math.Abs(ts.TotalSeconds);
+
+        if (delta < 1 * MINUTE)
+            return ts.Seconds == 1 ? "One second ago" : ts.Seconds + " seconds ago";
+
+        if (delta < 2 * MINUTE)
+            return "A minute ago";
+
+        if (delta < 45 * MINUTE)
+            return ts.Minutes + " minutes ago";
+
+        if (delta < 90 * MINUTE)
+            return "An hour ago";
+
+        if (delta < 24 * HOUR)
+            return ts.Hours + " hours ago";
+
+        if (delta < 48 * HOUR)
+            return "Yesterday";
+
+        if (delta < 30 * DAY)
+            return ts.Days + " days ago";
+
+        if (delta < 12 * MONTH)
+        {
+            int months = Convert.ToInt32(Math.Floor((double)ts.Days / 30));
+            return months <= 1 ? "One month ago" : months + " months ago";
+        }
+        else
+        {
+            int years = Convert.ToInt32(Math.Floor((double)ts.Days / 365));
+            return years <= 1 ? "One year ago" : years + " years ago";
+        }
+    }
 }
 
 <div class="row">
@@ -25,7 +69,7 @@
                 <a href="#" class="btn btn-primary">Go to inventory</a>
             </div>
             <div class="card-footer text-muted">
-                Last update: @inventoryModifiedDate by @inventoryModifiedBy
+                @inventoryModifiedDate by @inventoryModifiedBy
             </div>
         </div>
     </div>
@@ -39,7 +83,7 @@
                 <a href="#" class="btn btn-primary">Go to hygiene</a>
             </div>
             <div class="card-footer text-muted">
-                Last update: @hygieneModifiedDate by @hygieneModifiedBy
+                @hygieneModifiedDate by @hygieneModifiedBy
             </div>
         </div>
     </div>
@@ -53,7 +97,7 @@
                 <a href="#" class="btn btn-primary">Go to issues</a>
             </div>
             <div class="card-footer text-muted">
-                Last update: @issueModifiedDate by @issueModifiedBy
+                @issueModifiedDate by @issueModifiedBy
             </div>
         </div>
     </div>
