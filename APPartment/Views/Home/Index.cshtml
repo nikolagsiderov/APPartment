@@ -105,7 +105,7 @@
                 <a href="#" class="btn btn-primary">Go to hygiene</a>
             </div>
             <div class="card-footer text-muted">
-                @if (Model[0].Name != null)
+                @if (Model[1].Name != null)
                 {
                     <p>@hygieneModifiedDate by @hygieneModifiedBy</p>
                 }
@@ -133,7 +133,7 @@
                 <a href="#" class="btn btn-primary">Go to issues</a>
             </div>
             <div class="card-footer text-muted">
-                @if (Model[0].Name != null)
+                @if (Model[2].Name != null)
                 {
                     <p>@issueModifiedDate by @issueModifiedBy</p>
                 }
