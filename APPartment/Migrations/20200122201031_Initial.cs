@@ -29,6 +29,20 @@ namespace APPartment.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HouseSettings",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RentDueDate = table.Column<DateTime>(nullable: false),
+                    HouseId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HouseSettings", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Hygiene",
                 columns: table => new
                 {
@@ -108,6 +122,9 @@ namespace APPartment.Migrations
         {
             migrationBuilder.DropTable(
                 name: "House");
+
+            migrationBuilder.DropTable(
+                name: "HouseSettings");
 
             migrationBuilder.DropTable(
                 name: "Hygiene");

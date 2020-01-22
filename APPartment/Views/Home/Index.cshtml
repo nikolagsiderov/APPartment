@@ -138,9 +138,16 @@
     </div>
     <div class="col-md-6">
         <div class="jumbotron">
-            <h1 class="display-4">Rent due in 20/20/2020!</h1>
+            @if (ViewData["RentDueDate"] != null)
+            {
+                <h1 class="display-4">Rent due in @ViewData["RentDueDate"]</h1>
+            }
+            else
+            {
+                <h1 class="display-4">Rent due date not set!</h1>
+            }
             <hr class="my-4">
-            <p>New rent due date? You can manage your home from <a>Settings</a>.</p>
+            <p>New rent due date? You can manage your home from <a href="@Url.Action("Settings", "Home")">Settings</a>.</p>
         </div>
     </div>
 </div>

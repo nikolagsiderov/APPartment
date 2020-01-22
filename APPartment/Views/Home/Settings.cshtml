@@ -1,0 +1,23 @@
+﻿@model APPartment.Models.HouseSettings
+
+<form asp-action="Settings" enctype="multipart/form-data">
+    <div class="form-group">
+        <input type="submit" value="Save" class="btn btn-primary" />
+    </div>
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="Id" />
+    <div class="row">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label asp-for="RentDueDate" class="control-label">Rent Due Date</label>
+                <input asp-for="RentDueDate" class="form-control" />
+                <span asp-validation-for="RentDueDate" class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

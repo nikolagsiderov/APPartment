@@ -35,6 +35,12 @@ namespace APPartment.Controllers
 
             var displayObjects = GetDisplayObject(currentHouseId);
 
+            if (_context.HouseSettings.Any(x => x.HouseId == long.Parse(HttpContext.Session.GetString("HouseId"))))
+            {
+                ViewData["RentDueDate"] = _context.HouseSettings.Find(long.Parse(HttpContext.Session.GetString("HouseId"))).RentDueDate.Date.ToLongDateString();
+
+            }
+
             return View(displayObjects);
         }
 
@@ -92,6 +98,46 @@ namespace APPartment.Controllers
             }
 
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Settings()
+        {
+            var houseSettingsArePresent = _context.HouseSettings.Any(x => x.Id == long.Parse(HttpContext.Session.GetString("HouseId")));
+            HouseSettings houseSettings = null;
+
+            if (houseSettingsArePresent)
+            {
+                houseSettings = _context.HouseSettings.Find(long.Parse(HttpContext.Session.GetString("HouseId")));
+            }
+            
+            if (houseSettings != null)
+            {
+                return View(houseSettings);
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Settings(HouseSettings settings)
+        {
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            settings.HouseId = currentHouseId;
+
+            if (settings.Id == 0)
+            {
+                _context.HouseSettings.Add(settings);
+            }
+            else
+            {
+                _context.Update(settings);
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Privacy()

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APPartment.Migrations
 {
     [DbContext(typeof(DataAccessContext))]
-    [Migration("20200121205134_Initial")]
+    [Migration("20200122201031_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,24 @@ namespace APPartment.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("House");
+                });
+
+            modelBuilder.Entity("APPartment.Models.HouseSettings", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long?>("HouseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("RentDueDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HouseSettings");
                 });
 
             modelBuilder.Entity("APPartment.Models.Hygiene", b =>

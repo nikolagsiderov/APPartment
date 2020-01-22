@@ -60,6 +60,24 @@ namespace APPartment.Migrations
                     b.ToTable("House");
                 });
 
+            modelBuilder.Entity("APPartment.Models.HouseSettings", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long?>("HouseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("RentDueDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HouseSettings");
+                });
+
             modelBuilder.Entity("APPartment.Models.Hygiene", b =>
                 {
                     b.Property<long>("Id")
