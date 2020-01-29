@@ -16,6 +16,7 @@ namespace APPartment.Data
         public DbSet<APPartment.Models.Inventory> Inventory { get; set; }
         public DbSet<APPartment.Models.Hygiene> Hygiene { get; set; }
         public DbSet<APPartment.Models.Issue> Issue { get; set; }
+        public DbSet<APPartment.Models.Message> Message { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +28,7 @@ namespace APPartment.Data
             modelBuilder.Entity<Inventory>().ToTable("Inventory");
             modelBuilder.Entity<Hygiene>().ToTable("Hygiene");
             modelBuilder.Entity<Issue>().ToTable("Issue");
+            modelBuilder.Entity<Message>().ToTable("Message");
         }
     }
 }

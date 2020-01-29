@@ -9,6 +9,7 @@ using SmartBreadcrumbs.Attributes;
 using APPartment.Data;
 using Microsoft.AspNetCore.Http;
 using APPartment.Models.Base;
+using System.Threading.Tasks;
 
 namespace APPartment.Controllers
 {
@@ -31,14 +32,22 @@ namespace APPartment.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
+            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+            var currentUser = _context.User.Find(currentUserId);
+
+            ViewData["Username"] = currentUser.Username;
+
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            var messages = _context.Message.ToList();
+
+            ViewData["Messages"] = messages;
 
             var displayObjects = GetDisplayObject(currentHouseId);
 
             if (_context.HouseSettings.Any(x => x.HouseId == long.Parse(HttpContext.Session.GetString("HouseId"))))
             {
                 ViewData["RentDueDate"] = _context.HouseSettings.Find(long.Parse(HttpContext.Session.GetString("HouseId"))).RentDueDate.Date.ToLongDateString();
-
             }
 
             return View(displayObjects);
@@ -138,6 +147,18 @@ namespace APPartment.Controllers
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<ActionResult> CreateMessage(string username, string messageText)
+        {
+            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+
+            var message = new Message() { Username = username, Text = messageText, UserId = currentUserId, CreatedDate = DateTime.Now };
+
+            await _context.Message.AddAsync(message);
+            await _context.SaveChangesAsync();
+
+            return Ok();
         }
 
         public IActionResult Privacy()
