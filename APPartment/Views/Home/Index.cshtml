@@ -153,22 +153,17 @@
 <div class="row">
     <div class="col-md-6">
         <div class="container">
-            <form asp-controller="Home" asp-action="CreateMessage" id="chatForm"
-                  data-ajax="true" data-ajax-method="POST"
-                  data-ajax-mode="replace" data-ajax-update="#chatForm"
-                  data-ajax-success="success">
-                <input type="hidden" class="form-control" id="userInput" value="@ViewData["Username"]" />
-                <div class="row">
-                    <div class="col-2">Message</div>
-                    <div class="col-10"><textarea type="text" class="form-control" id="messageInput" rows="5" placeholder="Type a message..."></textarea></div>
+            <input type="hidden" class="form-control" id="userInput" value="@ViewData["Username"]" />
+            <div class="row">
+                <div class="col-2">Chat room</div>
+                <div class="col-10"><textarea type="text" class="form-control" id="messageInput" rows="5" placeholder="Type a message..."></textarea></div>
+            </div>
+            <div class="row">&nbsp;</div>
+            <div class="row">
+                <div class="col-6">
+                    <input type="submit" class="btn btn-primary" id="sendButton" value="Send Message" />
                 </div>
-                <div class="row">&nbsp;</div>
-                <div class="row">
-                    <div class="col-6">
-                        <input type="submit" class="btn btn-primary" id="sendButton" value="Send Message" />
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
         <div class="row">
             <div class="col-12">
@@ -203,3 +198,26 @@
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
+
+<script type="text/javascript">
+    $("#sendButton").click(function () {
+
+        var usernameValue = $('#userInput').val();
+        var messageValue = $('#messageInput').val();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CreateMessage", "Home")",
+            data: { username: usernameValue, messageText: messageValue },
+            dataType: "text",
+            success: function () {
+
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        });
+
+        $("#messageInput").val('');
+    });
+</script>

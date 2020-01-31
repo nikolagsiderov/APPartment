@@ -149,6 +149,7 @@ namespace APPartment.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
         public async Task<ActionResult> CreateMessage(string username, string messageText)
         {
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
