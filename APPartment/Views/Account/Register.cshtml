@@ -9,35 +9,44 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>APPartment</title>
-    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 <body>
     @model APPartment.Models.User
 
     <div class="wrapper">
         <form asp-action="Register">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-
-            <div>
-                <p>Already have an account? <a asp-action="Login" asp-controller="Account">Login</a> now!</p>
+            <div class="card shadow mb-4 text-center">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Register an account</h6>
+                </div>
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Username" class="control-label"></label>
+                        <input asp-for="Username" class="form-control" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ConfirmPassword" class="control-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <div>
+                        <p>Already have an account? <a asp-action="Login" asp-controller="Account">Login</a> now!</p>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -58,9 +67,17 @@
             max-width: 380px;
             padding: 15px 35px 45px;
             margin: 0 auto;
-            background-color: #fff;
-            border: 1px solid rgba(0,0,0,0.1);
         }
     </style>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/js/sb-admin-2.min.js"></script>
 </body>
 </html>

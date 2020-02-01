@@ -9,30 +9,39 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>APPartment</title>
-    <link href="~/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 <body>
     @model APPartment.Models.User
 
     <div class="wrapper">
         <form asp-action="Login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Username" class="control-label"></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-primary" />
-            </div>
-
-            <div>
-                <p>Don't have an account? <a asp-action="Register" asp-controller="Account">Register</a> now!</p>
+            <div class="card shadow mb-4 text-center">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Login to your account</h6>
+                </div>
+                <div class="card-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Username" class="control-label"></label>
+                        <input asp-for="Username" class="form-control" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Password" class="control-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Login" class="btn btn-primary" />
+                    </div>
+                </div>
+                <div class="card-footer text-muted">
+                    <div>
+                        <p>Don't have an account? <a asp-action="Register" asp-controller="Account">Register</a> now!</p>
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -40,22 +49,30 @@
     <style>
         @@import "bourbon";
 
-body {
-	background: #eee !important;	
-}
+        body {
+            background: #eee !important;
+        }
 
-.wrapper {	
-	margin-top: 80px;
-  margin-bottom: 80px;
-}
+        .wrapper {
+            margin-top: 80px;
+            margin-bottom: 80px;
+        }
 
-form {
-  max-width: 380px;
-  padding: 15px 35px 45px;
-  margin: 0 auto;
-  background-color: #fff;
-  border: 1px solid rgba(0,0,0,0.1);
-}
+        form {
+            max-width: 380px;
+            padding: 15px 35px 45px;
+            margin: 0 auto;
+        }
     </style>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/js/sb-admin-2.min.js"></script>
 </body>
 </html>
