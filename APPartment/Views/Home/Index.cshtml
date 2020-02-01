@@ -62,9 +62,9 @@
 
 <div class="row">
     <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-header">
-                <h5>Inventory - Last updates</h5>
+        <div class="card shadow mb-4 text-center">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Inventory - Last Updates</h6>
             </div>
             <div class="card-body">
                 @if (Model[0].Name != null)
@@ -90,9 +90,9 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-header">
-                <h5>Hygiene - Last updates</h5>
+        <div class="card shadow mb-4 text-center">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Hygiene - Last Updates</h6>
             </div>
             <div class="card-body">
                 @if (Model[1].Name != null)
@@ -119,9 +119,9 @@
         </div>
     </div>
     <div class="col-md-4">
-        <div class="card text-center">
-            <div class="card-header">
-                <h5>Issues - Last updates</h5>
+        <div class="card shadow mb-4 text-center">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Issues - Last Updates</h6>
             </div>
             <div class="card-body">
                 @if (Model[2].Name != null)
@@ -152,27 +152,33 @@
 
 <div class="row">
     <div class="col-md-6">
-        <div class="container">
-            <input type="hidden" class="form-control" id="userInput" value="@ViewData["Username"]" />
-            <div class="row">
-                <div class="col-2">Chat room</div>
-                <div class="col-10"><textarea type="text" class="form-control" id="messageInput" rows="5" placeholder="Type a message..."></textarea></div>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Home chat room</h6>
             </div>
-            <div class="row">&nbsp;</div>
-            <div class="row">
-                <div class="col-6">
-                    <input type="submit" class="btn btn-primary" id="sendButton" value="Send Message" />
+            <div class="card-body">
+                <div class="container">
+                    <input type="hidden" class="form-control" id="userInput" value="@ViewData["Username"]" />
+                    <div class="row">
+                        <div class="col-12"><textarea type="text" class="form-control" id="messageInput" rows="5" placeholder="Type a message..."></textarea></div>
+                    </div>
+                    <div class="row">&nbsp;</div>
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="submit" class="btn btn-primary" id="sendButton" value="Send Message" />
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <hr />
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-6">
-                <ul id="messagesList"></ul>
+                <div class="row">
+                    <div class="col-12">
+                        <hr />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <ul id="messagesList"></ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
