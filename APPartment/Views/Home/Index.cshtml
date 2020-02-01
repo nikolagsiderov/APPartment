@@ -75,7 +75,7 @@
                 {
                     <p class="card-text">No items in the inventory.</p>
                 }
-                <a href="#" class="btn btn-primary">Go to inventory</a>
+                <a asp-controller="Inventory" asp-action="Index" class="btn btn-primary">Go to inventory</a>
             </div>
             <div class="card-footer text-muted">
                 @if (Model[0].Name != null)
@@ -104,7 +104,7 @@
                     <p class="card-text">No items in the hygiene.</p>
                 }
 
-                <a href="#" class="btn btn-primary">Go to hygiene</a>
+                <a asp-controller="Hygiene" asp-action="Index" class="btn btn-primary">Go to hygiene</a>
             </div>
             <div class="card-footer text-muted">
                 @if (Model[1].Name != null)
@@ -132,7 +132,7 @@
                 {
                     <p class="card-text">No issues present.</p>
                 }
-                <a href="#" class="btn btn-primary">Go to issues</a>
+                <a asp-controller="Issues" asp-action="Index" class="btn btn-primary">Go to issues</a>
             </div>
             <div class="card-footer text-muted">
                 @if (Model[2].Name != null)
@@ -183,17 +183,28 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="jumbotron">
-            @if (ViewData["RentDueDate"] != null)
-            {
-                <h1 class="display-4">Rent due in @ViewData["RentDueDate"]</h1>
-            }
-            else
-            {
-                <h1 class="display-4">Rent due date not set!</h1>
-            }
-            <hr class="my-4">
-            <p>New rent due date? You can manage your home from <a href="@Url.Action("Settings", "Home")">Settings</a>.</p>
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Rent due date</div>
+                        <br />
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            @if (ViewData["RentDueDate"] != null)
+                            {
+                                <h1 class="display-4">Rent due in @ViewData["RentDueDate"]</h1>
+                            }
+                            else
+                            {
+                                <h1 class="display-4">Rent due date not set!</h1>
+                            }
+
+                            <hr class="my-4">
+                            <p>New rent due date? You can manage your home from <a href="@Url.Action("Settings", "Home")">Settings</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
