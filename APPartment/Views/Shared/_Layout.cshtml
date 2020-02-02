@@ -261,7 +261,15 @@
                     @RenderBody()
                     <hr />
                     <footer>
-                        <p>&copy; @DateTime.Now.Year - HoustonDS</p>
+                        <div class="row">
+                            <div class="col-md-2">
+                                <p>&copy; @DateTime.Now.Year - HoustonDS</p>
+                            </div>
+                            <div class="col-md-2">
+                                <a asp-controller="Home" asp-action="About">About</a>
+                            </div>
+                        </div>
+                        
                     </footer>
                 </div>
                 <!-- End of page content -->

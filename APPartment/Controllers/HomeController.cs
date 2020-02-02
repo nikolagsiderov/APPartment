@@ -24,7 +24,7 @@ namespace APPartment.Controllers
             _context = context;
         }
 
-        [DefaultBreadcrumb("<i class='fas fa-home' style='font-size:20px'></i> My Home")]
+        [DefaultBreadcrumb("<i class='fas fa-home' style='font-size:20px'></i> Home")]
         public IActionResult Index()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
@@ -144,6 +144,13 @@ namespace APPartment.Controllers
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
+        }
+
+        [HttpGet]
+        [Breadcrumb("<i class='fas fa-info-circle' style='font-size:20px'></i> About")]
+        public IActionResult About()
+        {
+            return View();
         }
 
         [HttpPost]
