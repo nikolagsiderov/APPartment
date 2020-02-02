@@ -39,10 +39,6 @@ namespace APPartment.Controllers
 
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
-            var messages = _context.Message.ToList();
-
-            ViewData["Messages"] = messages;
-
             var displayObjects = GetDisplayObject(currentHouseId);
 
             if (_context.HouseSettings.Any(x => x.HouseId == long.Parse(HttpContext.Session.GetString("HouseId"))))
@@ -110,6 +106,7 @@ namespace APPartment.Controllers
         }
 
         [HttpGet]
+        [Breadcrumb("<i class='fas fa-cogs' style='font-size:20px'></i> Settings")]
         public IActionResult Settings()
         {
             var houseSettingsArePresent = _context.HouseSettings.Any(x => x.Id == long.Parse(HttpContext.Session.GetString("HouseId")));
@@ -160,11 +157,6 @@ namespace APPartment.Controllers
             await _context.SaveChangesAsync();
 
             return Ok();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

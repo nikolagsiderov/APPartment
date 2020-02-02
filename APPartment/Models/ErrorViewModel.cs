@@ -1,5 +1,3 @@
-using System;
-
 namespace APPartment.Models
 {
     public class ErrorViewModel

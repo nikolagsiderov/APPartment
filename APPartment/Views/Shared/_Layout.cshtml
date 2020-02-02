@@ -26,7 +26,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Home" asp-action="Index">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <img src="~/images/APPartment logo official white.png" alt="APPartment logo" width="30" />
                 </div>
@@ -43,7 +43,6 @@
                 </a>
             </li>
 
-            <!-- Nav Item - Dashboard -->
             <li class="nav-item">
                 <a class="nav-link" asp-area="" asp-controller="Inventory" asp-action="Index">
                     <i class='fas fa-tasks'></i>
