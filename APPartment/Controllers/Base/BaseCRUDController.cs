@@ -30,6 +30,7 @@ namespace APPartment.Controllers.Base
 
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DetailsSortParm"] = sortOrder == "details_asc" ? "details_desc" : "details_asc";
+            ViewData["StatusSortParm"] = sortOrder == "status_asc" ? "status_desc" : "status_asc";
             ViewData["CurrentFilter"] = searchString;
 
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
@@ -44,6 +45,9 @@ namespace APPartment.Controllers.Base
 
             switch (sortOrder)
             {
+                case "name_asc":
+                    modelObjects = modelObjects.OrderBy(s => s.Name).ToList();
+                    break;
                 case "name_desc":
                     modelObjects = modelObjects.OrderByDescending(s => s.Name).ToList();
                     break;
@@ -52,6 +56,12 @@ namespace APPartment.Controllers.Base
                     break;
                 case "details_desc":
                     modelObjects = modelObjects.OrderByDescending(s => s.Details).ToList();
+                    break;
+                case "status_asc":
+                    modelObjects = modelObjects.OrderBy(s => s.Status).ToList();
+                    break;
+                case "status_desc":
+                    modelObjects = modelObjects.OrderByDescending(s => s.Status).ToList();
                     break;
                 default:
                     modelObjects = modelObjects.OrderBy(s => s.Name).ToList();
