@@ -66,6 +66,13 @@ namespace APPartment.Controllers
             return View();
         }
 
+        public IActionResult Logout()
+        {
+            HttpContext.Session.SetString("UserId", string.Empty);
+            HttpContext.Session.SetString("HouseId", string.Empty);
+
+            return RedirectToAction("Index", "Home");
+        }
         public IActionResult LoggedIn()
         {
             if (HttpContext.Session.GetString("UserId") != null)
