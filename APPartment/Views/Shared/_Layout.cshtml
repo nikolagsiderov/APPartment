@@ -30,7 +30,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <img src="~/images/APPartment logo official white.png" alt="APPartment logo" width="30" />
                 </div>
-                <div class="sidebar-brand-text mx-3">APPartment</div>
+                <div class="sidebar-brand-text mx-3">@Context.Session.GetString("HouseName")</div>
             </a>
 
             <!-- Divider -->
@@ -263,7 +263,7 @@
                     <footer>
                         <div class="row">
                             <div class="col-md-2">
-                                <p>&copy; @DateTime.Now.Year - HoustonDS</p>
+                                <p>&copy; @DateTime.Now.Year HoustonDS, Inc.</p>
                             </div>
                             <div class="col-md-2">
                                 <a asp-controller="Home" asp-action="About">About</a>
