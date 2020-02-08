@@ -183,21 +183,21 @@ namespace APPartment.Controllers
 
             if (inventoryObjects.Count() > 0)
             {
-                lastInventoryObject = inventoryObjects.OrderByDescending(x => x.Id).First();
+                lastInventoryObject = inventoryObjects.OrderByDescending(x => x.ModifiedDate).First();
             }
 
             var hygieneObjects = _context.Set<Hygiene>().Where(x => x.HouseId == currentHouseId);
 
             if (hygieneObjects.Count() > 0)
             {
-                lastHygieneObject = hygieneObjects.OrderByDescending(x => x.Id).First();
+                lastHygieneObject = hygieneObjects.OrderByDescending(x => x.ModifiedDate).First();
             }
 
             var issueObjects = _context.Set<Issue>().Where(x => x.HouseId == currentHouseId);
 
             if (issueObjects.Count() > 0)
             {
-                lastIssueObject = issueObjects.OrderByDescending(x => x.Id).First();
+                lastIssueObject = issueObjects.OrderByDescending(x => x.ModifiedDate).First();
             }
 
             displayObjects.Add(lastInventoryObject);
