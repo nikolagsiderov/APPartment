@@ -20,22 +20,22 @@
         <form asp-action="Login">
             <div class="card shadow mb-4 text-center">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Login to your home</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Enter your home</h6>
                 </div>
                 <div class="card-body">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="Name" class="control-label"></label>
+                        <label>Home name</label>
                         <input asp-for="Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <label asp-for="Password" class="control-label"></label>
+                        <label>Home password</label>
                         <input asp-for="Password" class="form-control" />
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <input type="submit" value="Login" class="btn btn-primary" />
+                        <input type="submit" value="Enter home" class="btn btn-primary" />
                     </div>
 
                 </div>
@@ -54,7 +54,8 @@
         }
 
         .wrapper {
-            margin-top: 80px;
+            margin-top: 50px;
+            margin-left: 60%;
             margin-bottom: 80px;
         }
 

@@ -20,7 +20,7 @@
         <form asp-action="Login">
             <div class="card shadow mb-4 text-center">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Login to your account</h6>
+                    <h6 class="m-0 font-weight-bold text-primary">Sign in to your account</h6>
                 </div>
                 <div class="card-body">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -35,7 +35,7 @@
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
                     <div class="form-group">
-                        <input type="submit" value="Login" class="btn btn-primary" />
+                        <input type="submit" value="Sign in account" class="btn btn-primary" />
                     </div>
                 </div>
                 <div class="card-footer text-muted">
@@ -53,7 +53,8 @@
         }
 
         .wrapper {
-            margin-top: 80px;
+            margin-top: 50px;
+            margin-right: 60%;
             margin-bottom: 80px;
         }
 
