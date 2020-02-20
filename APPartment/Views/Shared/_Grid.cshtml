@@ -50,10 +50,28 @@
                     {
                         <tr>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Name)
+                                @if (item.Name.Length <= 20)
+                                {
+                                    <p>@item.Name</p>
+                                }
+                                else
+                                {
+                                    var itemNameResult = item.Name.Substring(0, 20) + "...";
+
+                                    <p>@itemNameResult</p>
+                                }
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => item.Details)
+                                @if (item.Details.Length <= 50)
+                                {
+                                    <p>@item.Details</p>
+                                }
+                                else
+                                {
+                                    var itemDetailsResult = item.Details.Substring(0, 50) + "...";
+
+                                    <p>@itemDetailsResult</p>
+                                }
                             </td>
                             <td class="text-center">
                                 @if (item.Status == 1)
