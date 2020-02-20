@@ -13,6 +13,45 @@
     string hygieneModifiedBy = Model[1].ModifiedBy == null ? string.Empty : Model[1].ModifiedBy;
     string issueModifiedBy = Model[2].ModifiedBy == null ? string.Empty : Model[2].ModifiedBy;
 
+    string inventoryItemName = string.Empty;
+    string hygieneItemName = string.Empty;
+    string issueItemName = string.Empty;
+
+    string inventoryItemDetails = string.Empty;
+    string hygieneItemDetails = string.Empty;
+    string issueItemDetails = string.Empty;
+
+    if (!string.IsNullOrEmpty(Model[0].Name))
+    {
+        inventoryItemName = Model[0].Name.Length <= 10 ? Model[0].Name : Model[0].Name.Substring(0, 20) + "...";
+    }
+
+    if (!string.IsNullOrEmpty(Model[1].Name))
+    {
+        hygieneItemName = Model[1].Name.Length <= 10 ? Model[1].Name : Model[1].Name.Substring(0, 20) + "...";
+    }
+
+    if (!string.IsNullOrEmpty(Model[2].Name))
+    {
+        issueItemName = Model[2].Name.Length <= 10 ? Model[2].Name : Model[2].Name.Substring(0, 20) + "...";
+    }
+
+    if (!string.IsNullOrEmpty(Model[0].Details))
+    {
+        inventoryItemDetails = Model[0].Details.Length <= 50 ? Model[0].Details : Model[0].Details.Substring(0, 50) + "...";
+    }
+
+    if (!string.IsNullOrEmpty(Model[1].Details))
+    {
+        hygieneItemDetails = Model[1].Details.Length <= 50 ? Model[1].Details : Model[1].Details.Substring(0, 50) + "...";
+    }
+
+    if (!string.IsNullOrEmpty(Model[2].Details))
+    {
+        issueItemDetails = Model[2].Details.Length <= 50 ? Model[2].Details : Model[2].Details.Substring(0, 50) + "...";
+    }
+
+
     string CalculateRelativeTime(DateTime objectLastUpdate)
     {
         const int SECOND = 1;
@@ -69,7 +108,9 @@
             <div class="card-body">
                 @if (Model[0].Name != null)
                 {
-                    <p class="card-text"><strong>Name</strong>: @Model[0].Name <br /> <strong>Details</strong>: @Model[0].Details</p>
+                    <p class="card-text">
+                        <strong>Name</strong>: @inventoryItemName <br /> <strong>Details</strong>: @inventoryItemDetails
+                    </p>
                 }
                 else
                 {
@@ -97,7 +138,9 @@
             <div class="card-body">
                 @if (Model[1].Name != null)
                 {
-                    <p class="card-text"><strong>Name</strong>: @Model[1].Name <br /> <strong>Details</strong>: @Model[1].Details</p>
+                    <p class="card-text">
+                        <strong>Name</strong>: @hygieneItemName <br /> <strong>Details</strong>: @hygieneItemDetails
+                    </p>
                 }
                 else
                 {
@@ -126,7 +169,9 @@
             <div class="card-body">
                 @if (Model[2].Name != null)
                 {
-                    <p class="card-text"><strong>Name</strong>: @Model[2].Name <br /> <strong>Details</strong>: @Model[2].Details</p>
+                    <p class="card-text">
+                        <strong>Name</strong>: @issueItemName <br /> <strong>Details</strong>: @issueItemDetails
+                    </p>
                 }
                 else
                 {
