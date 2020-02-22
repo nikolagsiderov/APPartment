@@ -9,20 +9,6 @@
             <div class="col-md-1">
                 <a asp-action="Create"><button type="button" class="btn btn-primary"><i class="fas fa-plus"></i> Add</button></a>
             </div>
-            <div class="col-md-11">
-                <form asp-action="Index" method="get">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <input type="text" name="searchString" placeholder="Search in data table... (not implemented)" class="form-control" value="@ViewData["CurrentFilter"]" />
-                        </div>
-
-                        <div class="col-md-4">
-                            <a asp-action="Index" class="btn btn-primary"><i class="fas fa-search"></i></a>
-                            <a asp-action="Index" class="btn btn-primary"><i class="far fa-eye"></i> All</a>
-                        </div>
-                    </div>
-                </form>
-            </div>
         </div>
 
         <br />
@@ -117,3 +103,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function () {
+        $('#dataTable').DataTable();
+    });
+</script>
