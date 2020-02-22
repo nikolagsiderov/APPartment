@@ -20,9 +20,9 @@ namespace APPartment.Controllers
         }
 
         [Breadcrumb("<i class='fas fa-exclamation-circle' style='font-size:20px'></i> Issues")]
-        public override Task<IActionResult> Index(string sortOrder, string searchString)
+        public override Task<IActionResult> Index(string sortOrder)
         {
-            return base.Index(sortOrder, searchString);
+            return base.Index(sortOrder);
         }
 
         public JsonResult GetIssuesCriticalCount()

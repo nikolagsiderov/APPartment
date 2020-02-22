@@ -21,7 +21,7 @@ namespace APPartment.Controllers.Base
         }
 
         [Breadcrumb("Base")]
-        public virtual async Task<IActionResult> Index(string sortOrder, string searchString)
+        public virtual async Task<IActionResult> Index(string sortOrder)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
             {
@@ -31,17 +31,10 @@ namespace APPartment.Controllers.Base
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DetailsSortParm"] = sortOrder == "details_asc" ? "details_desc" : "details_asc";
             ViewData["StatusSortParm"] = sortOrder == "status_asc" ? "status_desc" : "status_asc";
-            ViewData["CurrentFilter"] = searchString;
 
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
             var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId).ToListAsync();
-
-            if (!String.IsNullOrEmpty(searchString))
-            {
-                modelObjects = modelObjects.Where(s => s.Name.Contains(searchString)
-                                       || s.Details.Contains(searchString)).ToList();
-            }
 
             switch (sortOrder)
             {
