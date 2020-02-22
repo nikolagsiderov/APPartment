@@ -70,6 +70,9 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("HouseName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("RentDueDateDay")
                         .HasColumnType("int");
 

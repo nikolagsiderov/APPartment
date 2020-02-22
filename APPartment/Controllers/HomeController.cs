@@ -115,6 +115,9 @@ namespace APPartment.Controllers
             if (houseSettingsArePresent)
             {
                 houseSettings = _context.HouseSettings.Find(long.Parse(HttpContext.Session.GetString("HouseId")));
+
+                var houseModel = _context.House.Find(long.Parse(HttpContext.Session.GetString("HouseId")));
+                houseSettings.HouseName = houseModel.Name;
             }
             
             if (houseSettings != null)
@@ -129,6 +132,14 @@ namespace APPartment.Controllers
         public IActionResult Settings(HouseSettings settings)
         {
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            if (!string.IsNullOrEmpty(settings.HouseName))
+            {
+                var houseModel = _context.Find<House>(currentHouseId);
+                houseModel.Name = settings.HouseName;
+                HttpContext.Session.SetString("HouseName", houseModel.Name.ToString());
+                _context.SaveChanges();
+            }
 
             settings.HouseId = currentHouseId;
 

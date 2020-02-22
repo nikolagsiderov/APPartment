@@ -35,6 +35,7 @@ namespace APPartment.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RentDueDateDay = table.Column<int>(nullable: false),
+                    HouseName = table.Column<string>(nullable: true),
                     HouseId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>

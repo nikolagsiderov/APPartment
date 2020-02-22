@@ -11,6 +11,8 @@ namespace APPartment.Models
 
         public int RentDueDateDay { get; set; }
 
+        public string HouseName { get; set; }
+
         [ForeignKey("House")]
         public long? HouseId { get; set; }
     }
