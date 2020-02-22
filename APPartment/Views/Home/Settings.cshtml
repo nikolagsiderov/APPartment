@@ -1,22 +1,42 @@
 ﻿@model APPartment.Models.HouseSettings
 
-<form asp-action="Settings" enctype="multipart/form-data">
-    <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-primary" />
-    </div>
+<div class="col-md-6">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Rent Settings</h6>
+        </div>
+        <div class="card-body">
+            <form asp-action="Settings" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label asp-for="RentDueDateDay" class="control-label">Rent Due In</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Day</label>
+                                </div>
+                                <select class="custom-select" asp-for="RentDueDateDay" id="inputGroupSelect01">
+                                    <option selected value="0">Please select rent due date day of the month.</option>
+                                    @for (int i = 1; i <= 30; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <span asp-validation-for="RentDueDateDay" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
 
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="Id" />
-    <div class="row">
-        <div class="col-md-3">
-            <div class="form-group">
-                <label asp-for="RentDueDate" class="control-label">Rent Due Date</label>
-                <input asp-for="RentDueDate" class="form-control" />
-                <span asp-validation-for="RentDueDate" class="text-danger"></span>
-            </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
         </div>
     </div>
-</form>
+</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

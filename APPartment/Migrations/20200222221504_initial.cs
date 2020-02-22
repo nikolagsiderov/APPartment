@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace APPartment.Migrations
 {
-    public partial class InitialSuccess : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,7 +34,7 @@ namespace APPartment.Migrations
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RentDueDate = table.Column<DateTime>(nullable: false),
+                    RentDueDateDay = table.Column<int>(nullable: false),
                     HouseId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>

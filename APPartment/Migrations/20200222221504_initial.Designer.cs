@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APPartment.Migrations
 {
     [DbContext(typeof(DataAccessContext))]
-    [Migration("20200126164112_InitialSuccess")]
-    partial class InitialSuccess
+    [Migration("20200222221504_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -72,8 +72,8 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("RentDueDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("RentDueDateDay")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

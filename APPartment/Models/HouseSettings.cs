@@ -9,8 +9,7 @@ namespace APPartment.Models
         [Key]
         public long Id { get; set; }
 
-        [DataType(DataType.Date)]
-        public DateTime RentDueDate { get; set; }
+        public int RentDueDateDay { get; set; }
 
         [ForeignKey("House")]
         public long? HouseId { get; set; }

@@ -70,8 +70,8 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("RentDueDate")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("RentDueDateDay")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

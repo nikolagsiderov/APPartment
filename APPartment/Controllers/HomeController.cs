@@ -43,7 +43,7 @@ namespace APPartment.Controllers
 
             if (_context.HouseSettings.Any(x => x.HouseId == long.Parse(HttpContext.Session.GetString("HouseId"))))
             {
-                ViewData["RentDueDate"] = _context.HouseSettings.Find(long.Parse(HttpContext.Session.GetString("HouseId"))).RentDueDate.Date.ToLongDateString();
+                ViewData["RentDueDateDay"] = _context.HouseSettings.Find(long.Parse(HttpContext.Session.GetString("HouseId"))).RentDueDateDay;
             }
 
             return View(displayObjects);

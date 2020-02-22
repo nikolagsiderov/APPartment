@@ -5,6 +5,22 @@
 @model List<APPartment.Models.Base.BaseObject>
 
 @{
+    var nextMonth = DateTime.Now.AddMonths(1).Month.ToString();
+    var thisMonth = DateTime.Now.Month.ToString();
+    var rentDueDate = string.Empty;
+
+    if (ViewData["RentDueDateDay"] != null && ViewData["RentDueDateDay"].ToString() != "0")
+    {
+        var dateString = $"{ViewData["RentDueDateDay"]}/{nextMonth}/{DateTime.Now.Year.ToString()}";
+        
+        if (DateTime.Parse(dateString).AddMonths(-1).Date > DateTime.Now.Date)
+        {
+            dateString = $"{ViewData["RentDueDateDay"]}/{thisMonth}/{DateTime.Now.Year.ToString()}";
+        }
+
+        rentDueDate = DateTime.Parse(dateString).ToLongDateString();
+    }
+
     string inventoryModifiedDate = Model[0].ModifiedDate == null ? string.Empty : CalculateRelativeTime(Model[0].ModifiedDate.Value);
     string hygieneModifiedDate = Model[1].ModifiedDate == null ? string.Empty : CalculateRelativeTime(Model[1].ModifiedDate.Value);
     string issueModifiedDate = Model[2].ModifiedDate == null ? string.Empty : CalculateRelativeTime(Model[2].ModifiedDate.Value);
@@ -235,9 +251,9 @@
                         <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Rent due date</div>
                         <br />
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            @if (ViewData["RentDueDate"] != null)
+                            @if (!string.IsNullOrEmpty(rentDueDate))
                             {
-                                <h1 class="display-4">Rent due in @ViewData["RentDueDate"]</h1>
+                                <h1 class="display-4">Rent due in @rentDueDate</h1>
                             }
                             else
                             {
