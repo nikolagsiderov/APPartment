@@ -1,0 +1,50 @@
+﻿@model APPartment.Models.Base.BaseObject
+
+@{
+    var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<input type="hidden" class="form-control" id="userInput" value="@ViewData["Username"]" />
+<div class="row">
+    <div class="col-10">
+        <textarea type="text" class="form-control" id="commentTextbox" rows="5" placeholder="Type a comment..."></textarea>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-1">
+        <button class="btn btn-primary btn-sm" id="commentButton">Comment</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10" id="comment-text-data">
+        @foreach (var comment in Model.Comments)
+        {
+            <hr />
+            <p>@Html.Raw(comment)</p>
+        }
+    </div>
+</div>
+
+<script>
+    $("#commentButton").click(function () {
+        var comment = $('#commentTextbox').val();
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("PostComment", controllerName)",
+            data: { targetId: @Model.ObjectId, commentText: comment },
+            success: function (data) {
+                var appendValue = document.createElement('p');
+                appendValue.innerHTML = "<hr />" + data;
+
+                $("#comment-text-data").prepend(appendValue);
+
+                $("#commentTextbox").attr("value", "");
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        });
+    });
+</script>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace APPartment.Models.Declaration
 {
@@ -23,5 +24,7 @@ namespace APPartment.Models.Declaration
         public long? HouseId { get; set; }
 
         public long ObjectId { get; set; }
+
+        public List<string> Comments { get; set; }
     }
 }

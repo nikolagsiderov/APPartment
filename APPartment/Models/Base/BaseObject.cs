@@ -1,5 +1,6 @@
 ﻿using APPartment.Models.Declaration;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -30,5 +31,8 @@ namespace APPartment.Models.Base
 
         [ForeignKey("Object")]
         public long ObjectId { get; set; }
+
+        [NotMapped]
+        public List<string> Comments { get; set; }
     }
 }

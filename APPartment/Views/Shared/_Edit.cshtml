@@ -50,7 +50,7 @@
 
 <br />
 
-@Html.Partial("_ObjectMetadataTab")
+@Html.Partial("_ObjectMetadataTab", Model)
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

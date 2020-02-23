@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using APPartment.Data;
+using APPartment.Models;
 using APPartment.Models.Declaration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -80,6 +82,8 @@ namespace APPartment.Controllers.Base
                 return NotFound();
             }
 
+            model.Comments = GetComments(model.ObjectId);
+
             return View("_Details", model);
         }
 
@@ -136,6 +140,8 @@ namespace APPartment.Controllers.Base
             {
                 return NotFound();
             }
+
+            model.Comments = GetComments(model.ObjectId);
 
             return View("_Edit", model);
         }
@@ -200,6 +206,35 @@ namespace APPartment.Controllers.Base
             _context.Set<T>().Remove(model);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // Base Object Metadata
+        public List<string> GetComments(long targetId)
+        {
+            var comments = _context.Comment.Where(x => x.TargetId == targetId)
+                .OrderByDescending(x => x.Id).Take(10).Select(x => $"<strong>{x.Username}</strong>: {x.Text}").ToList();
+
+            return comments;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostComment(long targetId, string commentText)
+        {
+            var username = HttpContext.Session.GetString("Username");
+
+            var comment = new Comment()
+            {
+                Text = commentText,
+                TargetId = targetId,
+                Username = username
+            };
+
+            _context.Add(comment);
+            await _context.SaveChangesAsync();
+
+            var result = $"<strong>{comment.Username}</strong>: {comment.Text}";
+
+            return Json(result);
         }
 
         private bool ObjectExists(long id)

@@ -18,6 +18,7 @@ namespace APPartment.Data
         public DbSet<APPartment.Models.Hygiene> Hygiene { get; set; }
         public DbSet<APPartment.Models.Issue> Issue { get; set; }
         public DbSet<APPartment.Models.Message> Message { get; set; }
+        public DbSet<APPartment.Models.Comment> Comment { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,6 +32,7 @@ namespace APPartment.Data
             modelBuilder.Entity<Hygiene>().ToTable("Hygiene");
             modelBuilder.Entity<Issue>().ToTable("Issue");
             modelBuilder.Entity<Message>().ToTable("Message");
+            modelBuilder.Entity<Comment>().ToTable("Comment");
         }
     }
 }
