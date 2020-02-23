@@ -1,10 +1,8 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
-@model List<APPartment.Models.Base.BaseObject>
+﻿@model APPartment.Data.Home.HomeDisplayModel
 
 @{
+    var widgetObjects = Model.BaseObjects;
+
     var nextMonth = DateTime.Now.AddMonths(1).Month.ToString();
     var thisMonth = DateTime.Now.Month.ToString();
     var rentDueDate = string.Empty;
@@ -12,7 +10,7 @@
     if (ViewData["RentDueDateDay"] != null && ViewData["RentDueDateDay"].ToString() != "0")
     {
         var dateString = $"{ViewData["RentDueDateDay"]}/{nextMonth}/{DateTime.Now.Year.ToString()}";
-        
+
         if (DateTime.Parse(dateString).AddMonths(-1).Date > DateTime.Now.Date)
         {
             dateString = $"{ViewData["RentDueDateDay"]}/{thisMonth}/{DateTime.Now.Year.ToString()}";
@@ -21,13 +19,13 @@
         rentDueDate = DateTime.Parse(dateString).ToLongDateString();
     }
 
-    string inventoryModifiedDate = Model[0].ModifiedDate == null ? string.Empty : CalculateRelativeTime(Model[0].ModifiedDate.Value);
-    string hygieneModifiedDate = Model[1].ModifiedDate == null ? string.Empty : CalculateRelativeTime(Model[1].ModifiedDate.Value);
-    string issueModifiedDate = Model[2].ModifiedDate == null ? string.Empty : CalculateRelativeTime(Model[2].ModifiedDate.Value);
+    string inventoryModifiedDate = widgetObjects[0].ModifiedDate == null ? string.Empty : CalculateRelativeTime(widgetObjects[0].ModifiedDate.Value);
+    string hygieneModifiedDate = widgetObjects[1].ModifiedDate == null ? string.Empty : CalculateRelativeTime(widgetObjects[1].ModifiedDate.Value);
+    string issueModifiedDate = widgetObjects[2].ModifiedDate == null ? string.Empty : CalculateRelativeTime(widgetObjects[2].ModifiedDate.Value);
 
-    string inventoryModifiedBy = Model[0].ModifiedBy == null ? string.Empty : Model[0].ModifiedBy;
-    string hygieneModifiedBy = Model[1].ModifiedBy == null ? string.Empty : Model[1].ModifiedBy;
-    string issueModifiedBy = Model[2].ModifiedBy == null ? string.Empty : Model[2].ModifiedBy;
+    string inventoryModifiedBy = widgetObjects[0].ModifiedBy == null ? string.Empty : widgetObjects[0].ModifiedBy;
+    string hygieneModifiedBy = widgetObjects[1].ModifiedBy == null ? string.Empty : widgetObjects[1].ModifiedBy;
+    string issueModifiedBy = widgetObjects[2].ModifiedBy == null ? string.Empty : widgetObjects[2].ModifiedBy;
 
     string inventoryItemName = string.Empty;
     string hygieneItemName = string.Empty;
@@ -37,34 +35,34 @@
     string hygieneItemDetails = string.Empty;
     string issueItemDetails = string.Empty;
 
-    if (!string.IsNullOrEmpty(Model[0].Name))
+    if (!string.IsNullOrEmpty(widgetObjects[0].Name))
     {
-        inventoryItemName = Model[0].Name.Length <= 10 ? Model[0].Name : Model[0].Name.Substring(0, 20) + "...";
+        inventoryItemName = widgetObjects[0].Name.Length <= 10 ? widgetObjects[0].Name : widgetObjects[0].Name.Substring(0, 20) + "...";
     }
 
-    if (!string.IsNullOrEmpty(Model[1].Name))
+    if (!string.IsNullOrEmpty(widgetObjects[1].Name))
     {
-        hygieneItemName = Model[1].Name.Length <= 10 ? Model[1].Name : Model[1].Name.Substring(0, 20) + "...";
+        hygieneItemName = widgetObjects[1].Name.Length <= 10 ? widgetObjects[1].Name : widgetObjects[1].Name.Substring(0, 20) + "...";
     }
 
-    if (!string.IsNullOrEmpty(Model[2].Name))
+    if (!string.IsNullOrEmpty(widgetObjects[2].Name))
     {
-        issueItemName = Model[2].Name.Length <= 10 ? Model[2].Name : Model[2].Name.Substring(0, 20) + "...";
+        issueItemName = widgetObjects[2].Name.Length <= 10 ? widgetObjects[2].Name : widgetObjects[2].Name.Substring(0, 20) + "...";
     }
 
-    if (!string.IsNullOrEmpty(Model[0].Details))
+    if (!string.IsNullOrEmpty(widgetObjects[0].Details))
     {
-        inventoryItemDetails = Model[0].Details.Length <= 50 ? Model[0].Details : Model[0].Details.Substring(0, 50) + "...";
+        inventoryItemDetails = widgetObjects[0].Details.Length <= 50 ? widgetObjects[0].Details : widgetObjects[0].Details.Substring(0, 50) + "...";
     }
 
-    if (!string.IsNullOrEmpty(Model[1].Details))
+    if (!string.IsNullOrEmpty(widgetObjects[1].Details))
     {
-        hygieneItemDetails = Model[1].Details.Length <= 50 ? Model[1].Details : Model[1].Details.Substring(0, 50) + "...";
+        hygieneItemDetails = widgetObjects[1].Details.Length <= 50 ? widgetObjects[1].Details : widgetObjects[1].Details.Substring(0, 50) + "...";
     }
 
-    if (!string.IsNullOrEmpty(Model[2].Details))
+    if (!string.IsNullOrEmpty(widgetObjects[2].Details))
     {
-        issueItemDetails = Model[2].Details.Length <= 50 ? Model[2].Details : Model[2].Details.Substring(0, 50) + "...";
+        issueItemDetails = widgetObjects[2].Details.Length <= 50 ? widgetObjects[2].Details : widgetObjects[2].Details.Substring(0, 50) + "...";
     }
 
 
@@ -111,8 +109,6 @@
             return years <= 1 ? "One year ago" : years + " years ago";
         }
     }
-
-    List<Message> messages;
 }
 
 <div class="row">
@@ -122,7 +118,7 @@
                 <h6 class="m-0 font-weight-bold text-primary">Inventory - latest updates</h6>
             </div>
             <div class="card-body">
-                @if (Model[0].Name != null)
+                @if (widgetObjects[0].Name != null)
                 {
                     <p class="card-text">
                         <strong>Name</strong>: @inventoryItemName <br /> <strong>Details</strong>: @inventoryItemDetails
@@ -135,7 +131,7 @@
                 <a asp-controller="Inventory" asp-action="Index" class="btn btn-primary">Go to inventory</a>
             </div>
             <div class="card-footer text-muted">
-                @if (Model[0].Name != null)
+                @if (widgetObjects[0].Name != null)
                 {
                     <p>@inventoryModifiedDate by @inventoryModifiedBy</p>
                 }
@@ -152,7 +148,7 @@
                 <h6 class="m-0 font-weight-bold text-primary">Hygiene - latest updates</h6>
             </div>
             <div class="card-body">
-                @if (Model[1].Name != null)
+                @if (widgetObjects[1].Name != null)
                 {
                     <p class="card-text">
                         <strong>Name</strong>: @hygieneItemName <br /> <strong>Details</strong>: @hygieneItemDetails
@@ -166,7 +162,7 @@
                 <a asp-controller="Hygiene" asp-action="Index" class="btn btn-primary">Go to hygiene</a>
             </div>
             <div class="card-footer text-muted">
-                @if (Model[1].Name != null)
+                @if (widgetObjects[1].Name != null)
                 {
                     <p>@hygieneModifiedDate by @hygieneModifiedBy</p>
                 }
@@ -183,7 +179,7 @@
                 <h6 class="m-0 font-weight-bold text-primary">Issues - latest updates</h6>
             </div>
             <div class="card-body">
-                @if (Model[2].Name != null)
+                @if (widgetObjects[2].Name != null)
                 {
                     <p class="card-text">
                         <strong>Name</strong>: @issueItemName <br /> <strong>Details</strong>: @issueItemDetails
@@ -196,7 +192,7 @@
                 <a asp-controller="Issues" asp-action="Index" class="btn btn-primary">Go to issues</a>
             </div>
             <div class="card-footer text-muted">
-                @if (Model[2].Name != null)
+                @if (widgetObjects[2].Name != null)
                 {
                     <p>@issueModifiedDate by @issueModifiedBy</p>
                 }
@@ -237,7 +233,12 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <ul id="messagesList"></ul>
+                        <ul id="messagesList">
+                            @foreach (var message in Model.Messages)
+                            {
+                                <li>@Html.Raw(message)</li>
+                            }
+                        </ul>
                     </div>
                 </div>
             </div>

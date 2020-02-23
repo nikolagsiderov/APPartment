@@ -232,6 +232,9 @@ namespace APPartment.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<long>("HouseId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 

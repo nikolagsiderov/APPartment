@@ -10,6 +10,7 @@ using APPartment.Data;
 using Microsoft.AspNetCore.Http;
 using APPartment.Models.Base;
 using System.Threading.Tasks;
+using APPartment.Data.Home;
 
 namespace APPartment.Controllers
 {
@@ -46,7 +47,13 @@ namespace APPartment.Controllers
                 ViewData["RentDueDateDay"] = _context.HouseSettings.Find(long.Parse(HttpContext.Session.GetString("HouseId"))).RentDueDateDay;
             }
 
-            return View(displayObjects);
+            var homeDisplayModel = new HomeDisplayModel()
+            {
+                Messages = GetMessages(currentHouseId),
+                BaseObjects = displayObjects
+            };
+
+            return View(homeDisplayModel);
         }
 
         public IActionResult Register()
@@ -168,8 +175,9 @@ namespace APPartment.Controllers
         public async Task<ActionResult> CreateMessage(string username, string messageText)
         {
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
-            var message = new Message() { Username = username, Text = messageText, UserId = currentUserId, CreatedDate = DateTime.Now };
+            var message = new Message() { Username = username, Text = messageText, UserId = currentUserId, HouseId = currentHouseId, CreatedDate = DateTime.Now };
 
             await _context.Message.AddAsync(message);
             await _context.SaveChangesAsync();
@@ -216,6 +224,13 @@ namespace APPartment.Controllers
             displayObjects.Add(lastIssueObject);
 
             return displayObjects;
+        }
+
+        private List<string> GetMessages(long currentHouseId)
+        {
+            var messages = _context.Message.Where(x => x.HouseId == currentHouseId).OrderByDescending(x => x.Id).Take(5).OrderBy(x => x.Id).Select(x => $"{x.Username}: {x.Text}").ToList();
+
+            return messages;
         }
     }
 }

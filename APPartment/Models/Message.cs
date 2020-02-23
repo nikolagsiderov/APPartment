@@ -17,5 +17,8 @@ namespace APPartment.Models
 
         [ForeignKey("User")]
         public long UserId { get; set; }
+
+        [ForeignKey("HouseId")]
+        public long HouseId { get; set; }
     }
 }

@@ -130,7 +130,8 @@ namespace APPartment.Migrations
                     Username = table.Column<string>(nullable: true),
                     Text = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
-                    UserId = table.Column<long>(nullable: false)
+                    UserId = table.Column<long>(nullable: false),
+                    HouseId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
