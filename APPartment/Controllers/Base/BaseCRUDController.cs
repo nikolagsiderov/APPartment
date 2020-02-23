@@ -92,7 +92,7 @@ namespace APPartment.Controllers.Base
         [Breadcrumb("<i class='fas fa-plus'></i> Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Details,Status,CreatedBy,ModifiedBy,CreatedDate,ModifiedDate,HouseId")] T model)
+        public async Task<IActionResult> Create([Bind("Id,Name,Details,Status,CreatedBy,ModifiedBy,CreatedDate,ModifiedDate,HouseId,ObjectId")] T model)
         {
             if (ModelState.IsValid)
             {
@@ -105,6 +105,14 @@ namespace APPartment.Controllers.Base
                 model.CreatedDate = DateTime.Now;
                 model.ModifiedBy = model.CreatedBy;
                 model.ModifiedDate = model.CreatedDate;
+
+                // Define Object
+                var objectDb = new APPartment.Models.Object();
+                _context.Add(objectDb);
+                await _context.SaveChangesAsync();
+
+                // Assign Base Object to Object
+                model.ObjectId = objectDb.ObjectId;
 
                 _context.Add(model);
                 await _context.SaveChangesAsync();
@@ -135,7 +143,7 @@ namespace APPartment.Controllers.Base
         [Breadcrumb("<i class='fas fa-edit'></i> Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Name,Details,Status,CreatedBy,ModifiedBy,CreatedDate,ModifiedDate,HouseId")] T model)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,Name,Details,Status,CreatedBy,ModifiedBy,CreatedDate,ModifiedDate,HouseId,ObjectId")] T model)
         {
             if (id != model.Id)
             {

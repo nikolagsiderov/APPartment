@@ -21,5 +21,7 @@ namespace APPartment.Models.Declaration
         public DateTime? ModifiedDate { get; set; }
 
         public long? HouseId { get; set; }
+
+        public long ObjectId { get; set; }
     }
 }

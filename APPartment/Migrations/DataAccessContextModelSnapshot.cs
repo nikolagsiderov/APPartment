@@ -110,6 +110,9 @@ namespace APPartment.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("ObjectId")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -146,6 +149,9 @@ namespace APPartment.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ObjectId")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -184,6 +190,9 @@ namespace APPartment.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("ObjectId")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -214,6 +223,18 @@ namespace APPartment.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Message");
+                });
+
+            modelBuilder.Entity("APPartment.Models.Object", b =>
+                {
+                    b.Property<long>("ObjectId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.HasKey("ObjectId");
+
+                    b.ToTable("Object");
                 });
 
             modelBuilder.Entity("APPartment.Models.User", b =>

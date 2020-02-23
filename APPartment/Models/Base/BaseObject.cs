@@ -27,5 +27,8 @@ namespace APPartment.Models.Base
 
         [ForeignKey("House")]
         public long? HouseId { get; set; }
+
+        [ForeignKey("Object")]
+        public long ObjectId { get; set; }
     }
 }

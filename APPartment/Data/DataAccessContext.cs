@@ -10,6 +10,7 @@ namespace APPartment.Data
         {
         }
 
+        public DbSet<APPartment.Models.Object> Object { get; set; }
         public DbSet<APPartment.Models.User> User { get; set; }
         public DbSet<APPartment.Models.House> House { get; set; }
         public DbSet<APPartment.Models.HouseSettings> HouseSettings { get; set; }
@@ -22,6 +23,7 @@ namespace APPartment.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Object>().ToTable("Object");
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<House>().ToTable("House");
             modelBuilder.Entity<HouseSettings>().ToTable("HouseSettings");

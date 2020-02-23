@@ -56,7 +56,8 @@ namespace APPartment.Migrations
                     ModifiedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true),
                     ModifiedDate = table.Column<DateTime>(nullable: true),
-                    HouseId = table.Column<long>(nullable: true)
+                    HouseId = table.Column<long>(nullable: true),
+                    ObjectId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,7 +77,8 @@ namespace APPartment.Migrations
                     ModifiedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true),
                     ModifiedDate = table.Column<DateTime>(nullable: true),
-                    HouseId = table.Column<long>(nullable: true)
+                    HouseId = table.Column<long>(nullable: true),
+                    ObjectId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,7 +98,8 @@ namespace APPartment.Migrations
                     ModifiedBy = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true),
                     ModifiedDate = table.Column<DateTime>(nullable: true),
-                    HouseId = table.Column<long>(nullable: true)
+                    HouseId = table.Column<long>(nullable: true),
+                    ObjectId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,6 +120,18 @@ namespace APPartment.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Message", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Object",
+                columns: table => new
+                {
+                    ObjectId = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Object", x => x.ObjectId);
                 });
 
             migrationBuilder.CreateTable(
@@ -154,6 +169,9 @@ namespace APPartment.Migrations
 
             migrationBuilder.DropTable(
                 name: "Message");
+
+            migrationBuilder.DropTable(
+                name: "Object");
 
             migrationBuilder.DropTable(
                 name: "User");
