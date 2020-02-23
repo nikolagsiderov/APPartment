@@ -228,7 +228,7 @@ namespace APPartment.Controllers
 
         private List<string> GetMessages(long currentHouseId)
         {
-            var messages = _context.Message.Where(x => x.HouseId == currentHouseId).OrderByDescending(x => x.Id).Take(5).OrderBy(x => x.Id).Select(x => $"{x.Username}: {x.Text}").ToList();
+            var messages = _context.Message.Where(x => x.HouseId == currentHouseId).OrderByDescending(x => x.Id).Take(10).OrderBy(x => x.Id).Select(x => $"{x.Username}: {x.Text}").ToList();
 
             return messages;
         }

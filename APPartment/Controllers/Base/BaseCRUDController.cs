@@ -212,7 +212,7 @@ namespace APPartment.Controllers.Base
         public List<string> GetComments(long targetId)
         {
             var comments = _context.Comment.Where(x => x.TargetId == targetId)
-                .OrderByDescending(x => x.Id).Take(10).Select(x => $"<strong>{x.Username}</strong>: {x.Text}").ToList();
+                .OrderByDescending(x => x.Id).Take(20).Select(x => $"<strong>{x.Username}</strong>: {x.Text}").ToList();
 
             return comments;
         }
