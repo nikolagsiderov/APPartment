@@ -1,11 +1,7 @@
-﻿using APPartment.Models;
-using APPartment.Models.Base;
-using System;
+﻿using APPartment.Models.Base;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace APPartment.Data.Home
+namespace APPartment.DisplayModels.Home
 {
     public class HomeDisplayModel
     {

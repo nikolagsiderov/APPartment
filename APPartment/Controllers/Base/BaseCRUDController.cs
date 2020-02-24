@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using APPartment.Data;
 using APPartment.Models;
 using APPartment.Models.Declaration;
+using APPartment.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace APPartment.Controllers.Base
         where T : class, IBaseObject
     {
         private readonly DataAccessContext _context;
+        private HtmlRenderHelper htmlRenderHelper = new HtmlRenderHelper();
 
         public BaseCRUDController(DataAccessContext context)
         {
@@ -257,8 +259,7 @@ namespace APPartment.Controllers.Base
         // Base Object Metadata
         public List<string> GetComments(long targetId)
         {
-            var comments = _context.Comment.Where(x => x.TargetId == targetId)
-                .OrderByDescending(x => x.Id).Take(20).Select(x => $"<strong>{x.Username}</strong>: {x.Text}").ToList();
+            var comments = htmlRenderHelper.BuildComments(_context.Comment.ToList(), targetId);
 
             return comments;
         }
@@ -278,7 +279,7 @@ namespace APPartment.Controllers.Base
             _context.Add(comment);
             await _context.SaveChangesAsync();
 
-            var result = $"<strong>{comment.Username}</strong>: {comment.Text}";
+            var result = htmlRenderHelper.BuildPostComment(comment);
 
             return Json(result);
         }

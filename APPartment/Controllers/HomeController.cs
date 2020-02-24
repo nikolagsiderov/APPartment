@@ -10,7 +10,8 @@ using APPartment.Data;
 using Microsoft.AspNetCore.Http;
 using APPartment.Models.Base;
 using System.Threading.Tasks;
-using APPartment.Data.Home;
+using APPartment.DisplayModels.Home;
+using APPartment.Utilities;
 
 namespace APPartment.Controllers
 {
@@ -18,6 +19,7 @@ namespace APPartment.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly DataAccessContext _context;
+        private HtmlRenderHelper htmlRenderHelper = new HtmlRenderHelper();
 
         public HomeController(ILogger<HomeController> logger, DataAccessContext context)
         {
@@ -228,7 +230,7 @@ namespace APPartment.Controllers
 
         private List<string> GetMessages(long currentHouseId)
         {
-            var messages = _context.Message.Where(x => x.HouseId == currentHouseId).OrderByDescending(x => x.Id).Take(10).OrderBy(x => x.Id).Select(x => $"{x.Username}: {x.Text}").ToList();
+            var messages = htmlRenderHelper.BuildMessagesForChat(_context.Message.ToList(), currentHouseId);
 
             return messages;
         }
