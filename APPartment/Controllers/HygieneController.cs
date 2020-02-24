@@ -22,6 +22,8 @@ namespace APPartment.Controllers
         [Breadcrumb("<i class='fas fa-recycle' style='font-size:20px'></i> Hygiene")]
         public override Task<IActionResult> Index(string sortOrder)
         {
+            ViewData["GridTitle"] = "Hygiene";
+
             return base.Index(sortOrder);
         }
 

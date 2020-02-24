@@ -22,6 +22,8 @@ namespace APPartment.Controllers
         [Breadcrumb("<i class='fas fa-tasks' style='font-size:20px'></i> Inventory")]
         public override Task<IActionResult> Index(string sortOrder)
         {
+            ViewData["GridTitle"] = "Inventory";
+
             return base.Index(sortOrder);
         }
 

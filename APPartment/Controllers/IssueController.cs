@@ -22,6 +22,8 @@ namespace APPartment.Controllers
         [Breadcrumb("<i class='fas fa-exclamation-circle' style='font-size:20px'></i> Issues")]
         public override Task<IActionResult> Index(string sortOrder)
         {
+            ViewData["GridTitle"] = "Issues";
+
             return base.Index(sortOrder);
         }
 
