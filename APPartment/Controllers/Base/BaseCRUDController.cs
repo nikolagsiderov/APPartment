@@ -96,7 +96,7 @@ namespace APPartment.Controllers.Base
         [Breadcrumb("<i class='fas fa-plus'></i> Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Details,Status,CreatedBy,ModifiedBy,CreatedDate,ModifiedDate,HouseId,ObjectId")] T model)
+        public async Task<IActionResult> Create([Bind("Id,Name,Details,Status,IsCompleted,CreatedBy,ModifiedBy,CreatedDate,ModifiedDate,HouseId,ObjectId")] T model)
         {
             if (ModelState.IsValid)
             {
@@ -149,7 +149,7 @@ namespace APPartment.Controllers.Base
         [Breadcrumb("<i class='fas fa-edit'></i> Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Name,Details,Status,CreatedBy,ModifiedBy,CreatedDate,ModifiedDate,HouseId,ObjectId")] T model)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,Name,Details,Status,IsCompleted,CreatedBy,ModifiedBy,CreatedDate,ModifiedDate,HouseId,ObjectId")] T model)
         {
             if (id != model.Id)
             {
@@ -186,6 +186,52 @@ namespace APPartment.Controllers.Base
                 return RedirectToAction(nameof(Index));
             }
             return View("_Edit", model);
+        }
+
+        public async Task<IActionResult> Complete(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var model = await _context.Set<T>()
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            model.IsCompleted = true;
+
+            _context.Update(model);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> MarkNotCompleted(long? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var model = await _context.Set<T>()
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            model.IsCompleted = false;
+
+            _context.Update(model);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(long? id)

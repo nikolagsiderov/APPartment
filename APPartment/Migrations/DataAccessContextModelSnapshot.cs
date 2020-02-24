@@ -121,6 +121,9 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -161,6 +164,9 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -200,6 +206,9 @@ namespace APPartment.Migrations
 
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");

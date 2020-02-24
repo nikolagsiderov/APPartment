@@ -13,6 +13,8 @@ namespace APPartment.Models.Declaration
 
         public int Status { get; set; }
 
+        public bool IsCompleted { get; set; }
+
         public string CreatedBy { get; set; }
 
         public string ModifiedBy { get; set; }

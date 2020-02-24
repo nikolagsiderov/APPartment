@@ -32,7 +32,7 @@ namespace APPartment.Controllers
                 long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
                 var hygieneCriticalCount = _context.Set<Issue>().ToList().Where(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.Critical || 
-                x.Status == (int)ObjectStatus.High)).Count();
+                x.Status == (int)ObjectStatus.High) && x.IsCompleted == false).Count();
 
                 return Json(hygieneCriticalCount);
             }
