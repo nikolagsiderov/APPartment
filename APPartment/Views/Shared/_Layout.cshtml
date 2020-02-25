@@ -44,24 +44,48 @@
             </li>
 
             <li class="nav-item" id="InventoryTab">
-                <a class="nav-link" asp-area="" asp-controller="Inventory" asp-action="Index">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#inventoryCollapse" aria-expanded="true" aria-controls="inventoryCollapse">
                     <i class='fas fa-tasks'></i>
                     <span>Inventory</span> <span class="badge badge-light" style="display: none" id="inventoryBadge"></span>
                 </a>
+                <div id="inventoryCollapse" class="collapse" aria-labelledby="inventoryCollapseLabel" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Inventory Objects:</h6>
+                        <a class="collapse-item" asp-controller="Inventory" asp-action="IndexNotCompleted"><i class="fas fa-exclamation-triangle"></i> Not Supplied</a>
+                        <a class="collapse-item" asp-controller="Inventory" asp-action="IndexCompleted"><i class="fas fa-check"></i> Supplied</a>
+                        <a class="collapse-item" asp-controller="Inventory" asp-action="Index"><i class="fas fa-bars"></i> All</a>
+                    </div>
+                </div>
             </li>
 
             <li class="nav-item" id="HygieneTab">
-                <a class="nav-link" asp-area="" asp-controller="Hygiene" asp-action="Index">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#hygieneCollapse" aria-expanded="true" aria-controls="hygieneCollapse">
                     <i class='fas fa-recycle'></i>
                     <span>Hygiene</span> <span class="badge badge-light" style="display: none" id="hygieneBadge"></span>
                 </a>
+                <div id="hygieneCollapse" class="collapse" aria-labelledby="hygieneCollapseLabel" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Hygiene Objects:</h6>
+                        <a class="collapse-item" asp-controller="Hygiene" asp-action="IndexNotCompleted"><i class="fas fa-exclamation-triangle"></i> Due Cleaning</a>
+                        <a class="collapse-item" asp-controller="Hygiene" asp-action="IndexCompleted"><i class="fas fa-check"></i> Cleaned</a>
+                        <a class="collapse-item" asp-controller="Hygiene" asp-action="Index"><i class="fas fa-bars"></i> All</a>
+                    </div>
+                </div>
             </li>
 
             <li class="nav-item" id="IssuesTab">
-                <a class="nav-link" asp-area="" asp-controller="Issues" asp-action="Index">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#issuesCollapse" aria-expanded="true" aria-controls="issuesCollapse">
                     <i class='fas fa-exclamation-circle'></i>
                     <span>Issues</span> <span class="badge badge-light" style="display: none" id="issuesBadge"></span>
                 </a>
+                <div id="issuesCollapse" class="collapse" aria-labelledby="issuesCollapseLabel" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Issue Objects:</h6>
+                        <a class="collapse-item" asp-controller="Issues" asp-action="IndexNotCompleted"><i class="fas fa-exclamation-triangle"></i> Open</a>
+                        <a class="collapse-item" asp-controller="Issues" asp-action="IndexCompleted"><i class="fas fa-check"></i> Closed</a>
+                        <a class="collapse-item" asp-controller="Issues" asp-action="Index"><i class="fas fa-bars"></i> All</a>
+                    </div>
+                </div>
             </li>
 
             <li class="nav-item">

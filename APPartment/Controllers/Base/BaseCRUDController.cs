@@ -25,45 +25,46 @@ namespace APPartment.Controllers.Base
         }
 
         [Breadcrumb("Base")]
-        public virtual async Task<IActionResult> Index(string sortOrder)
+        public virtual async Task<IActionResult> Index()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
             {
                 return RedirectToAction("Login", "Account");
             }
 
-            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-            ViewData["DetailsSortParm"] = sortOrder == "details_asc" ? "details_desc" : "details_asc";
-            ViewData["StatusSortParm"] = sortOrder == "status_asc" ? "status_desc" : "status_asc";
-
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
             var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId).ToListAsync();
 
-            switch (sortOrder)
+            return View("_Grid", modelObjects);
+        }
+
+        [Breadcrumb("Base")]
+        public virtual async Task<IActionResult> IndexCompleted()
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
             {
-                case "name_asc":
-                    modelObjects = modelObjects.OrderBy(s => s.Name).ToList();
-                    break;
-                case "name_desc":
-                    modelObjects = modelObjects.OrderByDescending(s => s.Name).ToList();
-                    break;
-                case "details_asc":
-                    modelObjects = modelObjects.OrderBy(s => s.Details).ToList();
-                    break;
-                case "details_desc":
-                    modelObjects = modelObjects.OrderByDescending(s => s.Details).ToList();
-                    break;
-                case "status_asc":
-                    modelObjects = modelObjects.OrderBy(s => s.Status).ToList();
-                    break;
-                case "status_desc":
-                    modelObjects = modelObjects.OrderByDescending(s => s.Status).ToList();
-                    break;
-                default:
-                    modelObjects = modelObjects.OrderBy(s => s.Name).ToList();
-                    break;
+                return RedirectToAction("Login", "Account");
             }
+
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == true).ToListAsync();
+
+            return View("_Grid", modelObjects);
+        }
+
+        [Breadcrumb("Base")]
+        public virtual async Task<IActionResult> IndexNotCompleted()
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == false).ToListAsync();
 
             return View("_Grid", modelObjects);
         }

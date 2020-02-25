@@ -1,5 +1,50 @@
 ﻿@model IEnumerable<APPartment.Models.Base.BaseObject>
 
+@{
+    var moduleName = ViewData["Module"].ToString();
+
+    var titleForCheckAction = string.Empty;
+    var titleForUncheckAction = string.Empty;
+    var checkCardBody = string.Empty;
+    var uncheckCardBody = string.Empty;
+    var checkCardButton = string.Empty;
+    var uncheckCardButton = string.Empty;
+
+    switch (moduleName)
+    {
+        case "Inventory":
+            titleForCheckAction = "Mark as supplied";
+            titleForUncheckAction = "Mark as not supplied";
+
+            checkCardBody = "Are you sure you want to mark as supplied?";
+            uncheckCardBody = "Are you sure you want to mark as not supplied?";
+
+            checkCardButton = "Mark supplied";
+            uncheckCardButton = "Mark not supplied";
+            break;
+        case "Hygiene":
+            titleForCheckAction = "Mark as cleaned";
+            titleForUncheckAction = "Mark as not cleaned";
+
+            checkCardBody = "Are you sure you want to mark as cleaned?";
+            uncheckCardBody = "Are you sure you want to mark as not cleaned?";
+
+            checkCardButton = "Mark cleaned";
+            uncheckCardButton = "Mark not cleaned";
+            break;
+        case "Issues":
+            titleForCheckAction = "Mark as closed";
+            titleForUncheckAction = "Mark as open";
+
+            checkCardBody = "Are you sure you want to close?";
+            uncheckCardBody = "Are you sure you want to open?";
+
+            checkCardButton = "Close";
+            uncheckCardButton = "Open";
+            break;
+    }
+}
+
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">@ViewData["GridTitle"]</h6>
@@ -18,13 +63,13 @@
                 <thead>
                     <tr>
                         <th>
-                            <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">Name</a>
+                            Name
                         </th>
                         <th>
-                            <a asp-action="Index" asp-route-sortOrder="@ViewData["DetailsSortParm"]">Details</a>
+                            Details
                         </th>
                         <th>
-                            <a asp-action="Index" asp-route-sortOrder="@ViewData["StatusSortParm"]">Status</a>
+                            Status
                         </th>
                         <th>Actions</th>
                     </tr>
@@ -74,23 +119,23 @@
                             <td>
                                 @if (item.IsCompleted)
                                 {
-                                    <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#markNotCompletedObjectModal"><i class="fas fa-exclamation-triangle"></i></button>
+                                    <button type="button" title="@titleForUncheckAction" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#markNotCompletedObjectModal"><i class="fas fa-exclamation-triangle"></i></button>
 
                                     <div class="modal fade" id="markNotCompletedObjectModal" tabindex="-1" role="dialog" aria-labelledby="markNotCompletedObjectModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="markNotCompletedObjectModalLabel">Open Object</h5>
+                                                    <h5 class="modal-title" id="markNotCompletedObjectModalLabel">@titleForUncheckAction</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    Are you sure you want to open this item?
+                                                    @uncheckCardBody
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                    <a asp-action="MarkNotCompleted" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">Open</button></a>
+                                                    <a asp-action="MarkNotCompleted" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">@uncheckCardButton</button></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -98,23 +143,23 @@
                                 }
                                 else
                                 {
-                                    <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#completeObjectModal"><i class="fas fa-check"></i></button>
+                                    <button type="button" title="@titleForCheckAction" class="btn btn-success btn-sm" data-toggle="modal" data-target="#completeObjectModal"><i class="fas fa-check"></i></button>
 
                                     <div class="modal fade" id="completeObjectModal" tabindex="-1" role="dialog" aria-labelledby="completeObjectModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="completeObjectModalLabel">Close Object</h5>
+                                                    <h5 class="modal-title" id="completeObjectModalLabel">@titleForCheckAction</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    Are you sure you want to close this item?
+                                                    @checkCardBody
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                    <a asp-action="Complete" asp-route-id="@item.Id"><button type="button" class="btn btn-success">Close</button></a>
+                                                    <a asp-action="Complete" asp-route-id="@item.Id"><button type="button" class="btn btn-success">@checkCardButton</button></a>
                                                 </div>
                                             </div>
                                         </div>

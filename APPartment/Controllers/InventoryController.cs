@@ -20,11 +20,30 @@ namespace APPartment.Controllers
         }
 
         [Breadcrumb("<i class='fas fa-tasks' style='font-size:20px'></i> Inventory")]
-        public override Task<IActionResult> Index(string sortOrder)
+        public override Task<IActionResult> Index()
         {
-            ViewData["GridTitle"] = "Inventory";
+            ViewData["GridTitle"] = "Inventory - All";
+            ViewData["Module"] = "Inventory";
 
-            return base.Index(sortOrder);
+            return base.Index();
+        }
+
+        [Breadcrumb("<i class='fas fa-check' style='font-size:20px'></i> Supplied")]
+        public override Task<IActionResult> IndexCompleted()
+        {
+            ViewData["GridTitle"] = "Inventory - Supplied";
+            ViewData["Module"] = "Inventory";
+
+            return base.IndexCompleted();
+        }
+
+        [Breadcrumb("<i class='fas fa-exclamation-triangle' style='font-size:20px'></i> Not Supplied")]
+        public override Task<IActionResult> IndexNotCompleted()
+        {
+            ViewData["GridTitle"] = "Inventory - Not Supplied";
+            ViewData["Module"] = "Inventory";
+
+            return base.IndexNotCompleted();
         }
 
         public JsonResult GetInventoryCriticalCount()

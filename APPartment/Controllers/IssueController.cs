@@ -20,11 +20,30 @@ namespace APPartment.Controllers
         }
 
         [Breadcrumb("<i class='fas fa-exclamation-circle' style='font-size:20px'></i> Issues")]
-        public override Task<IActionResult> Index(string sortOrder)
+        public override Task<IActionResult> Index()
         {
-            ViewData["GridTitle"] = "Issues";
+            ViewData["GridTitle"] = "Issues - All";
+            ViewData["Module"] = "Issues";
 
-            return base.Index(sortOrder);
+            return base.Index();
+        }
+
+        [Breadcrumb("<i class='fas fa-check' style='font-size:20px'></i> Closed")]
+        public override Task<IActionResult> IndexCompleted()
+        {
+            ViewData["GridTitle"] = "Issues - Closed";
+            ViewData["Module"] = "Issues";
+
+            return base.IndexCompleted();
+        }
+
+        [Breadcrumb("<i class='fas fa-exclamation-triangle' style='font-size:20px'></i> Open")]
+        public override Task<IActionResult> IndexNotCompleted()
+        {
+            ViewData["GridTitle"] = "Issues - Open";
+            ViewData["Module"] = "Issues";
+
+            return base.IndexNotCompleted();
         }
 
         public JsonResult GetIssuesCriticalCount()
