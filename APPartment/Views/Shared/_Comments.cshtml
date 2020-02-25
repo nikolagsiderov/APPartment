@@ -27,9 +27,10 @@
 </div>
 
 <script>
-    $("#commentButton").click(function () {
-        var comment = $('#commentTextbox').val();
+$("#commentButton").click(function () {
+    var comment = $('#commentTextbox').val();
 
+    if (comment && comment != "") {
         $.ajax({
             type: "POST",
             url: "@Url.Action("PostComment", controllerName)",
@@ -40,11 +41,12 @@
 
                 $("#comment-text-data").prepend(appendValue);
 
-                $("#commentTextbox").attr("value", "");
+                document.getElementById("commentTextbox").value = "";
             },
             error: function (req, status, error) {
                 alert(error);
             }
         });
-    });
+    }
+});
 </script>
