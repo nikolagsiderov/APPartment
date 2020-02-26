@@ -10,6 +10,8 @@
     var checkCardButton = string.Empty;
     var uncheckCardButton = string.Empty;
 
+    var newModel = new object();
+
     switch (moduleName)
     {
         case "Inventory":
@@ -21,6 +23,8 @@
 
             checkCardButton = "Mark supplied";
             uncheckCardButton = "Mark not supplied";
+
+            newModel = new APPartment.Models.Inventory();
             break;
         case "Hygiene":
             titleForCheckAction = "Mark as cleaned";
@@ -31,6 +35,8 @@
 
             checkCardButton = "Mark cleaned";
             uncheckCardButton = "Mark not cleaned";
+
+            newModel = new APPartment.Models.Hygiene();
             break;
         case "Issues":
             titleForCheckAction = "Mark as closed";
@@ -41,6 +47,8 @@
 
             checkCardButton = "Close";
             uncheckCardButton = "Open";
+
+            newModel = new APPartment.Models.Issue();
             break;
     }
 }
@@ -52,9 +60,11 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-1">
-                <a asp-action="Create"><button type="button" class="btn btn-primary"><i class="fas fa-plus"></i> Add</button></a>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createView"><i class="fas fa-plus"></i> Add</button>
             </div>
         </div>
+
+        @Html.Partial("_Create", newModel)
 
         <br />
 
@@ -91,15 +101,18 @@
                                 }
                             </td>
                             <td>
-                                @if (item.Details.Length <= 50)
+                                @if (!string.IsNullOrEmpty(item.Details))
                                 {
-                                    <p>@item.Details</p>
-                                }
-                                else
-                                {
-                                    var itemDetailsResult = item.Details.Substring(0, 50) + "...";
+                                    if (item.Details.Length <= 50)
+                                    {
+                                        <p>@item.Details</p>
+                                    }
+                                    else
+                                    {
+                                        var itemDetailsResult = item.Details.Substring(0, 50) + "...";
 
-                                    <p>@itemDetailsResult</p>
+                                        <p>@itemDetailsResult</p>
+                                    }
                                 }
                             </td>
                             <td class="text-center">

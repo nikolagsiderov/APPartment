@@ -37,17 +37,17 @@
 
     if (!string.IsNullOrEmpty(widgetObjects[0].Name))
     {
-        inventoryItemName = widgetObjects[0].Name.Length <= 10 ? widgetObjects[0].Name : widgetObjects[0].Name.Substring(0, 20) + "...";
+        inventoryItemName = widgetObjects[0].Name.Length <= 20 ? widgetObjects[0].Name : widgetObjects[0].Name.Substring(0, 20) + "...";
     }
 
     if (!string.IsNullOrEmpty(widgetObjects[1].Name))
     {
-        hygieneItemName = widgetObjects[1].Name.Length <= 10 ? widgetObjects[1].Name : widgetObjects[1].Name.Substring(0, 20) + "...";
+        hygieneItemName = widgetObjects[1].Name.Length <= 20 ? widgetObjects[1].Name : widgetObjects[1].Name.Substring(0, 20) + "...";
     }
 
     if (!string.IsNullOrEmpty(widgetObjects[2].Name))
     {
-        issueItemName = widgetObjects[2].Name.Length <= 10 ? widgetObjects[2].Name : widgetObjects[2].Name.Substring(0, 20) + "...";
+        issueItemName = widgetObjects[2].Name.Length <= 20 ? widgetObjects[2].Name : widgetObjects[2].Name.Substring(0, 20) + "...";
     }
 
     if (!string.IsNullOrEmpty(widgetObjects[0].Details))

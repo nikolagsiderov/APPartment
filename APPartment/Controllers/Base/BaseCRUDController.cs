@@ -90,13 +90,6 @@ namespace APPartment.Controllers.Base
             return View("_Details", model);
         }
 
-        [Breadcrumb("<i class='fas fa-plus'></i> Create")]
-        public IActionResult Create()
-        {
-            return View("_Create");
-        }
-
-        [Breadcrumb("<i class='fas fa-plus'></i> Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Details,Status,IsCompleted,CreatedBy,ModifiedBy,CreatedDate,ModifiedDate,HouseId,ObjectId")] T model)
@@ -123,10 +116,9 @@ namespace APPartment.Controllers.Base
 
                 _context.Add(model);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
             }
 
-            return View("_Create", model);
+            return RedirectToAction(nameof(Index));
         }
 
         [Breadcrumb("<i class='fas fa-edit'></i> Edit")]
