@@ -30,7 +30,15 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <img src="~/images/APPartment logo official white.png" alt="APPartment logo" width="30" />
                 </div>
-                <div class="sidebar-brand-text mx-3">@Context.Session.GetString("HouseName")</div>
+                @{ 
+                    var houseName = @Context.Session.GetString("HouseName");
+
+                    if (houseName.Length > 10)
+                    {
+                        houseName = houseName.Substring(0, 10) + "...";
+                    }
+                }
+                <div class="sidebar-brand-text mx-3">@houseName</div>
             </a>
 
             <!-- Divider -->

@@ -1,4 +1,4 @@
-﻿@model APPartment.Data.Home.HomeDisplayModel
+﻿@model APPartment.DisplayModels.Home.HomeDisplayModel
 
 @{
     var widgetObjects = Model.BaseObjects;
@@ -128,7 +128,7 @@
                 {
                     <p class="card-text">No items in the inventory.</p>
                 }
-                <a asp-controller="Inventory" asp-action="Index" class="btn btn-primary">Go to inventory</a>
+                <a asp-controller="Inventory" asp-action="Index" class="btn btn-primary"><i class="fas fa-link"></i> Go to inventory</a>
             </div>
             <div class="card-footer text-muted">
                 @if (widgetObjects[0].Name != null)
@@ -159,7 +159,7 @@
                     <p class="card-text">No items in the hygiene.</p>
                 }
 
-                <a asp-controller="Hygiene" asp-action="Index" class="btn btn-primary">Go to hygiene</a>
+                <a asp-controller="Hygiene" asp-action="Index" class="btn btn-primary"><i class="fas fa-link"></i> Go to hygiene</a>
             </div>
             <div class="card-footer text-muted">
                 @if (widgetObjects[1].Name != null)
@@ -189,7 +189,7 @@
                 {
                     <p class="card-text">No issues present.</p>
                 }
-                <a asp-controller="Issues" asp-action="Index" class="btn btn-primary">Go to issues</a>
+                <a asp-controller="Issues" asp-action="Index" class="btn btn-primary"><i class="fas fa-link"></i> Go to issues</a>
             </div>
             <div class="card-footer text-muted">
                 @if (widgetObjects[2].Name != null)
@@ -222,7 +222,7 @@
                     <div class="row">&nbsp;</div>
                     <div class="row">
                         <div class="col-6">
-                            <input type="submit" class="btn btn-primary" id="sendButton" value="Send Message" />
+                            <button type="submit" class="btn btn-primary" id="sendButton"><i class="fas fa-reply"></i> Send</button>
                         </div>
                     </div>
                 </div>
