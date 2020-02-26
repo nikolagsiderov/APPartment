@@ -13,14 +13,14 @@
 <br />
 <div class="row">
     <div class="col-md-1">
-        <button class="btn btn-primary btn-sm" id="commentButton">Comment</button>
+        <button class="btn btn-primary btn-sm" id="commentButton"><i class="far fa-comment"></i> Comment</button>
     </div>
 </div>
 <div class="row">
     <div class="col-md-10" id="comment-text-data">
         @foreach (var comment in Model.Comments)
         {
-            <hr />
+            <hr style="opacity: 0.4;" />
             <p>@Html.Raw(comment)</p>
         }
     </div>
