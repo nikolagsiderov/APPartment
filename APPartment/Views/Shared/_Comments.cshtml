@@ -13,7 +13,7 @@
 <br />
 <div class="row">
     <div class="col-md-1">
-        <button class="btn btn-primary btn-sm" id="commentButton"><i class="far fa-comment"></i> Comment</button>
+        <button class="btn btn-primary btn-sm" id="commentButton"></button>
     </div>
 </div>
 <div class="row">
@@ -27,6 +27,17 @@
 </div>
 
 <script>
+$(document).ready(function() {
+    $('#commentButton').prop('disabled', true);
+    $('#commentButton').html('<i class="fas fa-comment-slash"></i> Comment');
+    $('textarea[type="text"]').keyup(function() {
+       if($(this).val() != '') {
+           $('#commentButton').prop('disabled', false);
+           $('#commentButton').html('<i class="far fa-comment"></i> Comment');
+       }
+    });
+ });
+
 $("#commentButton").click(function () {
     var comment = $('#commentTextbox').val();
 
@@ -42,6 +53,8 @@ $("#commentButton").click(function () {
                 $("#comment-text-data").prepend(appendValue);
 
                 document.getElementById("commentTextbox").value = "";
+                $('#commentButton').prop('disabled', true);
+                $('#commentButton').html('<i class="fas fa-comment-slash"></i> Comment');
             },
             error: function (req, status, error) {
                 alert(error);
