@@ -31,7 +31,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <img src="~/images/APPartment logo official white.png" alt="APPartment logo" width="30" />
                 </div>
-                @{ 
+                @{
                     var houseName = @Context.Session.GetString("HouseName");
 
                     if (houseName.Length > 10)
@@ -161,6 +161,28 @@
                             </div>
                         </li>
 
+                        <!-- Nav Item - House Status -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="homeStatus" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </a>
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">
+                                    Home status
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-info text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">nsiderov</div>
+                                        <span class="font-weight-bold">The ghost is clear!</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+
                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -252,6 +274,24 @@
     <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <script>
+    $(document).ready(function () {
+        $.ajax({
+            url: "@Url.Action("GetHomeStatus", "Home")",
+            success: function (data) {
+                if (data === 1) {
+                    $('#homeStatus').html('<span class="dot-success"></span>');
+                } else if (data === 2) {
+                    $('#homeStatus').html('<span class="dot-warning"></span>');
+                } else {
+                    $('#homeStatus').html('<span class="dot-danger"></span>');
+                }
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        });
+    });
+
     $("#InventoryTab").ready(function () {
         $.ajax({
             url: "@Url.Action("GetInventoryCriticalCount", "Inventory")",

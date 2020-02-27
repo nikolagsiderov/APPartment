@@ -12,6 +12,7 @@ using APPartment.Models.Base;
 using System.Threading.Tasks;
 using APPartment.DisplayModels.Home;
 using APPartment.Utilities;
+using APPartment.Enums;
 
 namespace APPartment.Controllers
 {
@@ -128,7 +129,7 @@ namespace APPartment.Controllers
                 var houseModel = _context.House.Find(long.Parse(HttpContext.Session.GetString("HouseId")));
                 houseSettings.HouseName = houseModel.Name;
             }
-            
+
             if (houseSettings != null)
             {
                 return View(houseSettings);
@@ -185,6 +186,38 @@ namespace APPartment.Controllers
             await _context.SaveChangesAsync();
 
             return Ok();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> SetHomeStatus(HouseStatus houseStatus)
+        {
+            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            houseStatus.UserId = currentUserId;
+            houseStatus.HouseId = currentHouseId;
+
+            await _context.HouseStatuses.AddAsync(houseStatus);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        public JsonResult GetHomeStatus()
+        {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+                if (_context.HouseStatuses.Any(x => x.HouseId == currentHouseId))
+                {
+                    var currentHouseStatus = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == currentHouseId).FirstOrDefault().Status;
+
+                    return Json(currentHouseStatus);
+                }
+            }
+
+            return Json(1);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

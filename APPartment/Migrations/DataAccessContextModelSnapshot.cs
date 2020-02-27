@@ -102,6 +102,30 @@ namespace APPartment.Migrations
                     b.ToTable("HouseSettings");
                 });
 
+            modelBuilder.Entity("APPartment.Models.HouseStatus", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Details")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("HouseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HouseStatuses");
+                });
+
             modelBuilder.Entity("APPartment.Models.Hygiene", b =>
                 {
                     b.Property<long>("Id")

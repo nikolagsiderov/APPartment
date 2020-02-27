@@ -13,6 +13,7 @@ namespace APPartment.Data
         public DbSet<APPartment.Models.Object> Object { get; set; }
         public DbSet<APPartment.Models.User> User { get; set; }
         public DbSet<APPartment.Models.House> House { get; set; }
+        public DbSet<APPartment.Models.HouseStatus> HouseStatuses { get; set; }
         public DbSet<APPartment.Models.HouseSettings> HouseSettings { get; set; }
         public DbSet<APPartment.Models.Inventory> Inventory { get; set; }
         public DbSet<APPartment.Models.Hygiene> Hygiene { get; set; }
@@ -27,6 +28,7 @@ namespace APPartment.Data
             modelBuilder.Entity<Object>().ToTable("Object");
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<House>().ToTable("House");
+            modelBuilder.Entity<HouseStatus>().ToTable("HouseStatuses");
             modelBuilder.Entity<HouseSettings>().ToTable("HouseSettings");
             modelBuilder.Entity<Inventory>().ToTable("Inventory");
             modelBuilder.Entity<Hygiene>().ToTable("Hygiene");

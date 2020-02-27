@@ -59,6 +59,22 @@ namespace APPartment.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HouseStatuses",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Status = table.Column<int>(nullable: false),
+                    Details = table.Column<string>(nullable: true),
+                    UserId = table.Column<long>(nullable: false),
+                    HouseId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HouseStatuses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Hygiene",
                 columns: table => new
                 {
@@ -179,6 +195,9 @@ namespace APPartment.Migrations
 
             migrationBuilder.DropTable(
                 name: "HouseSettings");
+
+            migrationBuilder.DropTable(
+                name: "HouseStatuses");
 
             migrationBuilder.DropTable(
                 name: "Hygiene");
