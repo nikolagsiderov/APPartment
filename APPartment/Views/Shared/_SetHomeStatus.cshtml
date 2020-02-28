@@ -1,0 +1,83 @@
+﻿<div class="modal fade" id="setHomeStatus" tabindex="-1" role="dialog" aria-labelledby="createViewLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Set home status</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label">Status</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="homeStatusStatus">Options</label>
+                            </div>
+                            <select class="custom-select" id="homeStatusStatus">
+                                <option selected>Please select status...</option>
+                                <option value="1">Enter freely</option>
+                                <option value="2">Be catious</option>
+                                <option value="3">Do not enter</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">Details</label>
+                        <textarea id="homeStatusDetails" class="form-control" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" id="setHomeStatusButton" value="Set" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#setHomeStatusButton").click(function () {
+        var homeStatusStatus = $('#homeStatusStatus').val().toString();
+        var houseStatusDetailsString = $('#homeStatusDetails').val().toString();
+
+        $.ajax({
+            url: "@Url.Action("SetHomeStatus", "Home")",
+            data: { houseStatusString: homeStatusStatus, houseStatusDetailsString: houseStatusDetailsString },
+            success: function (data) {
+            },
+            error: function (req, status, error) {
+                alert(error);
+            },
+            complete: function (response) {
+                $.ajax({
+                    url: "@Url.Action("GetHomeStatus", "Home")",
+                    success: function (data) {
+                        var dataArr = data.split(";");
+                        var status = parseInt(dataArr[0]);
+                        var username = dataArr[1];
+                        var details = dataArr[2];
+
+                        if (status === 1) {
+                            $('#homeStatus').html('<span class="dot-success"></span>');
+                        } else if (status === 2) {
+                            $('#homeStatus').html('<span class="dot-warning"></span>');
+                        } else {
+                            $('#homeStatus').html('<span class="dot-danger"></span>');
+                        }
+
+                        if (details && details != "") {
+                            $('#homeStatusDetailsNavItem').html(details);
+                        }
+
+                        $('#homeStatusUserSetNavItem').html(username);
+                    },
+                    error: function (req, status, error) {
+                        alert(error);
+                    }
+                });
+            }
+        });
+    });
+</script>

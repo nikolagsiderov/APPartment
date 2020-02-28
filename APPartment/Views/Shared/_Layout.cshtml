@@ -7,6 +7,8 @@
     <meta name="author" content="">
     <title>APPartment</title>
 
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
     <link rel="icon" href="~/images/APPartment_logo_official_white_favicon.ico">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -16,8 +18,6 @@
     <link href="~/css/layout.custom.css" rel="stylesheet" />
 
     <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
-
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
 
     @RenderSection("Scripts", required: false)
 </head>
@@ -141,29 +141,9 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in" aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-
                         <!-- Nav Item - House Status -->
                         <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="homeStatus" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" id="homeStatus" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             </a>
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
@@ -176,10 +156,20 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="small text-gray-500">nsiderov</div>
-                                        <span class="font-weight-bold">The ghost is clear!</span>
+                                        <div class="small text-gray-500" id="homeStatusUserSetNavItem"></div>
+                                        <span class="font-weight-bold" id="homeStatusDetailsNavItem"></span>
                                     </div>
                                 </a>
+                                <button class="dropdown-item d-flex align-items-center" data-toggle="modal" data-target="#setHomeStatus">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-primary">
+                                            <i class="fas fa-plus text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="font-weight-bold">Click to set home status.</span>
+                                    </div>
+                                </button>
                             </div>
                         </li>
 
@@ -278,13 +268,24 @@
         $.ajax({
             url: "@Url.Action("GetHomeStatus", "Home")",
             success: function (data) {
-                if (data === 1) {
+                var dataArr = data.split(";");
+                var status = parseInt(dataArr[0]);
+                var username = dataArr[1];
+                var details = dataArr[2];
+
+                if (status === 1) {
                     $('#homeStatus').html('<span class="dot-success"></span>');
-                } else if (data === 2) {
+                } else if (status === 2) {
                     $('#homeStatus').html('<span class="dot-warning"></span>');
                 } else {
                     $('#homeStatus').html('<span class="dot-danger"></span>');
                 }
+
+                if (details && details != "") {
+                    $('#homeStatusDetailsNavItem').html(details);
+                }
+
+                $('#homeStatusUserSetNavItem').html(username);
             },
             error: function (req, status, error) {
                 alert(error);
@@ -340,5 +341,7 @@
         });
     });
     </script>
+
+    @Html.Partial("_SetHomeStatus")
 </body>
 </html>

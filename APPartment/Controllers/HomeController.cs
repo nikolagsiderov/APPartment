@@ -188,21 +188,6 @@ namespace APPartment.Controllers
             return Ok();
         }
 
-        [HttpPost]
-        public async Task<ActionResult> SetHomeStatus(HouseStatus houseStatus)
-        {
-            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
-            houseStatus.UserId = currentUserId;
-            houseStatus.HouseId = currentHouseId;
-
-            await _context.HouseStatuses.AddAsync(houseStatus);
-            await _context.SaveChangesAsync();
-
-            return Ok();
-        }
-
         public JsonResult GetHomeStatus()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
@@ -211,13 +196,63 @@ namespace APPartment.Controllers
 
                 if (_context.HouseStatuses.Any(x => x.HouseId == currentHouseId))
                 {
+                    var currentHouseStatusUserId = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == currentHouseId).FirstOrDefault().UserId;
                     var currentHouseStatus = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == currentHouseId).FirstOrDefault().Status;
+                    var username = _context.User.Where(x => x.UserId == currentHouseStatusUserId).FirstOrDefault().Username;
+                    var currentHouseStatusDetails = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == currentHouseId).FirstOrDefault().Details;
 
-                    return Json(currentHouseStatus);
+                    var result = $"{currentHouseStatus};{username};{currentHouseStatusDetails}";
+
+                    return Json(result);
                 }
             }
 
-            return Json(1);
+            var elseResult = $"1;system_generated;No one has set a status yet!";
+
+            return Json(elseResult);
+        }
+
+        public ActionResult SetHomeStatus(string houseStatusString, string houseStatusDetailsString)
+        {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+                long? currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+
+                var houseStatusDetails = string.Empty;
+
+                if (!string.IsNullOrEmpty(houseStatusDetailsString))
+                {
+                    houseStatusDetails = houseStatusDetailsString;
+                }
+
+                if (_context.HouseStatuses.Any(x => x.HouseId == currentHouseId))
+                {
+                    var currentHouseStatus = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == currentHouseId).FirstOrDefault();
+
+                    currentHouseStatus.Status = int.Parse(houseStatusString);
+                    currentHouseStatus.Details = houseStatusDetails;
+                    currentHouseStatus.UserId = (long)currentUserId;
+
+                    _context.Update(currentHouseStatus);
+                    _context.SaveChanges();
+                }
+                else
+                {
+                    var houseStatus = new HouseStatus()
+                    {
+                        Status = int.Parse(houseStatusString),
+                        Details = houseStatusDetails,
+                        UserId = (long)currentUserId,
+                        HouseId = currentHouseId
+                    };
+
+                    _context.Add(houseStatus);
+                    _context.SaveChanges();
+                }
+            }
+
+            return Json("");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
