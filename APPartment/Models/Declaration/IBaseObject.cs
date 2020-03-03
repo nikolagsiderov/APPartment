@@ -28,5 +28,7 @@ namespace APPartment.Models.Declaration
         public long ObjectId { get; set; }
 
         public List<string> Comments { get; set; }
+
+        public List<Image> Images { get; set; }
     }
 }

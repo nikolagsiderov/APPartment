@@ -1,0 +1,43 @@
+﻿@model APPartment.Models.Base.BaseObject
+
+@{
+    var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="images-display">
+            @foreach (var image in Model.Images)
+            {
+                <img src="~/BaseObject_Images/@image.Name" width="100" height="100"/>
+            }
+        </div>
+    </div>
+</div>
+
+<br />
+
+<form action="/@controllerName/UploadImages?targetIdString=@Model.ObjectId" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm" style="border: none;">
+    <div class="fallback">
+        <input name="targetIdString" value="@Model.ObjectId" />
+        <input name="file" type="file" multiple />
+        <input type="submit" value="Upload" />
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        Dropzone.options.dropzoneForm = {
+            maxFilesize: 5, // MB
+            maxFiles: 3,
+            acceptedFiles: ".png,.jpg,.gif,.bmp,.jpeg",
+            uploadMultiple: true,
+            init: function () {
+                this.on("complete", function (data) {
+                    //var res = eval('(' + data.xhr.responseText + ')');
+                    var res = JSON.parse(data.xhr.responseText);
+                });
+            }
+        };
+    });
+</script>

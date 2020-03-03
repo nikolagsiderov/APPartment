@@ -36,5 +36,8 @@ namespace APPartment.Models.Base
 
         [NotMapped]
         public List<string> Comments { get; set; }
+
+        [NotMapped]
+        public List<Image> Images { get; set; }
     }
 }

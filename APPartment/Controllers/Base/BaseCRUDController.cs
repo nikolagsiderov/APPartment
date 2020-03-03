@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using APPartment.Data;
 using APPartment.Models;
 using APPartment.Models.Declaration;
+using APPartment.Services;
 using APPartment.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +20,7 @@ namespace APPartment.Controllers.Base
     {
         private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper = new HtmlRenderHelper();
+        private FileUploadService fileUploadService = new FileUploadService();
 
         public BaseCRUDController(DataAccessContext context)
         {
@@ -86,6 +89,7 @@ namespace APPartment.Controllers.Base
             }
 
             model.Comments = GetComments(model.ObjectId);
+            model.Images = GetImages(model.ObjectId);
 
             return View("_Details", model);
         }
@@ -137,6 +141,7 @@ namespace APPartment.Controllers.Base
             }
 
             model.Comments = GetComments(model.ObjectId);
+            model.Images = GetImages(model.ObjectId);
 
             return View("_Edit", model);
         }
@@ -275,6 +280,49 @@ namespace APPartment.Controllers.Base
             var result = htmlRenderHelper.BuildPostComment(comment);
 
             return Json(result);
+        }
+
+        [HttpPost]
+        public ActionResult UploadImages(string targetIdString)
+        {
+            var targetId = long.Parse(targetIdString);
+
+            bool isSavedSuccessfully = true;
+            string fName = "";
+            try
+            {
+                foreach (string fileName in HttpContext.Request.Form.Files.Select(x => x.FileName))
+                {
+                    IFormFile file = HttpContext.Request.Form.Files.Where(x => x.FileName == fileName).FirstOrDefault();
+
+                    //Save file content goes here
+                    fName = file.FileName;
+                    if (file != null && file.Length > 0)
+                    {
+                        fileUploadService.UploadImage(file, _context, targetId);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                isSavedSuccessfully = false;
+            }
+
+            if (isSavedSuccessfully)
+            {
+                return Json(new { Message = fName });
+            }
+            else
+            {
+                return Json(new { Message = "Error in saving file" });
+            }
+        }
+
+        public List<Image> GetImages(long targetId)
+        {
+            var images = _context.Image.Where(x => x.TargetId == targetId).ToList();
+
+            return images;
         }
 
         private bool ObjectExists(long id)
