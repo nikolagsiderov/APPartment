@@ -60,11 +60,11 @@
                         var details = dataArr[2];
 
                         if (status === 1) {
-                            $('#homeStatus').html('<span class="dot-success"></span>');
+                            $('#homeStatus').html('<span class="btn btn-circle btn-success btn-sm"><i class="fas fa-thumbs-up"></i></span>');
                         } else if (status === 2) {
-                            $('#homeStatus').html('<span class="dot-warning"></span>');
+                            $('#homeStatus').html('<span class="btn btn-circle btn-warning btn-sm"><i class="fas fa-exclamation"></i></span>');
                         } else {
-                            $('#homeStatus').html('<span class="dot-danger"></span>');
+                            $('#homeStatus').html('<span class="btn btn-circle btn-danger btn-sm"><i class="fas fa-ban"></i></span>');
                         }
 
                         if (details && details != "") {
