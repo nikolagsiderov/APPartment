@@ -17,11 +17,19 @@
 
                 <div class="image-metadata" style="font-size: x-small;">
                     <hr />
-                    <span class="image-metadata-filesize" style="align-items:start;">
-                        @image.FileSize
+                    <span style="font-weight: bold;">
+                        @{ 
+                            var imageDisplayName = image.FileName.Length <= 15 ? image.FileName : image.FileName.Substring(0, 15) + "..." + image.FileName.Split('.').Last();
+                        }
+
+                        @imageDisplayName
+                        <br />
                     </span>
-                    <span class="image-metadata-created-date" style="align-items: end;">
-                        @image.CreatedDate.ToShortDateString()
+                    <span class="image-metadata-filesize">
+                        @image.FileSize | 
+                    </span>
+                    <span class="image-metadata-created-date">
+                        @image.CreatedDate.ToString("dd/MM/yyyy hh:mm:ss tt")
                     </span>
                 </div>
             </div>
