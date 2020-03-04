@@ -7,25 +7,41 @@
 <link href="~/css/images_displayview.css" rel="stylesheet" />
 
 <div class="row">
-    <div class="col-md-12" style="white-space: nowrap;">
-        <div class="square">
-            @foreach (var image in Model.Images)
-            {
-                <img src="~/BaseObject_Images/@image.Name" class="image-img"/>
-            }
-        </div>
+    <div class="col-md-12" style="display: contents;">
+        @foreach (var image in Model.Images)
+        {
+            <div style="margin: 10px;">
+                <div class="square" style="margin: 10px; text-align:center;">
+                    <img src="~/BaseObject_Images/@image.Name" class="image-img" />
+                </div>
+
+                <div class="image-metadata" style="font-size: x-small;">
+                    <hr />
+                    <span class="image-metadata-filesize" style="align-items:start;">
+                        @image.FileSize
+                    </span>
+                    <span class="image-metadata-created-date" style="align-items: end;">
+                        @image.CreatedDate.ToShortDateString()
+                    </span>
+                </div>
+            </div>
+        }
     </div>
 </div>
 
 <br />
 
-<form action="/@controllerName/UploadImages?targetIdString=@Model.ObjectId" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm" style="border: none;">
-    <div class="fallback">
-        <input name="targetIdString" value="@Model.ObjectId" />
-        <input name="file" type="file" multiple />
-        <input type="submit" value="Upload" />
+<div class="row" style="margin-top: 100px">
+    <div class="col-md-12">
+        <form action="/@controllerName/UploadImages?targetIdString=@Model.ObjectId" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm" style="border: none;">
+            <div class="fallback">
+                <input name="targetIdString" value="@Model.ObjectId" />
+                <input name="file" type="file" multiple />
+                <input type="submit" value="Upload" />
+            </div>
+        </form>
     </div>
-</form>
+</div>
 
 <script>
     $(document).ready(function () {
