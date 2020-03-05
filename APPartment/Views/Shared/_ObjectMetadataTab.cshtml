@@ -2,7 +2,7 @@
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item">
-        <a class="nav-link" id="comments-tab" data-toggle="tab" href="#commentsTab" role="tab" aria-controls="commentsTab" aria-selected="false"><i class="far fa-comments"></i> Comments</a>
+        <a class="nav-link active" id="comments-tab" data-toggle="tab" href="#commentsTab" role="tab" aria-controls="commentsTab" aria-selected="true"><i class="far fa-comments"></i> Comments</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" id="images-tab" data-toggle="tab" href="#imagesTab" role="tab" aria-controls="imagesTab" aria-selected="false"><i class="far fa-images"></i> Images</a>
@@ -12,7 +12,7 @@
     </li>
 </ul>
 <div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade" id="commentsTab" role="tabpanel" aria-labelledby="comments-tab">
+    <div class="tab-pane fade show active" id="commentsTab" role="tabpanel" aria-labelledby="comments-tab">
         <br />
         @Html.Partial("_Comments", Model)
     </div>
