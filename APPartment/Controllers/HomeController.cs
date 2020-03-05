@@ -56,6 +56,11 @@ namespace APPartment.Controllers
                 BaseObjects = displayObjects
             };
 
+            if (_context.HouseStatuses.Where(x => x.HouseId == currentHouseId).Any())
+            {
+                homeDisplayModel.HouseStatus = _context.HouseStatuses.Where(x => x.HouseId == currentHouseId).OrderByDescending(x => x.Id).FirstOrDefault();
+            }
+
             return View(homeDisplayModel);
         }
 

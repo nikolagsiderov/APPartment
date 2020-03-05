@@ -270,6 +270,45 @@
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="col-lg-6 mb-4" style="font-weight: bold;">
+            @if (Model.HouseStatus == null)
+            {
+                <div class="card bg-success text-white shadow">
+                    <div class="card-body">
+                        Home status has been set by system_generated
+                        <div class="text-white-50 small">No one has set a status yet!</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                if (Model.HouseStatus.Status == 1)
+                {
+                    <div class="card bg-success text-white shadow">
+                        <div class="card-body" id="houseStatusWidgetBody">
+                        </div>
+                    </div>
+                }
+                else if (Model.HouseStatus.Status == 2)
+                {
+                    <div class="card bg-warning text-white shadow">
+                        <div class="card-body" id="houseStatusWidgetBody">
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card bg-danger text-white shadow">
+                        <div class="card-body" id="houseStatusWidgetBody">
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
@@ -294,5 +333,21 @@
         });
 
         $("#messageInput").val('');
+    });
+
+    $(document).ready(function () {
+        $.ajax({
+            url: "@Url.Action("GetHomeStatus", "Home")",
+            success: function (data) {
+                var dataArr = data.split(";");
+                var username = dataArr[1];
+                var details = dataArr[2];
+
+                $('#houseStatusWidgetBody').html(`Home status has been set by ${username}` + `<div class="text-white-50 small">${details}</div>`);
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        });
     });
 </script>
