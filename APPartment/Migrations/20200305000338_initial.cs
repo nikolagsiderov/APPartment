@@ -59,7 +59,7 @@ namespace APPartment.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HouseStatuses",
+                name: "HouseStatus",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -71,7 +71,7 @@ namespace APPartment.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HouseStatuses", x => x.Id);
+                    table.PrimaryKey("PK_HouseStatus", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -214,7 +214,7 @@ namespace APPartment.Migrations
                 name: "HouseSettings");
 
             migrationBuilder.DropTable(
-                name: "HouseStatuses");
+                name: "HouseStatus");
 
             migrationBuilder.DropTable(
                 name: "Hygiene");

@@ -123,7 +123,7 @@ namespace APPartment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HouseStatuses");
+                    b.ToTable("HouseStatus");
                 });
 
             modelBuilder.Entity("APPartment.Models.Hygiene", b =>

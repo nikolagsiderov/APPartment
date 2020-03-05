@@ -37,7 +37,7 @@ namespace APPartment.Controllers
             }
 
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-            var currentUser = _context.User.Find(currentUserId);
+            var currentUser = _context.Users.Find(currentUserId);
 
             ViewData["Username"] = currentUser.Username;
 
@@ -69,7 +69,7 @@ namespace APPartment.Controllers
         {
             if (ModelState.IsValid)
             {
-                house.CreatedBy = _context.User.Find(long.Parse(HttpContext.Session.GetString("UserId"))).Username;
+                house.CreatedBy = _context.Users.Find(long.Parse(HttpContext.Session.GetString("UserId"))).Username;
                 house.CreatedDate = DateTime.Now;
                 house.ModifiedBy = house.CreatedBy;
                 house.ModifiedDate = house.CreatedDate;
@@ -96,11 +96,11 @@ namespace APPartment.Controllers
         [HttpPost]
         public IActionResult Login(House house)
         {
-            var houseIsContainedInDb = _context.House.Any(x => x.Name == house.Name && x.Password == house.Password);
+            var houseIsContainedInDb = _context.Houses.Any(x => x.Name == house.Name && x.Password == house.Password);
 
             if (houseIsContainedInDb)
             {
-                var home = _context.House.Single(h => h.Name == house.Name && h.Password == house.Password);
+                var home = _context.Houses.Single(h => h.Name == house.Name && h.Password == house.Password);
 
                 HttpContext.Session.SetString("HouseId", home.Id.ToString());
                 HttpContext.Session.SetString("HouseName", home.Name.ToString());
@@ -126,7 +126,7 @@ namespace APPartment.Controllers
             {
                 houseSettings = _context.HouseSettings.Find(long.Parse(HttpContext.Session.GetString("HouseId")));
 
-                var houseModel = _context.House.Find(long.Parse(HttpContext.Session.GetString("HouseId")));
+                var houseModel = _context.Houses.Find(long.Parse(HttpContext.Session.GetString("HouseId")));
                 houseSettings.HouseName = houseModel.Name;
             }
 
@@ -182,7 +182,7 @@ namespace APPartment.Controllers
 
             var message = new Message() { Username = username, Text = messageText, UserId = currentUserId, HouseId = currentHouseId, CreatedDate = DateTime.Now };
 
-            await _context.Message.AddAsync(message);
+            await _context.Messages.AddAsync(message);
             await _context.SaveChangesAsync();
 
             return Ok();
@@ -198,7 +198,7 @@ namespace APPartment.Controllers
                 {
                     var currentHouseStatusUserId = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == currentHouseId).FirstOrDefault().UserId;
                     var currentHouseStatus = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == currentHouseId).FirstOrDefault().Status;
-                    var username = _context.User.Where(x => x.UserId == currentHouseStatusUserId).FirstOrDefault().Username;
+                    var username = _context.Users.Where(x => x.UserId == currentHouseStatusUserId).FirstOrDefault().Username;
                     var currentHouseStatusDetails = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == currentHouseId).FirstOrDefault().Details;
 
                     var result = $"{currentHouseStatus};{username};{currentHouseStatusDetails}";
@@ -298,7 +298,7 @@ namespace APPartment.Controllers
 
         private List<string> GetMessages(long currentHouseId)
         {
-            var messages = htmlRenderHelper.BuildMessagesForChat(_context.Message.ToList(), currentHouseId);
+            var messages = htmlRenderHelper.BuildMessagesForChat(_context.Messages.ToList(), currentHouseId);
 
             return messages;
         }

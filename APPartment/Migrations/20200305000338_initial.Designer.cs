@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APPartment.Migrations
 {
     [DbContext(typeof(DataAccessContext))]
-    [Migration("20200303175048_initial")]
+    [Migration("20200305000338_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -125,7 +125,7 @@ namespace APPartment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HouseStatuses");
+                    b.ToTable("HouseStatus");
                 });
 
             modelBuilder.Entity("APPartment.Models.Hygiene", b =>

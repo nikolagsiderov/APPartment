@@ -25,7 +25,7 @@ namespace APPartment.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.User.Add(user);
+                _context.Users.Add(user);
                 _context.SaveChanges();
 
                 ModelState.Clear();
@@ -47,11 +47,11 @@ namespace APPartment.Controllers
         [HttpPost]
         public IActionResult Login(User user)
         {
-            var userIsContainedInDb = _context.User.Any(x => x.Username == user.Username && x.Password == user.Password);
+            var userIsContainedInDb = _context.Users.Any(x => x.Username == user.Username && x.Password == user.Password);
             
             if (userIsContainedInDb)
             {
-                var usr = _context.User.Single(u => u.Username == user.Username && u.Password == user.Password);
+                var usr = _context.Users.Single(u => u.Username == user.Username && u.Password == user.Password);
 
                 HttpContext.Session.SetString("UserId", usr.UserId.ToString());
                 HttpContext.Session.SetString("Username", usr.Username.ToString());

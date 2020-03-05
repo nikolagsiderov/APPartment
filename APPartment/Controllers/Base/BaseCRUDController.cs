@@ -105,7 +105,7 @@ namespace APPartment.Controllers.Base
                 model.HouseId = currentHouseId;
 
                 // Base History Properties
-                model.CreatedBy = _context.User.Find(long.Parse(HttpContext.Session.GetString("UserId"))).Username;
+                model.CreatedBy = _context.Users.Find(long.Parse(HttpContext.Session.GetString("UserId"))).Username;
                 model.CreatedDate = DateTime.Now;
                 model.ModifiedBy = model.CreatedBy;
                 model.ModifiedDate = model.CreatedDate;
@@ -163,7 +163,7 @@ namespace APPartment.Controllers.Base
                 model.HouseId = currentHouseId;
 
                 // Base History Properties
-                model.ModifiedBy = _context.User.Find(long.Parse(HttpContext.Session.GetString("UserId"))).Username;
+                model.ModifiedBy = _context.Users.Find(long.Parse(HttpContext.Session.GetString("UserId"))).Username;
                 model.ModifiedDate = DateTime.Now;
 
                 try
@@ -257,7 +257,7 @@ namespace APPartment.Controllers.Base
         // Base Object Metadata
         public List<string> GetComments(long targetId)
         {
-            var comments = htmlRenderHelper.BuildComments(_context.Comment.ToList(), targetId);
+            var comments = htmlRenderHelper.BuildComments(_context.Comments.ToList(), targetId);
 
             return comments;
         }
@@ -320,7 +320,7 @@ namespace APPartment.Controllers.Base
 
         public List<Image> GetImages(long targetId)
         {
-            var images = _context.Image.Where(x => x.TargetId == targetId).ToList();
+            var images = _context.Images.Where(x => x.TargetId == targetId).ToList();
 
             return images;
         }
