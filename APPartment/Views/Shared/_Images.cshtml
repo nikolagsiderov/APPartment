@@ -7,34 +7,45 @@
 <link href="~/css/images_displayview.css" rel="stylesheet" />
 
 <div class="row">
-    <div class="col-md-12" style="display: contents;">
-        @foreach (var image in Model.Images)
-        {
-            <div style="margin: 10px;">
-                <div class="square" style="margin: 10px; text-align:center;">
-                    <img src="~/BaseObject_Images/@image.Name" class="image-img" />
-                </div>
+    @if (Model.Images.Any())
+    {
+        <div class="col-md-12" style="display: contents;">
+            @foreach (var image in Model.Images)
+            {
+                <div style="margin: 10px;">
+                    <div class="square" style="margin: 10px; text-align:center;">
+                        <img src="~/BaseObject_Images/@image.Name" class="image-img" />
+                    </div>
 
-                <div class="image-metadata" style="font-size: x-small;">
-                    <hr />
-                    <span style="font-weight: bold;">
-                        @{ 
-                            var imageDisplayName = image.FileName.Length <= 15 ? image.FileName : image.FileName.Substring(0, 15) + "..." + image.FileName.Split('.').Last();
-                        }
+                    <div class="image-metadata" style="font-size: x-small;">
+                        <hr />
+                        <span style="font-weight: bold;">
+                            @{
+                                var imageDisplayName = image.FileName.Length <= 15 ? image.FileName : image.FileName.Substring(0, 15) + "..." + image.FileName.Split('.').Last();
+                            }
 
-                        @imageDisplayName
-                        <br />
-                    </span>
-                    <span class="image-metadata-filesize">
-                        @image.FileSize | 
-                    </span>
-                    <span class="image-metadata-created-date">
-                        @image.CreatedDate.ToString("dd/MM/yyyy hh:mm:ss tt")
-                    </span>
+                            @imageDisplayName
+                            <br />
+                        </span>
+                        <span class="image-metadata-filesize">
+                            @image.FileSize |
+                        </span>
+                        <span class="image-metadata-created-date">
+                            @image.CreatedDate.ToString("dd/MM/yyyy hh:mm:ss tt")
+                        </span>
+                    </div>
                 </div>
-            </div>
-        }
-    </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="col-md-12">
+            <span id="no-images-added-message">
+                No images have been added to this object!
+            </span>
+        </div>
+    }
 </div>
 
 <br />

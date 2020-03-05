@@ -18,10 +18,20 @@
 </div>
 <div class="row">
     <div class="col-md-10" id="comment-text-data">
-        @foreach (var comment in Model.Comments)
+        @if (Model.Comments.Any())
         {
-            <hr style="opacity: 0.4;" />
-            <p>@Html.Raw(comment)</p>
+            foreach (var comment in Model.Comments)
+            {
+                <hr style="opacity: 0.4;" />
+                <p>@Html.Raw(comment)</p>
+            }
+        }
+        else
+        {
+            <br />
+            <span id="no-comments-added-message">
+                No comments have been added to this object!
+            </span>
         }
     </div>
 </div>
@@ -47,6 +57,8 @@ $("#commentButton").click(function () {
             url: "@Url.Action("PostComment", controllerName)",
             data: { targetId: @Model.ObjectId, commentText: comment },
             success: function (data) {
+                $("#no-comments-added-message").attr('style', 'display:none;');
+
                 var appendValue = document.createElement('p');
                 appendValue.innerHTML = "<hr />" + data;
 
