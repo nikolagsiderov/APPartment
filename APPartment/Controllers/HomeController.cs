@@ -21,6 +21,7 @@ namespace APPartment.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper = new HtmlRenderHelper();
+        private TimeConverter timeConverter = new TimeConverter();
 
         public HomeController(ILogger<HomeController> logger, DataAccessContext context)
         {
@@ -45,11 +46,6 @@ namespace APPartment.Controllers
 
             var displayObjects = GetDisplayObject(currentHouseId);
 
-            if (_context.HouseSettings.Any(x => x.HouseId == long.Parse(HttpContext.Session.GetString("HouseId"))))
-            {
-                ViewData["RentDueDateDay"] = _context.HouseSettings.Find(long.Parse(HttpContext.Session.GetString("HouseId"))).RentDueDateDay;
-            }
-
             var homeDisplayModel = new HomeDisplayModel()
             {
                 Messages = GetMessages(currentHouseId),
@@ -59,6 +55,11 @@ namespace APPartment.Controllers
             if (_context.HouseStatuses.Where(x => x.HouseId == currentHouseId).Any())
             {
                 homeDisplayModel.HouseStatus = _context.HouseStatuses.Where(x => x.HouseId == currentHouseId).OrderByDescending(x => x.Id).FirstOrDefault();
+            }
+
+            if (_context.HouseSettings.Any(x => x.HouseId == long.Parse(HttpContext.Session.GetString("HouseId"))))
+            {
+                homeDisplayModel.RentDueDate = GetRentDueDate();
             }
 
             return View(homeDisplayModel);
@@ -278,6 +279,10 @@ namespace APPartment.Controllers
             if (inventoryObjects.Count() > 0)
             {
                 lastInventoryObject = inventoryObjects.OrderByDescending(x => x.ModifiedDate).First();
+                lastInventoryObject.LastUpdated = lastInventoryObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime(lastInventoryObject.ModifiedDate.Value);
+                lastInventoryObject.Name = lastInventoryObject.Name.Length <= 20 ? lastInventoryObject.Name : lastInventoryObject.Name.Substring(0, 20) + "...";
+                lastInventoryObject.Details = lastInventoryObject.Details.Length <= 50 ? lastInventoryObject.Details : lastInventoryObject.Details.Substring(0, 50) + "...";
+                lastInventoryObject.ModifiedBy = lastInventoryObject.ModifiedBy == null ? string.Empty : lastInventoryObject.ModifiedBy;
             }
 
             var hygieneObjects = _context.Set<Hygiene>().Where(x => x.HouseId == currentHouseId);
@@ -285,6 +290,10 @@ namespace APPartment.Controllers
             if (hygieneObjects.Count() > 0)
             {
                 lastHygieneObject = hygieneObjects.OrderByDescending(x => x.ModifiedDate).First();
+                lastHygieneObject.LastUpdated = lastHygieneObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime(lastHygieneObject.ModifiedDate.Value);
+                lastHygieneObject.Name = lastHygieneObject.Name.Length <= 20 ? lastHygieneObject.Name : lastHygieneObject.Name.Substring(0, 20) + "...";
+                lastHygieneObject.Details = lastHygieneObject.Details.Length <= 50 ? lastHygieneObject.Details : lastHygieneObject.Details.Substring(0, 50) + "...";
+                lastHygieneObject.ModifiedBy = lastHygieneObject.ModifiedBy == null ? string.Empty : lastHygieneObject.ModifiedBy;
             }
 
             var issueObjects = _context.Set<Issue>().Where(x => x.HouseId == currentHouseId);
@@ -292,6 +301,10 @@ namespace APPartment.Controllers
             if (issueObjects.Count() > 0)
             {
                 lastIssueObject = issueObjects.OrderByDescending(x => x.ModifiedDate).First();
+                lastIssueObject.LastUpdated = lastIssueObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime(lastIssueObject.ModifiedDate.Value);
+                lastIssueObject.Name = lastIssueObject.Name.Length <= 20 ? lastIssueObject.Name : lastIssueObject.Name.Substring(0, 20) + "...";
+                lastIssueObject.Details = lastIssueObject.Details.Length <= 50 ? lastIssueObject.Details : lastIssueObject.Details.Substring(0, 50) + "...";
+                lastIssueObject.ModifiedBy = lastIssueObject.ModifiedBy == null ? string.Empty : lastIssueObject.ModifiedBy;
             }
 
             displayObjects.Add(lastInventoryObject);
@@ -299,6 +312,28 @@ namespace APPartment.Controllers
             displayObjects.Add(lastIssueObject);
 
             return displayObjects;
+        }
+
+        public string GetRentDueDate()
+        {
+            var nextMonth = DateTime.Now.AddMonths(1).Month.ToString();
+            var thisMonth = DateTime.Now.Month.ToString();
+            var rentDueDate = string.Empty;
+            var rentDueDateDay = _context.HouseSettings.Find(long.Parse(HttpContext.Session.GetString("HouseId"))).RentDueDateDay;
+
+            if (rentDueDateDay != null && rentDueDateDay.ToString() != "0")
+            {
+                var dateString = $"{rentDueDateDay}/{nextMonth}/{DateTime.Now.Year.ToString()}";
+
+                if (DateTime.Parse(dateString).AddMonths(-1).Date > DateTime.Now.Date)
+                {
+                    dateString = $"{rentDueDateDay}/{thisMonth}/{DateTime.Now.Year.ToString()}";
+                }
+
+                rentDueDate = DateTime.Parse(dateString).ToLongDateString();
+            }
+
+            return rentDueDate;
         }
 
         private List<string> GetMessages(long currentHouseId)

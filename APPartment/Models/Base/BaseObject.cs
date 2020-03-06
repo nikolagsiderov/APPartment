@@ -39,5 +39,8 @@ namespace APPartment.Models.Base
 
         [NotMapped]
         public List<Image> Images { get; set; }
+
+        [NotMapped]
+        public string LastUpdated { get; set; }
     }
 }

@@ -2,113 +2,6 @@
 
 @{
     var widgetObjects = Model.BaseObjects;
-
-    var nextMonth = DateTime.Now.AddMonths(1).Month.ToString();
-    var thisMonth = DateTime.Now.Month.ToString();
-    var rentDueDate = string.Empty;
-
-    if (ViewData["RentDueDateDay"] != null && ViewData["RentDueDateDay"].ToString() != "0")
-    {
-        var dateString = $"{ViewData["RentDueDateDay"]}/{nextMonth}/{DateTime.Now.Year.ToString()}";
-
-        if (DateTime.Parse(dateString).AddMonths(-1).Date > DateTime.Now.Date)
-        {
-            dateString = $"{ViewData["RentDueDateDay"]}/{thisMonth}/{DateTime.Now.Year.ToString()}";
-        }
-
-        rentDueDate = DateTime.Parse(dateString).ToLongDateString();
-    }
-
-    string inventoryModifiedDate = widgetObjects[0].ModifiedDate == null ? string.Empty : CalculateRelativeTime(widgetObjects[0].ModifiedDate.Value);
-    string hygieneModifiedDate = widgetObjects[1].ModifiedDate == null ? string.Empty : CalculateRelativeTime(widgetObjects[1].ModifiedDate.Value);
-    string issueModifiedDate = widgetObjects[2].ModifiedDate == null ? string.Empty : CalculateRelativeTime(widgetObjects[2].ModifiedDate.Value);
-
-    string inventoryModifiedBy = widgetObjects[0].ModifiedBy == null ? string.Empty : widgetObjects[0].ModifiedBy;
-    string hygieneModifiedBy = widgetObjects[1].ModifiedBy == null ? string.Empty : widgetObjects[1].ModifiedBy;
-    string issueModifiedBy = widgetObjects[2].ModifiedBy == null ? string.Empty : widgetObjects[2].ModifiedBy;
-
-    string inventoryItemName = string.Empty;
-    string hygieneItemName = string.Empty;
-    string issueItemName = string.Empty;
-
-    string inventoryItemDetails = string.Empty;
-    string hygieneItemDetails = string.Empty;
-    string issueItemDetails = string.Empty;
-
-    if (!string.IsNullOrEmpty(widgetObjects[0].Name))
-    {
-        inventoryItemName = widgetObjects[0].Name.Length <= 20 ? widgetObjects[0].Name : widgetObjects[0].Name.Substring(0, 20) + "...";
-    }
-
-    if (!string.IsNullOrEmpty(widgetObjects[1].Name))
-    {
-        hygieneItemName = widgetObjects[1].Name.Length <= 20 ? widgetObjects[1].Name : widgetObjects[1].Name.Substring(0, 20) + "...";
-    }
-
-    if (!string.IsNullOrEmpty(widgetObjects[2].Name))
-    {
-        issueItemName = widgetObjects[2].Name.Length <= 20 ? widgetObjects[2].Name : widgetObjects[2].Name.Substring(0, 20) + "...";
-    }
-
-    if (!string.IsNullOrEmpty(widgetObjects[0].Details))
-    {
-        inventoryItemDetails = widgetObjects[0].Details.Length <= 50 ? widgetObjects[0].Details : widgetObjects[0].Details.Substring(0, 50) + "...";
-    }
-
-    if (!string.IsNullOrEmpty(widgetObjects[1].Details))
-    {
-        hygieneItemDetails = widgetObjects[1].Details.Length <= 50 ? widgetObjects[1].Details : widgetObjects[1].Details.Substring(0, 50) + "...";
-    }
-
-    if (!string.IsNullOrEmpty(widgetObjects[2].Details))
-    {
-        issueItemDetails = widgetObjects[2].Details.Length <= 50 ? widgetObjects[2].Details : widgetObjects[2].Details.Substring(0, 50) + "...";
-    }
-
-
-    string CalculateRelativeTime(DateTime objectLastUpdate)
-    {
-        const int SECOND = 1;
-        const int MINUTE = 60 * SECOND;
-        const int HOUR = 60 * MINUTE;
-        const int DAY = 24 * HOUR;
-        const int MONTH = 30 * DAY;
-
-        var ts = new TimeSpan(DateTime.Now.Ticks - objectLastUpdate.Ticks);
-        double delta = Math.Abs(ts.TotalSeconds);
-
-        if (delta < 1 * MINUTE)
-            return ts.Seconds == 1 ? "One second ago" : ts.Seconds + " seconds ago";
-
-        if (delta < 2 * MINUTE)
-            return "A minute ago";
-
-        if (delta < 45 * MINUTE)
-            return ts.Minutes + " minutes ago";
-
-        if (delta < 90 * MINUTE)
-            return "An hour ago";
-
-        if (delta < 24 * HOUR)
-            return ts.Hours + " hours ago";
-
-        if (delta < 48 * HOUR)
-            return "Yesterday";
-
-        if (delta < 30 * DAY)
-            return ts.Days + " days ago";
-
-        if (delta < 12 * MONTH)
-        {
-            int months = Convert.ToInt32(Math.Floor((double)ts.Days / 30));
-            return months <= 1 ? "One month ago" : months + " months ago";
-        }
-        else
-        {
-            int years = Convert.ToInt32(Math.Floor((double)ts.Days / 365));
-            return years <= 1 ? "One year ago" : years + " years ago";
-        }
-    }
 }
 
 <div class="row">
@@ -121,7 +14,7 @@
                 @if (widgetObjects[0].Name != null)
                 {
                     <p class="card-text">
-                        <strong>Name</strong>: @inventoryItemName <br /> <strong>Details</strong>: @inventoryItemDetails
+                        <strong>Name</strong>: @widgetObjects[0].Name <br /> <strong>Details</strong>: @widgetObjects[0].Details
                     </p>
                 }
                 else
@@ -133,7 +26,7 @@
             <div class="card-footer text-muted">
                 @if (widgetObjects[0].Name != null)
                 {
-                    <p>@inventoryModifiedDate by @inventoryModifiedBy</p>
+                    <p>@widgetObjects[0].LastUpdated by @widgetObjects[0].ModifiedBy</p>
                 }
                 else
                 {
@@ -151,7 +44,7 @@
                 @if (widgetObjects[1].Name != null)
                 {
                     <p class="card-text">
-                        <strong>Name</strong>: @hygieneItemName <br /> <strong>Details</strong>: @hygieneItemDetails
+                        <strong>Name</strong>: @widgetObjects[1].Name <br /> <strong>Details</strong>: @widgetObjects[1].Details
                     </p>
                 }
                 else
@@ -164,7 +57,7 @@
             <div class="card-footer text-muted">
                 @if (widgetObjects[1].Name != null)
                 {
-                    <p>@hygieneModifiedDate by @hygieneModifiedBy</p>
+                    <p>@widgetObjects[1].LastUpdated by @widgetObjects[1].ModifiedBy</p>
                 }
                 else
                 {
@@ -182,7 +75,7 @@
                 @if (widgetObjects[2].Name != null)
                 {
                     <p class="card-text">
-                        <strong>Name</strong>: @issueItemName <br /> <strong>Details</strong>: @issueItemDetails
+                        <strong>Name</strong>: @widgetObjects[2].Name <br /> <strong>Details</strong>: @widgetObjects[2].Details
                     </p>
                 }
                 else
@@ -194,7 +87,7 @@
             <div class="card-footer text-muted">
                 @if (widgetObjects[2].Name != null)
                 {
-                    <p>@issueModifiedDate by @issueModifiedBy</p>
+                    <p>@widgetObjects[2].LastUpdated by @widgetObjects[2].ModifiedBy</p>
                 }
                 else
                 {
@@ -252,9 +145,9 @@
                         <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Rent due date</div>
                         <br />
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            @if (!string.IsNullOrEmpty(rentDueDate))
+                            @if (!string.IsNullOrEmpty(Model.RentDueDate))
                             {
-                                <h1 class="display-4">Rent due in @rentDueDate</h1>
+                                <h1 class="display-4">Rent due in @Model.RentDueDate</h1>
                             }
                             else
                             {
@@ -313,41 +206,4 @@
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
 
-<script type="text/javascript">
-    $("#sendButton").click(function () {
-
-        var usernameValue = $('#userInput').val();
-        var messageValue = $('#messageInput').val();
-
-        $.ajax({
-            type: "POST",
-            url: "@Url.Action("CreateMessage", "Home")",
-            data: { username: usernameValue, messageText: messageValue },
-            dataType: "text",
-            success: function () {
-
-            },
-            error: function (req, status, error) {
-                alert(error);
-            }
-        });
-
-        $("#messageInput").val('');
-    });
-
-    $(document).ready(function () {
-        $.ajax({
-            url: "@Url.Action("GetHomeStatus", "Home")",
-            success: function (data) {
-                var dataArr = data.split(";");
-                var username = dataArr[1];
-                var details = dataArr[2];
-
-                $('#houseStatusWidgetBody').html(`Home status has been set by ${username}` + `<div class="text-white-50 small">${details}</div>`);
-            },
-            error: function (req, status, error) {
-                alert(error);
-            }
-        });
-    });
-</script>
+<script src="~/js/home.index.js"></script>

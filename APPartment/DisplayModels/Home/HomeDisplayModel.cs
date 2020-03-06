@@ -11,5 +11,7 @@ namespace APPartment.DisplayModels.Home
         public List<BaseObject> BaseObjects { get; set; }
 
         public HouseStatus HouseStatus { get; set; }
+
+        public string RentDueDate { get; set; }
     }
 }
