@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APPartment.Migrations
 {
     [DbContext(typeof(DataAccessContext))]
-    [Migration("20200305000338_initial")]
+    [Migration("20200307215035_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,6 +27,12 @@ namespace APPartment.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("ObjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ObjectTypeId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("TargetId")
                         .HasColumnType("bigint");
@@ -71,6 +77,12 @@ namespace APPartment.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("ObjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ObjectTypeId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -96,6 +108,12 @@ namespace APPartment.Migrations
                     b.Property<string>("HouseName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("ObjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ObjectTypeId")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("RentDueDateDay")
                         .HasColumnType("int");
 
@@ -115,6 +133,12 @@ namespace APPartment.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("HouseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ObjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ObjectTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("Status")
@@ -163,6 +187,9 @@ namespace APPartment.Migrations
                     b.Property<long>("ObjectId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("ObjectTypeId")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -189,6 +216,12 @@ namespace APPartment.Migrations
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ObjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ObjectTypeId")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("TargetId")
                         .HasColumnType("bigint");
@@ -231,6 +264,9 @@ namespace APPartment.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("ObjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ObjectTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("Status")
@@ -276,6 +312,9 @@ namespace APPartment.Migrations
                     b.Property<long>("ObjectId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("ObjectTypeId")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -295,6 +334,12 @@ namespace APPartment.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<long>("HouseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ObjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ObjectTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Text")
@@ -318,9 +363,79 @@ namespace APPartment.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<long>("ObjectTypeId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("ObjectId");
 
                     b.ToTable("Object");
+                });
+
+            modelBuilder.Entity("APPartment.Models.ObjectType", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ObjectType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Name = "User"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Name = "House"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Name = "HouseStatus"
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Name = "HouseSettings"
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            Name = "Inventory"
+                        },
+                        new
+                        {
+                            Id = 6L,
+                            Name = "Hygiene"
+                        },
+                        new
+                        {
+                            Id = 7L,
+                            Name = "Issue"
+                        },
+                        new
+                        {
+                            Id = 8L,
+                            Name = "Message"
+                        },
+                        new
+                        {
+                            Id = 9L,
+                            Name = "Comment"
+                        },
+                        new
+                        {
+                            Id = 10L,
+                            Name = "Image"
+                        });
                 });
 
             modelBuilder.Entity("APPartment.Models.User", b =>
@@ -332,6 +447,12 @@ namespace APPartment.Migrations
 
                     b.Property<string>("ConfirmPassword")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ObjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ObjectTypeId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Password")
                         .IsRequired()

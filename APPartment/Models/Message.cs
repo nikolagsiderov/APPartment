@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Models
 {
-    public class Message
+    public class Message : Base.Object
     {
         [Key]
         public long Id { get; set; }

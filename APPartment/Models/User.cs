@@ -2,7 +2,7 @@
 
 namespace APPartment.Models
 {
-    public class User
+    public class User : Base.Object
     {
         [Key]
         public long UserId { get; set; }

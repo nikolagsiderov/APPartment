@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace APPartment.Models
 {
-    public class House
+    public class House : Base.Object
     {
         [Key]
         public long Id { get; set; }

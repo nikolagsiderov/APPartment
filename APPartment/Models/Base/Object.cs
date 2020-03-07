@@ -1,11 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using APPartment.Models.Declaration;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace APPartment.Models
+namespace APPartment.Models.Base
 {
-    public class Object
+    public abstract class Object : IObject
     {
-        [Key]
+        [ForeignKey("Object")]
         public long ObjectId { get; set; }
 
         [ForeignKey("ObjectType")]
