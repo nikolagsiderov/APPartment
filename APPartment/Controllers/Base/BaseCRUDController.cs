@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using APPartment.Core;
 using APPartment.Data;
 using APPartment.Models;
 using APPartment.Models.Declaration;
@@ -21,6 +21,9 @@ namespace APPartment.Controllers.Base
         private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper = new HtmlRenderHelper();
         private FileUploadService fileUploadService = new FileUploadService();
+        private DataContext<T> dataContext = new DataContext<T>();
+        private DataContext<Comment> commentDataContext = new DataContext<Comment>();
+        private DataContext<Image> imageDataContext = new DataContext<Image>();
 
         public BaseCRUDController(DataAccessContext context)
         {
@@ -96,30 +99,16 @@ namespace APPartment.Controllers.Base
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Details,Status,IsCompleted,CreatedBy,ModifiedBy,CreatedDate,ModifiedDate,HouseId,ObjectId")] T model)
+        public async Task<IActionResult> Create([Bind("Id,Name,Details,Status,IsCompleted,HouseId,ObjectId")] T model)
         {
             if (ModelState.IsValid)
             {
                 var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+                var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
                 model.HouseId = currentHouseId;
 
-                // Base History Properties
-                model.CreatedBy = _context.Users.Find(long.Parse(HttpContext.Session.GetString("UserId"))).Username;
-                model.CreatedDate = DateTime.Now;
-                model.ModifiedBy = model.CreatedBy;
-                model.ModifiedDate = model.CreatedDate;
-
-                // Define Object
-                var objectDb = new APPartment.Models.Object();
-                _context.Add(objectDb);
-                await _context.SaveChangesAsync();
-
-                // Assign Base Object to Object
-                model.ObjectId = objectDb.ObjectId;
-
-                _context.Add(model);
-                await _context.SaveChangesAsync();
+                await dataContext.SaveAsync(model, _context, currentUserId);
             }
 
             return RedirectToAction(nameof(Index));
@@ -149,7 +138,7 @@ namespace APPartment.Controllers.Base
         [Breadcrumb("<i class='fas fa-edit'></i> Edit")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Name,Details,Status,IsCompleted,CreatedBy,ModifiedBy,CreatedDate,ModifiedDate,HouseId,ObjectId")] T model)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,Name,Details,Status,IsCompleted,HouseId,ObjectId")] T model)
         {
             if (id != model.Id)
             {
@@ -159,17 +148,14 @@ namespace APPartment.Controllers.Base
             if (ModelState.IsValid)
             {
                 var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
-                model.HouseId = currentHouseId;
-
-                // Base History Properties
-                model.ModifiedBy = _context.Users.Find(long.Parse(HttpContext.Session.GetString("UserId"))).Username;
-                model.ModifiedDate = DateTime.Now;
+                var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
                 try
                 {
                     _context.Update(model);
                     await _context.SaveChangesAsync();
+
+                    await dataContext.UpdateAsync(model, _context, currentUserId);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -190,6 +176,8 @@ namespace APPartment.Controllers.Base
 
         public async Task<IActionResult> Complete(long? id)
         {
+            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+
             if (id == null)
             {
                 return NotFound();
@@ -208,11 +196,15 @@ namespace APPartment.Controllers.Base
             _context.Update(model);
             await _context.SaveChangesAsync();
 
+            await dataContext.UpdateAsync(model, _context, currentUserId);
+
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> MarkNotCompleted(long? id)
         {
+            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+
             if (id == null)
             {
                 return NotFound();
@@ -230,6 +222,8 @@ namespace APPartment.Controllers.Base
 
             _context.Update(model);
             await _context.SaveChangesAsync();
+
+            await dataContext.UpdateAsync(model, _context, currentUserId);
 
             return RedirectToAction(nameof(Index));
         }
@@ -249,12 +243,12 @@ namespace APPartment.Controllers.Base
                 return NotFound();
             }
 
-            _context.Set<T>().Remove(model);
-            await _context.SaveChangesAsync();
+            await dataContext.DeleteAsync(model, _context);
+
             return RedirectToAction(nameof(Index));
         }
 
-        // Base Object Metadata
+        #region Metadata
         public List<string> GetComments(long targetId)
         {
             var comments = htmlRenderHelper.BuildComments(_context.Comments.ToList(), targetId);
@@ -266,6 +260,7 @@ namespace APPartment.Controllers.Base
         public async Task<IActionResult> PostComment(long targetId, string commentText)
         {
             var username = HttpContext.Session.GetString("Username");
+            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
             var comment = new Comment()
             {
@@ -274,8 +269,7 @@ namespace APPartment.Controllers.Base
                 Username = username
             };
 
-            _context.Add(comment);
-            await _context.SaveChangesAsync();
+            await commentDataContext.SaveAsync(comment, _context, currentUserId);
 
             var result = htmlRenderHelper.BuildPostComment(comment);
 
@@ -286,6 +280,7 @@ namespace APPartment.Controllers.Base
         public ActionResult UploadImages(string targetIdString)
         {
             var targetId = long.Parse(targetIdString);
+            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
             bool isSavedSuccessfully = true;
             string fName = "";
@@ -299,7 +294,7 @@ namespace APPartment.Controllers.Base
                     fName = file.FileName;
                     if (file != null && file.Length > 0)
                     {
-                        fileUploadService.UploadImage(file, _context, targetId);
+                        fileUploadService.UploadImage(file, _context, targetId, imageDataContext, currentUserId);
                     }
                 }
             }
@@ -324,6 +319,7 @@ namespace APPartment.Controllers.Base
 
             return images;
         }
+        #endregion
 
         private bool ObjectExists(long id)
         {

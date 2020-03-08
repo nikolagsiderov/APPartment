@@ -29,9 +29,6 @@ namespace APPartment.Migrations
                     b.Property<long>("ObjectId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ObjectTypeId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("TargetId")
                         .HasColumnType("bigint");
 
@@ -56,29 +53,14 @@ namespace APPartment.Migrations
                     b.Property<string>("ConfirmPassword")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("ModifiedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("ObjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ObjectTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Password")
@@ -109,9 +91,6 @@ namespace APPartment.Migrations
                     b.Property<long>("ObjectId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ObjectTypeId")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("RentDueDateDay")
                         .HasColumnType("int");
 
@@ -136,9 +115,6 @@ namespace APPartment.Migrations
                     b.Property<long>("ObjectId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ObjectTypeId")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -157,12 +133,6 @@ namespace APPartment.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
@@ -172,20 +142,11 @@ namespace APPartment.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("ObjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ObjectTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("Status")
@@ -218,9 +179,6 @@ namespace APPartment.Migrations
                     b.Property<long>("ObjectId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ObjectTypeId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("TargetId")
                         .HasColumnType("bigint");
 
@@ -236,12 +194,6 @@ namespace APPartment.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
@@ -251,20 +203,11 @@ namespace APPartment.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("ObjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ObjectTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("Status")
@@ -282,12 +225,6 @@ namespace APPartment.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
@@ -297,20 +234,11 @@ namespace APPartment.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("ModifiedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("ObjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ObjectTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<int>("Status")
@@ -337,9 +265,6 @@ namespace APPartment.Migrations
                     b.Property<long>("ObjectId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("ObjectTypeId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Text")
                         .HasColumnType("nvarchar(max)");
 
@@ -360,6 +285,18 @@ namespace APPartment.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("CreatedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("ModifiedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<long>("ObjectTypeId")
                         .HasColumnType("bigint");
@@ -447,9 +384,6 @@ namespace APPartment.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("ObjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("ObjectTypeId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Password")

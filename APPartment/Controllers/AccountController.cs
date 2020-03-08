@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using APPartment.Core;
 using APPartment.Data;
 using APPartment.Models;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +11,7 @@ namespace APPartment.Controllers
     public class AccountController : Controller
     {
         private readonly DataAccessContext _context;
+        private DataContext<User> dataContext = new DataContext<User>();
 
         public AccountController(DataAccessContext context)
         {
@@ -25,8 +28,7 @@ namespace APPartment.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Users.Add(user);
-                _context.SaveChanges();
+                dataContext.Save(user, _context, 0);
 
                 ModelState.Clear();
 

@@ -10,6 +10,12 @@ namespace APPartment.Data
         {
         }
 
+        // Enables seeing sensetive data (Id, etc.) in SQL error
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.EnableSensitiveDataLogging(true);
+        //}
+
         public DbSet<APPartment.Models.ObjectType> ObjectTypes { get; set; }
         public DbSet<APPartment.Models.Object> Objects { get; set; }
         public DbSet<APPartment.Models.User> Users { get; set; }

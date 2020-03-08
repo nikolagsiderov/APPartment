@@ -1,4 +1,5 @@
-﻿using APPartment.Data;
+﻿using APPartment.Core;
+using APPartment.Data;
 using APPartment.Models;
 using APPartment.Utilities;
 using Microsoft.AspNetCore.Http;
@@ -11,9 +12,9 @@ namespace APPartment.Services
     {
         private HumanSizeConverter humanSizeConverter = new HumanSizeConverter();
 
-        public void UploadImage(IFormFile file, DataAccessContext _context, long targetId)
+        public void UploadImage(IFormFile file, DataAccessContext _context, long targetId, DataContext<Image> context, long userId)
         {
-            var imageName = SaveImageToDB(file, _context, targetId);
+            var imageName = SaveImageToDB(file, _context, targetId, context, userId);
 
             string pathString = "wwwroot\\BaseObject_Images";
 
@@ -30,7 +31,7 @@ namespace APPartment.Services
             }
         }
 
-        private string SaveImageToDB(IFormFile file, DataAccessContext _context, long targetId)
+        private string SaveImageToDB(IFormFile file, DataAccessContext _context, long targetId, DataContext<Image> context, long userId)
         {
             var image = new Image()
             {
@@ -40,13 +41,14 @@ namespace APPartment.Services
                 TargetId = targetId,
             };
 
-            _context.Add(image);
-            _context.SaveChanges();
+            context.Save(image, _context, userId);
 
             image.Name = $"{image.Id}_{targetId}_{file.FileName}";
 
             _context.Update(image);
             _context.SaveChanges();
+
+            context.Update(image, _context, userId);
 
             return image.Name;
         }

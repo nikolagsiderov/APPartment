@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using APPartment.DisplayModels.Home;
 using APPartment.Utilities;
 using APPartment.Enums;
+using APPartment.Core;
 
 namespace APPartment.Controllers
 {
@@ -22,6 +23,10 @@ namespace APPartment.Controllers
         private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper = new HtmlRenderHelper();
         private TimeConverter timeConverter = new TimeConverter();
+        private DataContext<House> dataContext = new DataContext<House>();
+        private DataContext<HouseSettings> houseSettingsDataContext = new DataContext<HouseSettings>();
+        private DataContext<Message> messageDataContext = new DataContext<Message>();
+        private DataContext<HouseStatus> houseStatusDataContext = new DataContext<HouseStatus>();
 
         public HomeController(ILogger<HomeController> logger, DataAccessContext context)
         {
@@ -75,13 +80,9 @@ namespace APPartment.Controllers
         {
             if (ModelState.IsValid)
             {
-                house.CreatedBy = _context.Users.Find(long.Parse(HttpContext.Session.GetString("UserId"))).Username;
-                house.CreatedDate = DateTime.Now;
-                house.ModifiedBy = house.CreatedBy;
-                house.ModifiedDate = house.CreatedDate;
+                var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
-                _context.Add(house);
-                _context.SaveChanges();
+                dataContext.Save(house, _context, currentUserId);
 
                 ModelState.Clear();
 
@@ -148,27 +149,32 @@ namespace APPartment.Controllers
         public IActionResult Settings(HouseSettings settings)
         {
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
             if (!string.IsNullOrEmpty(settings.HouseName))
             {
                 var houseModel = _context.Find<House>(currentHouseId);
                 houseModel.Name = settings.HouseName;
-                HttpContext.Session.SetString("HouseName", houseModel.Name.ToString());
-                _context.SaveChanges();
-            }
 
-            settings.HouseId = currentHouseId;
+                _context.Update(houseModel);
+                _context.SaveChanges();
+
+                dataContext.Update(houseModel, _context, currentUserId);
+                HttpContext.Session.SetString("HouseName", houseModel.Name.ToString());
+            }
 
             if (settings.Id == 0)
             {
-                _context.HouseSettings.Add(settings);
+                settings.HouseId = currentHouseId;
+                houseSettingsDataContext.Save(settings, _context, currentUserId);
             }
             else
             {
                 _context.Update(settings);
-            }
+                _context.SaveChanges();
 
-            _context.SaveChanges();
+                houseSettingsDataContext.Update(settings, _context, currentUserId);
+            }
 
             return RedirectToAction(nameof(Index));
         }
@@ -188,8 +194,7 @@ namespace APPartment.Controllers
 
             var message = new Message() { Username = username, Text = messageText, UserId = currentUserId, HouseId = currentHouseId, CreatedDate = DateTime.Now };
 
-            await _context.Messages.AddAsync(message);
-            await _context.SaveChangesAsync();
+            await messageDataContext.SaveAsync(message, _context, currentUserId);
 
             return Ok();
         }
@@ -242,6 +247,8 @@ namespace APPartment.Controllers
 
                     _context.Update(currentHouseStatus);
                     _context.SaveChanges();
+
+                    houseStatusDataContext.Update(currentHouseStatus, _context, (long)currentUserId);
                 }
                 else
                 {
@@ -253,8 +260,7 @@ namespace APPartment.Controllers
                         HouseId = currentHouseId
                     };
 
-                    _context.Add(houseStatus);
-                    _context.SaveChanges();
+                    houseStatusDataContext.Save(houseStatus, _context, (long)currentUserId);
                 }
             }
 
@@ -270,46 +276,52 @@ namespace APPartment.Controllers
         public List<BaseObject> GetDisplayObject(long? currentHouseId)
         {
             var displayObjects = new List<BaseObject>();
-            var lastInventoryObject = new Inventory();
-            var lastHygieneObject = new Hygiene();
-            var lastIssueObject = new Issue();
+            var lastInventoryModel = new Inventory();
+            var lastHygieneModel = new Hygiene();
+            var lastIssueModel = new Issue();
 
             var inventoryObjects = _context.Set<Inventory>().Where(x => x.HouseId == currentHouseId);
 
             if (inventoryObjects.Count() > 0)
             {
-                lastInventoryObject = inventoryObjects.OrderByDescending(x => x.ModifiedDate).First();
-                lastInventoryObject.LastUpdated = lastInventoryObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime(lastInventoryObject.ModifiedDate.Value);
-                lastInventoryObject.Name = lastInventoryObject.Name.Length <= 20 ? lastInventoryObject.Name : lastInventoryObject.Name.Substring(0, 20) + "...";
-                lastInventoryObject.Details = lastInventoryObject.Details.Length <= 50 ? lastInventoryObject.Details : lastInventoryObject.Details.Substring(0, 50) + "...";
-                lastInventoryObject.ModifiedBy = lastInventoryObject.ModifiedBy == null ? string.Empty : lastInventoryObject.ModifiedBy;
+                var inventoryObject = _context.Set<Models.Object>().Where(x => x.ObjectTypeId == (long)ObjectTypes.Invetory).OrderByDescending(x => x.ModifiedDate).First();
+                lastInventoryModel = _context.Set<Inventory>().Where(x => x.ObjectId == inventoryObject.ObjectId).FirstOrDefault();
+
+                lastInventoryModel.LastUpdated = inventoryObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime(inventoryObject.ModifiedDate);
+                lastInventoryModel.Name = lastInventoryModel.Name.Length <= 20 ? lastInventoryModel.Name : lastInventoryModel.Name.Substring(0, 20) + "...";
+                lastInventoryModel.Details = lastInventoryModel.Details.Length <= 50 ? lastInventoryModel.Details : lastInventoryModel.Details.Substring(0, 50) + "...";
+                lastInventoryModel.LastUpdatedBy = _context.Users.Where(x => x.UserId == inventoryObject.ModifiedById).FirstOrDefault().Username;
             }
 
             var hygieneObjects = _context.Set<Hygiene>().Where(x => x.HouseId == currentHouseId);
 
             if (hygieneObjects.Count() > 0)
             {
-                lastHygieneObject = hygieneObjects.OrderByDescending(x => x.ModifiedDate).First();
-                lastHygieneObject.LastUpdated = lastHygieneObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime(lastHygieneObject.ModifiedDate.Value);
-                lastHygieneObject.Name = lastHygieneObject.Name.Length <= 20 ? lastHygieneObject.Name : lastHygieneObject.Name.Substring(0, 20) + "...";
-                lastHygieneObject.Details = lastHygieneObject.Details.Length <= 50 ? lastHygieneObject.Details : lastHygieneObject.Details.Substring(0, 50) + "...";
-                lastHygieneObject.ModifiedBy = lastHygieneObject.ModifiedBy == null ? string.Empty : lastHygieneObject.ModifiedBy;
+                var hygieneObject = _context.Set<Models.Object>().Where(x => x.ObjectTypeId == (long)ObjectTypes.Hygiene).OrderByDescending(x => x.ModifiedDate).First();
+                lastHygieneModel = _context.Set<Hygiene>().Where(x => x.ObjectId == hygieneObject.ObjectId).FirstOrDefault();
+
+                lastHygieneModel.LastUpdated = hygieneObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime(hygieneObject.ModifiedDate);
+                lastHygieneModel.Name = lastHygieneModel.Name.Length <= 20 ? lastHygieneModel.Name : lastHygieneModel.Name.Substring(0, 20) + "...";
+                lastHygieneModel.Details = lastHygieneModel.Details.Length <= 50 ? lastHygieneModel.Details : lastHygieneModel.Details.Substring(0, 50) + "...";
+                lastHygieneModel.LastUpdatedBy = _context.Users.Where(x => x.UserId == hygieneObject.ModifiedById).FirstOrDefault().Username;
             }
 
             var issueObjects = _context.Set<Issue>().Where(x => x.HouseId == currentHouseId);
 
             if (issueObjects.Count() > 0)
             {
-                lastIssueObject = issueObjects.OrderByDescending(x => x.ModifiedDate).First();
-                lastIssueObject.LastUpdated = lastIssueObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime(lastIssueObject.ModifiedDate.Value);
-                lastIssueObject.Name = lastIssueObject.Name.Length <= 20 ? lastIssueObject.Name : lastIssueObject.Name.Substring(0, 20) + "...";
-                lastIssueObject.Details = lastIssueObject.Details.Length <= 50 ? lastIssueObject.Details : lastIssueObject.Details.Substring(0, 50) + "...";
-                lastIssueObject.ModifiedBy = lastIssueObject.ModifiedBy == null ? string.Empty : lastIssueObject.ModifiedBy;
+                var issueObject = _context.Set<Models.Object>().Where(x => x.ObjectTypeId == (long)ObjectTypes.Issue).OrderByDescending(x => x.ModifiedDate).First();
+                lastIssueModel = _context.Set<Issue>().Where(x => x.ObjectId == issueObject.ObjectId).FirstOrDefault();
+
+                lastIssueModel.LastUpdated = issueObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime(issueObject.ModifiedDate);
+                lastIssueModel.Name = lastIssueModel.Name.Length <= 20 ? lastIssueModel.Name : lastIssueModel.Name.Substring(0, 20) + "...";
+                lastIssueModel.Details = lastIssueModel.Details.Length <= 50 ? lastIssueModel.Details : lastIssueModel.Details.Substring(0, 50) + "...";
+                lastIssueModel.LastUpdatedBy = _context.Users.Where(x => x.UserId == issueObject.ModifiedById).FirstOrDefault().Username;
             }
 
-            displayObjects.Add(lastInventoryObject);
-            displayObjects.Add(lastHygieneObject);
-            displayObjects.Add(lastIssueObject);
+            displayObjects.Add(lastInventoryModel);
+            displayObjects.Add(lastHygieneModel);
+            displayObjects.Add(lastIssueModel);
 
             return displayObjects;
         }

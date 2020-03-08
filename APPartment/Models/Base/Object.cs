@@ -7,8 +7,5 @@ namespace APPartment.Models.Base
     {
         [ForeignKey("Object")]
         public long ObjectId { get; set; }
-
-        [ForeignKey("ObjectType")]
-        public long ObjectTypeId { get; set; }
     }
 }

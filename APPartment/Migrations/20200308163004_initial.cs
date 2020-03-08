@@ -14,7 +14,6 @@ namespace APPartment.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ObjectId = table.Column<long>(nullable: false),
-                    ObjectTypeId = table.Column<long>(nullable: false),
                     Text = table.Column<string>(nullable: true),
                     Username = table.Column<string>(nullable: true),
                     TargetId = table.Column<long>(nullable: false)
@@ -31,16 +30,11 @@ namespace APPartment.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ObjectId = table.Column<long>(nullable: false),
-                    ObjectTypeId = table.Column<long>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Password = table.Column<string>(nullable: false),
                     ConfirmPassword = table.Column<string>(nullable: true),
                     Details = table.Column<string>(nullable: true),
-                    Status = table.Column<int>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    ModifiedBy = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: false),
-                    ModifiedDate = table.Column<DateTime>(nullable: false)
+                    Status = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,7 +48,6 @@ namespace APPartment.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ObjectId = table.Column<long>(nullable: false),
-                    ObjectTypeId = table.Column<long>(nullable: false),
                     RentDueDateDay = table.Column<int>(nullable: false),
                     HouseName = table.Column<string>(nullable: true),
                     HouseId = table.Column<long>(nullable: true)
@@ -71,7 +64,6 @@ namespace APPartment.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ObjectId = table.Column<long>(nullable: false),
-                    ObjectTypeId = table.Column<long>(nullable: false),
                     Status = table.Column<int>(nullable: false),
                     Details = table.Column<string>(nullable: true),
                     UserId = table.Column<long>(nullable: false),
@@ -92,13 +84,8 @@ namespace APPartment.Migrations
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
                     IsCompleted = table.Column<bool>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    ModifiedBy = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true),
-                    ModifiedDate = table.Column<DateTime>(nullable: true),
                     HouseId = table.Column<long>(nullable: true),
-                    ObjectId = table.Column<long>(nullable: false),
-                    ObjectTypeId = table.Column<long>(nullable: false)
+                    ObjectId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -112,7 +99,6 @@ namespace APPartment.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ObjectId = table.Column<long>(nullable: false),
-                    ObjectTypeId = table.Column<long>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     FileName = table.Column<string>(nullable: true),
                     FileSize = table.Column<string>(nullable: true),
@@ -134,13 +120,8 @@ namespace APPartment.Migrations
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
                     IsCompleted = table.Column<bool>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    ModifiedBy = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true),
-                    ModifiedDate = table.Column<DateTime>(nullable: true),
                     HouseId = table.Column<long>(nullable: true),
-                    ObjectId = table.Column<long>(nullable: false),
-                    ObjectTypeId = table.Column<long>(nullable: false)
+                    ObjectId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -157,13 +138,8 @@ namespace APPartment.Migrations
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
                     IsCompleted = table.Column<bool>(nullable: false),
-                    CreatedBy = table.Column<string>(nullable: true),
-                    ModifiedBy = table.Column<string>(nullable: true),
-                    CreatedDate = table.Column<DateTime>(nullable: true),
-                    ModifiedDate = table.Column<DateTime>(nullable: true),
                     HouseId = table.Column<long>(nullable: true),
-                    ObjectId = table.Column<long>(nullable: false),
-                    ObjectTypeId = table.Column<long>(nullable: false)
+                    ObjectId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -177,7 +153,6 @@ namespace APPartment.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ObjectId = table.Column<long>(nullable: false),
-                    ObjectTypeId = table.Column<long>(nullable: false),
                     Username = table.Column<string>(nullable: true),
                     Text = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
@@ -195,6 +170,10 @@ namespace APPartment.Migrations
                 {
                     ObjectId = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedById = table.Column<long>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    ModifiedById = table.Column<long>(nullable: false),
+                    ModifiedDate = table.Column<DateTime>(nullable: false),
                     ObjectTypeId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
@@ -222,7 +201,6 @@ namespace APPartment.Migrations
                     UserId = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ObjectId = table.Column<long>(nullable: false),
-                    ObjectTypeId = table.Column<long>(nullable: false),
                     Username = table.Column<string>(nullable: false),
                     Password = table.Column<string>(nullable: false),
                     ConfirmPassword = table.Column<string>(nullable: true)

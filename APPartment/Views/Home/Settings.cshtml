@@ -10,6 +10,7 @@
                 <form asp-action="Settings" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="ObjectId" />
 
                     <div class="form-group">
                         <label asp-for="HouseName" class="control-label">Change house name</label>

@@ -1,5 +1,4 @@
 ﻿using APPartment.Models.Declaration;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,22 +19,11 @@ namespace APPartment.Models.Base
 
         public bool IsCompleted { get; set; } = false;
 
-        public string CreatedBy { get; set; }
-
-        public string ModifiedBy { get; set; }
-
-        public DateTime? CreatedDate { get; set; }
-
-        public DateTime? ModifiedDate { get; set; }
-
         [ForeignKey("House")]
         public long? HouseId { get; set; }
 
         [ForeignKey("Object")]
         public long ObjectId { get; set; }
-
-        [ForeignKey("ObjectType")]
-        public long ObjectTypeId { get; set; }
 
         [NotMapped]
         public List<string> Comments { get; set; }
@@ -45,5 +33,8 @@ namespace APPartment.Models.Base
 
         [NotMapped]
         public string LastUpdated { get; set; }
+
+        [NotMapped]
+        public string LastUpdatedBy { get; set; }
     }
 }
