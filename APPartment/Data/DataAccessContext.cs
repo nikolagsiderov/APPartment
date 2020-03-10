@@ -17,6 +17,7 @@ namespace APPartment.Data
         //}
 
         public DbSet<APPartment.Models.ObjectType> ObjectTypes { get; set; }
+        public DbSet<APPartment.Models.HistoryFunctionType> HistoryFunctionTypes { get; set; }
         public DbSet<APPartment.Models.Object> Objects { get; set; }
         public DbSet<APPartment.Models.User> Users { get; set; }
         public DbSet<APPartment.Models.House> Houses { get; set; }
@@ -46,6 +47,11 @@ namespace APPartment.Data
                 new ObjectType { Id = 9, Name = "Comment" },
                 new ObjectType { Id = 10, Name = "Image" },
                 new ObjectType { Id = 11, Name = "History"}
+            );
+            modelBuilder.Entity<HistoryFunctionType>().ToTable("HistoryFunctionType").HasData(
+                new ObjectType { Id = 1, Name = "Create" },
+                new ObjectType { Id = 2, Name = "Update" },
+                new ObjectType { Id = 3, Name = "Delete" }
             );
             modelBuilder.Entity<Object>().ToTable("Object");
             modelBuilder.Entity<User>().ToTable("User");

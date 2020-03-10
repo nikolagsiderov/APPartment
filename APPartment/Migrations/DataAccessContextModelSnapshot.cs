@@ -73,6 +73,38 @@ namespace APPartment.Migrations
                     b.ToTable("History");
                 });
 
+            modelBuilder.Entity("APPartment.Models.HistoryFunctionType", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HistoryFunctionType");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Name = "Create"
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Name = "Update"
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Name = "Delete"
+                        });
+                });
+
             modelBuilder.Entity("APPartment.Models.House", b =>
                 {
                     b.Property<long>("Id")

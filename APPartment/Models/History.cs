@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace APPartment.Models
 {
     public class History : Base.Object
     {
+        [Key]
         public long Id { get; set; }
 
         public string Function { get; set; }

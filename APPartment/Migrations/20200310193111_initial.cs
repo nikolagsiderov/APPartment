@@ -42,6 +42,19 @@ namespace APPartment.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HistoryFunctionType",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HistoryFunctionType", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "House",
                 columns: table => new
                 {
@@ -229,6 +242,16 @@ namespace APPartment.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "HistoryFunctionType",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1L, "Create" },
+                    { 2L, "Update" },
+                    { 3L, "Delete" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "ObjectType",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
@@ -254,6 +277,9 @@ namespace APPartment.Migrations
 
             migrationBuilder.DropTable(
                 name: "History");
+
+            migrationBuilder.DropTable(
+                name: "HistoryFunctionType");
 
             migrationBuilder.DropTable(
                 name: "House");
