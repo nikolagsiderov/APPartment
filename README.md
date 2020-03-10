@@ -10,7 +10,7 @@ APPartment is an ASP.NET Core MVC project for sharing with your housemate/s and 
 * Basic work with SignalR
 * Creating custom logos with Photoshop
 
-# Project further description
+# Further description
 
 * Web project with double authorization (login, register) - first authorization for user, second authorization for house/home, because one user can have many houses/homes and a home can have many participants/users.
 * Top navigation menu with dropdowns for profile, home status with ability to display and set current home status.
