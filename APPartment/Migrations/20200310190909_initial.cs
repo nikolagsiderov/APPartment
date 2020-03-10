@@ -24,6 +24,24 @@ namespace APPartment.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "History",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ObjectId = table.Column<long>(nullable: false),
+                    Function = table.Column<string>(nullable: true),
+                    ColumnName = table.Column<string>(nullable: true),
+                    OldValue = table.Column<string>(nullable: true),
+                    NewValue = table.Column<string>(nullable: true),
+                    TargetId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_History", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "House",
                 columns: table => new
                 {
@@ -224,7 +242,8 @@ namespace APPartment.Migrations
                     { 7L, "Issue" },
                     { 8L, "Message" },
                     { 9L, "Comment" },
-                    { 10L, "Image" }
+                    { 10L, "Image" },
+                    { 11L, "History" }
                 });
         }
 
@@ -232,6 +251,9 @@ namespace APPartment.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Comment");
+
+            migrationBuilder.DropTable(
+                name: "History");
 
             migrationBuilder.DropTable(
                 name: "House");

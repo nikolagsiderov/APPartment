@@ -11,6 +11,7 @@
         Issue  = 7,
         Message = 8,
         Comment = 9,
-        Image = 10
+        Image = 10,
+        History = 11
     }
 }

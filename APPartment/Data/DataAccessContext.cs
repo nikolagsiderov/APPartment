@@ -28,6 +28,7 @@ namespace APPartment.Data
         public DbSet<APPartment.Models.Message> Messages { get; set; }
         public DbSet<APPartment.Models.Comment> Comments { get; set; }
         public DbSet<APPartment.Models.Image> Images { get; set; }
+        public DbSet<APPartment.Models.History> Histories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,7 +44,8 @@ namespace APPartment.Data
                 new ObjectType { Id = 7, Name = "Issue" },
                 new ObjectType { Id = 8, Name = "Message" },
                 new ObjectType { Id = 9, Name = "Comment" },
-                new ObjectType { Id = 10, Name = "Image" }
+                new ObjectType { Id = 10, Name = "Image" },
+                new ObjectType { Id = 11, Name = "History"}
             );
             modelBuilder.Entity<Object>().ToTable("Object");
             modelBuilder.Entity<User>().ToTable("User");
@@ -56,6 +58,7 @@ namespace APPartment.Data
             modelBuilder.Entity<Message>().ToTable("Message");
             modelBuilder.Entity<Comment>().ToTable("Comment");
             modelBuilder.Entity<Image>().ToTable("Image");
+            modelBuilder.Entity<History>().ToTable("History");
         }
     }
 }
