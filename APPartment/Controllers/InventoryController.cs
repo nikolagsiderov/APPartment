@@ -12,6 +12,10 @@ namespace APPartment.Controllers
 {
     public class InventoryController : BaseCRUDController<Inventory>
     {
+        private const string All_Breadcrumb = "<i class='fas fa-tasks' style='font-size:20px'></i> Inventory";
+        private const string Supplied_Breadcrumb = "<i class='fas fa-check' style='font-size:20px'></i> Supplied";
+        private const string Not_Supplied_Breadcrumb = "<i class='fas fa-exclamation-triangle' style='font-size:20px'></i> Not Supplied";
+
         private readonly DataAccessContext _context;
 
         public InventoryController(DataAccessContext context) : base(context)
@@ -19,7 +23,7 @@ namespace APPartment.Controllers
             _context = context;
         }
 
-        [Breadcrumb("<i class='fas fa-tasks' style='font-size:20px'></i> Inventory")]
+        [Breadcrumb(All_Breadcrumb)]
         public override Task<IActionResult> Index()
         {
             ViewData["GridTitle"] = "Inventory - All";
@@ -28,7 +32,7 @@ namespace APPartment.Controllers
             return base.Index();
         }
 
-        [Breadcrumb("<i class='fas fa-check' style='font-size:20px'></i> Supplied")]
+        [Breadcrumb(Supplied_Breadcrumb)]
         public override Task<IActionResult> IndexCompleted()
         {
             ViewData["GridTitle"] = "Inventory - Supplied";
@@ -37,7 +41,7 @@ namespace APPartment.Controllers
             return base.IndexCompleted();
         }
 
-        [Breadcrumb("<i class='fas fa-exclamation-triangle' style='font-size:20px'></i> Not Supplied")]
+        [Breadcrumb(Not_Supplied_Breadcrumb)]
         public override Task<IActionResult> IndexNotCompleted()
         {
             ViewData["GridTitle"] = "Inventory - Not Supplied";

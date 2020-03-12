@@ -12,6 +12,10 @@ namespace APPartment.Controllers
 {
     public class IssuesController : BaseCRUDController<Issue>
     {
+        private const string All_Breadcrumb = "<i class='fas fa-exclamation-circle' style='font-size:20px'></i> Issues";
+        private const string Closed_Breadcrumb = "<i class='fas fa-check' style='font-size:20px'></i> Closed";
+        private const string Open_Breadcrumb = "<i class='fas fa-exclamation-triangle' style='font-size:20px'></i> Open";
+
         private readonly DataAccessContext _context;
 
         public IssuesController(DataAccessContext context) : base(context)
@@ -19,7 +23,7 @@ namespace APPartment.Controllers
             _context = context;
         }
 
-        [Breadcrumb("<i class='fas fa-exclamation-circle' style='font-size:20px'></i> Issues")]
+        [Breadcrumb(All_Breadcrumb)]
         public override Task<IActionResult> Index()
         {
             ViewData["GridTitle"] = "Issues - All";
@@ -28,7 +32,7 @@ namespace APPartment.Controllers
             return base.Index();
         }
 
-        [Breadcrumb("<i class='fas fa-check' style='font-size:20px'></i> Closed")]
+        [Breadcrumb(Closed_Breadcrumb)]
         public override Task<IActionResult> IndexCompleted()
         {
             ViewData["GridTitle"] = "Issues - Closed";
@@ -37,7 +41,7 @@ namespace APPartment.Controllers
             return base.IndexCompleted();
         }
 
-        [Breadcrumb("<i class='fas fa-exclamation-triangle' style='font-size:20px'></i> Open")]
+        [Breadcrumb(Open_Breadcrumb)]
         public override Task<IActionResult> IndexNotCompleted()
         {
             ViewData["GridTitle"] = "Issues - Open";

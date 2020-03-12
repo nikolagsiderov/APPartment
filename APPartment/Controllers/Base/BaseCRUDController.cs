@@ -18,6 +18,9 @@ namespace APPartment.Controllers.Base
     public abstract class BaseCRUDController<T> : Controller
         where T : class, IBaseObject
     {
+        private const string Details_Breadcrumb = "<i class='fas fa-info-circle'></i> Details";
+        private const string Edit_Breadcrumb = "<i class='fas fa-edit'></i> Edit";
+
         private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper = new HtmlRenderHelper();
         private FileUploadService fileUploadService = new FileUploadService();
@@ -75,7 +78,7 @@ namespace APPartment.Controllers.Base
             return View("_Grid", modelObjects);
         }
 
-        [Breadcrumb("<i class='fas fa-info-circle'></i> Details")]
+        [Breadcrumb(Details_Breadcrumb)]
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -114,7 +117,7 @@ namespace APPartment.Controllers.Base
             return RedirectToAction(nameof(Index));
         }
 
-        [Breadcrumb("<i class='fas fa-edit'></i> Edit")]
+        [Breadcrumb(Edit_Breadcrumb)]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -135,7 +138,7 @@ namespace APPartment.Controllers.Base
             return View("_Edit", model);
         }
 
-        [Breadcrumb("<i class='fas fa-edit'></i> Edit")]
+        [Breadcrumb(Edit_Breadcrumb)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, [Bind("Id,Name,Details,Status,IsCompleted,HouseId,ObjectId")] T model)

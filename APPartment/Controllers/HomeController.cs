@@ -19,6 +19,10 @@ namespace APPartment.Controllers
 {
     public class HomeController : Controller
     {
+        private const string Default_Breadcrumb = "<i class='fas fa-home' style='font-size:20px'></i> Home";
+        private const string Settings_Breadcrumb = "<i class='fas fa-cogs' style='font-size:20px'></i> Settings";
+        private const string About_Breadcrumb = "<i class='fas fa-info-circle' style='font-size:20px'></i> About";
+
         private readonly ILogger<HomeController> _logger;
         private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper = new HtmlRenderHelper();
@@ -34,7 +38,7 @@ namespace APPartment.Controllers
             _context = context;
         }
 
-        [DefaultBreadcrumb("<i class='fas fa-home' style='font-size:20px'></i> Home")]
+        [DefaultBreadcrumb(Default_Breadcrumb)]
         public IActionResult Index()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
@@ -123,7 +127,7 @@ namespace APPartment.Controllers
         }
 
         [HttpGet]
-        [Breadcrumb("<i class='fas fa-cogs' style='font-size:20px'></i> Settings")]
+        [Breadcrumb(Settings_Breadcrumb)]
         public IActionResult Settings()
         {
             var houseSettingsArePresent = _context.HouseSettings.Any(x => x.Id == long.Parse(HttpContext.Session.GetString("HouseId")));
@@ -181,7 +185,7 @@ namespace APPartment.Controllers
         }
 
         [HttpGet]
-        [Breadcrumb("<i class='fas fa-info-circle' style='font-size:20px'></i> About")]
+        [Breadcrumb(About_Breadcrumb)]
         public IActionResult About()
         {
             return View();

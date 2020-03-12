@@ -12,6 +12,10 @@ namespace APPartment.Controllers
 {
     public class HygieneController : BaseCRUDController<Hygiene>
     {
+        private const string All_Breadcrumb = "<i class='fas fa-recycle' style='font-size:20px'></i> Hygiene";
+        private const string Cleaned_Breadcrumb = "<i class='fas fa-check' style='font-size:20px'></i> Cleaned";
+        private const string Due_Cleaning_Breadcrumb = "<i class='fas fa-exclamation-triangle' style='font-size:20px'></i> Due Cleaning";
+
         private readonly DataAccessContext _context;
 
         public HygieneController(DataAccessContext context) : base(context)
@@ -19,7 +23,7 @@ namespace APPartment.Controllers
             _context = context;
         }
 
-        [Breadcrumb("<i class='fas fa-recycle' style='font-size:20px'></i> Hygiene")]
+        [Breadcrumb(All_Breadcrumb)]
         public override Task<IActionResult> Index()
         {
             ViewData["GridTitle"] = "Hygiene - All";
@@ -28,7 +32,7 @@ namespace APPartment.Controllers
             return base.Index();
         }
 
-        [Breadcrumb("<i class='fas fa-check' style='font-size:20px'></i> Cleaned")]
+        [Breadcrumb(Cleaned_Breadcrumb)]
         public override Task<IActionResult> IndexCompleted()
         {
             ViewData["GridTitle"] = "Hygiene - Cleaned";
@@ -37,7 +41,7 @@ namespace APPartment.Controllers
             return base.IndexCompleted();
         }
 
-        [Breadcrumb("<i class='fas fa-exclamation-triangle' style='font-size:20px'></i> Due Cleaning")]
+        [Breadcrumb(Due_Cleaning_Breadcrumb)]
         public override Task<IActionResult> IndexNotCompleted()
         {
             ViewData["GridTitle"] = "Hygiene - Due Cleaning";
