@@ -30,10 +30,11 @@ namespace APPartment.Migrations
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ObjectId = table.Column<long>(nullable: false),
-                    Function = table.Column<string>(nullable: true),
+                    FunctionTypeId = table.Column<int>(nullable: false),
                     ColumnName = table.Column<string>(nullable: true),
                     OldValue = table.Column<string>(nullable: true),
                     NewValue = table.Column<string>(nullable: true),
+                    UserId = table.Column<long>(nullable: true),
                     TargetId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>

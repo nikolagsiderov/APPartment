@@ -82,7 +82,7 @@ namespace APPartment.Controllers
             {
                 var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
-                dataContext.Save(house, _context, currentUserId);
+                dataContext.Save(house, _context, currentUserId, null);
 
                 ModelState.Clear();
 
@@ -151,9 +151,10 @@ namespace APPartment.Controllers
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
+            var houseModel = _context.Find<House>(currentHouseId);
+
             if (!string.IsNullOrEmpty(settings.HouseName))
             {
-                var houseModel = _context.Find<House>(currentHouseId);
                 houseModel.Name = settings.HouseName;
 
                 _context.Update(houseModel);
@@ -166,7 +167,7 @@ namespace APPartment.Controllers
             if (settings.Id == 0)
             {
                 settings.HouseId = currentHouseId;
-                houseSettingsDataContext.Save(settings, _context, currentUserId);
+                houseSettingsDataContext.Save(settings, _context, currentUserId, houseModel.ObjectId);
             }
             else
             {
@@ -192,9 +193,11 @@ namespace APPartment.Controllers
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
+            var houseModel = _context.Find<House>(currentHouseId);
+
             var message = new Message() { Username = username, Text = messageText, UserId = currentUserId, HouseId = currentHouseId, CreatedDate = DateTime.Now };
 
-            await messageDataContext.SaveAsync(message, _context, currentUserId);
+            await messageDataContext.SaveAsync(message, _context, currentUserId, houseModel.ObjectId);
 
             return Ok();
         }
@@ -230,6 +233,8 @@ namespace APPartment.Controllers
                 long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
                 long? currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
+                var houseModel = _context.Find<House>(currentHouseId);
+
                 var houseStatusDetails = string.Empty;
 
                 if (!string.IsNullOrEmpty(houseStatusDetailsString))
@@ -260,7 +265,7 @@ namespace APPartment.Controllers
                         HouseId = currentHouseId
                     };
 
-                    houseStatusDataContext.Save(houseStatus, _context, (long)currentUserId);
+                    houseStatusDataContext.Save(houseStatus, _context, (long)currentUserId, houseModel.ObjectId);
                 }
             }
 

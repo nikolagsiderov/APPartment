@@ -108,7 +108,7 @@ namespace APPartment.Controllers.Base
 
                 model.HouseId = currentHouseId;
 
-                await dataContext.SaveAsync(model, _context, currentUserId);
+                await dataContext.SaveAsync(model, _context, currentUserId, null);
             }
 
             return RedirectToAction(nameof(Index));
@@ -230,6 +230,8 @@ namespace APPartment.Controllers.Base
 
         public async Task<IActionResult> Delete(long? id)
         {
+            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+
             if (id == null)
             {
                 return NotFound();
@@ -243,7 +245,7 @@ namespace APPartment.Controllers.Base
                 return NotFound();
             }
 
-            await dataContext.DeleteAsync(model, _context);
+            await dataContext.DeleteAsync(model, _context, currentUserId, null);
 
             return RedirectToAction(nameof(Index));
         }
@@ -269,7 +271,7 @@ namespace APPartment.Controllers.Base
                 Username = username
             };
 
-            await commentDataContext.SaveAsync(comment, _context, currentUserId);
+            await commentDataContext.SaveAsync(comment, _context, currentUserId, targetId);
 
             var result = htmlRenderHelper.BuildPostComment(comment);
 

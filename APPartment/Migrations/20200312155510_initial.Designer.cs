@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APPartment.Migrations
 {
     [DbContext(typeof(DataAccessContext))]
-    [Migration("20200310193111_initial")]
+    [Migration("20200312155510_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,8 +55,8 @@ namespace APPartment.Migrations
                     b.Property<string>("ColumnName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Function")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FunctionTypeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("NewValue")
                         .HasColumnType("nvarchar(max)");
@@ -68,6 +68,9 @@ namespace APPartment.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("TargetId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UserId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");

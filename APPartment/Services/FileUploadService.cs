@@ -41,7 +41,7 @@ namespace APPartment.Services
                 TargetId = targetId,
             };
 
-            context.Save(image, _context, userId);
+            context.Save(image, _context, userId, targetId);
 
             image.Name = $"{image.Id}_{targetId}_{file.FileName}";
 

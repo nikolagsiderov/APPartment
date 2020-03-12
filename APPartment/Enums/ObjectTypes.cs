@@ -4,14 +4,14 @@
     {
         User = 1,
         House = 2,
-        HouseStatus = 3,
-        HouseSettings = 4,
+        HouseStatus = 3, // sub-object
+        HouseSettings = 4, // sub-object
         Invetory = 5,
         Hygiene = 6,
         Issue  = 7,
         Message = 8,
-        Comment = 9,
-        Image = 10,
-        History = 11
+        Comment = 9, // sub-object
+        Image = 10, // sub-object
+        History = 11 // sub-object
     }
 }
