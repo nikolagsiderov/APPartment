@@ -155,9 +155,6 @@ namespace APPartment.Controllers.Base
 
                 try
                 {
-                    _context.Update(model);
-                    await _context.SaveChangesAsync();
-
                     await dataContext.UpdateAsync(model, _context, currentUserId);
                 }
                 catch (DbUpdateConcurrencyException)
@@ -196,9 +193,6 @@ namespace APPartment.Controllers.Base
 
             model.IsCompleted = true;
 
-            _context.Update(model);
-            await _context.SaveChangesAsync();
-
             await dataContext.UpdateAsync(model, _context, currentUserId);
 
             return RedirectToAction(nameof(Index));
@@ -222,9 +216,6 @@ namespace APPartment.Controllers.Base
             }
 
             model.IsCompleted = false;
-
-            _context.Update(model);
-            await _context.SaveChangesAsync();
 
             await dataContext.UpdateAsync(model, _context, currentUserId);
 

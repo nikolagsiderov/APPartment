@@ -48,8 +48,6 @@ namespace APPartment.Services
             _context.Update(image);
             _context.SaveChanges();
 
-            context.Update(image, _context, userId);
-
             return image.Name;
         }
     }

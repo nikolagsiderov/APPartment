@@ -18,9 +18,5 @@ namespace APPartment.Models
         [Compare("Password", ErrorMessage = "Please confirm your password.")]
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
-
-        public string Details { get; set; }
-
-        public int Status { get; set; }
     }
 }

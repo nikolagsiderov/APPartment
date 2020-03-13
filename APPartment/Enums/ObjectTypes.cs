@@ -6,7 +6,7 @@
         House = 2,
         HouseStatus = 3, // sub-object
         HouseSettings = 4, // sub-object
-        Invetory = 5,
+        Inventory = 5,
         Hygiene = 6,
         Issue  = 7,
         Message = 8,

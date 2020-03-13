@@ -14,6 +14,7 @@ using APPartment.DisplayModels.Home;
 using APPartment.Utilities;
 using APPartment.Enums;
 using APPartment.Core;
+using Microsoft.EntityFrameworkCore;
 
 namespace APPartment.Controllers
 {
@@ -161,9 +162,6 @@ namespace APPartment.Controllers
             {
                 houseModel.Name = settings.HouseName;
 
-                _context.Update(houseModel);
-                _context.SaveChanges();
-
                 dataContext.Update(houseModel, _context, currentUserId);
                 HttpContext.Session.SetString("HouseName", houseModel.Name.ToString());
             }
@@ -175,9 +173,6 @@ namespace APPartment.Controllers
             }
             else
             {
-                _context.Update(settings);
-                _context.SaveChanges();
-
                 houseSettingsDataContext.Update(settings, _context, currentUserId);
             }
 
@@ -254,9 +249,6 @@ namespace APPartment.Controllers
                     currentHouseStatus.Details = houseStatusDetails;
                     currentHouseStatus.UserId = (long)currentUserId;
 
-                    _context.Update(currentHouseStatus);
-                    _context.SaveChanges();
-
                     houseStatusDataContext.Update(currentHouseStatus, _context, (long)currentUserId);
                 }
                 else
@@ -293,7 +285,7 @@ namespace APPartment.Controllers
 
             if (inventoryObjects.Count() > 0)
             {
-                var inventoryObject = _context.Set<Models.Object>().Where(x => x.ObjectTypeId == (long)ObjectTypes.Invetory).OrderByDescending(x => x.ModifiedDate).First();
+                var inventoryObject = _context.Set<Models.Object>().Where(x => x.ObjectTypeId == (long)ObjectTypes.Inventory).OrderByDescending(x => x.ModifiedDate).First();
                 lastInventoryModel = _context.Set<Inventory>().Where(x => x.ObjectId == inventoryObject.ObjectId).FirstOrDefault();
 
                 lastInventoryModel.LastUpdated = inventoryObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime(inventoryObject.ModifiedDate);
