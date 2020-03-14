@@ -66,13 +66,13 @@ namespace APPartment.Core
         {
             var _object = context.Set<Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
+            PopulateHistory((int)HistoryFunctionTypes.Update, objectModel, _object, context, userId, null);
+
             _object.ModifiedById = userId;
             _object.ModifiedDate = DateTime.Now;
 
             context.Update(_object);
             await context.SaveChangesAsync();
-
-            PopulateHistory((int)HistoryFunctionTypes.Update, objectModel, _object, context, userId, null);
 
             context.Update(objectModel);
             await context.SaveChangesAsync();
@@ -82,13 +82,13 @@ namespace APPartment.Core
         {
             var _object = context.Set<Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
+            PopulateHistory((int)HistoryFunctionTypes.Update, objectModel, _object, context, userId, null);
+
             _object.ModifiedById = userId;
             _object.ModifiedDate = DateTime.Now;
 
             context.Update(_object);
             context.SaveChanges();
-
-            PopulateHistory((int)HistoryFunctionTypes.Update, objectModel, _object, context, userId, null);
 
             context.Update(objectModel);
             context.SaveChanges();
@@ -98,7 +98,7 @@ namespace APPartment.Core
         {
             var _object = context.Set<Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
-            PopulateHistory((int)HistoryFunctionTypes.Delete, null, _object, context, userId, targetObjectId);
+            PopulateHistory((int)HistoryFunctionTypes.Delete, objectModel, _object, context, userId, targetObjectId);
 
             context.Remove(_object);
             context.Remove(objectModel);
@@ -110,7 +110,7 @@ namespace APPartment.Core
         {
             var _object = context.Set<Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
-            PopulateHistory((int)HistoryFunctionTypes.Delete, null, _object, context, userId, targetObjectId);
+            PopulateHistory((int)HistoryFunctionTypes.Delete, objectModel, _object, context, userId, targetObjectId);
 
             context.Remove(_object);
             context.Remove(objectModel);
@@ -373,10 +373,59 @@ namespace APPartment.Core
                 }
 
                 // Child objects - Metadata
-                //switch (@object.ObjectTypeId)
-                //{
-                    
-                //}
+                switch (@object.ObjectTypeId)
+                {
+                    case (long)ObjectTypes.HouseStatus:
+                        var oldHouseStatusModel = context.HouseStatuses.AsNoTracking().Single(x => x.ObjectId == @object.ObjectId);
+                        var newHouseStatusModel = objectModel as HouseStatus;
+
+                        if (oldHouseStatusModel.Status != newHouseStatusModel.Status)
+                        {
+                            history.ColumnName = "Status";
+                            history.OldValue = oldHouseStatusModel.Status.ToString();
+                            history.NewValue = newHouseStatusModel.Status.ToString();
+
+                            this.SaveHistory(history, context, userId);
+                        }
+
+                        if (oldHouseStatusModel.Details != newHouseStatusModel.Details)
+                        {
+                            history.ColumnName = "Details";
+                            history.OldValue = oldHouseStatusModel.Details;
+                            history.NewValue = newHouseStatusModel.Details;
+
+                            this.SaveHistory(history, context, userId);
+                        }
+                        break;
+                    case (long)ObjectTypes.HouseSettings:
+                        var oldHouseSettingsModel = context.HouseSettings.AsNoTracking().Single(x => x.ObjectId == @object.ObjectId);
+                        var newHouseSettingsModel = objectModel as HouseSettings;
+
+                        if (oldHouseSettingsModel.RentDueDateDay != newHouseSettingsModel.RentDueDateDay)
+                        {
+                            history.ColumnName = "RentDueDateDay";
+                            history.OldValue = oldHouseSettingsModel.RentDueDateDay.ToString();
+                            history.NewValue = newHouseSettingsModel.RentDueDateDay.ToString();
+
+                            this.SaveHistory(history, context, userId);
+                        }
+
+                        if (oldHouseSettingsModel.HouseName != newHouseSettingsModel.HouseName)
+                        {
+                            history.ColumnName = "HouseName";
+                            history.OldValue = oldHouseSettingsModel.HouseName;
+                            history.NewValue = newHouseSettingsModel.HouseName;
+
+                            this.SaveHistory(history, context, userId);
+                        }
+                        break;
+                    case (long)ObjectTypes.Comment:
+                        // TODO: Implement this case, when comments become editable
+                        break;
+                    case (long)ObjectTypes.Image:
+                        // Will we event implement a case where images are going to be updated?
+                        break;
+                }
             }
             else if (historyFunctionType == (int)HistoryFunctionTypes.Delete)
             {
@@ -384,13 +433,84 @@ namespace APPartment.Core
 
                 if (isSubObject)
                 {
-                    // TODO: Save history for parent object. Example: deleted comment for {ParentObject}
+                    var history = new History()
+                    {
+                        FunctionTypeId = historyFunctionType,
+                        UserId = userId,
+                        DeletedObjectDate = DateTime.Now,
+                        TargetId = targetObjectId,
+                        ObjectId = @object.ObjectId
+                    };
+
+                    switch (@object.ObjectTypeId)
+                    {
+                        case (long)ObjectTypes.Comment:
+                            history.DeletedObjectObjectType = (long)ObjectTypes.Comment;
+
+                            this.SaveHistory(history, context, userId);
+                            break;
+                        case (long)ObjectTypes.Image:
+                            history.DeletedObjectObjectType = (long)ObjectTypes.Image;
+
+                            this.SaveHistory(history, context, userId);
+                            break;
+                    }
                 }
                 else
                 {
                     DeleteObjectMetadataSubObjects(@object, context, userId);
 
-                    // TODO: Determine how we will save info about deleted object, how to access it later to display?
+                    var history = new History()
+                    {
+                        FunctionTypeId = historyFunctionType,
+                        DeletedObjectDate = DateTime.Now,
+                        UserId = userId,
+                        ObjectId = @object.ObjectId
+                    };
+
+                    switch (@object.ObjectTypeId)
+                    {
+                        case (long)ObjectTypes.User:
+                            var userModel = objectModel as User;
+
+                            history.DeletedObjectName = userModel.Username;
+                            history.DeletedObjectObjectType = @object.ObjectTypeId;
+
+                            this.SaveHistory(history, context, userId);
+                            break;
+                        case (long)ObjectTypes.House:
+                            var houseModel = objectModel as House;
+
+                            history.DeletedObjectName = houseModel.Name;
+                            history.DeletedObjectObjectType = @object.ObjectTypeId;
+
+                            this.SaveHistory(history, context, userId);
+                            break;
+                        case (long)ObjectTypes.Inventory:
+                            var inventoryModel = objectModel as Inventory;
+
+                            history.DeletedObjectName = inventoryModel.Name;
+                            history.DeletedObjectObjectType = @object.ObjectTypeId;
+
+                            this.SaveHistory(history, context, userId);
+                            break;
+                        case (long)ObjectTypes.Hygiene:
+                            var hygieneModel = objectModel as Hygiene;
+
+                            history.DeletedObjectName = hygieneModel.Name;
+                            history.DeletedObjectObjectType = @object.ObjectTypeId;
+
+                            this.SaveHistory(history, context, userId);
+                            break;
+                        case (long)ObjectTypes.Issue:
+                            var issueModel = objectModel as Issue;
+
+                            history.DeletedObjectName = issueModel.Name;
+                            history.DeletedObjectObjectType = @object.ObjectTypeId;
+
+                            this.SaveHistory(history, context, userId);
+                            break;
+                    }
                 }
             }
         }

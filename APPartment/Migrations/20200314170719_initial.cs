@@ -34,6 +34,9 @@ namespace APPartment.Migrations
                     ColumnName = table.Column<string>(nullable: true),
                     OldValue = table.Column<string>(nullable: true),
                     NewValue = table.Column<string>(nullable: true),
+                    DeletedObjectName = table.Column<string>(nullable: true),
+                    DeletedObjectObjectType = table.Column<long>(nullable: true),
+                    DeletedObjectDate = table.Column<DateTime>(nullable: true),
                     UserId = table.Column<long>(nullable: true),
                     TargetId = table.Column<long>(nullable: true)
                 },
@@ -64,9 +67,7 @@ namespace APPartment.Migrations
                     ObjectId = table.Column<long>(nullable: false),
                     Name = table.Column<string>(nullable: false),
                     Password = table.Column<string>(nullable: false),
-                    ConfirmPassword = table.Column<string>(nullable: true),
-                    Details = table.Column<string>(nullable: true),
-                    Status = table.Column<int>(nullable: false)
+                    ConfirmPassword = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

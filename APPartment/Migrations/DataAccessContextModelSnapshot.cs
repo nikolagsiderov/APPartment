@@ -53,6 +53,15 @@ namespace APPartment.Migrations
                     b.Property<string>("ColumnName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("DeletedObjectDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedObjectName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("DeletedObjectObjectType")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("FunctionTypeId")
                         .HasColumnType("int");
 
@@ -118,9 +127,6 @@ namespace APPartment.Migrations
                     b.Property<string>("ConfirmPassword")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Details")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -131,9 +137,6 @@ namespace APPartment.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

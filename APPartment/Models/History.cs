@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace APPartment.Models
 {
@@ -14,6 +15,12 @@ namespace APPartment.Models
         public string OldValue { get; set; }
 
         public string NewValue { get; set; }
+
+        public string DeletedObjectName { get; set; }
+
+        public long? DeletedObjectObjectType { get; set; }
+
+        public DateTime? DeletedObjectDate { get; set; }
 
         public long? UserId { get; set; }
 

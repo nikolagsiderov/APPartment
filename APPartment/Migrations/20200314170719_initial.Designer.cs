@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APPartment.Migrations
 {
     [DbContext(typeof(DataAccessContext))]
-    [Migration("20200312155510_initial")]
+    [Migration("20200314170719_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,6 +54,15 @@ namespace APPartment.Migrations
 
                     b.Property<string>("ColumnName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeletedObjectDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeletedObjectName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("DeletedObjectObjectType")
+                        .HasColumnType("bigint");
 
                     b.Property<int>("FunctionTypeId")
                         .HasColumnType("int");
@@ -120,9 +129,6 @@ namespace APPartment.Migrations
                     b.Property<string>("ConfirmPassword")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Details")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -133,9 +139,6 @@ namespace APPartment.Migrations
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

@@ -130,11 +130,16 @@
                                 }
                             </td>
                             <td>
+                                @{
+                                    var modalNotCompletedId = "markNotCompletedObjectModal-" + item.Id.ToString();
+                                    var modalCompletedId = "completeObjectModal-" + item.Id.ToString();
+                                }
+
                                 @if (item.IsCompleted)
                                 {
-                                    <button type="button" title="@titleForUncheckAction" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#markNotCompletedObjectModal"><i class="fas fa-exclamation-triangle"></i></button>
+                                    <button type="button" title="@titleForUncheckAction" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
 
-                                    <div class="modal fade" id="markNotCompletedObjectModal" tabindex="-1" role="dialog" aria-labelledby="markNotCompletedObjectModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="@modalNotCompletedId" tabindex="-1" role="dialog" aria-labelledby="markNotCompletedObjectModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -156,9 +161,9 @@
                                 }
                                 else
                                 {
-                                    <button type="button" title="@titleForCheckAction" class="btn btn-success btn-sm" data-toggle="modal" data-target="#completeObjectModal"><i class="fas fa-check"></i></button>
+                                    <button type="button" title="@titleForCheckAction" class="btn btn-success btn-sm" data-toggle="modal" data-target="#@modalCompletedId"><i class="fas fa-check"></i></button>
 
-                                    <div class="modal fade" id="completeObjectModal" tabindex="-1" role="dialog" aria-labelledby="completeObjectModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="@modalCompletedId" tabindex="-1" role="dialog" aria-labelledby="completeObjectModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
