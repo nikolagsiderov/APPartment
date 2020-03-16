@@ -18,18 +18,18 @@ namespace APPartment.Utilities
                 var historyEventString = new StringBuilder();
                 var username = context.Users.Find(historyEvent.UserId).Username;
                 var isSubObject = historyEvent.TargetId == null ? false : true;
-                long subObjectType = 0;
+                long objectType = 0;
                 var when = historyEvent.When.ToString("dd'/'MM'/'yyyy HH:mm:ss");
 
-                if (isSubObject)
+                if (historyEvent.FunctionTypeId == (int)HistoryFunctionTypes.Delete)
                 {
-                    if (historyEvent.FunctionTypeId == (int)HistoryFunctionTypes.Delete)
+                    objectType = (long)historyEvent.DeletedObjectObjectType;
+                }
+                else
+                {
+                    if (context.Objects.Any(x => x.ObjectId == historyEvent.ObjectId))
                     {
-                        subObjectType = (long)historyEvent.DeletedObjectObjectType;
-                    }
-                    else
-                    {
-                        subObjectType = context.Objects.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault().ObjectTypeId;
+                        objectType = context.Objects.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault().ObjectTypeId;
                     }
                 }
 
@@ -39,13 +39,13 @@ namespace APPartment.Utilities
                 {
                     if (isSubObject)
                     {
-                        if (subObjectType == (int)ObjectTypes.Comment)
+                        if (objectType == (int)ObjectTypes.Comment)
                         {
-                            historyEventString.Append(" posted a comment.");
+                            historyEventString.Append(" posted a <strong>comment</strong>.");
                         }
-                        else if (subObjectType == (int)ObjectTypes.Image)
+                        else if (objectType == (int)ObjectTypes.Image)
                         {
-                            historyEventString.Append(" attached an image.");
+                            historyEventString.Append(" attached an <strong>image</strong>.");
                         }
                     }
                     else
@@ -57,52 +57,133 @@ namespace APPartment.Utilities
                 {
                     if (isSubObject)
                     {
-                        if (subObjectType == (int)ObjectTypes.Comment)
+                        if (objectType == (int)ObjectTypes.Comment)
                         {
                             // TODO: Implement this case when comments become editable.
                         }
-                        else if (subObjectType == (int)ObjectTypes.Image)
+                        else if (objectType == (int)ObjectTypes.Image)
                         {
                             // TODO: Implement this case if images become editable.
                         }
                     }
                     else
                     {
-                        if (historyEvent.ColumnName == "IsCompleted")
+                        switch (objectType)
                         {
-                            var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
+                            case (int)ObjectTypes.Inventory:
+                                if (historyEvent.ColumnName == "IsCompleted")
+                                {
+                                    var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
-                            if (wasMarkedAsCompleted)
-                            {
-                                historyEventString.Append(" closed this object as completed (in its own context).");
-                            }
-                            else
-                            {
-                                historyEventString.Append(" opened this object as not completed (in its own context).");
-                            }
-                        }
-                        else if (historyEvent.ColumnName == "Status")
-                        {
-                            switch (historyEvent.NewValue)
-                            {
-                                case "1":
-                                    historyEventString.Append(" set status as trivial.");
-                                    break;
-                                case "2":
-                                    historyEventString.Append(" set status as medium.");
-                                    break;
-                                case "3":
-                                    historyEventString.Append(" set status as high.");
-                                    break;
-                                case "4":
-                                    historyEventString.Append(" set status as critical.");
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            historyEventString.Append(string.Format(" updated {0} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{1}</span> <br/> Current value: <span style=\"background-color: #90EE90\">{2}</span>"
-                            , historyEvent.ColumnName.ToLower(), historyEvent.OldValue, historyEvent.NewValue));
+                                    if (wasMarkedAsCompleted)
+                                    {
+                                        historyEventString.Append(" marked as <strong>supplied</strong>.");
+                                    }
+                                    else
+                                    {
+                                        historyEventString.Append(" marked as <strong>not supplied</strong>.");
+                                    }
+                                }
+                                else if (historyEvent.ColumnName == "Status")
+                                {
+                                    switch (historyEvent.NewValue)
+                                    {
+                                        case "1":
+                                            historyEventString.Append(" set status as <strong>trivial</strong>.");
+                                            break;
+                                        case "2":
+                                            historyEventString.Append(" set status as <strong>medium</strong>.");
+                                            break;
+                                        case "3":
+                                            historyEventString.Append(" set status as <strong>high</strong>.");
+                                            break;
+                                        case "4":
+                                            historyEventString.Append(" set status as <strong>critical</strong>.");
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    historyEventString.Append(string.Format(" updated {0} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{1}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{2}</span>"
+                                    , historyEvent.ColumnName.ToLower(), historyEvent.OldValue, historyEvent.NewValue));
+                                }
+                                break;
+                            case (int)ObjectTypes.Hygiene:
+                                if (historyEvent.ColumnName == "IsCompleted")
+                                {
+                                    var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
+
+                                    if (wasMarkedAsCompleted)
+                                    {
+                                        historyEventString.Append(" marked as <strong>cleaned</strong>.");
+                                    }
+                                    else
+                                    {
+                                        historyEventString.Append(" marked as <strong>due cleaning</strong>.");
+                                    }
+                                }
+                                else if (historyEvent.ColumnName == "Status")
+                                {
+                                    switch (historyEvent.NewValue)
+                                    {
+                                        case "1":
+                                            historyEventString.Append(" set status as <strong>trivial</strong>.");
+                                            break;
+                                        case "2":
+                                            historyEventString.Append(" set status as <strong>medium</strong>.");
+                                            break;
+                                        case "3":
+                                            historyEventString.Append(" set status as <strong>high</strong>.");
+                                            break;
+                                        case "4":
+                                            historyEventString.Append(" set status as <strong>critical</strong>.");
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    historyEventString.Append(string.Format(" updated {0} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{1}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{2}</span>"
+                                    , historyEvent.ColumnName.ToLower(), historyEvent.OldValue, historyEvent.NewValue));
+                                }
+                                break;
+                            case (int)ObjectTypes.Issue:
+                                if (historyEvent.ColumnName == "IsCompleted")
+                                {
+                                    var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
+
+                                    if (wasMarkedAsCompleted)
+                                    {
+                                        historyEventString.Append(" marked as <strong>closed</strong>.");
+                                    }
+                                    else
+                                    {
+                                        historyEventString.Append(" marked as <strong>open</strong>.");
+                                    }
+                                }
+                                else if (historyEvent.ColumnName == "Status")
+                                {
+                                    switch (historyEvent.NewValue)
+                                    {
+                                        case "1":
+                                            historyEventString.Append(" set status as <strong>trivial</strong>.");
+                                            break;
+                                        case "2":
+                                            historyEventString.Append(" set status as <strong>medium</strong>.");
+                                            break;
+                                        case "3":
+                                            historyEventString.Append(" set status as <strong>high</strong>.");
+                                            break;
+                                        case "4":
+                                            historyEventString.Append(" set status as <strong>critical</strong>.");
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    historyEventString.Append(string.Format(" updated {0} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{1}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{2}</span>"
+                                    , historyEvent.ColumnName.ToLower(), historyEvent.OldValue, historyEvent.NewValue));
+                                }
+                                break;
                         }
                     }
                 }
@@ -110,18 +191,18 @@ namespace APPartment.Utilities
                 {
                     if (isSubObject)
                     {
-                        if (subObjectType == (int)ObjectTypes.Comment)
+                        if (objectType == (int)ObjectTypes.Comment)
                         {
-                            historyEventString.Append(" deleted a comment.");
+                            historyEventString.Append(" <strong>deleted</strong> a comment.");
                         }
-                        else if (subObjectType == (int)ObjectTypes.Image)
+                        else if (objectType == (int)ObjectTypes.Image)
                         {
-                            historyEventString.Append(" deleted an image.");
+                            historyEventString.Append(" <strong>deleted</strong> an image.");
                         }
                     }
                 }
 
-                historyEventString.Append(string.Format(" <br/> <span style=\"font-size: x-small;\">{0}</span>", when));
+                historyEventString.Append(string.Format(" <br/> <strong><span style=\"font-size: x-small;\">{0}</span></strong>", when));
 
                 result.Add(historyEventString.ToString());
             }
@@ -444,7 +525,7 @@ namespace APPartment.Utilities
                 }
                 else
                 {
-                    historyEventString.Append(string.Format(" <br/> <span style=\"font-size: x-small;\">{0}</span>", when));
+                    historyEventString.Append(string.Format(" <br/> <strong><span style=\"font-size: x-small;\">{0}</span></strong>", when));
 
                     result.Add(historyEventString.ToString());
                 }
