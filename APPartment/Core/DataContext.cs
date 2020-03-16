@@ -12,7 +12,7 @@ namespace APPartment.Core
     public class DataContext<T>
         where T : class, IObject
     {
-        public async Task SaveAsync(T objectModel, DataAccessContext context, long userId, long? targetObjectId)
+        public async Task SaveAsync(T objectModel, DataAccessContext context, long userId, long? targetObjectId, long houseId)
         {
             var objectTypeName = objectModel.GetType().Name;
             var objectTypeId = context.Set<ObjectType>().Where(x => x.Name == objectTypeName).FirstOrDefault().Id;
@@ -29,7 +29,7 @@ namespace APPartment.Core
             await context.AddAsync(_object);
             await context.SaveChangesAsync();
 
-            PopulateHistory((int)HistoryFunctionTypes.Create, null, _object, context, userId, targetObjectId);
+            PopulateHistory((int)HistoryFunctionTypes.Create, null, _object, context, userId, targetObjectId, houseId);
 
             objectModel.ObjectId = _object.ObjectId;
 
@@ -37,7 +37,7 @@ namespace APPartment.Core
             await context.SaveChangesAsync();
         }
 
-        public void Save(T objectModel, DataAccessContext context, long userId, long? targetObjectId)
+        public void Save(T objectModel, DataAccessContext context, long userId, long? targetObjectId, long houseId)
         {
             var objectTypeName = objectModel.GetType().Name;
             var objectTypeId = context.Set<ObjectType>().Where(x => x.Name == objectTypeName).FirstOrDefault().Id;
@@ -54,7 +54,7 @@ namespace APPartment.Core
             context.Add(_object);
             context.SaveChanges();
 
-            PopulateHistory((int)HistoryFunctionTypes.Create, null, _object, context, userId, targetObjectId);
+            PopulateHistory((int)HistoryFunctionTypes.Create, null, _object, context, userId, targetObjectId, houseId);
 
             objectModel.ObjectId = _object.ObjectId;
 
@@ -62,11 +62,11 @@ namespace APPartment.Core
             context.SaveChanges();
         }
 
-        public async Task UpdateAsync(T objectModel, DataAccessContext context, long userId)
+        public async Task UpdateAsync(T objectModel, DataAccessContext context, long userId, long houseId)
         {
             var _object = context.Set<Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
-            PopulateHistory((int)HistoryFunctionTypes.Update, objectModel, _object, context, userId, null);
+            PopulateHistory((int)HistoryFunctionTypes.Update, objectModel, _object, context, userId, null, houseId);
 
             _object.ModifiedById = userId;
             _object.ModifiedDate = DateTime.Now;
@@ -78,11 +78,11 @@ namespace APPartment.Core
             await context.SaveChangesAsync();
         }
 
-        public void Update(T objectModel, DataAccessContext context, long userId)
+        public void Update(T objectModel, DataAccessContext context, long userId, long houseId)
         {
             var _object = context.Set<Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
-            PopulateHistory((int)HistoryFunctionTypes.Update, objectModel, _object, context, userId, null);
+            PopulateHistory((int)HistoryFunctionTypes.Update, objectModel, _object, context, userId, null, houseId);
 
             _object.ModifiedById = userId;
             _object.ModifiedDate = DateTime.Now;
@@ -94,11 +94,11 @@ namespace APPartment.Core
             context.SaveChanges();
         }
 
-        public async Task DeleteAsync(T objectModel, DataAccessContext context, long userId, long? targetObjectId)
+        public async Task DeleteAsync(T objectModel, DataAccessContext context, long userId, long? targetObjectId, long houseId)
         {
             var _object = context.Set<Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
-            PopulateHistory((int)HistoryFunctionTypes.Delete, objectModel, _object, context, userId, targetObjectId);
+            PopulateHistory((int)HistoryFunctionTypes.Delete, objectModel, _object, context, userId, targetObjectId, houseId);
 
             context.Remove(_object);
             context.Remove(objectModel);
@@ -106,11 +106,11 @@ namespace APPartment.Core
             await context.SaveChangesAsync();
         }
 
-        public void Delete(T objectModel, DataAccessContext context, long userId, long? targetObjectId)
+        public void Delete(T objectModel, DataAccessContext context, long userId, long? targetObjectId, long houseId)
         {
             var _object = context.Set<Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
-            PopulateHistory((int)HistoryFunctionTypes.Delete, objectModel, _object, context, userId, targetObjectId);
+            PopulateHistory((int)HistoryFunctionTypes.Delete, objectModel, _object, context, userId, targetObjectId, houseId);
 
             context.Remove(_object);
             context.Remove(objectModel);
@@ -119,7 +119,7 @@ namespace APPartment.Core
         }
 
         #region History
-        private void PopulateHistory(int historyFunctionType, T objectModel, Models.Object @object, DataAccessContext context, long userId, long? targetObjectId)
+        private void PopulateHistory(int historyFunctionType, T objectModel, Models.Object @object, DataAccessContext context, long userId, long? targetObjectId, long houseId)
         {
             var now = DateTime.Now;
 
@@ -133,6 +133,7 @@ namespace APPartment.Core
                     {
                         FunctionTypeId = historyFunctionType,
                         When = now,
+                        HouseId = houseId,
                         UserId = userId,
                         TargetId = targetObjectId,
                         ObjectId = @object.ObjectId
@@ -146,6 +147,7 @@ namespace APPartment.Core
                     {
                         FunctionTypeId = historyFunctionType,
                         When = now,
+                        HouseId = houseId,
                         UserId = userId,
                         ObjectId = @object.ObjectId
                     };
@@ -159,6 +161,7 @@ namespace APPartment.Core
                 {
                     FunctionTypeId = historyFunctionType,
                     When = now,
+                    HouseId = houseId,
                     UserId = userId,
                     ObjectId = @object.ObjectId
                 };
@@ -211,6 +214,7 @@ namespace APPartment.Core
                             {
                                 FunctionTypeId = historyFunctionType,
                                 When = now,
+                                HouseId = houseId,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -228,6 +232,7 @@ namespace APPartment.Core
                             {
                                 FunctionTypeId = historyFunctionType,
                                 When = now,
+                                HouseId = houseId,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -245,6 +250,7 @@ namespace APPartment.Core
                             {
                                 FunctionTypeId = historyFunctionType,
                                 When = now,
+                                HouseId = houseId,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -275,6 +281,7 @@ namespace APPartment.Core
                             {
                                 FunctionTypeId = historyFunctionType,
                                 When = now,
+                                HouseId = houseId,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -292,6 +299,7 @@ namespace APPartment.Core
                             {
                                 FunctionTypeId = historyFunctionType,
                                 When = now,
+                                HouseId = houseId,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -309,6 +317,7 @@ namespace APPartment.Core
                             {
                                 FunctionTypeId = historyFunctionType,
                                 When = now,
+                                HouseId = houseId,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -339,6 +348,7 @@ namespace APPartment.Core
                             {
                                 FunctionTypeId = historyFunctionType,
                                 When = now,
+                                HouseId = houseId,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -356,6 +366,7 @@ namespace APPartment.Core
                             {
                                 FunctionTypeId = historyFunctionType,
                                 When = now,
+                                HouseId = houseId,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -373,6 +384,7 @@ namespace APPartment.Core
                             {
                                 FunctionTypeId = historyFunctionType,
                                 When = now,
+                                HouseId = houseId,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -451,6 +463,7 @@ namespace APPartment.Core
                     {
                         FunctionTypeId = historyFunctionType,
                         When = now,
+                        HouseId = houseId,
                         UserId = userId,
                         DeletedObjectDate = DateTime.Now,
                         TargetId = targetObjectId,
@@ -473,12 +486,13 @@ namespace APPartment.Core
                 }
                 else
                 {
-                    DeleteObjectMetadataSubObjects(@object, context, userId);
+                    DeleteObjectMetadataSubObjects(@object, context);
 
                     var history = new History()
                     {
                         FunctionTypeId = historyFunctionType,
                         When = now,
+                        HouseId = houseId,
                         DeletedObjectDate = DateTime.Now,
                         UserId = userId,
                         ObjectId = @object.ObjectId
@@ -531,7 +545,7 @@ namespace APPartment.Core
             }
         }
 
-        private void DeleteObjectMetadataSubObjects(Models.Object @object, DataAccessContext context, long userId)
+        private void DeleteObjectMetadataSubObjects(Models.Object @object, DataAccessContext context)
         {
             if (@object.ObjectTypeId == (long)ObjectTypes.House)
             {

@@ -24,6 +24,8 @@ namespace APPartment.Models
 
         public DateTime When { get; set; }
 
+        public long HouseId { get; set; }
+
         public long? UserId { get; set; }
 
         public long? TargetId { get; set; }

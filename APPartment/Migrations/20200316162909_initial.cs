@@ -38,6 +38,7 @@ namespace APPartment.Migrations
                     DeletedObjectObjectType = table.Column<long>(nullable: true),
                     DeletedObjectDate = table.Column<DateTime>(nullable: true),
                     When = table.Column<DateTime>(nullable: false),
+                    HouseId = table.Column<long>(nullable: false),
                     UserId = table.Column<long>(nullable: true),
                     TargetId = table.Column<long>(nullable: true)
                 },

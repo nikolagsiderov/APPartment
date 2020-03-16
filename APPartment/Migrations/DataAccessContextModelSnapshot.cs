@@ -65,6 +65,9 @@ namespace APPartment.Migrations
                     b.Property<int>("FunctionTypeId")
                         .HasColumnType("int");
 
+                    b.Property<long>("HouseId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("NewValue")
                         .HasColumnType("nvarchar(max)");
 

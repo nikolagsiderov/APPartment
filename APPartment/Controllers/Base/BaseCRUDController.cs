@@ -113,7 +113,7 @@ namespace APPartment.Controllers.Base
 
                 model.HouseId = currentHouseId;
 
-                await dataContext.SaveAsync(model, _context, currentUserId, null);
+                await dataContext.SaveAsync(model, _context, currentUserId, null, currentHouseId);
             }
 
             return RedirectToAction(nameof(Index));
@@ -158,7 +158,7 @@ namespace APPartment.Controllers.Base
 
                 try
                 {
-                    await dataContext.UpdateAsync(model, _context, currentUserId);
+                    await dataContext.UpdateAsync(model, _context, currentUserId, currentHouseId);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -180,6 +180,7 @@ namespace APPartment.Controllers.Base
         public async Task<IActionResult> Complete(long? id)
         {
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
             if (id == null)
             {
@@ -196,7 +197,7 @@ namespace APPartment.Controllers.Base
 
             model.IsCompleted = true;
 
-            await dataContext.UpdateAsync(model, _context, currentUserId);
+            await dataContext.UpdateAsync(model, _context, currentUserId, currentHouseId);
 
             return RedirectToAction(nameof(Index));
         }
@@ -204,6 +205,7 @@ namespace APPartment.Controllers.Base
         public async Task<IActionResult> MarkNotCompleted(long? id)
         {
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("UserId"));
 
             if (id == null)
             {
@@ -220,7 +222,7 @@ namespace APPartment.Controllers.Base
 
             model.IsCompleted = false;
 
-            await dataContext.UpdateAsync(model, _context, currentUserId);
+            await dataContext.UpdateAsync(model, _context, currentUserId, currentHouseId);
 
             return RedirectToAction(nameof(Index));
         }
@@ -228,6 +230,7 @@ namespace APPartment.Controllers.Base
         public async Task<IActionResult> Delete(long? id)
         {
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
             if (id == null)
             {
@@ -242,7 +245,7 @@ namespace APPartment.Controllers.Base
                 return NotFound();
             }
 
-            await dataContext.DeleteAsync(model, _context, currentUserId, null);
+            await dataContext.DeleteAsync(model, _context, currentUserId, null, currentHouseId);
 
             return RedirectToAction(nameof(Index));
         }
@@ -260,6 +263,7 @@ namespace APPartment.Controllers.Base
         {
             var username = HttpContext.Session.GetString("Username");
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
             var comment = new Comment()
             {
@@ -268,7 +272,7 @@ namespace APPartment.Controllers.Base
                 Username = username
             };
 
-            await commentDataContext.SaveAsync(comment, _context, currentUserId, targetId);
+            await commentDataContext.SaveAsync(comment, _context, currentUserId, targetId, currentHouseId);
 
             var result = htmlRenderHelper.BuildPostComment(comment);
 
@@ -280,6 +284,7 @@ namespace APPartment.Controllers.Base
         {
             var targetId = long.Parse(targetIdString);
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
             bool isSavedSuccessfully = true;
             string fName = "";
@@ -293,7 +298,7 @@ namespace APPartment.Controllers.Base
                     fName = file.FileName;
                     if (file != null && file.Length > 0)
                     {
-                        fileUploadService.UploadImage(file, _context, targetId, imageDataContext, currentUserId);
+                        fileUploadService.UploadImage(file, _context, targetId, imageDataContext, currentUserId, currentHouseId);
                     }
                 }
             }
@@ -323,7 +328,7 @@ namespace APPartment.Controllers.Base
         {
             var history = _context.Histories.Where(x => x.ObjectId == targetId || x.TargetId == targetId).ToList();
 
-            var objectHistoryDisplayList = historyHtmlBuilder.BuildBaseObjectHistory(history, targetId, _context);
+            var objectHistoryDisplayList = historyHtmlBuilder.BuildBaseObjectHistory(history, _context);
 
             return objectHistoryDisplayList;
         }

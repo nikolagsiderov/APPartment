@@ -23,6 +23,7 @@ namespace APPartment.Controllers
         private const string Default_Breadcrumb = "<i class='fas fa-home' style='font-size:20px'></i> Home";
         private const string Settings_Breadcrumb = "<i class='fas fa-cogs' style='font-size:20px'></i> Settings";
         private const string About_Breadcrumb = "<i class='fas fa-info-circle' style='font-size:20px'></i> About";
+        private const string History_Breadcrumb = "<i class='fas fa-history' style='font-size:20px'></i> History";
 
         private readonly ILogger<HomeController> _logger;
         private readonly DataAccessContext _context;
@@ -32,6 +33,7 @@ namespace APPartment.Controllers
         private DataContext<HouseSettings> houseSettingsDataContext = new DataContext<HouseSettings>();
         private DataContext<Message> messageDataContext = new DataContext<Message>();
         private DataContext<HouseStatus> houseStatusDataContext = new DataContext<HouseStatus>();
+        private HistoryHtmlBuilder historyHtmlBuilder = new HistoryHtmlBuilder();
 
         public HomeController(ILogger<HomeController> logger, DataAccessContext context)
         {
@@ -87,7 +89,7 @@ namespace APPartment.Controllers
             {
                 var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
-                dataContext.Save(house, _context, currentUserId, null);
+                dataContext.Save(house, _context, currentUserId, null, 0);
 
                 ModelState.Clear();
 
@@ -162,18 +164,18 @@ namespace APPartment.Controllers
             {
                 houseModel.Name = settings.HouseName;
 
-                dataContext.Update(houseModel, _context, currentUserId);
+                dataContext.Update(houseModel, _context, currentUserId, currentHouseId);
                 HttpContext.Session.SetString("HouseName", houseModel.Name.ToString());
             }
 
             if (settings.Id == 0)
             {
                 settings.HouseId = currentHouseId;
-                houseSettingsDataContext.Save(settings, _context, currentUserId, houseModel.ObjectId);
+                houseSettingsDataContext.Save(settings, _context, currentUserId, houseModel.ObjectId, currentHouseId);
             }
             else
             {
-                houseSettingsDataContext.Update(settings, _context, currentUserId);
+                houseSettingsDataContext.Update(settings, _context, currentUserId, currentHouseId);
             }
 
             return RedirectToAction(nameof(Index));
@@ -196,7 +198,7 @@ namespace APPartment.Controllers
 
             var message = new Message() { Username = username, Text = messageText, UserId = currentUserId, HouseId = currentHouseId, CreatedDate = DateTime.Now };
 
-            await messageDataContext.SaveAsync(message, _context, currentUserId, houseModel.ObjectId);
+            await messageDataContext.SaveAsync(message, _context, currentUserId, houseModel.ObjectId, currentHouseId);
 
             return Ok();
         }
@@ -249,7 +251,7 @@ namespace APPartment.Controllers
                     currentHouseStatus.Details = houseStatusDetails;
                     currentHouseStatus.UserId = (long)currentUserId;
 
-                    houseStatusDataContext.Update(currentHouseStatus, _context, (long)currentUserId);
+                    houseStatusDataContext.Update(currentHouseStatus, _context, (long)currentUserId, (long)currentHouseId);
                 }
                 else
                 {
@@ -261,11 +263,24 @@ namespace APPartment.Controllers
                         HouseId = currentHouseId
                     };
 
-                    houseStatusDataContext.Save(houseStatus, _context, (long)currentUserId, houseModel.ObjectId);
+                    houseStatusDataContext.Save(houseStatus, _context, (long)currentUserId, houseModel.ObjectId, (long)currentHouseId);
                 }
             }
 
             return Json("");
+        }
+
+        [HttpGet]
+        [Breadcrumb(History_Breadcrumb)]
+        public IActionResult History()
+        {
+            var historyModel = new HomeHistoryDisplayView();
+            long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+            var history = _context.Histories.Where(x => x.HouseId == currentHouseId).ToList();
+
+            historyModel.History = historyHtmlBuilder.BuildHomeHistory(history, _context);
+
+            return View(historyModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
