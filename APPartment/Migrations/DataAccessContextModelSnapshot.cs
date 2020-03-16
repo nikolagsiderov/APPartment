@@ -80,6 +80,9 @@ namespace APPartment.Migrations
                     b.Property<long?>("UserId")
                         .HasColumnType("bigint");
 
+                    b.Property<DateTime>("When")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.ToTable("History");

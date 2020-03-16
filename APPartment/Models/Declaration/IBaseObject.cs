@@ -20,5 +20,7 @@ namespace APPartment.Models.Declaration
         public List<string> Comments { get; set; }
 
         public List<Image> Images { get; set; }
+
+        public List<string> History { get; set; }
     }
 }

@@ -121,6 +121,8 @@ namespace APPartment.Core
         #region History
         private void PopulateHistory(int historyFunctionType, T objectModel, Models.Object @object, DataAccessContext context, long userId, long? targetObjectId)
         {
+            var now = DateTime.Now;
+
             if (historyFunctionType == (int)HistoryFunctionTypes.Create)
             {
                 var isSubObject = DetermineIfCurrentObjectIsSubObject(@object);
@@ -130,6 +132,7 @@ namespace APPartment.Core
                     var history = new History()
                     {
                         FunctionTypeId = historyFunctionType,
+                        When = now,
                         UserId = userId,
                         TargetId = targetObjectId,
                         ObjectId = @object.ObjectId
@@ -142,6 +145,7 @@ namespace APPartment.Core
                     var history = new History()
                     {
                         FunctionTypeId = historyFunctionType,
+                        When = now,
                         UserId = userId,
                         ObjectId = @object.ObjectId
                     };
@@ -154,6 +158,7 @@ namespace APPartment.Core
                 var history = new History()
                 {
                     FunctionTypeId = historyFunctionType,
+                    When = now,
                     UserId = userId,
                     ObjectId = @object.ObjectId
                 };
@@ -205,6 +210,7 @@ namespace APPartment.Core
                             history = new History()
                             {
                                 FunctionTypeId = historyFunctionType,
+                                When = now,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -221,6 +227,7 @@ namespace APPartment.Core
                             history = new History()
                             {
                                 FunctionTypeId = historyFunctionType,
+                                When = now,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -237,6 +244,7 @@ namespace APPartment.Core
                             history = new History()
                             {
                                 FunctionTypeId = historyFunctionType,
+                                When = now,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -266,6 +274,7 @@ namespace APPartment.Core
                             history = new History()
                             {
                                 FunctionTypeId = historyFunctionType,
+                                When = now,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -282,6 +291,7 @@ namespace APPartment.Core
                             history = new History()
                             {
                                 FunctionTypeId = historyFunctionType,
+                                When = now,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -298,6 +308,7 @@ namespace APPartment.Core
                             history = new History()
                             {
                                 FunctionTypeId = historyFunctionType,
+                                When = now,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -327,6 +338,7 @@ namespace APPartment.Core
                             history = new History()
                             {
                                 FunctionTypeId = historyFunctionType,
+                                When = now,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -343,6 +355,7 @@ namespace APPartment.Core
                             history = new History()
                             {
                                 FunctionTypeId = historyFunctionType,
+                                When = now,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -359,6 +372,7 @@ namespace APPartment.Core
                             history = new History()
                             {
                                 FunctionTypeId = historyFunctionType,
+                                When = now,
                                 UserId = userId,
                                 ObjectId = @object.ObjectId
                             };
@@ -436,6 +450,7 @@ namespace APPartment.Core
                     var history = new History()
                     {
                         FunctionTypeId = historyFunctionType,
+                        When = now,
                         UserId = userId,
                         DeletedObjectDate = DateTime.Now,
                         TargetId = targetObjectId,
@@ -463,6 +478,7 @@ namespace APPartment.Core
                     var history = new History()
                     {
                         FunctionTypeId = historyFunctionType,
+                        When = now,
                         DeletedObjectDate = DateTime.Now,
                         UserId = userId,
                         ObjectId = @object.ObjectId
@@ -578,11 +594,11 @@ namespace APPartment.Core
 
             result = @object.ObjectTypeId switch
             {
-                3 => true,
-                4 => true,
-                9 => true,
-                10 => true,
-                11 => true,
+                3 => true, // HouseStatus
+                4 => true, // HouseSettings
+                9 => true, // Comment
+                10 => true, // Image
+                11 => true, // History
                 _ => false,
             };
 

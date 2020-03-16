@@ -1,0 +1,25 @@
+﻿@model APPartment.Models.Base.BaseObject
+
+<div class="row">
+    <div class="col-md-10" id="baseObject-history">
+        @if (Model.History.Any())
+        {
+            <p>@Html.Raw(Model.History.First())</p>
+
+            if (Model.History.Count() > 1)
+            {
+                foreach (var historyEvent in Model.History.Skip(1))
+                {
+                    <hr style="opacity: 0.4;" />
+                    <p>@Html.Raw(historyEvent)</p>
+                }
+            }
+        }
+        else
+        {
+            <span>
+                No history available for this object.
+            </span>
+        }
+    </div>
+</div>

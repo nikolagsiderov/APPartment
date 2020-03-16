@@ -22,6 +22,8 @@ namespace APPartment.Models
 
         public DateTime? DeletedObjectDate { get; set; }
 
+        public DateTime When { get; set; }
+
         public long? UserId { get; set; }
 
         public long? TargetId { get; set; }

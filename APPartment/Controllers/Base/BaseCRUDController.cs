@@ -27,6 +27,7 @@ namespace APPartment.Controllers.Base
         private DataContext<T> dataContext = new DataContext<T>();
         private DataContext<Comment> commentDataContext = new DataContext<Comment>();
         private DataContext<Image> imageDataContext = new DataContext<Image>();
+        private HistoryHtmlBuilder historyHtmlBuilder = new HistoryHtmlBuilder();
 
         public BaseCRUDController(DataAccessContext context)
         {
@@ -96,6 +97,7 @@ namespace APPartment.Controllers.Base
 
             model.Comments = GetComments(model.ObjectId);
             model.Images = GetImages(model.ObjectId);
+            model.History = GetHistory(model.ObjectId);
 
             return View("_Details", model);
         }
@@ -134,6 +136,7 @@ namespace APPartment.Controllers.Base
 
             model.Comments = GetComments(model.ObjectId);
             model.Images = GetImages(model.ObjectId);
+            model.History = GetHistory(model.ObjectId);
 
             return View("_Edit", model);
         }
@@ -314,6 +317,15 @@ namespace APPartment.Controllers.Base
             var images = _context.Images.Where(x => x.TargetId == targetId).ToList();
 
             return images;
+        }
+
+        public List<string> GetHistory(long targetId)
+        {
+            var history = _context.Histories.Where(x => x.ObjectId == targetId || x.TargetId == targetId).ToList();
+
+            var objectHistoryDisplayList = historyHtmlBuilder.BuildBaseObjectHistory(history, targetId, _context);
+
+            return objectHistoryDisplayList;
         }
         #endregion
 
