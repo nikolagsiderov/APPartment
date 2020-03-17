@@ -14,7 +14,9 @@
             {
                 <div style="margin: 10px;">
                     <div class="square" style="margin: 10px; text-align:center;">
-                        <img src="~/BaseObject_Images/@image.Name" class="image-img" />
+                        <a href="~/BaseObject_Images/@image.Name" data-fancybox="gallery" data-caption="@image.FileName">
+                            <img src="~/BaseObject_Images/@image.Name" class="image-img" />
+                        </a>
                     </div>
 
                     <div class="image-metadata" style="font-size: x-small;">
