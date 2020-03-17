@@ -249,25 +249,6 @@ namespace APPartment.Utilities
 
                         switch (subObjectType)
                         {
-                            case (int)ObjectTypes.HouseStatus:
-                                var houseStatus = context.HouseStatuses.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault().Status;
-                                var statusString = string.Empty;
-
-                                if (houseStatus == (int)HomeStatus.Green)
-                                {
-                                    statusString = "<strong>free to enter</strong>";
-                                }
-                                else if (houseStatus == (int)HomeStatus.Yellow)
-                                {
-                                    statusString = "<strong>enter catiously</strong>";
-                                }
-                                else if (houseStatus == (int)HomeStatus.Red)
-                                {
-                                    statusString = "<strong>do not enter</strong>";
-                                }
-
-                                historyEventString.Append(string.Format(" set home status as {0}.", statusString));
-                                break;
                             case (int)ObjectTypes.Comment:
                                 switch (parentObjectTypeId)
                                 {
@@ -329,6 +310,28 @@ namespace APPartment.Utilities
 
                                 historyEventString.Append(string.Format(" created an object <strong>[Name: {0}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.Name));
                                 break;
+                            case (int)ObjectTypes.HouseStatus:
+                                if (historyEvent.ColumnName == "Status")
+                                {
+                                    var houseStatus = int.Parse(historyEvent.NewValue);
+                                    var statusString = string.Empty;
+
+                                    if (houseStatus == (int)HomeStatus.Green)
+                                    {
+                                        statusString = "<strong>free to enter</strong>";
+                                    }
+                                    else if (houseStatus == (int)HomeStatus.Yellow)
+                                    {
+                                        statusString = "<strong>enter catiously</strong>";
+                                    }
+                                    else if (houseStatus == (int)HomeStatus.Red)
+                                    {
+                                        statusString = "<strong>do not enter</strong>";
+                                    }
+
+                                    historyEventString.Append(string.Format(" set home status as {0}.", statusString));
+                                }
+                                break;
                         }
                     }
                 }
@@ -361,23 +364,26 @@ namespace APPartment.Utilities
                                 }
                                 break;
                             case (int)ObjectTypes.HouseStatus:
-                                var houseStatus = context.HouseStatuses.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault().Status;
-                                var statusString = string.Empty;
+                                if (historyEvent.ColumnName == "Status")
+                                {
+                                    var houseStatus = int.Parse(historyEvent.NewValue);
+                                    var statusString = string.Empty;
 
-                                if (houseStatus == (int)HomeStatus.Green)
-                                {
-                                    statusString = "<strong>free to enter</strong>";
-                                }
-                                else if (houseStatus == (int)HomeStatus.Yellow)
-                                {
-                                    statusString = "<strong>enter catiously</strong>";
-                                }
-                                else if (houseStatus == (int)HomeStatus.Red)
-                                {
-                                    statusString = "<strong>do not enter</strong>";
-                                }
+                                    if (houseStatus == (int)HomeStatus.Green)
+                                    {
+                                        statusString = "<strong>free to enter</strong>";
+                                    }
+                                    else if (houseStatus == (int)HomeStatus.Yellow)
+                                    {
+                                        statusString = "<strong>enter catiously</strong>";
+                                    }
+                                    else if (houseStatus == (int)HomeStatus.Red)
+                                    {
+                                        statusString = "<strong>do not enter</strong>";
+                                    }
 
-                                historyEventString.Append(string.Format(" set home status as {0}.", statusString));
+                                    historyEventString.Append(string.Format(" set home status as {0}.", statusString));
+                                }
                                 break;
                             case (int)ObjectTypes.Inventory:
                                 var theInventoryObject = context.Inventories.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault();

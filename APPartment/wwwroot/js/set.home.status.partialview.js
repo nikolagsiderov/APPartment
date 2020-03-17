@@ -3,7 +3,7 @@
     var houseStatusDetailsString = $('#homeStatusDetails').val().toString();
 
     $.ajax({
-        url: "Home/SetHomeStatus",
+        url: "/Home/SetHomeStatus",
         data: { houseStatusString: homeStatusStatus, houseStatusDetailsString: houseStatusDetailsString },
         success: function (data) {
         },
@@ -12,7 +12,7 @@
         },
         complete: function (response) {
             $.ajax({
-                url: "Home/GetHomeStatus",
+                url: "/Home/GetHomeStatus",
                 success: function (data) {
                     var dataArr = data.split(";");
                     var status = parseInt(dataArr[0]);

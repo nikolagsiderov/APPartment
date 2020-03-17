@@ -29,7 +29,7 @@ namespace APPartment.Core
             await context.AddAsync(_object);
             await context.SaveChangesAsync();
 
-            PopulateHistory((int)HistoryFunctionTypes.Create, null, _object, context, userId, targetObjectId, houseId);
+            PopulateHistory((int)HistoryFunctionTypes.Create, objectModel, _object, context, userId, targetObjectId, houseId);
 
             objectModel.ObjectId = _object.ObjectId;
 
@@ -54,7 +54,7 @@ namespace APPartment.Core
             context.Add(_object);
             context.SaveChanges();
 
-            PopulateHistory((int)HistoryFunctionTypes.Create, null, _object, context, userId, targetObjectId, houseId);
+            PopulateHistory((int)HistoryFunctionTypes.Create, objectModel, _object, context, userId, targetObjectId, houseId);
 
             objectModel.ObjectId = _object.ObjectId;
 
@@ -143,16 +143,36 @@ namespace APPartment.Core
                 }
                 else
                 {
-                    var history = new History()
+                    if (@object.ObjectTypeId == (int)ObjectTypes.HouseStatus)
                     {
-                        FunctionTypeId = historyFunctionType,
-                        When = now,
-                        HouseId = houseId,
-                        UserId = userId,
-                        ObjectId = @object.ObjectId
-                    };
+                        var newHouseStatusModel = objectModel as HouseStatus;
 
-                    this.SaveHistory(history, context, userId);
+                        var history = new History()
+                        {
+                            FunctionTypeId = historyFunctionType,
+                            ColumnName = "Status",
+                            NewValue = newHouseStatusModel.Status.ToString(),
+                            When = now,
+                            HouseId = houseId,
+                            UserId = userId,
+                            ObjectId = @object.ObjectId
+                        };
+
+                        this.SaveHistory(history, context, userId);
+                    }
+                    else
+                    {
+                        var history = new History()
+                        {
+                            FunctionTypeId = historyFunctionType,
+                            When = now,
+                            HouseId = houseId,
+                            UserId = userId,
+                            ObjectId = @object.ObjectId
+                        };
+
+                        this.SaveHistory(history, context, userId);
+                    }
                 }
             }
             else if (historyFunctionType == (int)HistoryFunctionTypes.Update)
@@ -413,15 +433,6 @@ namespace APPartment.Core
 
                             this.SaveHistory(history, context, userId);
                         }
-
-                        if (oldHouseStatusModel.Details != newHouseStatusModel.Details)
-                        {
-                            history.ColumnName = "Details";
-                            history.OldValue = oldHouseStatusModel.Details;
-                            history.NewValue = newHouseStatusModel.Details;
-
-                            this.SaveHistory(history, context, userId);
-                        }
                         break;
                     case (long)ObjectTypes.HouseSettings:
                         var oldHouseSettingsModel = context.HouseSettings.AsNoTracking().Single(x => x.ObjectId == @object.ObjectId);
@@ -429,6 +440,15 @@ namespace APPartment.Core
 
                         if (oldHouseSettingsModel.RentDueDateDay != newHouseSettingsModel.RentDueDateDay)
                         {
+                            history = new History()
+                            {
+                                FunctionTypeId = historyFunctionType,
+                                When = now,
+                                HouseId = houseId,
+                                UserId = userId,
+                                ObjectId = @object.ObjectId
+                            };
+
                             history.ColumnName = "RentDueDateDay";
                             history.OldValue = oldHouseSettingsModel.RentDueDateDay.ToString();
                             history.NewValue = newHouseSettingsModel.RentDueDateDay.ToString();
@@ -438,6 +458,15 @@ namespace APPartment.Core
 
                         if (oldHouseSettingsModel.HouseName != newHouseSettingsModel.HouseName)
                         {
+                            history = new History()
+                            {
+                                FunctionTypeId = historyFunctionType,
+                                When = now,
+                                HouseId = houseId,
+                                UserId = userId,
+                                ObjectId = @object.ObjectId
+                            };
+
                             history.ColumnName = "HouseName";
                             history.OldValue = oldHouseSettingsModel.HouseName;
                             history.NewValue = newHouseSettingsModel.HouseName;
@@ -608,7 +637,6 @@ namespace APPartment.Core
 
             result = @object.ObjectTypeId switch
             {
-                3 => true, // HouseStatus
                 4 => true, // HouseSettings
                 9 => true, // Comment
                 10 => true, // Image
