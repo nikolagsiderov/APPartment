@@ -46,14 +46,57 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
-            <li class="nav-item">
+            @{
+                var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+                var actionName = this.ViewContext.RouteData.Values["action"].ToString();
+
+                string homeLink = string.Empty;
+                string inventoryLink = string.Empty;
+                string hygieneLink = string.Empty;
+                string issuesLink = string.Empty;
+                string settingsLink = string.Empty;
+                string historyLink = string.Empty;
+
+                if (string.IsNullOrEmpty(controllerName) || (controllerName == "Home" && string.IsNullOrEmpty(actionName)) || (controllerName == "Home" && actionName == "Index"))
+                {
+                    homeLink = "active";
+                }
+                else if (controllerName == "Inventory")
+                {
+                    inventoryLink = "active";
+                }
+                else if (controllerName == "Hygiene")
+                {
+                    hygieneLink = "active";
+                }
+                else if (controllerName == "Issues")
+                {
+                    issuesLink = "active";
+                }
+                else if (controllerName == "Home" && actionName == "Settings")
+                {
+                    settingsLink = "active";
+                }
+                else if (controllerName == "Home" && actionName == "History")
+                {
+                    historyLink = "active";
+                }
+            }
+
+            <li class="nav-item @homeLink">
                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
                     <i class="fas fa-home"></i>
                     <span>Home</span>
                 </a>
             </li>
 
-            <li class="nav-item" id="InventoryTab">
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading">
+                Home Objects
+            </div>
+
+            <li class="nav-item @inventoryLink" id="InventoryTab">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#inventoryCollapse" aria-expanded="true" aria-controls="inventoryCollapse">
                     <i class='fas fa-tasks'></i>
                     <span>Inventory</span> <span class="badge badge-light" style="display: none" id="inventoryBadge"></span>
@@ -68,7 +111,7 @@
                 </div>
             </li>
 
-            <li class="nav-item" id="HygieneTab">
+            <li class="nav-item @hygieneLink" id="HygieneTab">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#hygieneCollapse" aria-expanded="true" aria-controls="hygieneCollapse">
                     <i class='fas fa-recycle'></i>
                     <span>Hygiene</span> <span class="badge badge-light" style="display: none" id="hygieneBadge"></span>
@@ -83,7 +126,7 @@
                 </div>
             </li>
 
-            <li class="nav-item" id="IssuesTab">
+            <li class="nav-item @issuesLink" id="IssuesTab">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#issuesCollapse" aria-expanded="true" aria-controls="issuesCollapse">
                     <i class='fas fa-exclamation-circle'></i>
                     <span>Issues</span> <span class="badge badge-light" style="display: none" id="issuesBadge"></span>
@@ -98,14 +141,20 @@
                 </div>
             </li>
 
-            <li class="nav-item">
+            <hr class="sidebar-divider">
+
+            <div class="sidebar-heading">
+                More
+            </div>
+
+            <li class="nav-item @settingsLink">
                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Settings">
                     <i class="fas fa-cogs"></i>
                     <span>Settings</span>
                 </a>
             </li>
 
-            <li class="nav-item">
+            <li class="nav-item @historyLink">
                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="History">
                     <i class="fas fa-history"></i>
                     <span>History</span>

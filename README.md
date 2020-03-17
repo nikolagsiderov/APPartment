@@ -18,6 +18,6 @@ APPartment is an ASP.NET Core MVC project for sharing with your housemate/s and 
 * Metadata for objects stands for comments, images and history - every user can add a comment for every object, attach an image or see its history. History is used in widgets for home page.
 * Settings page where users can modify their home's name or change rent due date.
 
-# Database Structure
+# Database structure
 
 ![APPartment DB Structure Image](https://trello-attachments.s3.amazonaws.com/5d531c3be843f538bdff0d0d/5e6bb43f0aefba3e8a28a962/4a7c8ae71841c10d96e0044d424d7619/APPartment-DB-Structure-with-logo.png)
