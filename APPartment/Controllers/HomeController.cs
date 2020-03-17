@@ -14,7 +14,6 @@ using APPartment.DisplayModels.Home;
 using APPartment.Utilities;
 using APPartment.Enums;
 using APPartment.Core;
-using Microsoft.EntityFrameworkCore;
 
 namespace APPartment.Controllers
 {
@@ -25,7 +24,6 @@ namespace APPartment.Controllers
         private const string About_Breadcrumb = "<i class='fas fa-info-circle' style='font-size:20px'></i> About";
         private const string History_Breadcrumb = "<i class='fas fa-history' style='font-size:20px'></i> History";
 
-        private readonly ILogger<HomeController> _logger;
         private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper = new HtmlRenderHelper();
         private TimeConverter timeConverter = new TimeConverter();
@@ -35,9 +33,8 @@ namespace APPartment.Controllers
         private DataContext<HouseStatus> houseStatusDataContext = new DataContext<HouseStatus>();
         private HistoryHtmlBuilder historyHtmlBuilder = new HistoryHtmlBuilder();
 
-        public HomeController(ILogger<HomeController> logger, DataAccessContext context)
+        public HomeController(DataAccessContext context)
         {
-            _logger = logger;
             _context = context;
         }
 

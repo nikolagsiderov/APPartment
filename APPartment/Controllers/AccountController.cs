@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using APPartment.Core;
 using APPartment.Data;
 using APPartment.Models;
