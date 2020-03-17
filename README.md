@@ -20,4 +20,4 @@ APPartment is an ASP.NET Core MVC project for sharing with your housemate/s and 
 
 # Database structure
 
-![APPartment DB Structure Image](https://trello-attachments.s3.amazonaws.com/5d531c3be843f538bdff0d0d/5e6bb43f0aefba3e8a28a962/4a7c8ae71841c10d96e0044d424d7619/APPartment-DB-Structure-with-logo.png)
+![APPartment DB Structure Image](https://trello-attachments.s3.amazonaws.com/5d531c3be843f538bdff0d0d/5e6bb43f0aefba3e8a28a962/d70cdb6086d01007ac01c6c1712792ca/db-structure-scheme.png)
