@@ -277,6 +277,8 @@ namespace APPartment.Controllers
 
             historyModel.History = historyHtmlBuilder.BuildHomeHistory(history, _context);
 
+            ViewData["HouseName"] = HttpContext.Session.GetString("HouseName").ToString();
+
             return View(historyModel);
         }
 
