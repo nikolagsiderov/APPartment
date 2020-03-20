@@ -46,6 +46,8 @@ namespace APPartment.Controllers.Base
 
             var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId).ToListAsync();
 
+            ViewData["Manage"] = true;
+
             return View("_Grid", modelObjects);
         }
 
@@ -61,6 +63,8 @@ namespace APPartment.Controllers.Base
 
             var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == true).ToListAsync();
 
+            ViewData["Manage"] = false;
+
             return View("_Grid", modelObjects);
         }
 
@@ -75,6 +79,8 @@ namespace APPartment.Controllers.Base
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
             var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == false).ToListAsync();
+
+            ViewData["Manage"] = false;
 
             return View("_Grid", modelObjects);
         }

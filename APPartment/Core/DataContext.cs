@@ -416,6 +416,74 @@ namespace APPartment.Core
                             this.SaveHistory(history, context, userId);
                         }
                         break;
+
+                    case (long)ObjectTypes.Survey:
+                        var oldSurveyModel = context.Surveys.AsNoTracking().Single(x => x.ObjectId == @object.ObjectId);
+                        var newSurveyModel = objectModel as Survey;
+
+                        if (oldSurveyModel.Name != newSurveyModel.Name)
+                        {
+                            history.ColumnName = "Name";
+                            history.OldValue = oldSurveyModel.Name;
+                            history.NewValue = newSurveyModel.Name;
+
+                            this.SaveHistory(history, context, userId);
+                        }
+
+                        if (oldSurveyModel.Details != newSurveyModel.Details)
+                        {
+                            history = new History()
+                            {
+                                FunctionTypeId = historyFunctionType,
+                                When = now,
+                                HouseId = houseId,
+                                UserId = userId,
+                                ObjectId = @object.ObjectId
+                            };
+
+                            history.ColumnName = "Details";
+                            history.OldValue = oldSurveyModel.Details;
+                            history.NewValue = newSurveyModel.Details;
+
+                            this.SaveHistory(history, context, userId);
+                        }
+
+                        if (oldSurveyModel.Status != newSurveyModel.Status)
+                        {
+                            history = new History()
+                            {
+                                FunctionTypeId = historyFunctionType,
+                                When = now,
+                                HouseId = houseId,
+                                UserId = userId,
+                                ObjectId = @object.ObjectId
+                            };
+
+                            history.ColumnName = "Status";
+                            history.OldValue = oldSurveyModel.Status.ToString();
+                            history.NewValue = newSurveyModel.Status.ToString();
+
+                            this.SaveHistory(history, context, userId);
+                        }
+
+                        if (oldSurveyModel.IsCompleted != newSurveyModel.IsCompleted)
+                        {
+                            history = new History()
+                            {
+                                FunctionTypeId = historyFunctionType,
+                                When = now,
+                                HouseId = houseId,
+                                UserId = userId,
+                                ObjectId = @object.ObjectId
+                            };
+
+                            history.ColumnName = "IsCompleted";
+                            history.OldValue = oldSurveyModel.IsCompleted.ToString();
+                            history.NewValue = newSurveyModel.IsCompleted.ToString();
+
+                            this.SaveHistory(history, context, userId);
+                        }
+                        break;
                 }
 
                 // Child objects - Metadata
@@ -565,6 +633,14 @@ namespace APPartment.Core
                             var issueModel = objectModel as Issue;
 
                             history.DeletedObjectName = issueModel.Name;
+                            history.DeletedObjectObjectType = @object.ObjectTypeId;
+
+                            this.SaveHistory(history, context, userId);
+                            break;
+                        case (long)ObjectTypes.Survey:
+                            var surveyModel = objectModel as Survey;
+
+                            history.DeletedObjectName = surveyModel.Name;
                             history.DeletedObjectObjectType = @object.ObjectTypeId;
 
                             this.SaveHistory(history, context, userId);

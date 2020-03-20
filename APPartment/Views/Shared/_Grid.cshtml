@@ -2,6 +2,7 @@
 
 @{
     var moduleName = ViewData["Module"].ToString();
+    var canManage = bool.Parse(ViewData["Manage"].ToString());
 
     var titleForCheckAction = string.Empty;
     var titleForUncheckAction = string.Empty;
@@ -50,6 +51,18 @@
 
             newModel = new APPartment.Models.Issue();
             break;
+        case "Surveys":
+            titleForCheckAction = "Mark as completed";
+            titleForUncheckAction = "Mark as pending";
+
+            checkCardBody = "Are you sure you want to mark as completed?";
+            uncheckCardBody = "Are you sure you want to mark as pending?";
+
+            checkCardButton = "Mark completed";
+            uncheckCardButton = "Mark pending";
+
+            newModel = new APPartment.Models.Survey();
+            break;
     }
 }
 
@@ -58,15 +71,20 @@
         <h6 class="m-0 font-weight-bold text-primary">@ViewData["GridTitle"]</h6>
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-md-1">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createView"><i class="fas fa-plus"></i> Add</button>
+
+        @if (canManage)
+        {
+            <div class="row">
+                <div class="col-md-1">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createView"><i class="fas fa-plus"></i> Add</button>
+                </div>
             </div>
-        </div>
 
-        @Html.Partial("_Create", newModel)
+            @Html.Partial("_Create", newModel)
 
-        <br />
+            <br />
+        }
+
 
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -135,25 +153,76 @@
                                     var modalCompletedId = "completeObjectModal-" + item.Id.ToString();
                                 }
 
-                                @if (item.IsCompleted)
+                                @if (canManage)
                                 {
-                                    <button type="button" title="@titleForUncheckAction" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
+                                    if (item.IsCompleted)
+                                    {
+                                        <button type="button" title="@titleForUncheckAction" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
 
-                                    <div class="modal fade" id="@modalNotCompletedId" tabindex="-1" role="dialog" aria-labelledby="markNotCompletedObjectModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="@modalNotCompletedId" tabindex="-1" role="dialog" aria-labelledby="markNotCompletedObjectModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="markNotCompletedObjectModalLabel">@titleForUncheckAction</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        @uncheckCardBody
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        <a asp-action="MarkNotCompleted" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">@uncheckCardButton</button></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" title="@titleForCheckAction" class="btn btn-success btn-sm" data-toggle="modal" data-target="#@modalCompletedId"><i class="fas fa-check"></i></button>
+
+                                        <div class="modal fade" id="@modalCompletedId" tabindex="-1" role="dialog" aria-labelledby="completeObjectModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="completeObjectModalLabel">@titleForCheckAction</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        @checkCardBody
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        <a asp-action="Complete" asp-route-id="@item.Id"><button type="button" class="btn btn-success">@checkCardButton</button></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i></button></a> 
+                                    <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-primary btn-sm"><i class="far fa-edit"></i></button></a> 
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteObjectModal"><i class="far fa-trash-alt"></i></button>
+
+                                    <div class="modal fade" id="deleteObjectModal" tabindex="-1" role="dialog" aria-labelledby="deleteObjectModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="markNotCompletedObjectModalLabel">@titleForUncheckAction</h5>
+                                                    <h5 class="modal-title" id="deleteObjectModalLabel">Confirm Deletion</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    @uncheckCardBody
+                                                    Are you sure you want to delete this item?
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                    <a asp-action="MarkNotCompleted" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">@uncheckCardButton</button></a>
+                                                    <a asp-action="Delete" asp-route-id="@item.Id"><button type="button" class="btn btn-danger">Delete</button></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -161,52 +230,8 @@
                                 }
                                 else
                                 {
-                                    <button type="button" title="@titleForCheckAction" class="btn btn-success btn-sm" data-toggle="modal" data-target="#@modalCompletedId"><i class="fas fa-check"></i></button>
-
-                                    <div class="modal fade" id="@modalCompletedId" tabindex="-1" role="dialog" aria-labelledby="completeObjectModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="completeObjectModalLabel">@titleForCheckAction</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    @checkCardBody
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                    <a asp-action="Complete" asp-route-id="@item.Id"><button type="button" class="btn btn-success">@checkCardButton</button></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i> Details</button></a>
                                 }
-                                &nbsp;
-                                <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i></button></a> &nbsp;
-                                <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-primary btn-sm"><i class="far fa-edit"></i></button></a> &nbsp;
-                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteObjectModal"><i class="far fa-trash-alt"></i></button>
-
-                                <div class="modal fade" id="deleteObjectModal" tabindex="-1" role="dialog" aria-labelledby="deleteObjectModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="deleteObjectModalLabel">Confirm Deletion</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                Are you sure you want to delete this item?
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                <a asp-action="Delete" asp-route-id="@item.Id"><button type="button" class="btn btn-danger">Delete</button></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             </td>
                         </tr>
                     }

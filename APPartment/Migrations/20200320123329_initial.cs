@@ -230,6 +230,24 @@ namespace APPartment.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Survey",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: false),
+                    Details = table.Column<string>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    IsCompleted = table.Column<bool>(nullable: false),
+                    HouseId = table.Column<long>(nullable: true),
+                    ObjectId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Survey", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
@@ -270,7 +288,8 @@ namespace APPartment.Migrations
                     { 8L, "Message" },
                     { 9L, "Comment" },
                     { 10L, "Image" },
-                    { 11L, "History" }
+                    { 11L, "History" },
+                    { 12L, "Survey" }
                 });
         }
 
@@ -314,6 +333,9 @@ namespace APPartment.Migrations
 
             migrationBuilder.DropTable(
                 name: "ObjectType");
+
+            migrationBuilder.DropTable(
+                name: "Survey");
 
             migrationBuilder.DropTable(
                 name: "User");

@@ -107,7 +107,7 @@
                         <h6 class="collapse-header">Inventory Objects:</h6>
                         <a class="collapse-item" asp-controller="Inventory" asp-action="IndexNotCompleted"><i class="fas fa-exclamation-triangle"></i> Not Supplied</a>
                         <a class="collapse-item" asp-controller="Inventory" asp-action="IndexCompleted"><i class="fas fa-check"></i> Supplied</a>
-                        <a class="collapse-item" asp-controller="Inventory" asp-action="Index"><i class="fas fa-bars"></i> All</a>
+                        <a class="collapse-item" asp-controller="Inventory" asp-action="Index"><i class="fas fa-tasks"></i> Manage</a>
                     </div>
                 </div>
             </li>
@@ -122,7 +122,7 @@
                         <h6 class="collapse-header">Hygiene Objects:</h6>
                         <a class="collapse-item" asp-controller="Hygiene" asp-action="IndexNotCompleted"><i class="fas fa-exclamation-triangle"></i> Due Cleaning</a>
                         <a class="collapse-item" asp-controller="Hygiene" asp-action="IndexCompleted"><i class="fas fa-check"></i> Cleaned</a>
-                        <a class="collapse-item" asp-controller="Hygiene" asp-action="Index"><i class="fas fa-bars"></i> All</a>
+                        <a class="collapse-item" asp-controller="Hygiene" asp-action="Index"><i class="fas fa-tasks"></i> Manage</a>
                     </div>
                 </div>
             </li>
@@ -137,7 +137,7 @@
                         <h6 class="collapse-header">Issue Objects:</h6>
                         <a class="collapse-item" asp-controller="Issues" asp-action="IndexNotCompleted"><i class="fas fa-exclamation-triangle"></i> Open</a>
                         <a class="collapse-item" asp-controller="Issues" asp-action="IndexCompleted"><i class="fas fa-check"></i> Closed</a>
-                        <a class="collapse-item" asp-controller="Issues" asp-action="Index"><i class="fas fa-bars"></i> All</a>
+                        <a class="collapse-item" asp-controller="Issues" asp-action="Index"><i class="fas fa-tasks"></i> Manage</a>
                     </div>
                 </div>
             </li>
@@ -147,6 +147,20 @@
             <div class="sidebar-heading">
                 More
             </div>
+
+            <li class="nav-item" id="SurveysTab">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#surveysCollapse" aria-expanded="true" aria-controls="surveysCollapse">
+                    <i class="fas fa-poll"></i>
+                    <span>Surveys</span> <span class="badge badge-light" style="display: none" id="surveysBadge"></span>
+                </a>
+                <div id="surveysCollapse" class="collapse" aria-labelledby="surveysCollapseLabel" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" asp-controller="Surveys" asp-action="IndexNotCompleted"><i class="fas fa-pen"></i> Pending</a>
+                        <a class="collapse-item" asp-controller="Surveys" asp-action="IndexCompleted"><i class="fas fa-check"></i> Completed</a>
+                        <a class="collapse-item" asp-controller="Surveys" asp-action="Index"><i class="fas fa-tasks"></i> Manage</a>
+                    </div>
+                </div>
+            </li>
 
             <li class="nav-item @settingsLink">
                 <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Settings">
@@ -396,6 +410,22 @@
                     $("#issuesBadge").attr("style", "display:none");
                 } else {
                     $("#issuesBadge").attr("style", "").html(data);
+                }
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        });
+    });
+
+    $("#SurveysTab").ready(function () {
+        $.ajax({
+            url: "@Url.Action("GetPendingSurveysCount", "Surveys")",
+            success: function (data) {
+                if (data === 0) {
+                    $("#surveysBadge").attr("style", "display:none");
+                } else {
+                    $("#surveysBadge").attr("style", "").html(data);
                 }
             },
             error: function (req, status, error) {

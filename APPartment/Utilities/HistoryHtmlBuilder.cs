@@ -184,6 +184,44 @@ namespace APPartment.Utilities
                                     , historyEvent.ColumnName.ToLower(), historyEvent.OldValue, historyEvent.NewValue));
                                 }
                                 break;
+                            case (int)ObjectTypes.Survey:
+                                if (historyEvent.ColumnName == "IsCompleted")
+                                {
+                                    var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
+
+                                    if (wasMarkedAsCompleted)
+                                    {
+                                        historyEventString.Append(" marked as <strong>completed</strong>.");
+                                    }
+                                    else
+                                    {
+                                        historyEventString.Append(" marked as <strong>pending</strong>.");
+                                    }
+                                }
+                                else if (historyEvent.ColumnName == "Status")
+                                {
+                                    switch (historyEvent.NewValue)
+                                    {
+                                        case "1":
+                                            historyEventString.Append(" set status as <strong>trivial</strong>.");
+                                            break;
+                                        case "2":
+                                            historyEventString.Append(" set status as <strong>medium</strong>.");
+                                            break;
+                                        case "3":
+                                            historyEventString.Append(" set status as <strong>high</strong>.");
+                                            break;
+                                        case "4":
+                                            historyEventString.Append(" set status as <strong>critical</strong>.");
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    historyEventString.Append(string.Format(" updated {0} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{1}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{2}</span>"
+                                    , historyEvent.ColumnName.ToLower(), historyEvent.OldValue, historyEvent.NewValue));
+                                }
+                                break;
                         }
                     }
                 }
@@ -267,6 +305,11 @@ namespace APPartment.Utilities
 
                                         historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[Name: {0}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssue.Name));
                                         break;
+                                    case (int)ObjectTypes.Survey:
+                                        var theSurvey = context.Surveys.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+
+                                        historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[Name: {0}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurvey.Name));
+                                        break;
                                 }
                                 break;
                             case (int)ObjectTypes.Image:
@@ -286,6 +329,11 @@ namespace APPartment.Utilities
                                         var theIssue = context.Hygienes.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
                                         historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[Name: {0}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssue.Name));
+                                        break;
+                                    case (int)ObjectTypes.Survey:
+                                        var theSurvey = context.Surveys.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+
+                                        historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[Name: {0}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurvey.Name));
                                         break;
                                 }
                                 break;
@@ -309,6 +357,11 @@ namespace APPartment.Utilities
                                 var theIssueObject = context.Issues.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault();
 
                                 historyEventString.Append(string.Format(" created an object <strong>[Name: {0}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.Name));
+                                break;
+                            case (int)ObjectTypes.Survey:
+                                var theSurveyObject = context.Surveys.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault();
+
+                                historyEventString.Append(string.Format(" created an object <strong>[Name: {0}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.Name));
                                 break;
                             case (int)ObjectTypes.HouseStatus:
                                 if (historyEvent.ColumnName == "Status")
@@ -505,6 +558,46 @@ namespace APPartment.Utilities
                                     , historyEvent.ColumnName.ToLower(), historyEvent.OldValue, historyEvent.NewValue, theIssueObject.Name));
                                 }
                                 break;
+                            case (int)ObjectTypes.Survey:
+                                var theSurveyObject = context.Surveys.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault();
+
+                                if (historyEvent.ColumnName == "IsCompleted")
+                                {
+                                    var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
+
+                                    if (wasMarkedAsCompleted)
+                                    {
+                                        historyEventString.Append(string.Format(" marked an object <strong>[Name: {0}]</strong> as <strong>completed</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.Name));
+                                    }
+                                    else
+                                    {
+                                        historyEventString.Append(string.Format(" marked an object <strong>[Name: {0}]</strong> as <strong>pending</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.Name));
+                                    }
+                                }
+                                else if (historyEvent.ColumnName == "Status")
+                                {
+                                    switch (historyEvent.NewValue)
+                                    {
+                                        case "1":
+                                            historyEventString.Append(string.Format(" set status as <strong>trivial</strong> for object <strong>[Name: {0}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.Name));
+                                            break;
+                                        case "2":
+                                            historyEventString.Append(string.Format(" set status as <strong>medium</strong> for object <strong>[Name: {0}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.Name));
+                                            break;
+                                        case "3":
+                                            historyEventString.Append(string.Format(" set status as <strong>high</strong> for object <strong>[Name: {0}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.Name));
+                                            break;
+                                        case "4":
+                                            historyEventString.Append(string.Format(" set status as <strong>critical</strong> for object <strong>[Name: {0}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.Name));
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    historyEventString.Append(string.Format(" updated {0} column in object <strong>[Name: {3}]</strong> in <a href='/Surveys/Index'>Surveys</a>. <br/> Previous value: <span style=\"text-decoration: line-through\">{1}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{2}</span>"
+                                    , historyEvent.ColumnName.ToLower(), historyEvent.OldValue, historyEvent.NewValue, theSurveyObject.Name));
+                                }
+                                break;
                         }
                     }
                 }
@@ -520,6 +613,9 @@ namespace APPartment.Utilities
                             break;
                         case (int)ObjectTypes.Issue:
                             historyEventString.Append(" <strong>deleted</strong> an object in <a href='/Issues/Index'>Issues</a>.");
+                            break;
+                        case (int)ObjectTypes.Survey:
+                            historyEventString.Append(" <strong>deleted</strong> an object in <a href='/Surveys/Index'>Surveys</a>.");
                             break;
                     }
                 }
