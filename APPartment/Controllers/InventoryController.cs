@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using APPartment.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace APPartment.Controllers
 {
@@ -33,21 +34,41 @@ namespace APPartment.Controllers
         }
 
         [Breadcrumb(Supplied_Breadcrumb)]
-        public override Task<IActionResult> IndexCompleted()
+        public async Task<IActionResult> Supplied()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            var modelObjects = await _context.Set<Inventory>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == true).ToListAsync();
+
             ViewData["GridTitle"] = "Inventory - Supplied";
             ViewData["Module"] = "Inventory";
+            ViewData["Manage"] = false;
 
-            return base.IndexCompleted();
+            return View("_Grid", modelObjects);
         }
 
         [Breadcrumb(Not_Supplied_Breadcrumb)]
-        public override Task<IActionResult> IndexNotCompleted()
+        public async Task<IActionResult> NotSupplied()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            var modelObjects = await _context.Set<Inventory>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == false).ToListAsync();
+
             ViewData["GridTitle"] = "Inventory - Not Supplied";
             ViewData["Module"] = "Inventory";
+            ViewData["Manage"] = false;
 
-            return base.IndexNotCompleted();
+            return View("_Grid", modelObjects);
         }
 
         public JsonResult GetInventoryCriticalCount()

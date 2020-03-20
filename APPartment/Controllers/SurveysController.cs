@@ -6,6 +6,7 @@ using System.Linq;
 using SmartBreadcrumbs.Attributes;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace APPartment.Controllers
 {
@@ -32,21 +33,41 @@ namespace APPartment.Controllers
         }
 
         [Breadcrumb(Completed_Breadcrumb)]
-        public override Task<IActionResult> IndexCompleted()
+        public async Task<IActionResult> Completed()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            var modelObjects = await _context.Set<Survey>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == true).ToListAsync();
+
             ViewData["GridTitle"] = "Surveys - Completed";
             ViewData["Module"] = "Surveys";
+            ViewData["Manage"] = false;
 
-            return base.IndexCompleted();
+            return View("_Grid", modelObjects);
         }
 
         [Breadcrumb(Pending_Breadcrumb)]
-        public override Task<IActionResult> IndexNotCompleted()
+        public async Task<IActionResult> Pending()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            var modelObjects = await _context.Set<Survey>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == false).ToListAsync();
+
             ViewData["GridTitle"] = "Surveys - Pending";
             ViewData["Module"] = "Surveys";
+            ViewData["Manage"] = false;
 
-            return base.IndexNotCompleted();
+            return View("_Grid", modelObjects);
         }
 
         public JsonResult GetPendingSurveysCount()

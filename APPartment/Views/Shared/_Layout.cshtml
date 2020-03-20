@@ -105,8 +105,8 @@
                 <div id="inventoryCollapse" class="collapse" aria-labelledby="inventoryCollapseLabel" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Inventory Objects:</h6>
-                        <a class="collapse-item" asp-controller="Inventory" asp-action="IndexNotCompleted"><i class="fas fa-exclamation-triangle"></i> Not Supplied</a>
-                        <a class="collapse-item" asp-controller="Inventory" asp-action="IndexCompleted"><i class="fas fa-check"></i> Supplied</a>
+                        <a class="collapse-item" asp-controller="Inventory" asp-action="NotSupplied"><i class="fas fa-exclamation-triangle"></i> Not Supplied</a>
+                        <a class="collapse-item" asp-controller="Inventory" asp-action="Supplied"><i class="fas fa-check"></i> Supplied</a>
                         <a class="collapse-item" asp-controller="Inventory" asp-action="Index"><i class="fas fa-tasks"></i> Manage</a>
                     </div>
                 </div>
@@ -120,8 +120,8 @@
                 <div id="hygieneCollapse" class="collapse" aria-labelledby="hygieneCollapseLabel" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Hygiene Objects:</h6>
-                        <a class="collapse-item" asp-controller="Hygiene" asp-action="IndexNotCompleted"><i class="fas fa-exclamation-triangle"></i> Due Cleaning</a>
-                        <a class="collapse-item" asp-controller="Hygiene" asp-action="IndexCompleted"><i class="fas fa-check"></i> Cleaned</a>
+                        <a class="collapse-item" asp-controller="Hygiene" asp-action="DueCleaning"><i class="fas fa-exclamation-triangle"></i> Due Cleaning</a>
+                        <a class="collapse-item" asp-controller="Hygiene" asp-action="Cleaned"><i class="fas fa-check"></i> Cleaned</a>
                         <a class="collapse-item" asp-controller="Hygiene" asp-action="Index"><i class="fas fa-tasks"></i> Manage</a>
                     </div>
                 </div>
@@ -135,8 +135,8 @@
                 <div id="issuesCollapse" class="collapse" aria-labelledby="issuesCollapseLabel" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Issue Objects:</h6>
-                        <a class="collapse-item" asp-controller="Issues" asp-action="IndexNotCompleted"><i class="fas fa-exclamation-triangle"></i> Open</a>
-                        <a class="collapse-item" asp-controller="Issues" asp-action="IndexCompleted"><i class="fas fa-check"></i> Closed</a>
+                        <a class="collapse-item" asp-controller="Issues" asp-action="Open"><i class="fas fa-exclamation-triangle"></i> Open</a>
+                        <a class="collapse-item" asp-controller="Issues" asp-action="Closed"><i class="fas fa-check"></i> Closed</a>
                         <a class="collapse-item" asp-controller="Issues" asp-action="Index"><i class="fas fa-tasks"></i> Manage</a>
                     </div>
                 </div>
@@ -155,8 +155,8 @@
                 </a>
                 <div id="surveysCollapse" class="collapse" aria-labelledby="surveysCollapseLabel" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" asp-controller="Surveys" asp-action="IndexNotCompleted"><i class="fas fa-pen"></i> Pending</a>
-                        <a class="collapse-item" asp-controller="Surveys" asp-action="IndexCompleted"><i class="fas fa-check"></i> Completed</a>
+                        <a class="collapse-item" asp-controller="Surveys" asp-action="Pending"><i class="fas fa-pen"></i> Pending</a>
+                        <a class="collapse-item" asp-controller="Surveys" asp-action="Completed"><i class="fas fa-check"></i> Completed</a>
                         <a class="collapse-item" asp-controller="Surveys" asp-action="Index"><i class="fas fa-tasks"></i> Manage</a>
                     </div>
                 </div>

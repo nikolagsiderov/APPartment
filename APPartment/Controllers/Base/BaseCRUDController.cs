@@ -51,40 +51,6 @@ namespace APPartment.Controllers.Base
             return View("_Grid", modelObjects);
         }
 
-        [Breadcrumb("Base")]
-        public virtual async Task<IActionResult> IndexCompleted()
-        {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
-            var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == true).ToListAsync();
-
-            ViewData["Manage"] = false;
-
-            return View("_Grid", modelObjects);
-        }
-
-        [Breadcrumb("Base")]
-        public virtual async Task<IActionResult> IndexNotCompleted()
-        {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
-            var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == false).ToListAsync();
-
-            ViewData["Manage"] = false;
-
-            return View("_Grid", modelObjects);
-        }
-
         [Breadcrumb(Details_Breadcrumb)]
         public async Task<IActionResult> Details(long? id)
         {

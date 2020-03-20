@@ -7,6 +7,7 @@ using SmartBreadcrumbs.Attributes;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using APPartment.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace APPartment.Controllers
 {
@@ -33,21 +34,41 @@ namespace APPartment.Controllers
         }
 
         [Breadcrumb(Cleaned_Breadcrumb)]
-        public override Task<IActionResult> IndexCompleted()
+        public async Task<IActionResult> Cleaned()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            var modelObjects = await _context.Set<Hygiene>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == true).ToListAsync();
+
             ViewData["GridTitle"] = "Hygiene - Cleaned";
             ViewData["Module"] = "Hygiene";
+            ViewData["Manage"] = false;
 
-            return base.IndexCompleted();
+            return View("_Grid", modelObjects);
         }
 
         [Breadcrumb(Due_Cleaning_Breadcrumb)]
-        public override Task<IActionResult> IndexNotCompleted()
+        public async Task<IActionResult> DueCleaning()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            var modelObjects = await _context.Set<Hygiene>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == false).ToListAsync();
+
             ViewData["GridTitle"] = "Hygiene - Due Cleaning";
             ViewData["Module"] = "Hygiene";
+            ViewData["Manage"] = false;
 
-            return base.IndexNotCompleted();
+            return View("_Grid", modelObjects);
         }
 
         public JsonResult GetHygieneCriticalCount()
