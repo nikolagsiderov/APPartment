@@ -66,7 +66,7 @@ namespace APPartment.Controllers
                 homeDisplayModel.HouseStatus = _context.HouseStatuses.Where(x => x.HouseId == currentHouseId).OrderByDescending(x => x.Id).FirstOrDefault();
             }
 
-            if (_context.HouseSettings.Any(x => x.HouseId == long.Parse(HttpContext.Session.GetString("HouseId"))))
+            if (_context.HouseSettings.Any(x => x.HouseId == currentHouseId))
             {
                 homeDisplayModel.RentDueDate = GetRentDueDate();
             }
@@ -146,6 +146,8 @@ namespace APPartment.Controllers
                 return View(houseSettings);
             }
 
+            ViewData["HouseName"] = HttpContext.Session.GetString("HouseName").ToString();
+
             return View();
         }
 
@@ -156,8 +158,9 @@ namespace APPartment.Controllers
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
             var houseModel = _context.Find<House>(currentHouseId);
+            settings.HouseId = currentHouseId;
 
-            if (!string.IsNullOrEmpty(settings.HouseName))
+            if (!string.IsNullOrEmpty(settings.HouseName) || settings.HouseName != houseModel.Name)
             {
                 houseModel.Name = settings.HouseName;
 

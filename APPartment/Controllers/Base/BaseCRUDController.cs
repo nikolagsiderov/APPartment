@@ -146,6 +146,11 @@ namespace APPartment.Controllers.Base
 
                 return RedirectToAction(nameof(Index));
             }
+
+            model.Comments = GetComments(model.ObjectId);
+            model.Images = GetImages(model.ObjectId);
+            model.History = GetHistory(model.ObjectId);
+
             return View("_Edit", model);
         }
 

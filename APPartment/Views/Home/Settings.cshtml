@@ -14,7 +14,16 @@
 
                     <div class="form-group">
                         <label asp-for="HouseName" class="control-label">Change house name</label>
-                        <input asp-for="HouseName" class="form-control" />
+
+                        @if (Model != null)
+                        {
+                            <input asp-for="HouseName" class="form-control" />
+                        }
+                        else
+                        {
+                            <input asp-for="HouseName" class="form-control" value="@ViewData["HouseName"]" />
+                        }
+
                         <span asp-validation-for="HouseName" class="text-danger"></span>
                     </div>
 

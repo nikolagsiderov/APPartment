@@ -26,13 +26,13 @@ namespace APPartment.Models.Base
         public long ObjectId { get; set; }
 
         [NotMapped]
-        public List<string> Comments { get; set; }
+        public List<string> Comments { get; set; } = new List<string>();
 
         [NotMapped]
-        public List<Image> Images { get; set; }
+        public List<Image> Images { get; set; } = new List<Image>();
 
         [NotMapped]
-        public List<string> History { get; set; }
+        public List<string> History { get; set; } = new List<string>();
 
         [NotMapped]
         public string LastUpdated { get; set; }
