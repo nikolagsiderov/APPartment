@@ -90,6 +90,7 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
+                        <th>ID</th>
                         <th>
                             Name
                         </th>
@@ -106,6 +107,9 @@
                     @foreach (var item in Model)
                     {
                         <tr>
+                            <td>
+                                <p>@item.Id</p>
+                            </td>
                             <td>
                                 @if (item.Name.Length <= 20)
                                 {
