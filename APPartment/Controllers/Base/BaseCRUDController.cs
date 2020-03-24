@@ -18,9 +18,12 @@ namespace APPartment.Controllers.Base
     public abstract class BaseCRUDController<T> : Controller
         where T : class, IBaseObject
     {
+        #region Breadcrumbs
         private const string Details_Breadcrumb = "<i class='fas fa-info-circle'></i> Details";
         private const string Edit_Breadcrumb = "<i class='fas fa-edit'></i> Edit";
+        #endregion
 
+        #region Context, Services and Utilities
         private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper = new HtmlRenderHelper();
         private FileUploadService fileUploadService = new FileUploadService();
@@ -28,12 +31,14 @@ namespace APPartment.Controllers.Base
         private DataContext<Comment> commentDataContext = new DataContext<Comment>();
         private DataContext<Image> imageDataContext = new DataContext<Image>();
         private HistoryHtmlBuilder historyHtmlBuilder = new HistoryHtmlBuilder();
+        #endregion
 
         public BaseCRUDController(DataAccessContext context)
         {
             _context = context;
         }
 
+        #region Actions
         [Breadcrumb("Base")]
         public virtual async Task<IActionResult> Index()
         {
@@ -226,6 +231,7 @@ namespace APPartment.Controllers.Base
 
             return RedirectToAction(nameof(Index));
         }
+        #endregion
 
         #region Metadata
         public List<string> GetComments(long targetId)

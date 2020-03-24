@@ -9,14 +9,17 @@ namespace APPartment.Controllers
 {
     public class AccountController : Controller
     {
+        #region Context, Services and Utilities
         private readonly DataAccessContext _context;
         private DataContext<User> dataContext = new DataContext<User>();
+        #endregion
 
         public AccountController(DataAccessContext context)
         {
             _context = context;
         }
 
+        #region Actions
         public IActionResult Register()
         {
             return View();
@@ -85,5 +88,6 @@ namespace APPartment.Controllers
                 return RedirectToAction("Login");
             }
         }
+        #endregion
     }
 }

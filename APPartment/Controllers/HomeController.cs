@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using APPartment.Models;
 using SmartBreadcrumbs.Attributes;
 using APPartment.Data;
@@ -19,11 +18,14 @@ namespace APPartment.Controllers
 {
     public class HomeController : Controller
     {
+        #region Breadcrumbs
         private const string Default_Breadcrumb = "<i class='fas fa-home' style='font-size:20px'></i> Home";
         private const string Settings_Breadcrumb = "<i class='fas fa-cogs' style='font-size:20px'></i> Settings";
         private const string About_Breadcrumb = "<i class='fas fa-info-circle' style='font-size:20px'></i> About";
         private const string History_Breadcrumb = "<i class='fas fa-history' style='font-size:20px'></i> History";
+        #endregion
 
+        #region Context, Services and Utilities
         private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper = new HtmlRenderHelper();
         private TimeConverter timeConverter = new TimeConverter();
@@ -32,12 +34,14 @@ namespace APPartment.Controllers
         private DataContext<Message> messageDataContext = new DataContext<Message>();
         private DataContext<HouseStatus> houseStatusDataContext = new DataContext<HouseStatus>();
         private HistoryHtmlBuilder historyHtmlBuilder = new HistoryHtmlBuilder();
+        #endregion
 
         public HomeController(DataAccessContext context)
         {
             _context = context;
         }
 
+        #region Actions
         [DefaultBreadcrumb(Default_Breadcrumb)]
         public IActionResult Index()
         {
@@ -284,6 +288,7 @@ namespace APPartment.Controllers
 
             return View(historyModel);
         }
+        #endregion
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -291,6 +296,7 @@ namespace APPartment.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        #region Getters
         public List<BaseObject> GetDisplayObject(long? currentHouseId)
         {
             var displayObjects = new List<BaseObject>();
@@ -372,5 +378,6 @@ namespace APPartment.Controllers
 
             return messages;
         }
+        #endregion
     }
 }

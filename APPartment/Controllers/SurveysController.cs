@@ -12,9 +12,11 @@ namespace APPartment.Controllers
 {
     public class SurveysController : BaseCRUDController<Survey>
     {
+        #region Breadcrumbs
         private const string All_Breadcrumb = "<i class='fas fa-tasks' style='font-size:20px'></i> All";
         private const string Pending_Breadcrumb = "<i class='fas fa-pen' style='font-size:20px'></i> Pending";
         private const string Completed_Breadcrumb = "<i class='fas fa-check' style='font-size:20px'></i> Completed";
+        #endregion
 
         private readonly DataAccessContext _context;
 
@@ -23,6 +25,7 @@ namespace APPartment.Controllers
             _context = context;
         }
 
+        #region Actions
         [Breadcrumb(All_Breadcrumb)]
         public override Task<IActionResult> Index()
         {
@@ -83,6 +86,7 @@ namespace APPartment.Controllers
 
             return Json(0);
         }
+        #endregion
 
         public override void PopulateViewData()
         {
