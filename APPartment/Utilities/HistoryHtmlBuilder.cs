@@ -283,60 +283,63 @@ namespace APPartment.Utilities
                 {
                     if (isSubObject)
                     {
-                        var parentObjectTypeId = context.Objects.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault().ObjectTypeId;
-
-                        switch (subObjectType)
+                        if (context.Objects.Any(x => x.ObjectId == historyEvent.TargetId))
                         {
-                            case (int)ObjectTypes.Comment:
-                                switch (parentObjectTypeId)
-                                {
-                                    case (int)ObjectTypes.Inventory:
-                                        var theInventory = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+                            var parentObjectTypeId = context.Objects.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault().ObjectTypeId;
 
-                                        historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[Name: {0}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventory.Name));
-                                        break;
-                                    case (int)ObjectTypes.Hygiene:
-                                        var theHygiene = context.Hygienes.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+                            switch (subObjectType)
+                            {
+                                case (int)ObjectTypes.Comment:
+                                    switch (parentObjectTypeId)
+                                    {
+                                        case (int)ObjectTypes.Inventory:
+                                            var theInventory = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                        historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[Name: {0}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygiene.Name));
-                                        break;
-                                    case (int)ObjectTypes.Issue:
-                                        var theIssue = context.Hygienes.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+                                            historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[Name: {0}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventory.Name));
+                                            break;
+                                        case (int)ObjectTypes.Hygiene:
+                                            var theHygiene = context.Hygienes.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                        historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[Name: {0}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssue.Name));
-                                        break;
-                                    case (int)ObjectTypes.Survey:
-                                        var theSurvey = context.Surveys.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+                                            historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[Name: {0}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygiene.Name));
+                                            break;
+                                        case (int)ObjectTypes.Issue:
+                                            var theIssue = context.Issues.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                        historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[Name: {0}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurvey.Name));
-                                        break;
-                                }
-                                break;
-                            case (int)ObjectTypes.Image:
-                                switch (parentObjectTypeId)
-                                {
-                                    case (int)ObjectTypes.Inventory:
-                                        var theInventory = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+                                            historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[Name: {0}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssue.Name));
+                                            break;
+                                        case (int)ObjectTypes.Survey:
+                                            var theSurvey = context.Surveys.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                        historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[Name: {0}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventory.Name));
-                                        break;
-                                    case (int)ObjectTypes.Hygiene:
-                                        var theHygiene = context.Hygienes.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+                                            historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[Name: {0}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurvey.Name));
+                                            break;
+                                    }
+                                    break;
+                                case (int)ObjectTypes.Image:
+                                    switch (parentObjectTypeId)
+                                    {
+                                        case (int)ObjectTypes.Inventory:
+                                            var theInventory = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                        historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[Name: {0}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygiene.Name));
-                                        break;
-                                    case (int)ObjectTypes.Issue:
-                                        var theIssue = context.Hygienes.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+                                            historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[Name: {0}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventory.Name));
+                                            break;
+                                        case (int)ObjectTypes.Hygiene:
+                                            var theHygiene = context.Hygienes.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                        historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[Name: {0}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssue.Name));
-                                        break;
-                                    case (int)ObjectTypes.Survey:
-                                        var theSurvey = context.Surveys.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+                                            historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[Name: {0}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygiene.Name));
+                                            break;
+                                        case (int)ObjectTypes.Issue:
+                                            var theIssue = context.Issues.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                        historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[Name: {0}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurvey.Name));
-                                        break;
-                                }
-                                break;
+                                            historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[Name: {0}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssue.Name));
+                                            break;
+                                        case (int)ObjectTypes.Survey:
+                                            var theSurvey = context.Surveys.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+
+                                            historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[Name: {0}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurvey.Name));
+                                            break;
+                                    }
+                                    break;
+                            }
                         }
                     }
                     else
