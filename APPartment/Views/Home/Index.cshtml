@@ -165,7 +165,7 @@
 </div>
 <div class="row">
     <div class="col-md-6">
-        <div class="col-lg-6 mb-4" style="font-weight: bold;">
+        <div class="col-lg-6 mb-4" style="font-weight: bold;" id="home-status-card-div">
             @if (Model.HouseStatus == null)
             {
                 <div class="card bg-success text-white shadow">
@@ -175,30 +175,10 @@
                     </div>
                 </div>
             }
-            else
-            {
-                if (Model.HouseStatus.Status == 1)
-                {
-                    <div class="card bg-success text-white shadow">
-                        <div class="card-body" id="houseStatusWidgetBody">
-                        </div>
-                    </div>
-                }
-                else if (Model.HouseStatus.Status == 2)
-                {
-                    <div class="card bg-warning text-white shadow">
-                        <div class="card-body" id="houseStatusWidgetBody">
-                        </div>
-                    </div>
-                }
-                else
-                {
-                    <div class="card bg-danger text-white shadow">
-                        <div class="card-body" id="houseStatusWidgetBody">
-                        </div>
-                    </div>
-                }
-            }
+            <div class="card bg-success text-white shadow" id="houseStatusWidget">
+                <div class="card-body" id="houseStatusWidgetBody">
+                </div>
+            </div>
         </div>
     </div>
 </div>
