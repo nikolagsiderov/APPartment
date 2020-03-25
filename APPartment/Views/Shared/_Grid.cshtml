@@ -210,8 +210,8 @@
                                         </div>
                                     }
 
-                                    <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i></button></a> 
-                                    <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-primary btn-sm"><i class="far fa-edit"></i></button></a> 
+                                    <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i></button></a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-primary btn-sm"><i class="far fa-edit"></i></button></a>
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#@modalDeleteId"><i class="far fa-trash-alt"></i></button>
 
                                     <div class="modal fade" id="@modalDeleteId" tabindex="-1" role="dialog" aria-labelledby="deleteObjectModalLabel" aria-hidden="true">
@@ -247,8 +247,4 @@
     </div>
 </div>
 
-<script>
-    $(document).ready(function () {
-        $('#dataTable').DataTable();
-    });
-</script>
+<script src="~/js/grid.js"></script>
