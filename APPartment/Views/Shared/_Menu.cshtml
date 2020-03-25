@@ -29,6 +29,7 @@
         string inventoryLink = string.Empty;
         string hygieneLink = string.Empty;
         string issuesLink = string.Empty;
+        string surveysLink = string.Empty;
         string settingsLink = string.Empty;
         string historyLink = string.Empty;
 
@@ -47,6 +48,10 @@
         else if (controllerName == "Issues")
         {
             issuesLink = "active";
+        }
+        else if (controllerName == "Surveys")
+        {
+            surveysLink = "active";
         }
         else if (controllerName == "Home" && actionName == "Settings")
         {
@@ -122,7 +127,7 @@
         More
     </div>
 
-    <li class="nav-item" id="SurveysTab">
+    <li class="nav-item @surveysLink" id="SurveysTab">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#surveysCollapse" aria-expanded="true" aria-controls="surveysCollapse">
             <i class="fas fa-poll"></i>
             <span>Surveys</span> <span class="badge badge-light" style="display: none" id="surveysBadge"></span>
