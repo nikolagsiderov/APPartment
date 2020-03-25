@@ -10,11 +10,19 @@ namespace APPartment.Services
 {
     public class FileUploadService
     {
+        private DataAccessContext _context;
+        private DataContext<Image> context;
         private HumanSizeConverter humanSizeConverter = new HumanSizeConverter();
 
-        public void UploadImage(IFormFile file, DataAccessContext _context, long targetId, DataContext<Image> context, long userId, long houseId)
+        public FileUploadService(DataAccessContext _context, DataContext<Image> context)
         {
-            var imageName = SaveImageToDB(file, _context, targetId, context, userId, houseId);
+            this._context = _context;
+            this.context = context;
+        }
+
+        public void UploadImage(IFormFile file, long targetId, long userId, long houseId)
+        {
+            var imageName = SaveImageToDB(file, targetId, userId, houseId);
 
             string pathString = "wwwroot\\BaseObject_Images";
 
@@ -31,7 +39,7 @@ namespace APPartment.Services
             }
         }
 
-        private string SaveImageToDB(IFormFile file, DataAccessContext _context, long targetId, DataContext<Image> context, long userId, long houseId)
+        private string SaveImageToDB(IFormFile file, long targetId, long userId, long houseId)
         {
             var image = new Image()
             {
@@ -41,7 +49,7 @@ namespace APPartment.Services
                 TargetId = targetId,
             };
 
-            context.Save(image, _context, userId, targetId, houseId);
+            context.Save(image, userId, targetId, houseId);
 
             image.Name = $"{image.Id}_{targetId}_{file.FileName}";
 

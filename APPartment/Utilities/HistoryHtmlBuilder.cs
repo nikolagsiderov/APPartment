@@ -9,7 +9,14 @@ namespace APPartment.Utilities
 {
     public class HistoryHtmlBuilder
     {
-        public string BuildLastUpdateBaseObjectHistoryForWidget(long objectId, DataAccessContext context)
+        private DataAccessContext context;
+
+        public HistoryHtmlBuilder(DataAccessContext context)
+        {
+            this.context = context;
+        }
+
+        public string BuildLastUpdateBaseObjectHistoryForWidget(long objectId)
         {
             var result = string.Empty;
 
@@ -259,7 +266,7 @@ namespace APPartment.Utilities
             return result;
         }
 
-        public List<string> BuildBaseObjectHistory(List<History> history, DataAccessContext context)
+        public List<string> BuildBaseObjectHistory(List<History> history)
         {
             var result = new List<string>();
 
@@ -498,7 +505,7 @@ namespace APPartment.Utilities
             return result;
         }
 
-        public List<string> BuildHomeHistory(List<History> history, DataAccessContext context)
+        public List<string> BuildHomeHistory(List<History> history)
         {
             var result = new List<string>();
 

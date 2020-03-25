@@ -11,9 +11,16 @@ namespace APPartment.Core
     public class DataContext<T>
         where T : class, IObject
     {
-        private HistoryContext<T> historyContext = new HistoryContext<T>();
+        private DataAccessContext context;
+        private HistoryContext<T> historyContext;
 
-        public async Task SaveAsync(T objectModel, DataAccessContext context, long userId, long? targetObjectId, long houseId)
+        public DataContext(DataAccessContext context)
+        {
+            this.context = context;
+            this.historyContext = new HistoryContext<T>(this.context);
+        }
+
+        public async Task SaveAsync(T objectModel, long userId, long? targetObjectId, long houseId)
         {
             var objectTypeName = objectModel.GetType().Name;
             var objectTypeId = context.Set<ObjectType>().Where(x => x.Name == objectTypeName).FirstOrDefault().Id;
@@ -30,7 +37,7 @@ namespace APPartment.Core
             await context.AddAsync(_object);
             await context.SaveChangesAsync();
 
-            historyContext.PopulateHistory((int)HistoryFunctionTypes.Create, objectModel, _object, context, userId, targetObjectId, houseId);
+            historyContext.PopulateHistory((int)HistoryFunctionTypes.Create, objectModel, _object, userId, targetObjectId, houseId);
 
             objectModel.ObjectId = _object.ObjectId;
 
@@ -38,7 +45,7 @@ namespace APPartment.Core
             await context.SaveChangesAsync();
         }
 
-        public void Save(T objectModel, DataAccessContext context, long userId, long? targetObjectId, long houseId)
+        public void Save(T objectModel, long userId, long? targetObjectId, long houseId)
         {
             var objectTypeName = objectModel.GetType().Name;
             var objectTypeId = context.Set<ObjectType>().Where(x => x.Name == objectTypeName).FirstOrDefault().Id;
@@ -55,7 +62,7 @@ namespace APPartment.Core
             context.Add(_object);
             context.SaveChanges();
 
-            historyContext.PopulateHistory((int)HistoryFunctionTypes.Create, objectModel, _object, context, userId, targetObjectId, houseId);
+            historyContext.PopulateHistory((int)HistoryFunctionTypes.Create, objectModel, _object, userId, targetObjectId, houseId);
 
             objectModel.ObjectId = _object.ObjectId;
 
@@ -63,11 +70,11 @@ namespace APPartment.Core
             context.SaveChanges();
         }
 
-        public async Task UpdateAsync(T objectModel, DataAccessContext context, long userId, long houseId)
+        public async Task UpdateAsync(T objectModel, long userId, long houseId)
         {
             var _object = context.Set<Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
-            historyContext.PopulateHistory((int)HistoryFunctionTypes.Update, objectModel, _object, context, userId, null, houseId);
+            historyContext.PopulateHistory((int)HistoryFunctionTypes.Update, objectModel, _object, userId, null, houseId);
 
             _object.ModifiedById = userId;
             _object.ModifiedDate = DateTime.Now;
@@ -79,11 +86,11 @@ namespace APPartment.Core
             await context.SaveChangesAsync();
         }
 
-        public void Update(T objectModel, DataAccessContext context, long userId, long houseId)
+        public void Update(T objectModel, long userId, long houseId)
         {
             var _object = context.Set<Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
-            historyContext.PopulateHistory((int)HistoryFunctionTypes.Update, objectModel, _object, context, userId, null, houseId);
+            historyContext.PopulateHistory((int)HistoryFunctionTypes.Update, objectModel, _object, userId, null, houseId);
 
             _object.ModifiedById = userId;
             _object.ModifiedDate = DateTime.Now;
@@ -95,11 +102,11 @@ namespace APPartment.Core
             context.SaveChanges();
         }
 
-        public async Task DeleteAsync(T objectModel, DataAccessContext context, long userId, long? targetObjectId, long houseId)
+        public async Task DeleteAsync(T objectModel, long userId, long? targetObjectId, long houseId)
         {
             var _object = context.Set<Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
-            historyContext.PopulateHistory((int)HistoryFunctionTypes.Delete, objectModel, _object, context, userId, targetObjectId, houseId);
+            historyContext.PopulateHistory((int)HistoryFunctionTypes.Delete, objectModel, _object, userId, targetObjectId, houseId);
 
             context.Remove(_object);
             context.Remove(objectModel);
@@ -107,11 +114,11 @@ namespace APPartment.Core
             await context.SaveChangesAsync();
         }
 
-        public void Delete(T objectModel, DataAccessContext context, long userId, long? targetObjectId, long houseId)
+        public void Delete(T objectModel, long userId, long? targetObjectId, long houseId)
         {
             var _object = context.Set<Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
-            historyContext.PopulateHistory((int)HistoryFunctionTypes.Delete, objectModel, _object, context, userId, targetObjectId, houseId);
+            historyContext.PopulateHistory((int)HistoryFunctionTypes.Delete, objectModel, _object, userId, targetObjectId, houseId);
 
             context.Remove(_object);
             context.Remove(objectModel);

@@ -11,12 +11,13 @@ namespace APPartment.Controllers
     {
         #region Context, Services and Utilities
         private readonly DataAccessContext _context;
-        private DataContext<User> dataContext = new DataContext<User>();
+        private DataContext<User> dataContext;
         #endregion
 
         public AccountController(DataAccessContext context)
         {
             _context = context;
+            dataContext = new DataContext<User>(_context);
         }
 
         #region Actions
@@ -30,7 +31,7 @@ namespace APPartment.Controllers
         {
             if (ModelState.IsValid)
             {
-                dataContext.Save(user, _context, 0, null, 0);
+                dataContext.Save(user, 0, null, 0);
 
                 ModelState.Clear();
 

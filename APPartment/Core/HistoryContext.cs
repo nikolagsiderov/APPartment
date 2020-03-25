@@ -11,7 +11,14 @@ namespace APPartment.Core
     public class HistoryContext<T>
         where T : class, IObject
     {
-        public void PopulateHistory(int historyFunctionType, T objectModel, Models.Object @object, DataAccessContext context, long userId, long? targetObjectId, long houseId)
+        private DataAccessContext context;
+
+        public HistoryContext(DataAccessContext context)
+        {
+            this.context = context;
+        }
+
+        public void PopulateHistory(int historyFunctionType, T objectModel, Models.Object @object, long userId, long? targetObjectId, long houseId)
         {
             var now = DateTime.Now;
 
@@ -31,7 +38,7 @@ namespace APPartment.Core
                         ObjectId = @object.ObjectId
                     };
 
-                    this.SaveHistory(history, context, userId);
+                    this.SaveHistory(history, userId);
                 }
                 else
                 {
@@ -50,7 +57,7 @@ namespace APPartment.Core
                             ObjectId = @object.ObjectId
                         };
 
-                        this.SaveHistory(history, context, userId);
+                        this.SaveHistory(history, userId);
                     }
                     else
                     {
@@ -63,7 +70,7 @@ namespace APPartment.Core
                             ObjectId = @object.ObjectId
                         };
 
-                        this.SaveHistory(history, context, userId);
+                        this.SaveHistory(history, userId);
                     }
                 }
             }
@@ -92,7 +99,7 @@ namespace APPartment.Core
                             history.NewValue = newuUserModel.Username;
                         }
 
-                        this.SaveHistory(history, context, userId);
+                        this.SaveHistory(history, userId);
                         break;
                     case (long)ObjectTypes.House:
                         var oldHouseModel = context.Houses.AsNoTracking().Single(x => x.ObjectId == @object.ObjectId);
@@ -105,7 +112,7 @@ namespace APPartment.Core
                             history.NewValue = newHouseModel.Name;
                         }
 
-                        this.SaveHistory(history, context, userId);
+                        this.SaveHistory(history, userId);
                         break;
                     case (long)ObjectTypes.Inventory:
                         var oldInventoryModel = context.Inventories.AsNoTracking().Single(x => x.ObjectId == @object.ObjectId);
@@ -117,7 +124,7 @@ namespace APPartment.Core
                             history.OldValue = oldInventoryModel.Name;
                             history.NewValue = newInventoryModel.Name;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
 
                         if (oldInventoryModel.Details != newInventoryModel.Details)
@@ -135,7 +142,7 @@ namespace APPartment.Core
                             history.OldValue = oldInventoryModel.Details;
                             history.NewValue = newInventoryModel.Details;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
 
                         if (oldInventoryModel.Status != newInventoryModel.Status)
@@ -153,7 +160,7 @@ namespace APPartment.Core
                             history.OldValue = oldInventoryModel.Status.ToString();
                             history.NewValue = newInventoryModel.Status.ToString();
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
 
                         if (oldInventoryModel.IsCompleted != newInventoryModel.IsCompleted)
@@ -171,7 +178,7 @@ namespace APPartment.Core
                             history.OldValue = oldInventoryModel.IsCompleted.ToString();
                             history.NewValue = newInventoryModel.IsCompleted.ToString();
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
                         break;
                     case (long)ObjectTypes.Hygiene:
@@ -184,7 +191,7 @@ namespace APPartment.Core
                             history.OldValue = oldHygieneModel.Name;
                             history.NewValue = newHygieneModel.Name;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
 
                         if (oldHygieneModel.Details != newHygieneModel.Details)
@@ -202,7 +209,7 @@ namespace APPartment.Core
                             history.OldValue = oldHygieneModel.Details;
                             history.NewValue = newHygieneModel.Details;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
 
                         if (oldHygieneModel.Status != newHygieneModel.Status)
@@ -220,7 +227,7 @@ namespace APPartment.Core
                             history.OldValue = oldHygieneModel.Status.ToString();
                             history.NewValue = newHygieneModel.Status.ToString();
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
 
                         if (oldHygieneModel.IsCompleted != newHygieneModel.IsCompleted)
@@ -238,7 +245,7 @@ namespace APPartment.Core
                             history.OldValue = oldHygieneModel.IsCompleted.ToString();
                             history.NewValue = newHygieneModel.IsCompleted.ToString();
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
                         break;
                     case (long)ObjectTypes.Issue:
@@ -251,7 +258,7 @@ namespace APPartment.Core
                             history.OldValue = oldIssueModel.Name;
                             history.NewValue = newIssueModel.Name;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
 
                         if (oldIssueModel.Details != newIssueModel.Details)
@@ -269,7 +276,7 @@ namespace APPartment.Core
                             history.OldValue = oldIssueModel.Details;
                             history.NewValue = newIssueModel.Details;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
 
                         if (oldIssueModel.Status != newIssueModel.Status)
@@ -287,7 +294,7 @@ namespace APPartment.Core
                             history.OldValue = oldIssueModel.Status.ToString();
                             history.NewValue = newIssueModel.Status.ToString();
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
 
                         if (oldIssueModel.IsCompleted != newIssueModel.IsCompleted)
@@ -305,7 +312,7 @@ namespace APPartment.Core
                             history.OldValue = oldIssueModel.IsCompleted.ToString();
                             history.NewValue = newIssueModel.IsCompleted.ToString();
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
                         break;
 
@@ -319,7 +326,7 @@ namespace APPartment.Core
                             history.OldValue = oldSurveyModel.Name;
                             history.NewValue = newSurveyModel.Name;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
 
                         if (oldSurveyModel.Details != newSurveyModel.Details)
@@ -337,7 +344,7 @@ namespace APPartment.Core
                             history.OldValue = oldSurveyModel.Details;
                             history.NewValue = newSurveyModel.Details;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
 
                         if (oldSurveyModel.Status != newSurveyModel.Status)
@@ -355,7 +362,7 @@ namespace APPartment.Core
                             history.OldValue = oldSurveyModel.Status.ToString();
                             history.NewValue = newSurveyModel.Status.ToString();
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
 
                         if (oldSurveyModel.IsCompleted != newSurveyModel.IsCompleted)
@@ -373,7 +380,7 @@ namespace APPartment.Core
                             history.OldValue = oldSurveyModel.IsCompleted.ToString();
                             history.NewValue = newSurveyModel.IsCompleted.ToString();
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
                         break;
                 }
@@ -391,7 +398,7 @@ namespace APPartment.Core
                             history.OldValue = oldHouseStatusModel.Status.ToString();
                             history.NewValue = newHouseStatusModel.Status.ToString();
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
                         break;
                     case (long)ObjectTypes.HouseSettings:
@@ -413,7 +420,7 @@ namespace APPartment.Core
                             history.OldValue = oldHouseSettingsModel.RentDueDateDay.ToString();
                             history.NewValue = newHouseSettingsModel.RentDueDateDay.ToString();
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
 
                         if (oldHouseSettingsModel.HouseName != newHouseSettingsModel.HouseName)
@@ -431,7 +438,7 @@ namespace APPartment.Core
                             history.OldValue = oldHouseSettingsModel.HouseName;
                             history.NewValue = newHouseSettingsModel.HouseName;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                         }
                         break;
                     case (long)ObjectTypes.Comment:
@@ -464,18 +471,18 @@ namespace APPartment.Core
                         case (long)ObjectTypes.Comment:
                             history.DeletedObjectObjectType = (long)ObjectTypes.Comment;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                             break;
                         case (long)ObjectTypes.Image:
                             history.DeletedObjectObjectType = (long)ObjectTypes.Image;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                             break;
                     }
                 }
                 else
                 {
-                    DeleteObjectMetadataSubObjects(@object, context);
+                    DeleteObjectMetadataSubObjects(@object);
 
                     var history = new History()
                     {
@@ -495,7 +502,7 @@ namespace APPartment.Core
                             history.DeletedObjectName = userModel.Username;
                             history.DeletedObjectObjectType = @object.ObjectTypeId;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                             break;
                         case (long)ObjectTypes.House:
                             var houseModel = objectModel as House;
@@ -503,7 +510,7 @@ namespace APPartment.Core
                             history.DeletedObjectName = houseModel.Name;
                             history.DeletedObjectObjectType = @object.ObjectTypeId;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                             break;
                         case (long)ObjectTypes.Inventory:
                             var inventoryModel = objectModel as Inventory;
@@ -511,7 +518,7 @@ namespace APPartment.Core
                             history.DeletedObjectName = inventoryModel.Name;
                             history.DeletedObjectObjectType = @object.ObjectTypeId;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                             break;
                         case (long)ObjectTypes.Hygiene:
                             var hygieneModel = objectModel as Hygiene;
@@ -519,7 +526,7 @@ namespace APPartment.Core
                             history.DeletedObjectName = hygieneModel.Name;
                             history.DeletedObjectObjectType = @object.ObjectTypeId;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                             break;
                         case (long)ObjectTypes.Issue:
                             var issueModel = objectModel as Issue;
@@ -527,7 +534,7 @@ namespace APPartment.Core
                             history.DeletedObjectName = issueModel.Name;
                             history.DeletedObjectObjectType = @object.ObjectTypeId;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                             break;
                         case (long)ObjectTypes.Survey:
                             var surveyModel = objectModel as Survey;
@@ -535,14 +542,14 @@ namespace APPartment.Core
                             history.DeletedObjectName = surveyModel.Name;
                             history.DeletedObjectObjectType = @object.ObjectTypeId;
 
-                            this.SaveHistory(history, context, userId);
+                            this.SaveHistory(history, userId);
                             break;
                     }
                 }
             }
         }
 
-        private void DeleteObjectMetadataSubObjects(Models.Object @object, DataAccessContext context)
+        private void DeleteObjectMetadataSubObjects(Models.Object @object)
         {
             if (@object.ObjectTypeId == (long)ObjectTypes.House)
             {
@@ -615,7 +622,7 @@ namespace APPartment.Core
             return result;
         }
 
-        public void SaveHistory(History objectModel, DataAccessContext context, long userId)
+        public void SaveHistory(History objectModel, long userId)
         {
             var objectTypeName = objectModel.GetType().Name;
             var objectTypeId = context.Set<ObjectType>().Where(x => x.Name == objectTypeName).FirstOrDefault().Id;

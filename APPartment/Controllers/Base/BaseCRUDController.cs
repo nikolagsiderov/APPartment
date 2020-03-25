@@ -25,17 +25,23 @@ namespace APPartment.Controllers.Base
 
         #region Context, Services and Utilities
         private readonly DataAccessContext _context;
-        private HtmlRenderHelper htmlRenderHelper = new HtmlRenderHelper();
-        private FileUploadService fileUploadService = new FileUploadService();
-        private DataContext<T> dataContext = new DataContext<T>();
-        private DataContext<Comment> commentDataContext = new DataContext<Comment>();
-        private DataContext<Image> imageDataContext = new DataContext<Image>();
-        private HistoryHtmlBuilder historyHtmlBuilder = new HistoryHtmlBuilder();
+        private HtmlRenderHelper htmlRenderHelper;
+        private FileUploadService fileUploadService;
+        private DataContext<T> dataContext;
+        private DataContext<Comment> commentDataContext;
+        private DataContext<Image> imageDataContext;
+        private HistoryHtmlBuilder historyHtmlBuilder;
         #endregion
 
         public BaseCRUDController(DataAccessContext context)
         {
             _context = context;
+            htmlRenderHelper = new HtmlRenderHelper(_context);
+            imageDataContext = new DataContext<Image>(_context);
+            fileUploadService = new FileUploadService(_context, imageDataContext);
+            dataContext = new DataContext<T>(_context);
+            commentDataContext = new DataContext<Comment>(_context);
+            historyHtmlBuilder = new HistoryHtmlBuilder(_context);
         }
 
         #region Actions
@@ -90,7 +96,7 @@ namespace APPartment.Controllers.Base
 
                 model.HouseId = currentHouseId;
 
-                await dataContext.SaveAsync(model, _context, currentUserId, null, currentHouseId);
+                await dataContext.SaveAsync(model, currentUserId, null, currentHouseId);
             }
 
             return RedirectToAction(nameof(Index));
@@ -135,7 +141,7 @@ namespace APPartment.Controllers.Base
 
                 try
                 {
-                    await dataContext.UpdateAsync(model, _context, currentUserId, currentHouseId);
+                    await dataContext.UpdateAsync(model, currentUserId, currentHouseId);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -179,7 +185,7 @@ namespace APPartment.Controllers.Base
 
             model.IsCompleted = true;
 
-            await dataContext.UpdateAsync(model, _context, currentUserId, currentHouseId);
+            await dataContext.UpdateAsync(model, currentUserId, currentHouseId);
 
             return RedirectToAction(nameof(Index));
         }
@@ -204,7 +210,7 @@ namespace APPartment.Controllers.Base
 
             model.IsCompleted = false;
 
-            await dataContext.UpdateAsync(model, _context, currentUserId, currentHouseId);
+            await dataContext.UpdateAsync(model, currentUserId, currentHouseId);
 
             return RedirectToAction(nameof(Index));
         }
@@ -227,7 +233,7 @@ namespace APPartment.Controllers.Base
                 return NotFound();
             }
 
-            await dataContext.DeleteAsync(model, _context, currentUserId, null, currentHouseId);
+            await dataContext.DeleteAsync(model, currentUserId, null, currentHouseId);
 
             return RedirectToAction(nameof(Index));
         }
@@ -236,7 +242,7 @@ namespace APPartment.Controllers.Base
         #region Metadata
         public List<string> GetComments(long targetId)
         {
-            var comments = htmlRenderHelper.BuildComments(_context.Comments.ToList(), targetId, _context);
+            var comments = htmlRenderHelper.BuildComments(_context.Comments.ToList(), targetId);
 
             return comments;
         }
@@ -255,9 +261,9 @@ namespace APPartment.Controllers.Base
                 Username = username
             };
 
-            await commentDataContext.SaveAsync(comment, _context, currentUserId, targetId, currentHouseId);
+            await commentDataContext.SaveAsync(comment, currentUserId, targetId, currentHouseId);
 
-            var result = htmlRenderHelper.BuildPostComment(comment, _context);
+            var result = htmlRenderHelper.BuildPostComment(comment);
 
             return Json(result);
         }
@@ -281,7 +287,7 @@ namespace APPartment.Controllers.Base
                     fName = file.FileName;
                     if (file != null && file.Length > 0)
                     {
-                        fileUploadService.UploadImage(file, _context, targetId, imageDataContext, currentUserId, currentHouseId);
+                        fileUploadService.UploadImage(file, targetId, currentUserId, currentHouseId);
                     }
                 }
             }
@@ -311,7 +317,7 @@ namespace APPartment.Controllers.Base
         {
             var history = _context.Histories.Where(x => x.ObjectId == targetId || x.TargetId == targetId).ToList();
 
-            var objectHistoryDisplayList = historyHtmlBuilder.BuildBaseObjectHistory(history, _context);
+            var objectHistoryDisplayList = historyHtmlBuilder.BuildBaseObjectHistory(history);
 
             return objectHistoryDisplayList;
         }
