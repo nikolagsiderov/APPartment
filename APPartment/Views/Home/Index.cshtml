@@ -14,7 +14,7 @@
                 @if (widgetObjects[0].Name != null)
                 {
                     <p class="card-text">
-                        <strong>Name</strong>: @widgetObjects[0].Name <br /> <strong>Details</strong>: @widgetObjects[0].Details
+                        @Html.Raw(widgetObjects[0].LastUpdate)
                     </p>
                 }
                 else
@@ -44,7 +44,7 @@
                 @if (widgetObjects[1].Name != null)
                 {
                     <p class="card-text">
-                        <strong>Name</strong>: @widgetObjects[1].Name <br /> <strong>Details</strong>: @widgetObjects[1].Details
+                        @Html.Raw(widgetObjects[1].LastUpdate)
                     </p>
                 }
                 else
@@ -75,7 +75,7 @@
                 @if (widgetObjects[2].Name != null)
                 {
                     <p class="card-text">
-                        <strong>Name</strong>: @widgetObjects[2].Name <br /> <strong>Details</strong>: @widgetObjects[2].Details
+                        @Html.Raw(widgetObjects[2].LastUpdate)
                     </p>
                 }
                 else

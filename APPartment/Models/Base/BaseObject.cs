@@ -39,5 +39,8 @@ namespace APPartment.Models.Base
 
         [NotMapped]
         public string LastUpdatedBy { get; set; }
+
+        [NotMapped]
+        public string LastUpdate { get; set; }
     }
 }

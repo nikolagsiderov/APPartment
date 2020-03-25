@@ -9,6 +9,256 @@ namespace APPartment.Utilities
 {
     public class HistoryHtmlBuilder
     {
+        public string BuildLastUpdateBaseObjectHistoryForWidget(long objectId, DataAccessContext context)
+        {
+            var result = string.Empty;
+
+            var historyEvent = context.Histories.Where(x => x.ObjectId == objectId || x.TargetId == objectId).OrderByDescending(x => x.Id).FirstOrDefault();
+
+            var historyEventString = new StringBuilder();
+            var isSubObject = historyEvent.TargetId == null ? false : true;
+            var subObjectTargetObject = new object();
+            long subObjectType = 0;
+            long parentObjectType = 0;
+
+            if (isSubObject)
+            {
+                subObjectType = context.Objects.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault().ObjectTypeId;
+            }
+            else
+            {
+                if (historyEvent.FunctionTypeId != (int)HistoryFunctionTypes.Delete)
+                {
+                    if (context.Objects.Any(x => x.ObjectId == historyEvent.ObjectId))
+                    {
+                        parentObjectType = context.Objects.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault().ObjectTypeId;
+                    }
+                }
+            }
+
+            if (historyEvent.FunctionTypeId == (int)HistoryFunctionTypes.Create)
+            {
+                if (isSubObject)
+                {
+                    if (context.Objects.Any(x => x.ObjectId == historyEvent.TargetId))
+                    {
+                        var parentObjectTypeId = context.Objects.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault().ObjectTypeId;
+
+                        switch (subObjectType)
+                        {
+                            case (int)ObjectTypes.Comment:
+                                switch (parentObjectTypeId)
+                                {
+                                    case (int)ObjectTypes.Inventory:
+                                        var theInventory = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+
+                                        historyEventString.Append(string.Format("Posted a <strong>comment</strong> in object <strong>[ID: {0}, Name: {1}]</strong>.", theInventory.ObjectId, theInventory.Name));
+                                        break;
+                                    case (int)ObjectTypes.Hygiene:
+                                        var theHygiene = context.Hygienes.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+
+                                        historyEventString.Append(string.Format("Posted a <strong>comment</strong> in object <strong>[ID: {0}, Name: {1}]</strong>.", theHygiene.ObjectId, theHygiene.Name));
+                                        break;
+                                    case (int)ObjectTypes.Issue:
+                                        var theIssue = context.Issues.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+
+                                        historyEventString.Append(string.Format("Posted a <strong>comment</strong> in object <strong>[ID: {0}, Name: {1}]</strong>.", theIssue.ObjectId, theIssue.Name));
+                                        break;
+                                }
+                                break;
+                            case (int)ObjectTypes.Image:
+                                switch (parentObjectTypeId)
+                                {
+                                    case (int)ObjectTypes.Inventory:
+                                        var theInventory = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+
+                                        historyEventString.Append(string.Format("Attached an <strong>image</strong> in object <strong>[ID: {0}, Name: {1}]</strong>.", theInventory.ObjectId, theInventory.Name));
+                                        break;
+                                    case (int)ObjectTypes.Hygiene:
+                                        var theHygiene = context.Hygienes.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+
+                                        historyEventString.Append(string.Format("Attached an <strong>image</strong> in object <strong>[ID: {0}, Name: {1}]</strong>.", theHygiene.ObjectId, theHygiene.Name));
+                                        break;
+                                    case (int)ObjectTypes.Issue:
+                                        var theIssue = context.Issues.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
+
+                                        historyEventString.Append(string.Format("Attached an <strong>image</strong> in object <strong>[ID: {0}, Name: {1}]</strong>.", theIssue.ObjectId, theIssue.Name));
+                                        break;
+                                }
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    switch (parentObjectType)
+                    {
+                        case (int)ObjectTypes.Inventory:
+                            var theInventoryObject = context.Inventories.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault();
+
+                            historyEventString.Append(string.Format("Created an object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                            break;
+                        case (int)ObjectTypes.Hygiene:
+                            var theHygieneObject = context.Hygienes.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault();
+
+                            historyEventString.Append(string.Format("Created an object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                            break;
+                        case (int)ObjectTypes.Issue:
+                            var theIssueObject = context.Issues.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault();
+
+                            historyEventString.Append(string.Format("Created an object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                            break;
+                    }
+                }
+            }
+            else if (historyEvent.FunctionTypeId == (int)HistoryFunctionTypes.Update)
+            {
+                if (isSubObject)
+                {
+                    if (subObjectType == (int)ObjectTypes.Comment)
+                    {
+                        // TODO: Implement this case when comments become editable.
+                        // ATM we will only display parent objects history
+                    }
+                    else if (subObjectType == (int)ObjectTypes.Image)
+                    {
+                        // TODO: Implement this case if images become editable.
+                        // ATM we will only display parent objects history
+                    }
+                }
+                else
+                {
+                    switch (parentObjectType)
+                    {
+                        case (int)ObjectTypes.Inventory:
+                            var theInventoryObject = context.Inventories.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault();
+
+                            if (historyEvent.ColumnName == "IsCompleted")
+                            {
+                                var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
+
+                                if (wasMarkedAsCompleted)
+                                {
+                                    historyEventString.Append(string.Format("Marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>supplied</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                }
+                                else
+                                {
+                                    historyEventString.Append(string.Format("Marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>not supplied</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                }
+                            }
+                            else if (historyEvent.ColumnName == "Status")
+                            {
+                                switch (historyEvent.NewValue)
+                                {
+                                    case "1":
+                                        historyEventString.Append(string.Format("Set status as <strong>trivial</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                        break;
+                                    case "2":
+                                        historyEventString.Append(string.Format("Set status as <strong>medium</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                        break;
+                                    case "3":
+                                        historyEventString.Append(string.Format("Set status as <strong>high</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                        break;
+                                    case "4":
+                                        historyEventString.Append(string.Format("Set status as <strong>critical</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                historyEventString.Append(string.Format("Updated {0} column in object <strong>[ID: {4}, Name: {3}]</strong>. <br/> Previous value: <span style=\"text-decoration: line-through\">{1}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{2}</span>"
+                                , historyEvent.ColumnName.ToLower(), historyEvent.OldValue, historyEvent.NewValue, theInventoryObject.Name, theInventoryObject.ObjectId));
+                            }
+                            break;
+                        case (int)ObjectTypes.Hygiene:
+                            var theHygieneObject = context.Hygienes.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault();
+
+                            if (historyEvent.ColumnName == "IsCompleted")
+                            {
+                                var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
+
+                                if (wasMarkedAsCompleted)
+                                {
+                                    historyEventString.Append(string.Format("Marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>cleaned</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                }
+                                else
+                                {
+                                    historyEventString.Append(string.Format("Marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>due cleaning</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                }
+                            }
+                            else if (historyEvent.ColumnName == "Status")
+                            {
+                                switch (historyEvent.NewValue)
+                                {
+                                    case "1":
+                                        historyEventString.Append(string.Format("Set status as <strong>trivial</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                        break;
+                                    case "2":
+                                        historyEventString.Append(string.Format("Set status as <strong>medium</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                        break;
+                                    case "3":
+                                        historyEventString.Append(string.Format("Set status as <strong>high</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                        break;
+                                    case "4":
+                                        historyEventString.Append(string.Format("Set status as <strong>critical</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                historyEventString.Append(string.Format("Updated {0} column in object <strong>[ID: {4}, Name: {3}]</strong>. <br/> Previous value: <span style=\"text-decoration: line-through\">{1}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{2}</span>"
+                                , historyEvent.ColumnName.ToLower(), historyEvent.OldValue, historyEvent.NewValue, theHygieneObject.Name, theHygieneObject.ObjectId));
+                            }
+                            break;
+                        case (int)ObjectTypes.Issue:
+                            var theIssueObject = context.Issues.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault();
+
+                            if (historyEvent.ColumnName == "IsCompleted")
+                            {
+                                var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
+
+                                if (wasMarkedAsCompleted)
+                                {
+                                    historyEventString.Append(string.Format("Marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>closed</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                }
+                                else
+                                {
+                                    historyEventString.Append(string.Format("Marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>open</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                }
+                            }
+                            else if (historyEvent.ColumnName == "Status")
+                            {
+                                switch (historyEvent.NewValue)
+                                {
+                                    case "1":
+                                        historyEventString.Append(string.Format("Set status as <strong>trivial</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                        break;
+                                    case "2":
+                                        historyEventString.Append(string.Format("Set status as <strong>medium</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                        break;
+                                    case "3":
+                                        historyEventString.Append(string.Format("Set status as <strong>high</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                        break;
+                                    case "4":
+                                        historyEventString.Append(string.Format("Set status as <strong>critical</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                historyEventString.Append(string.Format("Updated {0} column in object <strong>[ID: {4}, Name: {3}]</strong>. <br/> Previous value: <span style=\"text-decoration: line-through\">{1}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{2}</span>"
+                                , historyEvent.ColumnName.ToLower(), historyEvent.OldValue, historyEvent.NewValue, theIssueObject.Name, theIssueObject.ObjectId));
+                            }
+                            break;
+                    }
+                }
+            }
+
+            result = historyEventString.ToString();
+
+            return result;
+        }
+
         public List<string> BuildBaseObjectHistory(List<History> history, DataAccessContext context)
         {
             var result = new List<string>();

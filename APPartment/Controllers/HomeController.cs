@@ -311,10 +311,12 @@ namespace APPartment.Controllers
                 var inventoryObject = _context.Set<Models.Object>().Where(x => x.ObjectTypeId == (long)ObjectTypes.Inventory).OrderByDescending(x => x.ModifiedDate).First();
                 lastInventoryModel = _context.Set<Inventory>().Where(x => x.ObjectId == inventoryObject.ObjectId).FirstOrDefault();
 
-                lastInventoryModel.LastUpdated = inventoryObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime(inventoryObject.ModifiedDate);
-                lastInventoryModel.Name = lastInventoryModel.Name.Length <= 20 ? lastInventoryModel.Name : lastInventoryModel.Name.Substring(0, 20) + "...";
-                lastInventoryModel.Details = lastInventoryModel.Details.Length <= 50 ? lastInventoryModel.Details : lastInventoryModel.Details.Substring(0, 50) + "...";
+                var when = _context.Histories.Where(x => x.ObjectId == lastInventoryModel.ObjectId || x.TargetId == lastInventoryModel.ObjectId)
+                    .OrderByDescending(x => x.Id).FirstOrDefault().When;
+
+                lastInventoryModel.LastUpdated = when == null ? string.Empty : timeConverter.CalculateRelativeTime(when);
                 lastInventoryModel.LastUpdatedBy = _context.Users.Where(x => x.UserId == inventoryObject.ModifiedById).FirstOrDefault().Username;
+                lastInventoryModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastInventoryModel.ObjectId, _context);
             }
 
             var hygieneObjects = _context.Set<Hygiene>().Where(x => x.HouseId == currentHouseId);
@@ -324,10 +326,12 @@ namespace APPartment.Controllers
                 var hygieneObject = _context.Set<Models.Object>().Where(x => x.ObjectTypeId == (long)ObjectTypes.Hygiene).OrderByDescending(x => x.ModifiedDate).First();
                 lastHygieneModel = _context.Set<Hygiene>().Where(x => x.ObjectId == hygieneObject.ObjectId).FirstOrDefault();
 
-                lastHygieneModel.LastUpdated = hygieneObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime(hygieneObject.ModifiedDate);
-                lastHygieneModel.Name = lastHygieneModel.Name.Length <= 20 ? lastHygieneModel.Name : lastHygieneModel.Name.Substring(0, 20) + "...";
-                lastHygieneModel.Details = lastHygieneModel.Details.Length <= 50 ? lastHygieneModel.Details : lastHygieneModel.Details.Substring(0, 50) + "...";
+                var when = _context.Histories.Where(x => x.ObjectId == lastHygieneModel.ObjectId || x.TargetId == lastHygieneModel.ObjectId)
+                    .OrderByDescending(x => x.Id).FirstOrDefault().When;
+
+                lastHygieneModel.LastUpdated = when == null ? string.Empty : timeConverter.CalculateRelativeTime(when);
                 lastHygieneModel.LastUpdatedBy = _context.Users.Where(x => x.UserId == hygieneObject.ModifiedById).FirstOrDefault().Username;
+                lastHygieneModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastHygieneModel.ObjectId, _context);
             }
 
             var issueObjects = _context.Set<Issue>().Where(x => x.HouseId == currentHouseId);
@@ -337,10 +341,12 @@ namespace APPartment.Controllers
                 var issueObject = _context.Set<Models.Object>().Where(x => x.ObjectTypeId == (long)ObjectTypes.Issue).OrderByDescending(x => x.ModifiedDate).First();
                 lastIssueModel = _context.Set<Issue>().Where(x => x.ObjectId == issueObject.ObjectId).FirstOrDefault();
 
-                lastIssueModel.LastUpdated = issueObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime(issueObject.ModifiedDate);
-                lastIssueModel.Name = lastIssueModel.Name.Length <= 20 ? lastIssueModel.Name : lastIssueModel.Name.Substring(0, 20) + "...";
-                lastIssueModel.Details = lastIssueModel.Details.Length <= 50 ? lastIssueModel.Details : lastIssueModel.Details.Substring(0, 50) + "...";
+                var when = _context.Histories.Where(x => x.ObjectId == lastIssueModel.ObjectId || x.TargetId == lastIssueModel.ObjectId)
+                    .OrderByDescending(x => x.Id).FirstOrDefault().When;
+
+                lastIssueModel.LastUpdated = when == null ? string.Empty : timeConverter.CalculateRelativeTime(when);
                 lastIssueModel.LastUpdatedBy = _context.Users.Where(x => x.UserId == issueObject.ModifiedById).FirstOrDefault().Username;
+                lastIssueModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastIssueModel.ObjectId, _context); 
             }
 
             displayObjects.Add(lastInventoryModel);
