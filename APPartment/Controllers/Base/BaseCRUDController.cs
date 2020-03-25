@@ -236,7 +236,7 @@ namespace APPartment.Controllers.Base
         #region Metadata
         public List<string> GetComments(long targetId)
         {
-            var comments = htmlRenderHelper.BuildComments(_context.Comments.ToList(), targetId);
+            var comments = htmlRenderHelper.BuildComments(_context.Comments.ToList(), targetId, _context);
 
             return comments;
         }
@@ -257,7 +257,7 @@ namespace APPartment.Controllers.Base
 
             await commentDataContext.SaveAsync(comment, _context, currentUserId, targetId, currentHouseId);
 
-            var result = htmlRenderHelper.BuildPostComment(comment);
+            var result = htmlRenderHelper.BuildPostComment(comment, _context);
 
             return Json(result);
         }
