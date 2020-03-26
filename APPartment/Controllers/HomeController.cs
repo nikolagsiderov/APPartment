@@ -20,7 +20,7 @@ namespace APPartment.Controllers
     {
         #region Breadcrumbs
         private const string Default_Breadcrumb = "<i class='fas fa-home' style='font-size:20px'></i> Home";
-        private const string Settings_Breadcrumb = "<i class='fas fa-cogs' style='font-size:20px'></i> Settings";
+        private const string Settings_Breadcrumb = "<i class='fas fa-cog' style='font-size:20px'></i> Settings";
         private const string About_Breadcrumb = "<i class='fas fa-info-circle' style='font-size:20px'></i> About";
         private const string History_Breadcrumb = "<i class='fas fa-history' style='font-size:20px'></i> History";
         #endregion
