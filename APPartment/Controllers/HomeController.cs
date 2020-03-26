@@ -84,6 +84,11 @@ namespace APPartment.Controllers
             return View(homeDisplayModel);
         }
 
+        public IActionResult EnterCreateHomeOptions()
+        {
+            return View();
+        }
+
         public IActionResult Register()
         {
             return View();

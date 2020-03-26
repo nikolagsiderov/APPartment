@@ -8,54 +8,62 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>APPartment</title>
+    <title>Sign in - APPartment</title>
 
     <link rel="icon" href="~/images/APPartment_logo_official_white_favicon.ico">
-    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="~/css/user.loginregister.css" rel="stylesheet" />
+    <link href="~/css/styles.css" rel="stylesheet" />
+
+    <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.24.1/feather.min.js" crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="bg-primary">
+
     @model APPartment.Models.User
 
-    <div class="wrapper">
-        <form asp-action="Login">
-            <div class="card shadow mb-4 text-center">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">Sign in to your account</h6>
+    <div id="layoutAuthentication">
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-11">
+                            <div class="card my-5">
+                                <div class="card-body p-5 text-center">
+                                    <div class="h3 font-weight-light mb-3">Sign In</div>
+                                </div>
+                                <hr class="my-0" />
+                                <div class="card-body p-5">
+                                    <form asp-action="Login">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <div class="form-group">
+                                            <label asp-for="Username" class="control-label"></label>
+                                            <input asp-for="Username" class="form-control" />
+                                            <span asp-validation-for="Username" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label asp-for="Password" class="control-label"></label>
+                                            <input asp-for="Password" class="form-control" />
+                                            <span asp-validation-for="Password" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="submit" value="Sign in account" class="btn btn-primary" />
+                                        </div>
+                                    </form>
+                                </div>
+                                <hr class="my-0" />
+                                <div class="card-body px-5 py-4">
+                                    <div class="small text-center">New user? <a asp-action="Register" asp-controller="Account">Create an account!</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <div class="form-group">
-                        <label asp-for="Username" class="control-label"></label>
-                        <input asp-for="Username" class="form-control" />
-                        <span asp-validation-for="Username" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Password" class="control-label"></label>
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" value="Sign in account" class="btn btn-primary" />
-                    </div>
-                </div>
-                <div class="card-footer text-muted">
-                    <div>
-                        <p>Don't have an account? <a asp-action="Register" asp-controller="Account">Register</a> now!</p>
-                    </div>
-                </div>
-            </div>
-        </form>
+            </main>
+        </div>
+
+        <partial name="_Footer" />
     </div>
-
-    <!-- Bootstrap core JavaScript -->
-    <script src="~/vendor/jquery/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Core plugin JavaScript-->
-    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-    <!-- Custom scripts for all pages-->
-    <script src="~/js/sb-admin-2.min.js"></script>
+    <script src="~/js/scripts.js"></script>
 </body>
 </html>

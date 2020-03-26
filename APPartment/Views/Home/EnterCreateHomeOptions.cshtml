@@ -1,0 +1,69 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create or Join Home - APPartment</title>
+
+    <link rel="icon" href="~/images/APPartment_logo_official_white_favicon.ico">
+    <link href="~/css/styles.css" rel="stylesheet" />
+
+    <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.24.1/feather.min.js" crossorigin="anonymous"></script>
+</head>
+<body class="bg-primary">
+
+    @model APPartment.Models.User
+
+    <div id="layoutAuthentication">
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <!-- Create Home-->
+                        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-11 mt-4">
+                            <div class="card text-center h-100">
+                                <div class="card-body px-5 pt-5 d-flex flex-column">
+                                    <div>
+                                        <div class="h3 text-primary font-weight-300">Create</div>
+                                        <p class="text-muted mb-4">Create your home</p>
+                                    </div>
+                                    <div class="icons-org-create align-items-center mx-auto mt-auto"><i class="icon-users" data-feather="users"></i><i class="icon-plus fas fa-plus"></i></div>
+                                </div>
+                                <div class="card-footer bg-transparent px-5 py-4">
+                                    <div class="small text-center"><a class="btn btn-block btn-primary" asp-controller="Home" asp-action="Register">Create a new home</a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Enter Home-->
+                        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-11 mt-4">
+                            <div class="card text-center h-100">
+                                <div class="card-body px-5 pt-5 d-flex flex-column align-items-between">
+                                    <div>
+                                        <div class="h3 text-secondary font-weight-300">Enter</div>
+                                        <p class="text-muted mb-4">Enter home name and password to proceed</p>
+                                    </div>
+                                    <div class="icons-org-join align-items-center mx-auto"><i class="icon-user" data-feather="user"></i><i class="icon-arrow fas fa-long-arrow-alt-right"></i><i class="icon-users" data-feather="users"></i></div>
+                                </div>
+                                <div class="card-footer bg-transparent px-5 py-4">
+                                    <div class="small text-center"><a class="btn btn-block btn-secondary" asp-controller="Home" asp-action="Login">Enter home</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <partial name="_Footer" />
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/scripts.js"></script>
+</body>
+</html>
