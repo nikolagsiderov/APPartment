@@ -27,6 +27,7 @@ namespace APPartment.Data
         public DbSet<APPartment.Models.Hygiene> Hygienes { get; set; }
         public DbSet<APPartment.Models.Issue> Issues { get; set; }
         public DbSet<APPartment.Models.Survey> Surveys { get; set; }
+        public DbSet<APPartment.Models.Chore> Chores { get; set; }
         public DbSet<APPartment.Models.Message> Messages { get; set; }
         public DbSet<APPartment.Models.Comment> Comments { get; set; }
         public DbSet<APPartment.Models.Image> Images { get; set; }
@@ -49,7 +50,8 @@ namespace APPartment.Data
                 new ObjectType { Id = 9, Name = "Comment" },
                 new ObjectType { Id = 10, Name = "Image" },
                 new ObjectType { Id = 11, Name = "History"},
-                new ObjectType { Id = 12, Name = "Survey" }
+                new ObjectType { Id = 12, Name = "Survey" },
+                new ObjectType { Id = 13, Name = "Chore" }
             );
             modelBuilder.Entity<HistoryFunctionType>().ToTable("HistoryFunctionType").HasData(
                 new ObjectType { Id = 1, Name = "Create" },
@@ -65,6 +67,7 @@ namespace APPartment.Data
             modelBuilder.Entity<Hygiene>().ToTable("Hygiene");
             modelBuilder.Entity<Issue>().ToTable("Issue");
             modelBuilder.Entity<Survey>().ToTable("Survey");
+            modelBuilder.Entity<Chore>().ToTable("Chore");
             modelBuilder.Entity<Message>().ToTable("Message");
             modelBuilder.Entity<Comment>().ToTable("Comment");
             modelBuilder.Entity<Image>().ToTable("Image");

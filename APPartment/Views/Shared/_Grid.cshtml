@@ -82,6 +82,22 @@
 
             newModel = new APPartment.Models.Survey();
             break;
+        case "Chores":
+            titleForCheckAction = "Mark as completed";
+            titleForUncheckAction = "Mark as not completed";
+
+            checkCardBody = "Are you sure you want to mark as completed?";
+            uncheckCardBody = "Are you sure you want to mark as not completed?";
+
+            checkCardButton = "Mark completed";
+            uncheckCardButton = "Mark not completed";
+
+            status1 = "trivial";
+            status2 = "medium";
+            status3 = "high";
+
+            newModel = new APPartment.Models.Chore();
+            break;
     }
 }
 

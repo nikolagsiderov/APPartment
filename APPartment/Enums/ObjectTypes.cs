@@ -14,6 +14,7 @@
         Comment = 9, // sub-object
         Image = 10, // sub-object
         History = 11, // sub-object
-        Survey = 12
+        Survey = 12,
+        Chore = 13
     }
 }

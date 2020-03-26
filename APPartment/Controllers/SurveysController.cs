@@ -13,7 +13,7 @@ namespace APPartment.Controllers
     public class SurveysController : BaseCRUDController<Survey>
     {
         #region Breadcrumbs
-        private const string All_Breadcrumb = "<i class='fas fa-tasks' style='font-size:20px'></i> All";
+        private const string All_Breadcrumb = "<i class='fas fa-poll' style='font-size:20px'></i> Surveys";
         private const string Pending_Breadcrumb = "<i class='fas fa-pen' style='font-size:20px'></i> Pending";
         private const string Completed_Breadcrumb = "<i class='fas fa-check' style='font-size:20px'></i> Completed";
         #endregion

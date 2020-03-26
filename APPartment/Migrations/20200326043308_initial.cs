@@ -8,6 +8,25 @@ namespace APPartment.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Chore",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: false),
+                    Details = table.Column<string>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
+                    IsCompleted = table.Column<bool>(nullable: false),
+                    HouseId = table.Column<long>(nullable: true),
+                    ObjectId = table.Column<long>(nullable: false),
+                    AssignedToId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Chore", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comment",
                 columns: table => new
                 {
@@ -289,12 +308,16 @@ namespace APPartment.Migrations
                     { 9L, "Comment" },
                     { 10L, "Image" },
                     { 11L, "History" },
-                    { 12L, "Survey" }
+                    { 12L, "Survey" },
+                    { 13L, "Chore" }
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Chore");
+
             migrationBuilder.DropTable(
                 name: "Comment");
 

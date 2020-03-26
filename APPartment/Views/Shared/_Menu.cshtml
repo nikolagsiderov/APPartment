@@ -7,6 +7,7 @@
     string hygieneLink = string.Empty;
     string issuesLink = string.Empty;
     string surveysLink = string.Empty;
+    string choresLink = string.Empty;
     string settingsLink = string.Empty;
     string historyLink = string.Empty;
 
@@ -29,6 +30,10 @@
     else if (controllerName == "Surveys")
     {
         surveysLink = "active";
+    }
+    else if (controllerName == "Chores")
+    {
+        choresLink = "active";
     }
     else if (controllerName == "Home" && actionName == "Settings")
     {
@@ -57,9 +62,9 @@
                 </a>
                 <div class="collapse" id="collapseInventory" data-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" asp-controller="Inventory" asp-action="NotSupplied"><i class="fas fa-exclamation-triangle"></i> Not Supplied</a>
-                        <a class="nav-link" asp-controller="Inventory" asp-action="Supplied"><i class="fas fa-check"></i> Supplied</a>
-                        <a class="nav-link" asp-controller="Inventory" asp-action="Index"><i class="fas fa-tasks"></i> Manage</a>
+                        <a class="nav-link" asp-controller="Inventory" asp-action="NotSupplied"><i class="fas fa-exclamation-triangle"></i> &nbsp; Not Supplied</a>
+                        <a class="nav-link" asp-controller="Inventory" asp-action="Supplied"><i class="fas fa-check"></i> &nbsp; Supplied</a>
+                        <a class="nav-link" asp-controller="Inventory" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed @hygieneLink" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseHygiene" aria-expanded="false" aria-controls="collapseHygiene">
@@ -69,9 +74,9 @@
                 </a>
                 <div class="collapse" id="collapseHygiene" data-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" asp-controller="Hygiene" asp-action="DueCleaning"><i class="fas fa-exclamation-triangle"></i> Due Cleaning</a>
-                        <a class="nav-link" asp-controller="Hygiene" asp-action="Cleaned"><i class="fas fa-check"></i> Cleaned</a>
-                        <a class="nav-link" asp-controller="Hygiene" asp-action="Index"><i class="fas fa-tasks"></i> Manage</a>
+                        <a class="nav-link" asp-controller="Hygiene" asp-action="DueCleaning"><i class="fas fa-exclamation-triangle"></i> &nbsp; Due Cleaning</a>
+                        <a class="nav-link" asp-controller="Hygiene" asp-action="Cleaned"><i class="fas fa-check"></i> &nbsp; Cleaned</a>
+                        <a class="nav-link" asp-controller="Hygiene" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed @issuesLink" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseIssues" aria-expanded="false" aria-controls="collapseIssues">
@@ -81,9 +86,21 @@
                 </a>
                 <div class="collapse" id="collapseIssues" data-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" asp-controller="Issues" asp-action="Open"><i class="fas fa-exclamation-triangle"></i> Open</a>
-                        <a class="nav-link" asp-controller="Issues" asp-action="Closed"><i class="fas fa-check"></i> Closed</a>
-                        <a class="nav-link" asp-controller="Issues" asp-action="Index"><i class="fas fa-tasks"></i> Manage</a>
+                        <a class="nav-link" asp-controller="Issues" asp-action="Open"><i class="fas fa-exclamation-triangle"></i> &nbsp; Open</a>
+                        <a class="nav-link" asp-controller="Issues" asp-action="Closed"><i class="fas fa-check"></i> &nbsp; Closed</a>
+                        <a class="nav-link" asp-controller="Issues" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
+                    </nav>
+                </div>
+                <a class="nav-link collapsed @choresLink" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseChores" aria-expanded="false" aria-controls="collapseChores">
+                    <div class="nav-link-icon"><i class='fas fa-shopping-bag'></i></div>
+                    Chores &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="choresBadge"></span>
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseChores" data-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                        <a class="nav-link" asp-controller="Chores" asp-action="Mine"><i class='fas fa-user-tag'></i> &nbsp; Mine</a>
+                        <a class="nav-link" asp-controller="Chores" asp-action="Others"><i class='fas fa-user-friends'></i> &nbsp; Others</a>
+                        <a class="nav-link" asp-controller="Chores" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
                     </nav>
                 </div>
                 <div class="sidenav-menu-heading">More</div>
@@ -94,9 +111,9 @@
                 </a>
                 <div class="collapse" id="collapseSurveys" data-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" asp-controller="Surveys" asp-action="Pending"><i class="fas fa-exclamation-triangle"></i> Pending</a>
-                        <a class="nav-link" asp-controller="Surveys" asp-action="Completed"><i class="fas fa-check"></i> Completed</a>
-                        <a class="nav-link" asp-controller="Surveys" asp-action="Index"><i class="fas fa-tasks"></i> Manage</a>
+                        <a class="nav-link" asp-controller="Surveys" asp-action="Pending"><i class="fas fa-exclamation-triangle"></i> &nbsp; Pending</a>
+                        <a class="nav-link" asp-controller="Surveys" asp-action="Completed"><i class="fas fa-check"></i> &nbsp; Completed</a>
+                        <a class="nav-link" asp-controller="Surveys" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
                     </nav>
                 </div>
                 <a class="nav-link @settingsLink" asp-controller="Home" asp-action="Settings">

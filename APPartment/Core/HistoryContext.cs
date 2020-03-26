@@ -383,6 +383,73 @@ namespace APPartment.Core
                             this.SaveHistory(history, userId);
                         }
                         break;
+                    case (long)ObjectTypes.Chore:
+                        var oldChoreModel = context.Chores.AsNoTracking().Single(x => x.ObjectId == @object.ObjectId);
+                        var newChoreModel = objectModel as Chore;
+
+                        if (oldChoreModel.Name != newChoreModel.Name)
+                        {
+                            history.ColumnName = "Name";
+                            history.OldValue = oldChoreModel.Name;
+                            history.NewValue = newChoreModel.Name;
+
+                            this.SaveHistory(history, userId);
+                        }
+
+                        if (oldChoreModel.Details != newChoreModel.Details)
+                        {
+                            history = new History()
+                            {
+                                FunctionTypeId = historyFunctionType,
+                                When = now,
+                                HouseId = houseId,
+                                UserId = userId,
+                                ObjectId = @object.ObjectId
+                            };
+
+                            history.ColumnName = "Details";
+                            history.OldValue = oldChoreModel.Details;
+                            history.NewValue = newChoreModel.Details;
+
+                            this.SaveHistory(history, userId);
+                        }
+
+                        if (oldChoreModel.Status != newChoreModel.Status)
+                        {
+                            history = new History()
+                            {
+                                FunctionTypeId = historyFunctionType,
+                                When = now,
+                                HouseId = houseId,
+                                UserId = userId,
+                                ObjectId = @object.ObjectId
+                            };
+
+                            history.ColumnName = "Status";
+                            history.OldValue = oldChoreModel.Status.ToString();
+                            history.NewValue = newChoreModel.Status.ToString();
+
+                            this.SaveHistory(history, userId);
+                        }
+
+                        if (oldChoreModel.IsCompleted != newChoreModel.IsCompleted)
+                        {
+                            history = new History()
+                            {
+                                FunctionTypeId = historyFunctionType,
+                                When = now,
+                                HouseId = houseId,
+                                UserId = userId,
+                                ObjectId = @object.ObjectId
+                            };
+
+                            history.ColumnName = "IsCompleted";
+                            history.OldValue = oldChoreModel.IsCompleted.ToString();
+                            history.NewValue = newChoreModel.IsCompleted.ToString();
+
+                            this.SaveHistory(history, userId);
+                        }
+                        break;
                 }
 
                 // Child objects - Metadata
@@ -540,6 +607,14 @@ namespace APPartment.Core
                             var surveyModel = objectModel as Survey;
 
                             history.DeletedObjectName = surveyModel.Name;
+                            history.DeletedObjectObjectType = @object.ObjectTypeId;
+
+                            this.SaveHistory(history, userId);
+                            break;
+                        case (long)ObjectTypes.Chore:
+                            var choreModel = objectModel as Chore;
+
+                            history.DeletedObjectName = choreModel.Name;
                             history.DeletedObjectObjectType = @object.ObjectTypeId;
 
                             this.SaveHistory(history, userId);
