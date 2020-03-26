@@ -22,12 +22,12 @@ namespace APPartment.Utilities
         public List<string> BuildComments(List<Comment> comments, long targetId)
         {
             return comments.Where(x => x.TargetId == targetId)
-                .OrderByDescending(x => x.Id).Take(20).Select(x => $"<strong>{x.Username}</strong>: {x.Text} <br/> <strong><span style=\"font-size: x-small;\">{context.Objects.Where(y => y.ObjectId == x.ObjectId).FirstOrDefault().CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")}</span></strong>").ToList();
+                .OrderByDescending(x => x.Id).Take(20).Select(x => $"<strong>{x.Username}</strong>: {x.Text} <br/> <strong><span class=\"text-muted\" style=\"font-size: x-small;\">{context.Objects.Where(y => y.ObjectId == x.ObjectId).FirstOrDefault().CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")}</span></strong>").ToList();
         }
 
         public string BuildPostComment(Comment comment)
         {
-            return $"<strong>{comment.Username}</strong>: {comment.Text} <br/> <strong><span style=\"font-size: x-small;\">{context.Objects.Where(y => y.ObjectId == comment.ObjectId).FirstOrDefault().CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")}</span></strong>";
+            return $"<strong>{comment.Username}</strong>: {comment.Text} <br/> <strong><span class=\"text-muted\" style=\"font-size: x-small;\">{context.Objects.Where(y => y.ObjectId == comment.ObjectId).FirstOrDefault().CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")}</span></strong>";
         }
     }
 }

@@ -1,59 +1,73 @@
 ﻿@model APPartment.Models.Base.BaseObject
 
-    <form asp-action="Edit" enctype="multipart/form-data">
-        <div class="form-group">
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
-
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="Id" />
-        <input type="hidden" asp-for="IsCompleted" />
-        <input type="hidden" asp-for="HouseId" />
-        <input type="hidden" asp-for="ObjectId" />
-        <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="Name" class="control-label">Name</label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="text-danger"></span>
-                </div>
+<div class="card">
+    <div class="card-header">
+        @{
+            var header = string.Format("ID: {0}, Name: {1}", Model.ObjectId, Model.Name);
+        }
+        @header
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label asp-for="Status" class="control-label">Status</label>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="inputGroupSelect01">Options</label>
-                        </div>
-                        <select class="custom-select" asp-for="Status" id="inputGroupSelect01">
-                            <option selected>Please select status...</option>
-                            <option value="1">Trivial</option>
-                            <option value="2">Medium</option>
-                            <option value="3">High</option>
-                            <option value="4">Critical</option>
-                        </select>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IsCompleted" />
+            <input type="hidden" asp-for="HouseId" />
+            <input type="hidden" asp-for="ObjectId" />
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="Name" class="control-label">Name</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
-                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-label">Status</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                            </div>
+                            <select class="custom-select" asp-for="Status" id="inputGroupSelect01">
+                                <option selected>Please select status...</option>
+                                <option value="1">Trivial</option>
+                                <option value="2">Medium</option>
+                                <option value="3">High</option>
+                                <option value="4">Critical</option>
+                            </select>
+                        </div>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <br />
+            <br />
 
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="Details" class="control-label">Details</label>
-                    <textarea asp-for="Details" class="form-control" rows="5"></textarea>
-                    <span asp-validation-for="Details" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label asp-for="Details" class="control-label">Details</label>
+                        <textarea asp-for="Details" class="form-control" rows="5"></textarea>
+                        <span asp-validation-for="Details" class="text-danger"></span>
+                    </div>
                 </div>
             </div>
-        </div>
-    </form>
+        </form>
+    </div>
+</div>
 
 <br />
 
-@Html.Partial("_ObjectMetadataTab", Model)
+<div class="card">
+    <div class="card-body">
+        @await Html.PartialAsync("_ObjectMetadataTab", Model)
+    </div>
+</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

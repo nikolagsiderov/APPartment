@@ -5,33 +5,24 @@
 
 @if (Context.Session.GetString("UserId") != null)
 {
-    <a class="dropdown-item" href="#">
-        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-        Profile
-    </a>
-    <a class="dropdown-item" href="#">
-        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-        Settings
-    </a>
-    <a class="dropdown-item" href="#">
-        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-        Activity Log
-    </a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
-        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-        Logout
-    </a>
-}
-else
-{
-    <a class="dropdown-item" asp-controller="Account" asp-action="Register">
-        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-        Register
-    </a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" asp-controller="Account" asp-action="Login">
-        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-        Login
-    </a>
+    <li class="nav-item dropdown no-caret mr-3 dropdown-user">
+        <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" src="~/images/user.png" /></a>
+        <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+            <h6 class="dropdown-header d-flex align-items-center">
+                <img class="dropdown-user-img" src="~/images/user.png" />
+                <div class="dropdown-user-details">
+                    <div class="dropdown-user-details-name">@Context.Session.GetString("Username")</div>
+                </div>
+            </h6>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#!">
+                <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
+                Account (not implemented)
+            </a>
+            <a class="dropdown-item" asp-controller="Account" asp-action="Logout">
+                <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
+                Logout
+            </a>
+        </div>
+    </li>
 }

@@ -13,64 +13,49 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
 
-    <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
-    <link href="~/css/status-dots.css" rel="stylesheet" />
+    <link href="~/css/styles.css" rel="stylesheet">
     <link href="~/css/dropzone.min.css" rel="stylesheet" />
     <link href="~/css/layout.custom.css" rel="stylesheet" />
 
     <link href="~/vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
     <link href="~/css/jquery.fancybox.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.24.1/feather.min.js" crossorigin="anonymous"></script>
 
     @RenderSection("Scripts", required: false)
 </head>
-<body id="page-top">
-    <div id="wrapper">
-
-       @Html.Partial("_Menu")
-
-        <!-- /#sidebar-wrapper -->
-        <!-- Page Content -->
-        <div id="content-wrapper" class="d-flex flex-column">
-            <div id="content">
-
-                @Html.Partial("_Navigation")
-
-                <!-- Page Content -->
-                <breadcrumb></breadcrumb>
-
-                <div class="container-fluid">
-                    @RenderBody()
-                    <hr />
-                    
-                    @Html.Partial("_Footer")
+<body id="nav-fixed">
+    <partial name="_Navigation" />
+    <div id="layoutSidenav">
+        <partial name="_Menu" />
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="page-header pb-10 page-header-dark bg-gradient-primary-to-secondary">
+                    <div class="container-fluid">
+                        <div class="page-header-content">
+                            <breadcrumb></breadcrumb>
+                        </div>
+                    </div>
                 </div>
-                <!-- End of page content -->
-
-            </div>
+                <div class="container-fluid mt-n15">
+                    @RenderBody()
+                </div>
+            </main>
+            <partial name="_Footer" />
         </div>
-        <!-- /#page-content-wrapper -->
-
     </div>
 
-    @Html.Partial("_SetHomeStatus")
+    <partial name="_SetHomeStatus" />
 
-    <!-- /#wrapper -->
-    <!-- Bootstrap core JavaScript -->
     <script src="~/vendor/jquery/jquery.min.js"></script>
     <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="~/js/scripts.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="~/js/sb-admin-2.min.js"></script>
+    <script src="~/vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <script src="~/vendor/datatables/jquery.dataTables.min.js"></script>
     <script src="~/vendor/datatables/dataTables.bootstrap4.min.js"></script>
-
     <script src="~/js/jquery.fancybox.min.js"></script>
-
-    <!-- DropzoneJS -->
     <script src="~/js/dropzone.min.js"></script>
 
     <script src="~/js/layout.custom.js"></script>

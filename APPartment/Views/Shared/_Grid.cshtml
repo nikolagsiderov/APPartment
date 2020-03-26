@@ -10,6 +10,9 @@
     var uncheckCardBody = string.Empty;
     var checkCardButton = string.Empty;
     var uncheckCardButton = string.Empty;
+    var status1 = string.Empty;
+    var status2 = string.Empty;
+    var status3 = string.Empty;
 
     var newModel = new object();
 
@@ -25,6 +28,10 @@
             checkCardButton = "Mark supplied";
             uncheckCardButton = "Mark not supplied";
 
+            status1 = "well supplied";
+            status2 = "supplied";
+            status3 = "low supply";
+
             newModel = new APPartment.Models.Inventory();
             break;
         case "Hygiene":
@@ -36,6 +43,10 @@
 
             checkCardButton = "Mark cleaned";
             uncheckCardButton = "Mark not cleaned";
+
+            status1 = "well cleaned";
+            status2 = "clean";
+            status3 = "not clean";
 
             newModel = new APPartment.Models.Hygiene();
             break;
@@ -49,6 +60,10 @@
             checkCardButton = "Close";
             uncheckCardButton = "Open";
 
+            status1 = "not present";
+            status2 = "present";
+            status3 = "high priority";
+
             newModel = new APPartment.Models.Issue();
             break;
         case "Surveys":
@@ -60,6 +75,10 @@
 
             checkCardButton = "Mark completed";
             uncheckCardButton = "Mark pending";
+
+            status1 = "completed";
+            status2 = "open";
+            status3 = "pending";
 
             newModel = new APPartment.Models.Survey();
             break;
@@ -76,7 +95,7 @@
         {
             <div class="row">
                 <div class="col-md-1">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createView"><i class="fas fa-plus"></i> Add</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createView"><i class="fas fa-plus"></i> &nbsp; Add</button>
                 </div>
             </div>
 
@@ -140,15 +159,19 @@
                             <td class="text-center">
                                 @if (item.Status == 1)
                                 {
-                                    <span class="dot-success"></span>
+                                    <span class="badge badge-success">@status1</span>
                                 }
-                                else if (item.Status == 2 || item.Status == 3)
+                                else if (item.Status == 2)
                                 {
-                                    <span class="dot-warning"></span>
+                                    <span class="badge badge-warning">@status2</span>
+                                }
+                                else if (item.Status == 3)
+                                {
+                                    <span class="badge badge-danger">@status3</span>
                                 }
                                 else
                                 {
-                                    <span class="dot-danger"></span>
+                                    <span class="badge badge-danger">critical</span>
                                 }
                             </td>
                             <td>

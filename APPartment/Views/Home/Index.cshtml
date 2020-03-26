@@ -21,7 +21,7 @@
                 {
                     <p class="card-text">No items in the inventory.</p>
                 }
-                <a asp-controller="Inventory" asp-action="Index" class="btn btn-primary"><i class="fas fa-link"></i> Go to inventory</a>
+                <a asp-controller="Inventory" asp-action="Index" class="btn btn-primary"><i class="fas fa-link"></i> &nbsp; Go to inventory</a>
             </div>
             <div class="card-footer text-muted">
                 @if (widgetObjects[0].Name != null)
@@ -52,7 +52,7 @@
                     <p class="card-text">No items in the hygiene.</p>
                 }
 
-                <a asp-controller="Hygiene" asp-action="Index" class="btn btn-primary"><i class="fas fa-link"></i> Go to hygiene</a>
+                <a asp-controller="Hygiene" asp-action="Index" class="btn btn-primary"><i class="fas fa-link"></i> &nbsp; Go to hygiene</a>
             </div>
             <div class="card-footer text-muted">
                 @if (widgetObjects[1].Name != null)
@@ -82,7 +82,7 @@
                 {
                     <p class="card-text">No issues present.</p>
                 }
-                <a asp-controller="Issues" asp-action="Index" class="btn btn-primary"><i class="fas fa-link"></i> Go to issues</a>
+                <a asp-controller="Issues" asp-action="Index" class="btn btn-primary"><i class="fas fa-link"></i> &nbsp; Go to issues</a>
             </div>
             <div class="card-footer text-muted">
                 @if (widgetObjects[2].Name != null)
@@ -115,7 +115,7 @@
                     <div class="row">&nbsp;</div>
                     <div class="row">
                         <div class="col-6">
-                            <button type="submit" class="btn btn-primary" id="sendButton"><i class="fas fa-reply"></i> Send</button>
+                            <button type="submit" class="btn btn-primary" id="sendButton"><i class="fas fa-reply"></i> &nbsp; Send</button>
                         </div>
                     </div>
                 </div>
@@ -138,7 +138,7 @@
         </div>
     </div>
     <div class="col-md-6">
-        <div class="card border-left-danger shadow h-100 py-2">
+        <div class="card shadow">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
@@ -163,6 +163,9 @@
         </div>
     </div>
 </div>
+
+<br />
+
 <div class="row">
     <div class="col-md-6">
         <div class="col-lg-6 mb-4" style="font-weight: bold;" id="home-status-card-div">

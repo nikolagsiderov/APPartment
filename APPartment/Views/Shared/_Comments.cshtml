@@ -12,7 +12,7 @@
 </div>
 <br />
 <div class="row">
-    <div class="col-md-1">
+    <div class="col-md-2">
         <button class="btn btn-primary btn-sm" id="commentButton"></button>
     </div>
 </div>
@@ -57,7 +57,7 @@ $("#commentButton").click(function () {
 
                 document.getElementById("commentTextbox").value = "";
                 $('#commentButton').prop('disabled', true);
-                $('#commentButton').html('<i class="fas fa-comment-slash"></i> Comment');
+                $('#commentButton').html('<i class="fas fa-comment-slash"></i> &nbsp; Comment');
             },
             error: function (req, status, error) {
                 alert(error);
