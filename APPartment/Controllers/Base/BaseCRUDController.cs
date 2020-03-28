@@ -8,6 +8,7 @@ using APPartment.Models;
 using APPartment.Models.Declaration;
 using APPartment.Services;
 using APPartment.Utilities;
+using APPartment.ViewResults;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -70,7 +71,7 @@ namespace APPartment.Controllers.Base
         {
             if (id == null)
             {
-                return NotFound();
+                return new Error404NotFoundViewResult();
             }
 
             var model = await _context.Set<T>()
@@ -78,7 +79,7 @@ namespace APPartment.Controllers.Base
 
             if (model == null)
             {
-                return NotFound();
+                return new Error404NotFoundViewResult();
             }
 
             model.Comments = GetComments(model.ObjectId);
@@ -112,14 +113,14 @@ namespace APPartment.Controllers.Base
         {
             if (id == null)
             {
-                return NotFound();
+                return new Error404NotFoundViewResult();
             }
 
             var model = await _context.Set<T>().FindAsync(id);
 
             if (model == null)
             {
-                return NotFound();
+                return new Error404NotFoundViewResult();
             }
 
             model.Comments = GetComments(model.ObjectId);
@@ -138,7 +139,7 @@ namespace APPartment.Controllers.Base
         {
             if (id != model.Id)
             {
-                return NotFound();
+                return new Error404NotFoundViewResult();
             }
 
             if (ModelState.IsValid)
@@ -154,7 +155,7 @@ namespace APPartment.Controllers.Base
                 {
                     if (!baseService.ObjectExists(model.Id))
                     {
-                        return NotFound();
+                        return new Error404NotFoundViewResult();
                     }
                     else
                     {
@@ -179,7 +180,7 @@ namespace APPartment.Controllers.Base
 
             if (id == null)
             {
-                return NotFound();
+                return new Error404NotFoundViewResult();
             }
 
             var model = await _context.Set<T>()
@@ -187,7 +188,7 @@ namespace APPartment.Controllers.Base
 
             if (model == null)
             {
-                return NotFound();
+                return new Error404NotFoundViewResult();
             }
 
             model.IsCompleted = true;
@@ -204,7 +205,7 @@ namespace APPartment.Controllers.Base
 
             if (id == null)
             {
-                return NotFound();
+                return new Error404NotFoundViewResult();
             }
 
             var model = await _context.Set<T>()
@@ -212,7 +213,7 @@ namespace APPartment.Controllers.Base
 
             if (model == null)
             {
-                return NotFound();
+                return new Error404NotFoundViewResult();
             }
 
             model.IsCompleted = false;
@@ -229,7 +230,7 @@ namespace APPartment.Controllers.Base
 
             if (id == null)
             {
-                return NotFound();
+                return new Error404NotFoundViewResult();
             }
 
             var model = await _context.Set<T>()
@@ -237,7 +238,7 @@ namespace APPartment.Controllers.Base
 
             if (model == null)
             {
-                return NotFound();
+                return new Error404NotFoundViewResult();
             }
 
             await dataContext.DeleteAsync(model, currentUserId, null, currentHouseId);

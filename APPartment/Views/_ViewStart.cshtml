@@ -2,7 +2,7 @@
     var controller = this.ViewContext.RouteData.Values["controller"].ToString();
     var action = this.ViewContext.RouteData.Values["action"].ToString();
 
-    if (controller == "Home" && (action == "Settings" || action == "History"))
+    if (controller == "Home" && (action == "Settings" || action == "History" || action == "About"))
     {
         ViewBag.Title = $"APPartment: {action}";
     }
