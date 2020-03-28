@@ -51,7 +51,7 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Chores - Others";
             ViewData["Module"] = "Chores";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = GetStatuses(typeof(Chore));
+            ViewData["Statuses"] = baseService.GetStatuses(typeof(Chore));
 
             return View("_Grid", modelObjects);
         }
@@ -72,7 +72,7 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Chores - Mine";
             ViewData["Module"] = "Chores";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = GetStatuses(typeof(Chore));
+            ViewData["Statuses"] = baseService.GetStatuses(typeof(Chore));
 
             return View("_Grid", modelObjects);
         }

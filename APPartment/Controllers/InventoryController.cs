@@ -51,7 +51,7 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Inventory - Supplied";
             ViewData["Module"] = "Inventory";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = GetStatuses(typeof(Inventory));
+            ViewData["Statuses"] = baseService.GetStatuses(typeof(Inventory));
 
             return View("_Grid", modelObjects);
         }
@@ -71,7 +71,7 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Inventory - Not Supplied";
             ViewData["Module"] = "Inventory";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = GetStatuses(typeof(Inventory));
+            ViewData["Statuses"] = baseService.GetStatuses(typeof(Inventory));
 
             return View("_Grid", modelObjects);
         }

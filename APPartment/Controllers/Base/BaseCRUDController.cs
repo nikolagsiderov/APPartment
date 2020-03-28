@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using APPartment.Core;
 using APPartment.Data;
-using APPartment.Enums;
 using APPartment.Models;
 using APPartment.Models.Declaration;
 using APPartment.Services;
@@ -32,6 +31,7 @@ namespace APPartment.Controllers.Base
         private DataContext<Comment> commentDataContext;
         private DataContext<Image> imageDataContext;
         private HistoryHtmlBuilder historyHtmlBuilder;
+        public BaseService<T> baseService;
         #endregion
 
         public BaseCRUDController(DataAccessContext context)
@@ -43,6 +43,7 @@ namespace APPartment.Controllers.Base
             dataContext = new DataContext<T>(_context);
             commentDataContext = new DataContext<Comment>(_context);
             historyHtmlBuilder = new HistoryHtmlBuilder(_context);
+            baseService = new BaseService<T>(_context);
         }
 
         #region Actions
@@ -59,7 +60,7 @@ namespace APPartment.Controllers.Base
             var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId).ToListAsync();
 
             ViewData["Manage"] = true;
-            ViewData["Statuses"] = GetStatuses(typeof(T));
+            ViewData["Statuses"] = baseService.GetStatuses(typeof(T));
 
             return View("_Grid", modelObjects);
         }
@@ -84,7 +85,7 @@ namespace APPartment.Controllers.Base
             model.Images = GetImages(model.ObjectId);
             model.History = GetHistory(model.ObjectId);
 
-            ViewData["Statuses"] = GetStatuses(typeof(T));
+            ViewData["Statuses"] = baseService.GetStatuses(typeof(T));
 
             return View("_Details", model);
         }
@@ -125,7 +126,7 @@ namespace APPartment.Controllers.Base
             model.Images = GetImages(model.ObjectId);
             model.History = GetHistory(model.ObjectId);
 
-            ViewData["Statuses"] = GetStatuses(typeof(T));
+            ViewData["Statuses"] = baseService.GetStatuses(typeof(T));
 
             return View("_Edit", model);
         }
@@ -151,7 +152,7 @@ namespace APPartment.Controllers.Base
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ObjectExists(model.Id))
+                    if (!baseService.ObjectExists(model.Id))
                     {
                         return NotFound();
                     }
@@ -329,54 +330,7 @@ namespace APPartment.Controllers.Base
         }
         #endregion
 
-        private bool ObjectExists(long id)
-        {
-            return _context.Set<T>().Any(e => e.Id == id);
-        }
-
         public virtual void PopulateViewData()
         { }
-
-        public string GetStatuses(Type objectType)
-        {
-            var module = objectType.ToString().Split('.').Last();
-
-            var statuses = new List<string>();
-
-            switch (module)
-            {
-                case "Inventory":
-                    statuses.Add(BaseObjectStatus.Inventory1);
-                    statuses.Add(BaseObjectStatus.Inventory2);
-                    statuses.Add(BaseObjectStatus.Inventory3);
-                    break;
-                case "Hygiene":
-                    statuses.Add(BaseObjectStatus.Hygiene1);
-                    statuses.Add(BaseObjectStatus.Hygiene2);
-                    statuses.Add(BaseObjectStatus.Hygiene3);
-                    break;
-                case "Issue":
-                    statuses.Add(BaseObjectStatus.Issues1);
-                    statuses.Add(BaseObjectStatus.Issues2);
-                    statuses.Add(BaseObjectStatus.Issues3);
-                    break;
-                case "Chore":
-                    statuses.Add(BaseObjectStatus.Chores1);
-                    statuses.Add(BaseObjectStatus.Chores2);
-                    statuses.Add(BaseObjectStatus.Chores3);
-                    break;
-                case "Survey":
-                    statuses.Add(BaseObjectStatus.Surveys1);
-                    statuses.Add(BaseObjectStatus.Surveys2);
-                    statuses.Add(BaseObjectStatus.Surveys3);
-                    break;
-            }
-
-            statuses.Add(BaseObjectStatus.Critical);
-
-            var result = string.Join(",", statuses);
-
-            return result;
-        }
     }
 }

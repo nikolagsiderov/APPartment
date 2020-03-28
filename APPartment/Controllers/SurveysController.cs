@@ -50,7 +50,7 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Surveys - Completed";
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = GetStatuses(typeof(Survey));
+            ViewData["Statuses"] = baseService.GetStatuses(typeof(Survey));
 
             return View("_Grid", modelObjects);
         }
@@ -70,7 +70,7 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Surveys - Pending";
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = GetStatuses(typeof(Survey));
+            ViewData["Statuses"] = baseService.GetStatuses(typeof(Survey));
 
             return View("_Grid", modelObjects);
         }

@@ -51,7 +51,7 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Issues - Closed";
             ViewData["Module"] = "Issues";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = GetStatuses(typeof(Issue));
+            ViewData["Statuses"] = baseService.GetStatuses(typeof(Issue));
 
             return View("_Grid", modelObjects);
         }
@@ -71,7 +71,7 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Issues - Open";
             ViewData["Module"] = "Issues";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = GetStatuses(typeof(Issue));
+            ViewData["Statuses"] = baseService.GetStatuses(typeof(Issue));
 
             return View("_Grid", modelObjects);
         }

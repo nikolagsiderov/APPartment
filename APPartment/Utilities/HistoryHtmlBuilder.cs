@@ -54,42 +54,46 @@ namespace APPartment.Utilities
                         switch (subObjectType)
                         {
                             case (int)ObjectTypes.Comment:
+                                historyEventString.Append("Posted a <strong>comment</strong> in object ");
+
                                 switch (parentObjectTypeId)
                                 {
                                     case (int)ObjectTypes.Inventory:
                                         var theInventory = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                        historyEventString.Append(string.Format("Posted a <strong>comment</strong> in object <strong>[ID: {0}, Name: {1}]</strong>.", theInventory.ObjectId, theInventory.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong>.", theInventory.ObjectId, theInventory.Name));
                                         break;
                                     case (int)ObjectTypes.Hygiene:
                                         var theHygiene = context.Hygienes.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                        historyEventString.Append(string.Format("Posted a <strong>comment</strong> in object <strong>[ID: {0}, Name: {1}]</strong>.", theHygiene.ObjectId, theHygiene.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong>.", theHygiene.ObjectId, theHygiene.Name));
                                         break;
                                     case (int)ObjectTypes.Issue:
                                         var theIssue = context.Issues.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                        historyEventString.Append(string.Format("Posted a <strong>comment</strong> in object <strong>[ID: {0}, Name: {1}]</strong>.", theIssue.ObjectId, theIssue.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong>.", theIssue.ObjectId, theIssue.Name));
                                         break;
                                 }
                                 break;
                             case (int)ObjectTypes.Image:
+                                historyEventString.Append("Attached an <strong>image</strong> in object ");
+
                                 switch (parentObjectTypeId)
                                 {
                                     case (int)ObjectTypes.Inventory:
                                         var theInventory = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                        historyEventString.Append(string.Format("Attached an <strong>image</strong> in object <strong>[ID: {0}, Name: {1}]</strong>.", theInventory.ObjectId, theInventory.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong>.", theInventory.ObjectId, theInventory.Name));
                                         break;
                                     case (int)ObjectTypes.Hygiene:
                                         var theHygiene = context.Hygienes.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                        historyEventString.Append(string.Format("Attached an <strong>image</strong> in object <strong>[ID: {0}, Name: {1}]</strong>.", theHygiene.ObjectId, theHygiene.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong>.", theHygiene.ObjectId, theHygiene.Name));
                                         break;
                                     case (int)ObjectTypes.Issue:
                                         var theIssue = context.Issues.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                        historyEventString.Append(string.Format("Attached an <strong>image</strong> in object <strong>[ID: {0}, Name: {1}]</strong>.", theIssue.ObjectId, theIssue.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong>.", theIssue.ObjectId, theIssue.Name));
                                         break;
                                 }
                                 break;
@@ -98,22 +102,24 @@ namespace APPartment.Utilities
                 }
                 else
                 {
+                    historyEventString.Append("Created an object ");
+
                     switch (parentObjectType)
                     {
                         case (int)ObjectTypes.Inventory:
                             var theInventoryObject = context.Inventories.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault();
 
-                            historyEventString.Append(string.Format("Created an object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                            historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
                             break;
                         case (int)ObjectTypes.Hygiene:
                             var theHygieneObject = context.Hygienes.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault();
 
-                            historyEventString.Append(string.Format("Created an object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                            historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
                             break;
                         case (int)ObjectTypes.Issue:
                             var theIssueObject = context.Issues.Where(x => x.ObjectId == historyEvent.ObjectId).FirstOrDefault();
 
-                            historyEventString.Append(string.Format("Created an object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                            historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
                             break;
                     }
                 }
@@ -144,30 +150,34 @@ namespace APPartment.Utilities
                             {
                                 var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
+                                historyEventString.Append("Marked an object ");
+
                                 if (wasMarkedAsCompleted)
                                 {
-                                    historyEventString.Append(string.Format("Marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>supplied</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                    historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>supplied</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
                                 }
                                 else
                                 {
-                                    historyEventString.Append(string.Format("Marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>not supplied</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                    historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>not supplied</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
                                 }
                             }
                             else if (historyEvent.ColumnName == "Status")
                             {
+                                historyEventString.Append("Set status as ");
+
                                 switch (historyEvent.NewValue)
                                 {
                                     case "1":
-                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory1));
+                                        historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory1));
                                         break;
                                     case "2":
-                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory2));
+                                        historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory2));
                                         break;
                                     case "3":
-                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory3));
+                                        historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory3));
                                         break;
                                     case "4":
-                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Critical));
+                                        historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Critical));
                                         break;
                                 }
                             }
@@ -184,30 +194,34 @@ namespace APPartment.Utilities
                             {
                                 var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
+                                historyEventString.Append("Marked an object ");
+
                                 if (wasMarkedAsCompleted)
                                 {
-                                    historyEventString.Append(string.Format("Marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>cleaned</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                    historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>cleaned</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
                                 }
                                 else
                                 {
-                                    historyEventString.Append(string.Format("Marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>due cleaning</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                    historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>due cleaning</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
                                 }
                             }
                             else if (historyEvent.ColumnName == "Status")
                             {
+                                historyEventString.Append("Set status as ");
+
                                 switch (historyEvent.NewValue)
                                 {
                                     case "1":
-                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene1));
+                                        historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene1));
                                         break;
                                     case "2":
-                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene2));
+                                        historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene2));
                                         break;
                                     case "3":
-                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene3));
+                                        historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene3));
                                         break;
                                     case "4":
-                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Critical));
+                                        historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Critical));
                                         break;
                                 }
                             }
@@ -224,30 +238,34 @@ namespace APPartment.Utilities
                             {
                                 var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
+                                historyEventString.Append("Marked an object ");
+
                                 if (wasMarkedAsCompleted)
                                 {
-                                    historyEventString.Append(string.Format("Marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>closed</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                    historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>closed</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
                                 }
                                 else
                                 {
-                                    historyEventString.Append(string.Format("Marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>open</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                    historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>open</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
                                 }
                             }
                             else if (historyEvent.ColumnName == "Status")
                             {
+                                historyEventString.Append("Set status as ");
+
                                 switch (historyEvent.NewValue)
                                 {
                                     case "1":
-                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues1));
+                                        historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues1));
                                         break;
                                     case "2":
-                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues2));
+                                        historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues2));
                                         break;
                                     case "3":
-                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues3));
+                                        historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues3));
                                         break;
                                     case "4":
-                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Critical));
+                                        historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Critical));
                                         break;
                                 }
                             }
@@ -332,30 +350,34 @@ namespace APPartment.Utilities
                                 {
                                     var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
+                                    historyEventString.Append(" marked as ");
+
                                     if (wasMarkedAsCompleted)
                                     {
-                                        historyEventString.Append(" marked as <strong>supplied</strong>.");
+                                        historyEventString.Append("<strong>supplied</strong>.");
                                     }
                                     else
                                     {
-                                        historyEventString.Append(" marked as <strong>not supplied</strong>.");
+                                        historyEventString.Append("<strong>not supplied</strong>.");
                                     }
                                 }
                                 else if (historyEvent.ColumnName == "Status")
                                 {
+                                    historyEventString.Append(" set status as ");
+
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Inventory1}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Inventory1}</strong>.");
                                             break;
                                         case "2":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Inventory2}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Inventory2}</strong>.");
                                             break;
                                         case "3":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Inventory3}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Inventory3}</strong>.");
                                             break;
                                         case "4":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Critical}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Critical}</strong>.");
                                             break;
                                     }
                                 }
@@ -370,30 +392,34 @@ namespace APPartment.Utilities
                                 {
                                     var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
+                                    historyEventString.Append(" marked as ");
+
                                     if (wasMarkedAsCompleted)
                                     {
-                                        historyEventString.Append(" marked as <strong>cleaned</strong>.");
+                                        historyEventString.Append("<strong>cleaned</strong>.");
                                     }
                                     else
                                     {
-                                        historyEventString.Append(" marked as <strong>due cleaning</strong>.");
+                                        historyEventString.Append("<strong>due cleaning</strong>.");
                                     }
                                 }
                                 else if (historyEvent.ColumnName == "Status")
                                 {
+                                    historyEventString.Append(" set status as ");
+
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Hygiene1}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Hygiene1}</strong>.");
                                             break;
                                         case "2":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Hygiene2}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Hygiene2}</strong>.");
                                             break;
                                         case "3":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Hygiene3}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Hygiene3}</strong>.");
                                             break;
                                         case "4":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Critical}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Critical}</strong>.");
                                             break;
                                     }
                                 }
@@ -408,30 +434,34 @@ namespace APPartment.Utilities
                                 {
                                     var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
+                                    historyEventString.Append(" marked as ");
+
                                     if (wasMarkedAsCompleted)
                                     {
-                                        historyEventString.Append(" marked as <strong>closed</strong>.");
+                                        historyEventString.Append("<strong>closed</strong>.");
                                     }
                                     else
                                     {
-                                        historyEventString.Append(" marked as <strong>open</strong>.");
+                                        historyEventString.Append("<strong>open</strong>.");
                                     }
                                 }
                                 else if (historyEvent.ColumnName == "Status")
                                 {
+                                    historyEventString.Append(" set status as ");
+
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Issues1}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Issues1}</strong>.");
                                             break;
                                         case "2":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Issues2}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Issues2}</strong>.");
                                             break;
                                         case "3":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Issues3}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Issues3}</strong>.");
                                             break;
                                         case "4":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Critical}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Critical}</strong>.");
                                             break;
                                     }
                                 }
@@ -446,30 +476,34 @@ namespace APPartment.Utilities
                                 {
                                     var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
+                                    historyEventString.Append(" marked as ");
+
                                     if (wasMarkedAsCompleted)
                                     {
-                                        historyEventString.Append(" marked as <strong>completed</strong>.");
+                                        historyEventString.Append("<strong>completed</strong>.");
                                     }
                                     else
                                     {
-                                        historyEventString.Append(" marked as <strong>pending</strong>.");
+                                        historyEventString.Append("<strong>pending</strong>.");
                                     }
                                 }
                                 else if (historyEvent.ColumnName == "Status")
                                 {
+                                    historyEventString.Append(" set status as ");
+
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Surveys1}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Surveys1}</strong>.");
                                             break;
                                         case "2":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Surveys2}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Surveys2}</strong>.");
                                             break;
                                         case "3":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Surveys3}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Surveys3}</strong>.");
                                             break;
                                         case "4":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Critical}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Critical}</strong>.");
                                             break;
                                     }
                                 }
@@ -484,30 +518,34 @@ namespace APPartment.Utilities
                                 {
                                     var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
+                                    historyEventString.Append(" marked as ");
+
                                     if (wasMarkedAsCompleted)
                                     {
-                                        historyEventString.Append(" marked as <strong>completed</strong>.");
+                                        historyEventString.Append("<strong>completed</strong>.");
                                     }
                                     else
                                     {
-                                        historyEventString.Append(" marked as <strong>pending</strong>.");
+                                        historyEventString.Append("<strong>pending</strong>.");
                                     }
                                 }
                                 else if (historyEvent.ColumnName == "Status")
                                 {
+                                    historyEventString.Append(" set status as ");
+
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Chores1}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Chores1}</strong>.");
                                             break;
                                         case "2":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Chores2}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Chores2}</strong>.");
                                             break;
                                         case "3":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Chores3}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Chores3}</strong>.");
                                             break;
                                         case "4":
-                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Critical}</strong>.");
+                                            historyEventString.Append($"<strong>{BaseObjectStatus.Critical}</strong>.");
                                             break;
                                     }
                                 }
@@ -524,13 +562,15 @@ namespace APPartment.Utilities
                 {
                     if (isSubObject)
                     {
+                        historyEventString.Append(" <strong>deleted</strong> ");
+
                         if (objectType == (int)ObjectTypes.Comment)
                         {
-                            historyEventString.Append(" <strong>deleted</strong> a comment.");
+                            historyEventString.Append("a comment.");
                         }
                         else if (objectType == (int)ObjectTypes.Image)
                         {
-                            historyEventString.Append(" <strong>deleted</strong> an image.");
+                            historyEventString.Append("an image.");
                         }
                     }
                 }
@@ -585,62 +625,66 @@ namespace APPartment.Utilities
                             switch (subObjectType)
                             {
                                 case (int)ObjectTypes.Comment:
+                                    historyEventString.Append(" posted a <strong>comment</strong> in object ");
+
                                     switch (parentObjectTypeId)
                                     {
                                         case (int)ObjectTypes.Inventory:
                                             var theInventory = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                            historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventory.ObjectId, theInventory.Name));
+                                            historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventory.ObjectId, theInventory.Name));
                                             break;
                                         case (int)ObjectTypes.Hygiene:
                                             var theHygiene = context.Hygienes.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                            historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygiene.ObjectId, theHygiene.Name));
+                                            historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygiene.ObjectId, theHygiene.Name));
                                             break;
                                         case (int)ObjectTypes.Issue:
                                             var theIssue = context.Issues.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                            historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssue.ObjectId, theIssue.Name));
+                                            historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssue.ObjectId, theIssue.Name));
                                             break;
                                         case (int)ObjectTypes.Survey:
                                             var theSurvey = context.Surveys.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                            historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurvey.ObjectId, theSurvey.Name));
+                                            historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurvey.ObjectId, theSurvey.Name));
                                             break;
                                         case (int)ObjectTypes.Chore:
                                             var theChore = context.Chores.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                            historyEventString.Append(string.Format(" posted a <strong>comment</strong> in object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChore.ObjectId, theChore.Name));
+                                            historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChore.ObjectId, theChore.Name));
                                             break;
                                     }
                                     break;
                                 case (int)ObjectTypes.Image:
+                                    historyEventString.Append(" attached an <strong>image</strong> in object ");
+
                                     switch (parentObjectTypeId)
                                     {
                                         case (int)ObjectTypes.Inventory:
                                             var theInventory = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                            historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventory.ObjectId, theInventory.Name));
+                                            historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventory.ObjectId, theInventory.Name));
                                             break;
                                         case (int)ObjectTypes.Hygiene:
                                             var theHygiene = context.Hygienes.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                            historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygiene.ObjectId, theHygiene.Name));
+                                            historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygiene.ObjectId, theHygiene.Name));
                                             break;
                                         case (int)ObjectTypes.Issue:
                                             var theIssue = context.Issues.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                            historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssue.ObjectId, theIssue.Name));
+                                            historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssue.ObjectId, theIssue.Name));
                                             break;
                                         case (int)ObjectTypes.Survey:
                                             var theSurvey = context.Surveys.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                            historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurvey.ObjectId, theSurvey.Name));
+                                            historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurvey.ObjectId, theSurvey.Name));
                                             break;
                                         case (int)ObjectTypes.Chore:
                                             var theChore = context.Chores.Where(x => x.ObjectId == historyEvent.TargetId).FirstOrDefault();
 
-                                            historyEventString.Append(string.Format(" attached an <strong>image</strong> in object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChore.ObjectId, theChore.Name));
+                                            historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChore.ObjectId, theChore.Name));
                                             break;
                                     }
                                     break;
@@ -758,30 +802,34 @@ namespace APPartment.Utilities
                                 {
                                     var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
+                                    historyEventString.Append(" marked an object ");
+
                                     if (wasMarkedAsCompleted)
                                     {
-                                        historyEventString.Append(string.Format(" marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>supplied</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>supplied</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name));
                                     }
                                     else
                                     {
-                                        historyEventString.Append(string.Format(" marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>not supplied</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>not supplied</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name));
                                     }
                                 }
                                 else if (historyEvent.ColumnName == "Status")
                                 {
+                                    historyEventString.Append(" set status as ");
+
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory1));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory1));
                                             break;
                                         case "2":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory2));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory2));
                                             break;
                                         case "3":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory3));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory3));
                                             break;
                                         case "4":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Critical));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Critical));
                                             break;
                                     }
                                 }
@@ -798,30 +846,34 @@ namespace APPartment.Utilities
                                 {
                                     var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
+                                    historyEventString.Append(" marked an object ");
+
                                     if (wasMarkedAsCompleted)
                                     {
-                                        historyEventString.Append(string.Format(" marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>cleaned</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>cleaned</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name));
                                     }
                                     else
                                     {
-                                        historyEventString.Append(string.Format(" marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>due cleaning</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>due cleaning</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name));
                                     }
                                 }
                                 else if (historyEvent.ColumnName == "Status")
                                 {
+                                    historyEventString.Append(" set status as ");
+
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene1));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene1));
                                             break;
                                         case "2":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene2));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene2));
                                             break;
                                         case "3":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene3));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene3));
                                             break;
                                         case "4":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Critical));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Critical));
                                             break;
                                     }
                                 }
@@ -838,30 +890,34 @@ namespace APPartment.Utilities
                                 {
                                     var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
+                                    historyEventString.Append(" marked an object ");
+
                                     if (wasMarkedAsCompleted)
                                     {
-                                        historyEventString.Append(string.Format(" marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>closed</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>closed</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name));
                                     }
                                     else
                                     {
-                                        historyEventString.Append(string.Format(" marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>open</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>open</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name));
                                     }
                                 }
                                 else if (historyEvent.ColumnName == "Status")
                                 {
+                                    historyEventString.Append(" set status as ");
+
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues1));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues1));
                                             break;
                                         case "2":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues2));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues2));
                                             break;
                                         case "3":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues3));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues3));
                                             break;
                                         case "4":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Critical));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Critical));
                                             break;
                                     }
                                 }
@@ -878,30 +934,34 @@ namespace APPartment.Utilities
                                 {
                                     var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
+                                    historyEventString.Append(" marked an object ");
+
                                     if (wasMarkedAsCompleted)
                                     {
-                                        historyEventString.Append(string.Format(" marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>completed</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>completed</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name));
                                     }
                                     else
                                     {
-                                        historyEventString.Append(string.Format(" marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>pending</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>pending</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name));
                                     }
                                 }
                                 else if (historyEvent.ColumnName == "Status")
                                 {
+                                    historyEventString.Append(" set status as ");
+
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name, BaseObjectStatus.Surveys1));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name, BaseObjectStatus.Surveys1));
                                             break;
                                         case "2":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name, BaseObjectStatus.Surveys2));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name, BaseObjectStatus.Surveys2));
                                             break;
                                         case "3":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name, BaseObjectStatus.Surveys3));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name, BaseObjectStatus.Surveys3));
                                             break;
                                         case "4":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name, BaseObjectStatus.Critical));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name, BaseObjectStatus.Critical));
                                             break;
                                     }
                                 }
@@ -918,30 +978,34 @@ namespace APPartment.Utilities
                                 {
                                     var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
 
+                                    historyEventString.Append(" marked an object ");
+
                                     if (wasMarkedAsCompleted)
                                     {
-                                        historyEventString.Append(string.Format(" marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>completed</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>completed</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name));
                                     }
                                     else
                                     {
-                                        historyEventString.Append(string.Format(" marked an object <strong>[ID: {0}, Name: {1}]</strong> as <strong>pending</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name));
+                                        historyEventString.Append(string.Format("<strong>[ID: {0}, Name: {1}]</strong> as <strong>pending</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name));
                                     }
                                 }
                                 else if (historyEvent.ColumnName == "Status")
                                 {
+                                    historyEventString.Append(" set status as ");
+
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name, BaseObjectStatus.Chores1));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name, BaseObjectStatus.Chores1));
                                             break;
                                         case "2":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name, BaseObjectStatus.Chores2));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name, BaseObjectStatus.Chores2));
                                             break;
                                         case "3":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name, BaseObjectStatus.Chores3));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name, BaseObjectStatus.Chores3));
                                             break;
                                         case "4":
-                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name, BaseObjectStatus.Critical));
+                                            historyEventString.Append(string.Format("<strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name, BaseObjectStatus.Critical));
                                             break;
                                     }
                                 }
@@ -956,22 +1020,24 @@ namespace APPartment.Utilities
                 }
                 else if (historyEvent.FunctionTypeId == (int)HistoryFunctionTypes.Delete)
                 {
+                    historyEventString.Append(" <strong>deleted</strong> an object ");
+
                     switch ((int)historyEvent.DeletedObjectObjectType)
                     {
                         case (int)ObjectTypes.Inventory:
-                            historyEventString.Append(string.Format(" <strong>deleted</strong> an object <strong>[ID: {0}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", historyEvent.ObjectId));
+                            historyEventString.Append(string.Format("<strong>[ID: {0}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", historyEvent.ObjectId));
                             break;
                         case (int)ObjectTypes.Hygiene:
-                            historyEventString.Append(string.Format(" <strong>deleted</strong> an object <strong>[ID: {0}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", historyEvent.ObjectId));
+                            historyEventString.Append(string.Format("<strong>[ID: {0}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", historyEvent.ObjectId));
                             break;
                         case (int)ObjectTypes.Issue:
-                            historyEventString.Append(string.Format(" <strong>deleted</strong> an object <strong>[ID: {0}]</strong> in <a href='/Issues/Index'>Issues</a>.", historyEvent.ObjectId));
+                            historyEventString.Append(string.Format("<strong>[ID: {0}]</strong> in <a href='/Issues/Index'>Issues</a>.", historyEvent.ObjectId));
                             break;
                         case (int)ObjectTypes.Survey:
-                            historyEventString.Append(string.Format(" <strong>deleted</strong> an object <strong>[ID: {0}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", historyEvent.ObjectId));
+                            historyEventString.Append(string.Format("<strong>[ID: {0}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", historyEvent.ObjectId));
                             break;
                         case (int)ObjectTypes.Chore:
-                            historyEventString.Append(string.Format(" <strong>deleted</strong> an object <strong>[ID: {0}]</strong> in <a href='/Chores/Index'>Chores</a>.", historyEvent.ObjectId));
+                            historyEventString.Append(string.Format("<strong>[ID: {0}]</strong> in <a href='/Chores/Index'>Chores</a>.", historyEvent.ObjectId));
                             break;
                     }
                 }
