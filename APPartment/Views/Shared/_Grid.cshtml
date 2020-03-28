@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<APPartment.Models.Base.BaseObject>
 
 @{
+    List<string> statuses = ViewData["Statuses"].ToString().Split(',').ToList();
     var moduleName = ViewData["Module"].ToString();
     var canManage = bool.Parse(ViewData["Manage"].ToString());
 
@@ -10,9 +11,6 @@
     var uncheckCardBody = string.Empty;
     var checkCardButton = string.Empty;
     var uncheckCardButton = string.Empty;
-    var status1 = string.Empty;
-    var status2 = string.Empty;
-    var status3 = string.Empty;
 
     var newModel = new object();
 
@@ -28,10 +26,6 @@
             checkCardButton = "Mark supplied";
             uncheckCardButton = "Mark not supplied";
 
-            status1 = "well supplied";
-            status2 = "supplied";
-            status3 = "low supply";
-
             newModel = new APPartment.Models.Inventory();
             break;
         case "Hygiene":
@@ -43,10 +37,6 @@
 
             checkCardButton = "Mark cleaned";
             uncheckCardButton = "Mark not cleaned";
-
-            status1 = "well cleaned";
-            status2 = "clean";
-            status3 = "not clean";
 
             newModel = new APPartment.Models.Hygiene();
             break;
@@ -60,10 +50,6 @@
             checkCardButton = "Close";
             uncheckCardButton = "Open";
 
-            status1 = "not present";
-            status2 = "present";
-            status3 = "high priority";
-
             newModel = new APPartment.Models.Issue();
             break;
         case "Surveys":
@@ -76,10 +62,6 @@
             checkCardButton = "Mark completed";
             uncheckCardButton = "Mark pending";
 
-            status1 = "completed";
-            status2 = "open";
-            status3 = "pending";
-
             newModel = new APPartment.Models.Survey();
             break;
         case "Chores":
@@ -91,10 +73,6 @@
 
             checkCardButton = "Mark completed";
             uncheckCardButton = "Mark not completed";
-
-            status1 = "trivial";
-            status2 = "medium";
-            status3 = "high";
 
             newModel = new APPartment.Models.Chore();
             break;
@@ -175,15 +153,15 @@
                             <td class="text-center">
                                 @if (item.Status == 1)
                                 {
-                                    <span class="badge badge-success">@status1</span>
+                                    <span class="badge badge-success">@statuses[0]</span>
                                 }
                                 else if (item.Status == 2)
                                 {
-                                    <span class="badge badge-warning">@status2</span>
+                                    <span class="badge badge-warning">@statuses[1]</span>
                                 }
                                 else if (item.Status == 3)
                                 {
-                                    <span class="badge badge-danger">@status3</span>
+                                    <span class="badge badge-danger">@statuses[2]</span>
                                 }
                                 else
                                 {

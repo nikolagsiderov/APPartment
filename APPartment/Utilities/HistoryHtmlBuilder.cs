@@ -158,16 +158,16 @@ namespace APPartment.Utilities
                                 switch (historyEvent.NewValue)
                                 {
                                     case "1":
-                                        historyEventString.Append(string.Format("Set status as <strong>trivial</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory1));
                                         break;
                                     case "2":
-                                        historyEventString.Append(string.Format("Set status as <strong>medium</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory2));
                                         break;
                                     case "3":
-                                        historyEventString.Append(string.Format("Set status as <strong>high</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory3));
                                         break;
                                     case "4":
-                                        historyEventString.Append(string.Format("Set status as <strong>critical</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Critical));
                                         break;
                                 }
                             }
@@ -198,16 +198,16 @@ namespace APPartment.Utilities
                                 switch (historyEvent.NewValue)
                                 {
                                     case "1":
-                                        historyEventString.Append(string.Format("Set status as <strong>trivial</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene1));
                                         break;
                                     case "2":
-                                        historyEventString.Append(string.Format("Set status as <strong>medium</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene2));
                                         break;
                                     case "3":
-                                        historyEventString.Append(string.Format("Set status as <strong>high</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene3));
                                         break;
                                     case "4":
-                                        historyEventString.Append(string.Format("Set status as <strong>critical</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Critical));
                                         break;
                                 }
                             }
@@ -238,16 +238,16 @@ namespace APPartment.Utilities
                                 switch (historyEvent.NewValue)
                                 {
                                     case "1":
-                                        historyEventString.Append(string.Format("Set status as <strong>trivial</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues1));
                                         break;
                                     case "2":
-                                        historyEventString.Append(string.Format("Set status as <strong>medium</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues2));
                                         break;
                                     case "3":
-                                        historyEventString.Append(string.Format("Set status as <strong>high</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues3));
                                         break;
                                     case "4":
-                                        historyEventString.Append(string.Format("Set status as <strong>critical</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                        historyEventString.Append(string.Format("Set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Critical));
                                         break;
                                 }
                             }
@@ -346,16 +346,16 @@ namespace APPartment.Utilities
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(" set status as <strong>trivial</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Inventory1}</strong>.");
                                             break;
                                         case "2":
-                                            historyEventString.Append(" set status as <strong>medium</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Inventory2}</strong>.");
                                             break;
                                         case "3":
-                                            historyEventString.Append(" set status as <strong>high</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Inventory3}</strong>.");
                                             break;
                                         case "4":
-                                            historyEventString.Append(" set status as <strong>critical</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Critical}</strong>.");
                                             break;
                                     }
                                 }
@@ -384,16 +384,16 @@ namespace APPartment.Utilities
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(" set status as <strong>trivial</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Hygiene1}</strong>.");
                                             break;
                                         case "2":
-                                            historyEventString.Append(" set status as <strong>medium</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Hygiene2}</strong>.");
                                             break;
                                         case "3":
-                                            historyEventString.Append(" set status as <strong>high</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Hygiene3}</strong>.");
                                             break;
                                         case "4":
-                                            historyEventString.Append(" set status as <strong>critical</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Critical}</strong>.");
                                             break;
                                     }
                                 }
@@ -422,16 +422,16 @@ namespace APPartment.Utilities
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(" set status as <strong>trivial</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Issues1}</strong>.");
                                             break;
                                         case "2":
-                                            historyEventString.Append(" set status as <strong>medium</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Issues2}</strong>.");
                                             break;
                                         case "3":
-                                            historyEventString.Append(" set status as <strong>high</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Issues3}</strong>.");
                                             break;
                                         case "4":
-                                            historyEventString.Append(" set status as <strong>critical</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Critical}</strong>.");
                                             break;
                                     }
                                 }
@@ -460,16 +460,54 @@ namespace APPartment.Utilities
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(" set status as <strong>trivial</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Surveys1}</strong>.");
                                             break;
                                         case "2":
-                                            historyEventString.Append(" set status as <strong>medium</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Surveys2}</strong>.");
                                             break;
                                         case "3":
-                                            historyEventString.Append(" set status as <strong>high</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Surveys3}</strong>.");
                                             break;
                                         case "4":
-                                            historyEventString.Append(" set status as <strong>critical</strong>.");
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Critical}</strong>.");
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    historyEventString.Append(string.Format(" updated {0} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{1}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{2}</span>"
+                                    , historyEvent.ColumnName.ToLower(), historyEvent.OldValue, historyEvent.NewValue));
+                                }
+                                break;
+                            case (int)ObjectTypes.Chore:
+                                if (historyEvent.ColumnName == "IsCompleted")
+                                {
+                                    var wasMarkedAsCompleted = bool.Parse(historyEvent.NewValue);
+
+                                    if (wasMarkedAsCompleted)
+                                    {
+                                        historyEventString.Append(" marked as <strong>completed</strong>.");
+                                    }
+                                    else
+                                    {
+                                        historyEventString.Append(" marked as <strong>pending</strong>.");
+                                    }
+                                }
+                                else if (historyEvent.ColumnName == "Status")
+                                {
+                                    switch (historyEvent.NewValue)
+                                    {
+                                        case "1":
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Chores1}</strong>.");
+                                            break;
+                                        case "2":
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Chores2}</strong>.");
+                                            break;
+                                        case "3":
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Chores3}</strong>.");
+                                            break;
+                                        case "4":
+                                            historyEventString.Append($" set status as <strong>{BaseObjectStatus.Critical}</strong>.");
                                             break;
                                     }
                                 }
@@ -734,16 +772,16 @@ namespace APPartment.Utilities
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(string.Format(" set status as <strong>trivial</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory1));
                                             break;
                                         case "2":
-                                            historyEventString.Append(string.Format(" set status as <strong>medium</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory2));
                                             break;
                                         case "3":
-                                            historyEventString.Append(string.Format(" set status as <strong>high</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Inventory3));
                                             break;
                                         case "4":
-                                            historyEventString.Append(string.Format(" set status as <strong>critical</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Inventory/Index'>Inventory</a>.", theInventoryObject.ObjectId, theInventoryObject.Name, BaseObjectStatus.Critical));
                                             break;
                                     }
                                 }
@@ -774,16 +812,16 @@ namespace APPartment.Utilities
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(string.Format(" set status as <strong>trivial</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene1));
                                             break;
                                         case "2":
-                                            historyEventString.Append(string.Format(" set status as <strong>medium</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene2));
                                             break;
                                         case "3":
-                                            historyEventString.Append(string.Format(" set status as <strong>high</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Hygiene3));
                                             break;
                                         case "4":
-                                            historyEventString.Append(string.Format(" set status as <strong>critical</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Hygiene/Index'>Hygiene</a>.", theHygieneObject.ObjectId, theHygieneObject.Name, BaseObjectStatus.Critical));
                                             break;
                                     }
                                 }
@@ -814,16 +852,16 @@ namespace APPartment.Utilities
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(string.Format(" set status as <strong>trivial</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues1));
                                             break;
                                         case "2":
-                                            historyEventString.Append(string.Format(" set status as <strong>medium</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues2));
                                             break;
                                         case "3":
-                                            historyEventString.Append(string.Format(" set status as <strong>high</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Issues3));
                                             break;
                                         case "4":
-                                            historyEventString.Append(string.Format(" set status as <strong>critical</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Issues/Index'>Issues</a>.", theIssueObject.ObjectId, theIssueObject.Name, BaseObjectStatus.Critical));
                                             break;
                                     }
                                 }
@@ -854,16 +892,16 @@ namespace APPartment.Utilities
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(string.Format(" set status as <strong>trivial</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name, BaseObjectStatus.Surveys1));
                                             break;
                                         case "2":
-                                            historyEventString.Append(string.Format(" set status as <strong>medium</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name, BaseObjectStatus.Surveys2));
                                             break;
                                         case "3":
-                                            historyEventString.Append(string.Format(" set status as <strong>high</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name, BaseObjectStatus.Surveys3));
                                             break;
                                         case "4":
-                                            historyEventString.Append(string.Format(" set status as <strong>critical</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Surveys/Index'>Surveys</a>.", theSurveyObject.ObjectId, theSurveyObject.Name, BaseObjectStatus.Critical));
                                             break;
                                     }
                                 }
@@ -894,16 +932,16 @@ namespace APPartment.Utilities
                                     switch (historyEvent.NewValue)
                                     {
                                         case "1":
-                                            historyEventString.Append(string.Format(" set status as <strong>trivial</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name, BaseObjectStatus.Chores1));
                                             break;
                                         case "2":
-                                            historyEventString.Append(string.Format(" set status as <strong>medium</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name, BaseObjectStatus.Chores2));
                                             break;
                                         case "3":
-                                            historyEventString.Append(string.Format(" set status as <strong>high</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name, BaseObjectStatus.Chores3));
                                             break;
                                         case "4":
-                                            historyEventString.Append(string.Format(" set status as <strong>critical</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name));
+                                            historyEventString.Append(string.Format(" set status as <strong>{2}</strong> for object <strong>[ID: {0}, Name: {1}]</strong> in <a href='/Chores/Index'>Chores</a>.", theChoreObject.ObjectId, theChoreObject.Name, BaseObjectStatus.Critical));
                                             break;
                                     }
                                 }

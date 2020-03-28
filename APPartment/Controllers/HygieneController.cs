@@ -51,6 +51,7 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Hygiene - Cleaned";
             ViewData["Module"] = "Hygiene";
             ViewData["Manage"] = false;
+            ViewData["Statuses"] = GetStatuses(typeof(Hygiene));
 
             return View("_Grid", modelObjects);
         }
@@ -70,6 +71,7 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Hygiene - Due Cleaning";
             ViewData["Module"] = "Hygiene";
             ViewData["Manage"] = false;
+            ViewData["Statuses"] = GetStatuses(typeof(Hygiene));
 
             return View("_Grid", modelObjects);
         }
