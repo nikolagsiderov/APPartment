@@ -200,6 +200,11 @@ namespace APPartment.Controllers
         [Breadcrumb(About_Breadcrumb)]
         public IActionResult About()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             return View();
         }
 

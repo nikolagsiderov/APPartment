@@ -223,6 +223,16 @@ namespace APPartment.Controllers.Base
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Assign(string username, long choreId)
+        {
+            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            // TODO: Implement assign logic
+
+            return RedirectToAction(nameof(Index));
+        }
+
         public async Task<IActionResult> Delete(long? id)
         {
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));

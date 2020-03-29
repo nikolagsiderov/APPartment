@@ -165,19 +165,50 @@
                                 }
                                 else
                                 {
-                                    <span class="badge badge-danger">critical</span>
+                                    <span class="badge badge-danger">Critical</span>
                                 }
                             </td>
                             <td>
                                 @{
                                     var modalNotCompletedId = "markNotCompletedObjectModal-" + item.Id.ToString();
                                     var modalCompletedId = "completeObjectModal-" + item.Id.ToString();
+                                    var modalAssignId = "assignModal-" + item.Id.ToString();
 
                                     var modalDeleteId = "deleteModal-" + item.Id.ToString();
                                 }
 
                                 @if (canManage)
                                 {
+                                    @if (moduleName == "Chores")
+                                    {
+                                        <button type="button" title="Assign" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalAssignId"><i class="fas fa-tag"></i></button>
+
+                                        <div class="modal fade" id="@modalAssignId" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Assign</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <form asp-action="Assign" enctype="multipart/form-data">
+                                                        <div class="modal-body">
+                                                            <div class="form-group">
+                                                                <input name="username" placeholder="Type username to assign..." class="form-control" />
+                                                                <input name="choreId" type="hidden" value="@item.Id" />
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <input type="submit" value="Assign" class="btn btn-primary" />
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
                                     if (item.IsCompleted)
                                     {
                                         <button type="button" title="@titleForUncheckAction" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
