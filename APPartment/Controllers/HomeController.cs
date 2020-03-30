@@ -108,6 +108,8 @@ namespace APPartment.Controllers
                 HttpContext.Session.SetString("HouseId", house.Id.ToString());
                 HttpContext.Session.SetString("HouseName", house.Name.ToString());
 
+                SetUserToCurrentHouse(house.Id);
+
                 return RedirectToAction("Index", "Home");
             }
 
@@ -130,6 +132,8 @@ namespace APPartment.Controllers
 
                 HttpContext.Session.SetString("HouseId", home.Id.ToString());
                 HttpContext.Session.SetString("HouseName", home.Name.ToString());
+
+                SetUserToCurrentHouse(home.Id);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -401,5 +405,23 @@ namespace APPartment.Controllers
             return messages;
         }
         #endregion
+
+        public void SetUserToCurrentHouse(long houseId)
+        {
+            var userId = long.Parse(HttpContext.Session.GetString("UserId"));
+            var userIsAlreadyApartOfCurrentHouse = _context.HouseUsers.Any(x => x.UserId == userId && x.HouseId == houseId);
+
+            if (!userIsAlreadyApartOfCurrentHouse)
+            {
+                var houseUser = new HouseUser()
+                {
+                    HouseId = houseId,
+                    UserId = userId
+                };
+
+                _context.HouseUsers.Add(houseUser);
+                _context.SaveChanges();
+            }
+        }
     }
 }

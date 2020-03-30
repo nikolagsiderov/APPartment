@@ -129,6 +129,20 @@ namespace APPartment.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HouseUser",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HouseId = table.Column<long>(nullable: false),
+                    UserId = table.Column<long>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HouseUser", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Hygiene",
                 columns: table => new
                 {
@@ -297,19 +311,20 @@ namespace APPartment.Migrations
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 1L, "User" },
-                    { 2L, "House" },
-                    { 3L, "HouseStatus" },
-                    { 4L, "HouseSettings" },
-                    { 5L, "Inventory" },
-                    { 6L, "Hygiene" },
-                    { 7L, "Issue" },
-                    { 8L, "Message" },
-                    { 9L, "Comment" },
-                    { 10L, "Image" },
-                    { 11L, "History" },
                     { 12L, "Survey" },
-                    { 13L, "Chore" }
+                    { 11L, "History" },
+                    { 10L, "Image" },
+                    { 9L, "Comment" },
+                    { 8L, "Message" },
+                    { 7L, "Issue" },
+                    { 6L, "Hygiene" },
+                    { 5L, "Inventory" },
+                    { 4L, "HouseSettings" },
+                    { 3L, "HouseStatus" },
+                    { 2L, "House" },
+                    { 1L, "User" },
+                    { 13L, "Chore" },
+                    { 14L, "HouseUser" }
                 });
         }
 
@@ -335,6 +350,9 @@ namespace APPartment.Migrations
 
             migrationBuilder.DropTable(
                 name: "HouseStatus");
+
+            migrationBuilder.DropTable(
+                name: "HouseUser");
 
             migrationBuilder.DropTable(
                 name: "Hygiene");

@@ -15,6 +15,7 @@
         Image = 10, // sub-object
         History = 11, // sub-object
         Survey = 12,
-        Chore = 13
+        Chore = 13,
+        HouseUser = 14
     }
 }

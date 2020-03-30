@@ -21,6 +21,7 @@ namespace APPartment.Data
         public DbSet<APPartment.Models.Object> Objects { get; set; }
         public DbSet<APPartment.Models.User> Users { get; set; }
         public DbSet<APPartment.Models.House> Houses { get; set; }
+        public DbSet<APPartment.Models.HouseUser> HouseUsers { get; set; }
         public DbSet<APPartment.Models.HouseStatus> HouseStatuses { get; set; }
         public DbSet<APPartment.Models.HouseSettings> HouseSettings { get; set; }
         public DbSet<APPartment.Models.Inventory> Inventories { get; set; }
@@ -51,7 +52,8 @@ namespace APPartment.Data
                 new ObjectType { Id = 10, Name = "Image" },
                 new ObjectType { Id = 11, Name = "History"},
                 new ObjectType { Id = 12, Name = "Survey" },
-                new ObjectType { Id = 13, Name = "Chore" }
+                new ObjectType { Id = 13, Name = "Chore" },
+                new ObjectType { Id = 14, Name = "HouseUser" }
             );
             modelBuilder.Entity<HistoryFunctionType>().ToTable("HistoryFunctionType").HasData(
                 new ObjectType { Id = 1, Name = "Create" },
@@ -61,6 +63,7 @@ namespace APPartment.Data
             modelBuilder.Entity<Object>().ToTable("Object");
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<House>().ToTable("House");
+            modelBuilder.Entity<HouseUser>().ToTable("HouseUser");
             modelBuilder.Entity<HouseStatus>().ToTable("HouseStatus");
             modelBuilder.Entity<HouseSettings>().ToTable("HouseSettings");
             modelBuilder.Entity<Inventory>().ToTable("Inventory");

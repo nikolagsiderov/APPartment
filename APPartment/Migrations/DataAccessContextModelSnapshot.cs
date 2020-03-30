@@ -234,6 +234,24 @@ namespace APPartment.Migrations
                     b.ToTable("HouseStatus");
                 });
 
+            modelBuilder.Entity("APPartment.Models.HouseUser", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("HouseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HouseUser");
+                });
+
             modelBuilder.Entity("APPartment.Models.Hygiene", b =>
                 {
                     b.Property<long>("Id")
@@ -493,6 +511,11 @@ namespace APPartment.Migrations
                         {
                             Id = 13L,
                             Name = "Chore"
+                        },
+                        new
+                        {
+                            Id = 14L,
+                            Name = "HouseUser"
                         });
                 });
 
