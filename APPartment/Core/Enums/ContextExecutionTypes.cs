@@ -1,6 +1,6 @@
-﻿namespace APPartment.Enums
+﻿namespace APPartment.Core.Enums
 {
-    public enum HistoryFunctionTypes
+    public enum ContextExecutionTypes
     {
         Create = 1,
         Update = 2,

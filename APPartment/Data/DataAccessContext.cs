@@ -17,7 +17,6 @@ namespace APPartment.Data
         //}
 
         public DbSet<APPartment.Models.ObjectType> ObjectTypes { get; set; }
-        public DbSet<APPartment.Models.HistoryFunctionType> HistoryFunctionTypes { get; set; }
         public DbSet<APPartment.Models.Object> Objects { get; set; }
         public DbSet<APPartment.Models.User> Users { get; set; }
         public DbSet<APPartment.Models.House> Houses { get; set; }
@@ -32,7 +31,7 @@ namespace APPartment.Data
         public DbSet<APPartment.Models.Message> Messages { get; set; }
         public DbSet<APPartment.Models.Comment> Comments { get; set; }
         public DbSet<APPartment.Models.Image> Images { get; set; }
-        public DbSet<APPartment.Models.History> Histories { get; set; }
+        public DbSet<APPartment.Models.Audit> Audits { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -50,15 +49,10 @@ namespace APPartment.Data
                 new ObjectType { Id = 8, Name = "Message" },
                 new ObjectType { Id = 9, Name = "Comment" },
                 new ObjectType { Id = 10, Name = "Image" },
-                new ObjectType { Id = 11, Name = "History"},
                 new ObjectType { Id = 12, Name = "Survey" },
                 new ObjectType { Id = 13, Name = "Chore" },
-                new ObjectType { Id = 14, Name = "HouseUser" }
-            );
-            modelBuilder.Entity<HistoryFunctionType>().ToTable("HistoryFunctionType").HasData(
-                new ObjectType { Id = 1, Name = "Create" },
-                new ObjectType { Id = 2, Name = "Update" },
-                new ObjectType { Id = 3, Name = "Delete" }
+                new ObjectType { Id = 14, Name = "HouseUser" },
+                new ObjectType { Id = 15, Name = "Audit" }
             );
             modelBuilder.Entity<Object>().ToTable("Object");
             modelBuilder.Entity<User>().ToTable("User");
@@ -74,7 +68,7 @@ namespace APPartment.Data
             modelBuilder.Entity<Message>().ToTable("Message");
             modelBuilder.Entity<Comment>().ToTable("Comment");
             modelBuilder.Entity<Image>().ToTable("Image");
-            modelBuilder.Entity<History>().ToTable("History");
+            modelBuilder.Entity<Audit>().ToTable("Audit");
         }
     }
 }

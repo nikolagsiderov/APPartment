@@ -31,7 +31,7 @@ namespace APPartment.Controllers
         {
             if (ModelState.IsValid)
             {
-                dataContext.Save(user, 0, null, 0);
+                dataContext.Save(user, 0, 0, null);
 
                 ModelState.Clear();
 

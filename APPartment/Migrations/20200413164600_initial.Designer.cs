@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APPartment.Migrations
 {
     [DbContext(typeof(DataAccessContext))]
-    [Migration("20200330153824_initial")]
+    [Migration("20200413164600_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,45 @@ namespace APPartment.Migrations
                 .HasAnnotation("ProductVersion", "3.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("APPartment.Models.Audit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<long>("HouseId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("KeyValues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NewValues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("ObjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("OldValues")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TableName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("TargetObjectId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("When")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Audit");
+                });
 
             modelBuilder.Entity("APPartment.Models.Chore", b =>
                 {
@@ -77,86 +116,6 @@ namespace APPartment.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Comment");
-                });
-
-            modelBuilder.Entity("APPartment.Models.History", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ColumnName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DeletedObjectDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedObjectName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("DeletedObjectObjectType")
-                        .HasColumnType("bigint");
-
-                    b.Property<int>("FunctionTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<long>("HouseId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("NewValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("ObjectId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("OldValue")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("TargetId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("When")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("History");
-                });
-
-            modelBuilder.Entity("APPartment.Models.HistoryFunctionType", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("HistoryFunctionType");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Name = "Create"
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Name = "Update"
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            Name = "Delete"
-                        });
                 });
 
             modelBuilder.Entity("APPartment.Models.House", b =>
@@ -501,11 +460,6 @@ namespace APPartment.Migrations
                         },
                         new
                         {
-                            Id = 11L,
-                            Name = "History"
-                        },
-                        new
-                        {
                             Id = 12L,
                             Name = "Survey"
                         },
@@ -518,6 +472,11 @@ namespace APPartment.Migrations
                         {
                             Id = 14L,
                             Name = "HouseUser"
+                        },
+                        new
+                        {
+                            Id = 15L,
+                            Name = "Audit"
                         });
                 });
 

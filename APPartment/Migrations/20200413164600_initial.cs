@@ -8,6 +8,27 @@ namespace APPartment.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Audit",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ObjectId = table.Column<long>(nullable: false),
+                    TableName = table.Column<string>(nullable: true),
+                    When = table.Column<DateTime>(nullable: false),
+                    KeyValues = table.Column<string>(nullable: true),
+                    OldValues = table.Column<string>(nullable: true),
+                    NewValues = table.Column<string>(nullable: true),
+                    HouseId = table.Column<long>(nullable: false),
+                    UserId = table.Column<long>(nullable: false),
+                    TargetObjectId = table.Column<long>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Audit", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Chore",
                 columns: table => new
                 {
@@ -40,43 +61,6 @@ namespace APPartment.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Comment", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "History",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ObjectId = table.Column<long>(nullable: false),
-                    FunctionTypeId = table.Column<int>(nullable: false),
-                    ColumnName = table.Column<string>(nullable: true),
-                    OldValue = table.Column<string>(nullable: true),
-                    NewValue = table.Column<string>(nullable: true),
-                    DeletedObjectName = table.Column<string>(nullable: true),
-                    DeletedObjectObjectType = table.Column<long>(nullable: true),
-                    DeletedObjectDate = table.Column<DateTime>(nullable: true),
-                    When = table.Column<DateTime>(nullable: false),
-                    HouseId = table.Column<long>(nullable: false),
-                    UserId = table.Column<long>(nullable: true),
-                    TargetId = table.Column<long>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_History", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "HistoryFunctionType",
-                columns: table => new
-                {
-                    Id = table.Column<long>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HistoryFunctionType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -297,50 +281,37 @@ namespace APPartment.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "HistoryFunctionType",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1L, "Create" },
-                    { 2L, "Update" },
-                    { 3L, "Delete" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "ObjectType",
                 columns: new[] { "Id", "Name" },
                 values: new object[,]
                 {
-                    { 12L, "Survey" },
-                    { 11L, "History" },
-                    { 10L, "Image" },
-                    { 9L, "Comment" },
-                    { 8L, "Message" },
-                    { 7L, "Issue" },
-                    { 6L, "Hygiene" },
-                    { 5L, "Inventory" },
-                    { 4L, "HouseSettings" },
-                    { 3L, "HouseStatus" },
-                    { 2L, "House" },
                     { 1L, "User" },
+                    { 2L, "House" },
+                    { 3L, "HouseStatus" },
+                    { 4L, "HouseSettings" },
+                    { 5L, "Inventory" },
+                    { 6L, "Hygiene" },
+                    { 7L, "Issue" },
+                    { 8L, "Message" },
+                    { 9L, "Comment" },
+                    { 10L, "Image" },
+                    { 12L, "Survey" },
                     { 13L, "Chore" },
-                    { 14L, "HouseUser" }
+                    { 14L, "HouseUser" },
+                    { 15L, "Audit" }
                 });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Audit");
+
+            migrationBuilder.DropTable(
                 name: "Chore");
 
             migrationBuilder.DropTable(
                 name: "Comment");
-
-            migrationBuilder.DropTable(
-                name: "History");
-
-            migrationBuilder.DropTable(
-                name: "HistoryFunctionType");
 
             migrationBuilder.DropTable(
                 name: "House");

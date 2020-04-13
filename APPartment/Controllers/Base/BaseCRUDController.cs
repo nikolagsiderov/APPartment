@@ -102,7 +102,7 @@ namespace APPartment.Controllers.Base
 
                 model.HouseId = currentHouseId;
 
-                await dataContext.SaveAsync(model, currentUserId, null, currentHouseId);
+                await dataContext.SaveAsync(model, currentUserId, currentHouseId, null);
             }
 
             return RedirectToAction(nameof(Index));
@@ -149,7 +149,7 @@ namespace APPartment.Controllers.Base
 
                 try
                 {
-                    await dataContext.UpdateAsync(model, currentUserId, currentHouseId);
+                    await dataContext.UpdateAsync(model, currentUserId, currentHouseId, null);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -193,7 +193,7 @@ namespace APPartment.Controllers.Base
 
             model.IsCompleted = true;
 
-            await dataContext.UpdateAsync(model, currentUserId, currentHouseId);
+            await dataContext.UpdateAsync(model, currentUserId, currentHouseId, null);
 
             return RedirectToAction(nameof(Index));
         }
@@ -218,7 +218,7 @@ namespace APPartment.Controllers.Base
 
             model.IsCompleted = false;
 
-            await dataContext.UpdateAsync(model, currentUserId, currentHouseId);
+            await dataContext.UpdateAsync(model, currentUserId, currentHouseId, null);
 
             return RedirectToAction(nameof(Index));
         }
@@ -251,7 +251,7 @@ namespace APPartment.Controllers.Base
                 return new Error404NotFoundViewResult();
             }
 
-            await dataContext.DeleteAsync(model, currentUserId, null, currentHouseId);
+            await dataContext.DeleteAsync(model, currentUserId, currentHouseId, null);
 
             return RedirectToAction(nameof(Index));
         }
@@ -279,7 +279,7 @@ namespace APPartment.Controllers.Base
                 Username = username
             };
 
-            await commentDataContext.SaveAsync(comment, currentUserId, targetId, currentHouseId);
+            await commentDataContext.SaveAsync(comment, currentUserId, currentHouseId, targetId);
 
             var result = htmlRenderHelper.BuildPostComment(comment);
 
@@ -333,7 +333,7 @@ namespace APPartment.Controllers.Base
 
         public List<string> GetHistory(long targetId)
         {
-            var history = _context.Histories.Where(x => x.ObjectId == targetId || x.TargetId == targetId).ToList();
+            var history = _context.Audits.Where(x => x.ObjectId == targetId || x.TargetObjectId == targetId).ToList();
 
             var objectHistoryDisplayList = historyHtmlBuilder.BuildBaseObjectHistory(history);
 

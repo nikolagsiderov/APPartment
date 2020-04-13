@@ -49,7 +49,7 @@ namespace APPartment.Services
                 TargetId = targetId,
             };
 
-            context.Save(image, userId, targetId, houseId);
+            context.Save(image, userId, houseId, targetId);
 
             image.Name = $"{image.Id}_{targetId}_{file.FileName}";
 

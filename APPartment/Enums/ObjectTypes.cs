@@ -13,7 +13,6 @@
         Message = 8,
         Comment = 9, // sub-object
         Image = 10, // sub-object
-        History = 11, // sub-object
         Survey = 12,
         Chore = 13,
         HouseUser = 14
