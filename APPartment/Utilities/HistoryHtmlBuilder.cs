@@ -63,17 +63,20 @@ namespace APPartment.Utilities
 
                         if (parentObjectTypeId == (int)ObjectTypes.Inventory || parentObjectTypeId == (int)ObjectTypes.Hygiene || parentObjectTypeId == (int)ObjectTypes.Issue)
                         {
-                            appendString = string.Format($"{referenceLink}.");
+                            var audit = context.Audits.OrderByDescending(x => x.Id).Where(x => x.ObjectId == historyEvent.TargetObjectId).First();
+                            var auditValues = JsonConvert.DeserializeObject<Dictionary<string, string>>(audit.NewValues);
+
+                            appendString = string.Format($"<strong>[ID: {audit.ObjectId}, Name: {auditValues["Name"]}]</strong>.");
                         }
 
                         switch (objectObjectTypeId)
                         {
                             case (int)ObjectTypes.Comment:
-                                historyEventString.Append("Posted a <strong>comment</strong> in object ");
+                                historyEventString.Append("Posted a <strong>comment</strong> in ");
                                 historyEventString.Append(appendString);
                                 break;
                             case (int)ObjectTypes.Image:
-                                historyEventString.Append("Attached an <strong>image</strong> in object ");
+                                historyEventString.Append("Attached an <strong>image</strong> in ");
                                 historyEventString.Append(appendString);
                                 break;
                         }
@@ -85,12 +88,14 @@ namespace APPartment.Utilities
 
                     if (objectObjectTypeId == (int)ObjectTypes.Inventory || objectObjectTypeId == (int)ObjectTypes.Hygiene || objectObjectTypeId == (int)ObjectTypes.Issue)
                     {
-                        historyEventString.Append($"{referenceLink}."));
+                        historyEventString.Append($"{referenceLink}.");
                     }
                 }
             }
             else if (isUpdateEvent)
             {
+                var modifications = 0;
+
                 if (isSubObject)
                 {
                     if (objectObjectTypeId == (int)ObjectTypes.Comment)
@@ -106,19 +111,11 @@ namespace APPartment.Utilities
                 }
                 else
                 {
-                    var isCompletedOldValue = string.Empty;
                     var isCompletedNewValue = string.Empty;
-                    var statusOldValue = string.Empty;
                     var statusNewValue = string.Empty;
-
-                    if (oldValues.ContainsKey("IsCompleted"))
-                        isCompletedOldValue = oldValues["IsCompleted"];
 
                     if (newValues.ContainsKey("IsCompleted"))
                         isCompletedNewValue = newValues["IsCompleted"];
-
-                    if (oldValues.ContainsKey("Status"))
-                        statusOldValue = oldValues["Status"];
 
                     if (newValues.ContainsKey("Status"))
                         statusNewValue = newValues["Status"];
@@ -131,6 +128,11 @@ namespace APPartment.Utilities
                             {
                                 if (oldValues[column] != newValues[column])
                                 {
+                                    if (modifications >= 1)
+                                    {
+                                        historyEventString.Append("<br/>");
+                                    }
+
                                     if (column == "IsCompleted")
                                     {
                                         var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
@@ -170,6 +172,8 @@ namespace APPartment.Utilities
                                     {
                                         historyEventString.Append(string.Format($"Updated {column.ToLower()} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{oldValues[column]}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{newValues[column]}</span>"));
                                     }
+
+                                    modifications++;
                                 }
                             }
                             break;
@@ -179,6 +183,11 @@ namespace APPartment.Utilities
                             {
                                 if (oldValues[column] != newValues[column])
                                 {
+                                    if (modifications >= 1)
+                                    {
+                                        historyEventString.Append("<br/>");
+                                    }
+
                                     if (column == "IsCompleted")
                                     {
                                         var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
@@ -218,6 +227,8 @@ namespace APPartment.Utilities
                                     {
                                         historyEventString.Append(string.Format($"Updated {column.ToLower()} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{oldValues[column]}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{newValues[column]}</span>"));
                                     }
+
+                                    modifications++;
                                 }
                             }
                             break;
@@ -227,6 +238,11 @@ namespace APPartment.Utilities
                             {
                                 if (oldValues[column] != newValues[column])
                                 {
+                                    if (modifications >= 1)
+                                    {
+                                        historyEventString.Append("<br/>");
+                                    }
+
                                     if (column == "IsCompleted")
                                     {
                                         var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
@@ -267,6 +283,7 @@ namespace APPartment.Utilities
                                         historyEventString.Append(string.Format($"Updated {column.ToLower()} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{oldValues[column]}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{newValues[column]}</span>"));
                                     }
 
+                                    modifications++;
                                 }
                             }
                             break;
@@ -343,6 +360,8 @@ namespace APPartment.Utilities
                 }
                 else if (isUpdateEvent)
                 {
+                    var modifications = 0;
+
                     if (isSubObject)
                     {
                         if (objectType == (int)ObjectTypes.Comment)
@@ -356,19 +375,11 @@ namespace APPartment.Utilities
                     }
                     else
                     {
-                        var isCompletedOldValue = string.Empty;
                         var isCompletedNewValue = string.Empty;
-                        var statusOldValue = string.Empty;
                         var statusNewValue = string.Empty;
-
-                        if (oldValues.ContainsKey("IsCompleted"))
-                            isCompletedOldValue = oldValues["IsCompleted"];
 
                         if (newValues.ContainsKey("IsCompleted"))
                             isCompletedNewValue = newValues["IsCompleted"];
-
-                        if (oldValues.ContainsKey("Status"))
-                            statusOldValue = oldValues["Status"];
 
                         if (newValues.ContainsKey("Status"))
                             statusNewValue = newValues["Status"];
@@ -381,6 +392,11 @@ namespace APPartment.Utilities
                                 {
                                     if (oldValues[column] != newValues[column])
                                     {
+                                        if (modifications >= 1)
+                                        {
+                                            historyEventString.Append("<br/>");
+                                        }
+
                                         if (column == "IsCompleted")
                                         {
                                             var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
@@ -420,6 +436,8 @@ namespace APPartment.Utilities
                                         {
                                             historyEventString.Append(string.Format($" updated {column.ToLower()} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{oldValues[column]}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{newValues[column]}</span>"));
                                         }
+
+                                        modifications++;
                                     }
                                 }
                                 break;
@@ -429,6 +447,11 @@ namespace APPartment.Utilities
                                 {
                                     if (oldValues[column] != newValues[column])
                                     {
+                                        if (modifications >= 1)
+                                        {
+                                            historyEventString.Append("<br/>");
+                                        }
+
                                         if (column == "IsCompleted")
                                         {
                                             var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
@@ -468,6 +491,8 @@ namespace APPartment.Utilities
                                         {
                                             historyEventString.Append(string.Format($" updated {column.ToLower()} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{oldValues[column]}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{newValues[column]}</span>"));
                                         }
+
+                                        modifications++;
                                     }
                                 }
                                 break;
@@ -477,6 +502,11 @@ namespace APPartment.Utilities
                                 {
                                     if (oldValues[column] != newValues[column])
                                     {
+                                        if (modifications >= 1)
+                                        {
+                                            historyEventString.Append("<br/>");
+                                        }
+
                                         if (column == "IsCompleted")
                                         {
                                             var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
@@ -516,6 +546,8 @@ namespace APPartment.Utilities
                                         {
                                             historyEventString.Append(string.Format($" updated {column.ToLower()} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{oldValues[column]}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{newValues[column]}</span>"));
                                         }
+
+                                        modifications++;
                                     }
                                 }
                                 break;
@@ -525,6 +557,11 @@ namespace APPartment.Utilities
                                 {
                                     if (oldValues[column] != newValues[column])
                                     {
+                                        if (modifications >= 1)
+                                        {
+                                            historyEventString.Append("<br/>");
+                                        }
+
                                         if (column == "IsCompleted")
                                         {
                                             var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
@@ -564,6 +601,8 @@ namespace APPartment.Utilities
                                         {
                                             historyEventString.Append(string.Format($" updated {column.ToLower()} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{oldValues[column]}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{newValues[column]}</span>"));
                                         }
+
+                                        modifications++;
                                     }
                                 }
                                 break;
@@ -573,6 +612,11 @@ namespace APPartment.Utilities
                                 {
                                     if (oldValues[column] != newValues[column])
                                     {
+                                        if (modifications >= 1)
+                                        {
+                                            historyEventString.Append("<br/>");
+                                        }
+
                                         if (column == "IsCompleted")
                                         {
                                             var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
@@ -612,6 +656,8 @@ namespace APPartment.Utilities
                                         {
                                             historyEventString.Append(string.Format($" updated {column.ToLower()} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{oldValues[column]}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{newValues[column]}</span>"));
                                         }
+
+                                        modifications++;
                                     }
                                 }
                                 break;
@@ -692,53 +738,71 @@ namespace APPartment.Utilities
                         {
                             var parentObjectTypeId = context.Objects.Where(x => x.ObjectId == historyEvent.TargetObjectId).FirstOrDefault().ObjectTypeId;
 
+                            var objectObjectIdAndNameHtml = string.Empty;
+
                             switch (objectObjectTypeId)
                             {
                                 case (int)ObjectTypes.Comment:
-                                    historyEventString.Append(" posted a <strong>comment</strong> in object ");
-
-                                    historyEventString.Append($"{referenceLink} ");
+                                    historyEventString.Append($" posted a <strong>comment</strong> in ");
 
                                     switch (parentObjectTypeId)
                                     {
                                         case (int)ObjectTypes.Inventory:
-                                            historyEventString.Append(string.Format($"in <a href='/Inventory/Index'>Inventory</a>."));
+                                            var thisInventoryObject = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetObjectId).First();
+                                            objectObjectIdAndNameHtml = $"<strong>[ID: {thisInventoryObject.ObjectId}, Name: {thisInventoryObject.Name}]</strong>";
+                                            historyEventString.Append(string.Format($"{objectObjectIdAndNameHtml} in <a href='/Inventory/Index'>Inventory</a>."));
                                             break;
                                         case (int)ObjectTypes.Hygiene:
-                                            historyEventString.Append(string.Format($"in <a href='/Hygiene/Index'>Hygiene</a>."));
+                                            var thisHygieneObject = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetObjectId).First();
+                                            objectObjectIdAndNameHtml = $"<strong>[ID: {thisHygieneObject.ObjectId}, Name: {thisHygieneObject.Name}]</strong>";
+                                            historyEventString.Append(string.Format($"{objectObjectIdAndNameHtml} in <a href='/Hygiene/Index'>Hygiene</a>."));
                                             break;
                                         case (int)ObjectTypes.Issue:
-                                            historyEventString.Append(string.Format($"in <a href='/Issues/Index'>Issues</a>."));
+                                            var thisIssueObject = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetObjectId).First();
+                                            objectObjectIdAndNameHtml = $"<strong>[ID: {thisIssueObject.ObjectId}, Name: {thisIssueObject.Name}]</strong>";
+                                            historyEventString.Append(string.Format($"{objectObjectIdAndNameHtml} in <a href='/Issues/Index'>Issues</a>."));
                                             break;
                                         case (int)ObjectTypes.Survey:
-                                            historyEventString.Append(string.Format($"in <a href='/Surveys/Index'>Surveys</a>."));
+                                            var thisSurveyObject = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetObjectId).First();
+                                            objectObjectIdAndNameHtml = $"<strong>[ID: {thisSurveyObject.ObjectId}, Name: {thisSurveyObject.Name}]</strong>";
+                                            historyEventString.Append(string.Format($"{objectObjectIdAndNameHtml} in <a href='/Surveys/Index'>Surveys</a>."));
                                             break;
                                         case (int)ObjectTypes.Chore:
-                                            historyEventString.Append(string.Format($"in <a href='/Chores/Index'>Chores</a>."));
+                                            var thisChoreObject = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetObjectId).First();
+                                            objectObjectIdAndNameHtml = $"<strong>[ID: {thisChoreObject.ObjectId}, Name: {thisChoreObject.Name}]</strong>";
+                                            historyEventString.Append(string.Format($"{objectObjectIdAndNameHtml} in <a href='/Chores/Index'>Chores</a>."));
                                             break;
                                     }
                                     break;
                                 case (int)ObjectTypes.Image:
-                                    historyEventString.Append(" attached an <strong>image</strong> in object ");
-
-                                    historyEventString.Append($"{referenceLink} ");
+                                    historyEventString.Append(" attached an <strong>image</strong> in ");
 
                                     switch (parentObjectTypeId)
                                     {
                                         case (int)ObjectTypes.Inventory:
-                                            historyEventString.Append(string.Format($"in <a href='/Inventory/Index'>Inventory</a>."));
+                                            var thisInventoryObject = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetObjectId).First();
+                                            objectObjectIdAndNameHtml = $"<strong>[ID: {thisInventoryObject.ObjectId}, Name: {thisInventoryObject.Name}]</strong>";
+                                            historyEventString.Append(string.Format($"{objectObjectIdAndNameHtml} in <a href='/Inventory/Index'>Inventory</a>."));
                                             break;
                                         case (int)ObjectTypes.Hygiene:
-                                            historyEventString.Append(string.Format($"in <a href='/Hygiene/Index'>Hygiene</a>."));
+                                            var thisHygieneObject = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetObjectId).First();
+                                            objectObjectIdAndNameHtml = $"<strong>[ID: {thisHygieneObject.ObjectId}, Name: {thisHygieneObject.Name}]</strong>";
+                                            historyEventString.Append(string.Format($"{objectObjectIdAndNameHtml} in <a href='/Hygiene/Index'>Hygiene</a>."));
                                             break;
                                         case (int)ObjectTypes.Issue:
-                                            historyEventString.Append(string.Format($"in <a href='/Issues/Index'>Issues</a>."));
+                                            var thisIssueObject = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetObjectId).First();
+                                            objectObjectIdAndNameHtml = $"<strong>[ID: {thisIssueObject.ObjectId}, Name: {thisIssueObject.Name}]</strong>";
+                                            historyEventString.Append(string.Format($"{objectObjectIdAndNameHtml} in <a href='/Issues/Index'>Issues</a>."));
                                             break;
                                         case (int)ObjectTypes.Survey:
-                                            historyEventString.Append(string.Format($"in <a href='/Surveys/Index'>Surveys</a>."));
+                                            var thisSurveyObject = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetObjectId).First();
+                                            objectObjectIdAndNameHtml = $"<strong>[ID: {thisSurveyObject.ObjectId}, Name: {thisSurveyObject.Name}]</strong>";
+                                            historyEventString.Append(string.Format($"{objectObjectIdAndNameHtml} in <a href='/Surveys/Index'>Surveys</a>."));
                                             break;
                                         case (int)ObjectTypes.Chore:
-                                            historyEventString.Append(string.Format($"in <a href='/Chores/Index'>Chores</a>."));
+                                            var thisChoreObject = context.Inventories.Where(x => x.ObjectId == historyEvent.TargetObjectId).First();
+                                            objectObjectIdAndNameHtml = $"<strong>[ID: {thisChoreObject.ObjectId}, Name: {thisChoreObject.Name}]</strong>";
+                                            historyEventString.Append(string.Format($"{objectObjectIdAndNameHtml} in <a href='/Chores/Index'>Chores</a>."));
                                             break;
                                     }
                                     break;
@@ -800,6 +864,8 @@ namespace APPartment.Utilities
                 }
                 else if (isUpdateEvent)
                 {
+                    var modifications = 0;
+
                     if (isSubObject)
                     {
                         if (objectObjectTypeId == (int)ObjectTypes.Comment)
@@ -815,13 +881,9 @@ namespace APPartment.Utilities
                     }
                     else
                     {
-                        var isCompletedOldValue = string.Empty;
                         var isCompletedNewValue = string.Empty;
                         var statusOldValue = string.Empty;
                         var statusNewValue = string.Empty;
-
-                        if (oldValues.ContainsKey("IsCompleted"))
-                            isCompletedOldValue = oldValues["IsCompleted"];
 
                         if (newValues.ContainsKey("IsCompleted"))
                             isCompletedNewValue = newValues["IsCompleted"];
@@ -870,6 +932,11 @@ namespace APPartment.Utilities
                                 {
                                     if (oldValues[column] != newValues[column])
                                     {
+                                        if (modifications >= 1)
+                                        {
+                                            historyEventString.Append("<br/>");
+                                        }
+
                                         if (column == "IsCompleted")
                                         {
                                             var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
@@ -907,6 +974,8 @@ namespace APPartment.Utilities
                                         {
                                             historyEventString.Append(string.Format($" updated {column.ToLower()} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{oldValues[column]}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{newValues[column]}</span>"));
                                         }
+
+                                        modifications++;
                                     }
                                 }
 
@@ -918,6 +987,11 @@ namespace APPartment.Utilities
                                 {
                                     if (oldValues[column] != newValues[column])
                                     {
+                                        if (modifications >= 1)
+                                        {
+                                            historyEventString.Append("<br/>");
+                                        }
+
                                         if (column == "IsCompleted")
                                         {
                                             var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
@@ -955,6 +1029,8 @@ namespace APPartment.Utilities
                                         {
                                             historyEventString.Append(string.Format($" updated {column.ToLower()} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{oldValues[column]}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{newValues[column]}</span>"));
                                         }
+
+                                        modifications++;
                                     }
                                 }
 
@@ -966,6 +1042,11 @@ namespace APPartment.Utilities
                                 {
                                     if (oldValues[column] != newValues[column])
                                     {
+                                        if (modifications >= 1)
+                                        {
+                                            historyEventString.Append("<br/>");
+                                        }
+
                                         if (column == "IsCompleted")
                                         {
                                             var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
@@ -1003,6 +1084,8 @@ namespace APPartment.Utilities
                                         {
                                             historyEventString.Append(string.Format($" updated {column.ToLower()} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{oldValues[column]}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{newValues[column]}</span>"));
                                         }
+
+                                        modifications++;
                                     }
                                 }
 
@@ -1014,6 +1097,11 @@ namespace APPartment.Utilities
                                 {
                                     if (oldValues[column] != newValues[column])
                                     {
+                                        if (modifications >= 1)
+                                        {
+                                            historyEventString.Append("<br/>");
+                                        }
+
                                         if (column == "IsCompleted")
                                         {
                                             var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
@@ -1051,6 +1139,8 @@ namespace APPartment.Utilities
                                         {
                                             historyEventString.Append(string.Format($" updated {column.ToLower()} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{oldValues[column]}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{newValues[column]}</span>"));
                                         }
+
+                                        modifications++;
                                     }
                                 }
 
@@ -1062,6 +1152,11 @@ namespace APPartment.Utilities
                                 {
                                     if (oldValues[column] != newValues[column])
                                     {
+                                        if (modifications >= 1)
+                                        {
+                                            historyEventString.Append("<br/>");
+                                        }
+
                                         if (column == "IsCompleted")
                                         {
                                             var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
@@ -1099,6 +1194,8 @@ namespace APPartment.Utilities
                                         {
                                             historyEventString.Append(string.Format($" updated {column.ToLower()} column. <br/> Previous value: <span style=\"text-decoration: line-through\">{oldValues[column]}</span> <br/> <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{newValues[column]}</span>"));
                                         }
+
+                                        modifications++;
                                     }
                                 }
 
