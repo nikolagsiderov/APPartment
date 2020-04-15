@@ -29,6 +29,7 @@ namespace APPartment.Controllers.Base
         private HtmlRenderHelper htmlRenderHelper;
         private FileUploadService fileUploadService;
         private DataContext<T> dataContext;
+        private DataContext<Chore> choreDataContext;
         private DataContext<Comment> commentDataContext;
         private DataContext<Image> imageDataContext;
         private HistoryHtmlBuilder historyHtmlBuilder;
@@ -42,6 +43,7 @@ namespace APPartment.Controllers.Base
             imageDataContext = new DataContext<Image>(_context);
             fileUploadService = new FileUploadService(_context, imageDataContext);
             dataContext = new DataContext<T>(_context);
+            choreDataContext = new DataContext<Chore>(_context);
             commentDataContext = new DataContext<Comment>(_context);
             historyHtmlBuilder = new HistoryHtmlBuilder(_context);
             baseService = new BaseService<T>(_context);
@@ -228,7 +230,23 @@ namespace APPartment.Controllers.Base
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
-            // TODO: Implement assign logic
+            if (choreId == null)
+            {
+                return new Error404NotFoundViewResult();
+            }
+
+            var model = await _context.Set<Chore>().FirstOrDefaultAsync(x => x.Id == choreId);
+
+            if (model == null)
+            {
+                return new Error404NotFoundViewResult();
+            }
+
+            var userToAssign = await _context.Set<User>().FirstOrDefaultAsync(x => x.Username == username);
+            var userToAssignUserId = userToAssign.UserId;
+
+            model.AssignedToId = userToAssignUserId;
+            await choreDataContext.UpdateAsync(model, currentUserId, currentHouseId, null);
 
             return RedirectToAction(nameof(Index));
         }

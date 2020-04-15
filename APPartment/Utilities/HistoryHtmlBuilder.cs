@@ -633,6 +633,12 @@ namespace APPartment.Utilities
                                                 historyEventString.Append("<strong>pending</strong>.");
                                             }
                                         }
+                                        else if (column == "AssignedToId")
+                                        {
+                                            var assignedUserUsername = context.Users.Where(x => x.UserId == long.Parse(newValues[column])).FirstOrDefault().Username;
+
+                                            historyEventString.Append($"Assigned chore to {assignedUserUsername}.");
+                                        }
                                         else if (column == "Status")
                                         {
                                             historyEventString.Append("Set status as ");
@@ -1185,6 +1191,12 @@ namespace APPartment.Utilities
                                             {
                                                 historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
                                             }
+                                        }
+                                        else if (column == "AssignedToId")
+                                        {
+                                            var assignedUserUsername = context.Users.Where(x => x.UserId == long.Parse(newValues[column])).FirstOrDefault().Username;
+
+                                            historyEventString.Append($"Assigned chore to {assignedUserUsername}.");
                                         }
                                         else if (column == "Status")
                                         {
