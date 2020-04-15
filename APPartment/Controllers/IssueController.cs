@@ -8,17 +8,12 @@ using Microsoft.AspNetCore.Http;
 using System.Linq;
 using APPartment.Enums;
 using Microsoft.EntityFrameworkCore;
+using APPartment.Utilities.Constants.Breadcrumbs;
 
 namespace APPartment.Controllers
 {
     public class IssuesController : BaseCRUDController<Issue>
     {
-        #region Breadcrumbs
-        private const string All_Breadcrumb = "<i class='fas fa-exclamation-circle' style='font-size:20px'></i> Issues";
-        private const string Closed_Breadcrumb = "<i class='fas fa-check' style='font-size:20px'></i> Closed";
-        private const string Open_Breadcrumb = "<i class='fas fa-exclamation-triangle' style='font-size:20px'></i> Open";
-        #endregion
-
         private readonly DataAccessContext _context;
 
         public IssuesController(DataAccessContext context) : base(context)
@@ -27,7 +22,7 @@ namespace APPartment.Controllers
         }
 
         #region Actions
-        [Breadcrumb(All_Breadcrumb)]
+        [Breadcrumb(IssuesBreadcrumbs.All_Breadcrumb)]
         public override Task<IActionResult> Index()
         {
             ViewData["GridTitle"] = "Issues - All";
@@ -36,7 +31,7 @@ namespace APPartment.Controllers
             return base.Index();
         }
 
-        [Breadcrumb(Closed_Breadcrumb)]
+        [Breadcrumb(IssuesBreadcrumbs.Closed_Breadcrumb)]
         public async Task<IActionResult> Closed()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
@@ -56,7 +51,7 @@ namespace APPartment.Controllers
             return View("_Grid", modelObjects);
         }
 
-        [Breadcrumb(Open_Breadcrumb)]
+        [Breadcrumb(IssuesBreadcrumbs.Open_Breadcrumb)]
         public async Task<IActionResult> Open()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))

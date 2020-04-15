@@ -7,17 +7,12 @@ using SmartBreadcrumbs.Attributes;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using APPartment.Utilities.Constants.Breadcrumbs;
 
 namespace APPartment.Controllers
 {
     public class SurveysController : BaseCRUDController<Survey>
     {
-        #region Breadcrumbs
-        private const string All_Breadcrumb = "<i class='fas fa-poll' style='font-size:20px'></i> Surveys";
-        private const string Pending_Breadcrumb = "<i class='fas fa-pen' style='font-size:20px'></i> Pending";
-        private const string Completed_Breadcrumb = "<i class='fas fa-check' style='font-size:20px'></i> Completed";
-        #endregion
-
         private readonly DataAccessContext _context;
 
         public SurveysController(DataAccessContext context) : base(context)
@@ -26,7 +21,7 @@ namespace APPartment.Controllers
         }
 
         #region Actions
-        [Breadcrumb(All_Breadcrumb)]
+        [Breadcrumb(SurveysBreadcrumbs.All_Breadcrumb)]
         public override Task<IActionResult> Index()
         {
             ViewData["GridTitle"] = "Surveys - All";
@@ -35,7 +30,7 @@ namespace APPartment.Controllers
             return base.Index();
         }
 
-        [Breadcrumb(Completed_Breadcrumb)]
+        [Breadcrumb(SurveysBreadcrumbs.Completed_Breadcrumb)]
         public async Task<IActionResult> Completed()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
@@ -55,7 +50,7 @@ namespace APPartment.Controllers
             return View("_Grid", modelObjects);
         }
 
-        [Breadcrumb(Pending_Breadcrumb)]
+        [Breadcrumb(SurveysBreadcrumbs.Pending_Breadcrumb)]
         public async Task<IActionResult> Pending()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))

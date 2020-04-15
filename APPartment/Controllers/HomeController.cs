@@ -13,18 +13,12 @@ using APPartment.DisplayModels.Home;
 using APPartment.Utilities;
 using APPartment.Enums;
 using APPartment.Core;
+using APPartment.Utilities.Constants.Breadcrumbs;
 
 namespace APPartment.Controllers
 {
     public class HomeController : Controller
     {
-        #region Breadcrumbs
-        private const string Default_Breadcrumb = "<i class='fas fa-home' style='font-size:20px'></i> Home";
-        private const string Settings_Breadcrumb = "<i class='fas fa-cog' style='font-size:20px'></i> Settings";
-        private const string About_Breadcrumb = "<i class='fas fa-info-circle' style='font-size:20px'></i> About";
-        private const string History_Breadcrumb = "<i class='fas fa-history' style='font-size:20px'></i> History";
-        #endregion
-
         #region Context, Services and Utilities
         private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper;
@@ -48,7 +42,7 @@ namespace APPartment.Controllers
         }
 
         #region Actions
-        [DefaultBreadcrumb(Default_Breadcrumb)]
+        [DefaultBreadcrumb(HomeBreadcrumbs.Default_Breadcrumb)]
         public IActionResult Index()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
@@ -146,7 +140,7 @@ namespace APPartment.Controllers
         }
 
         [HttpGet]
-        [Breadcrumb(Settings_Breadcrumb)]
+        [Breadcrumb(HomeBreadcrumbs.Settings_Breadcrumb)]
         public IActionResult Settings()
         {
             var houseSettingsArePresent = _context.HouseSettings.Any(x => x.Id == long.Parse(HttpContext.Session.GetString("HouseId")));
@@ -201,7 +195,7 @@ namespace APPartment.Controllers
         }
 
         [HttpGet]
-        [Breadcrumb(About_Breadcrumb)]
+        [Breadcrumb(HomeBreadcrumbs.About_Breadcrumb)]
         public IActionResult About()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
@@ -295,7 +289,7 @@ namespace APPartment.Controllers
         }
 
         [HttpGet]
-        [Breadcrumb(History_Breadcrumb)]
+        [Breadcrumb(HomeBreadcrumbs.History_Breadcrumb)]
         public IActionResult History()
         {
             var historyModel = new HomeHistoryDisplayView();

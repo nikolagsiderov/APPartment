@@ -7,17 +7,12 @@ using APPartment.Models;
 using APPartment.Controllers.Base;
 using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Http;
+using APPartment.Utilities.Constants.Breadcrumbs;
 
 namespace APPartment.Controllers
 {
     public class ChoresController : BaseCRUDController<Chore>
     {
-        #region Breadcrumbs
-        private const string All_Breadcrumb = "<i class='fas fa-shopping-bag' style='font-size:20px'></i> Manage";
-        private const string Mine_Breadcrumb = "<i class='fas fa-user-tag' style='font-size:20px'></i> Mine";
-        private const string Others_Breadcrumb = "<i class='fas fa-user-friends' style='font-size:20px'></i> Others";
-        #endregion
-
         private readonly DataAccessContext _context;
 
         public ChoresController(DataAccessContext context) : base(context)
@@ -26,7 +21,7 @@ namespace APPartment.Controllers
         }
 
         #region Actions
-        [Breadcrumb(All_Breadcrumb)]
+        [Breadcrumb(ChoresBreadcrumbs.All_Breadcrumb)]
         public override Task<IActionResult> Index()
         {
             ViewData["GridTitle"] = "Chores - All";
@@ -35,7 +30,7 @@ namespace APPartment.Controllers
             return base.Index();
         }
 
-        [Breadcrumb(Others_Breadcrumb)]
+        [Breadcrumb(ChoresBreadcrumbs.Others_Breadcrumb)]
         public async Task<IActionResult> Others()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
@@ -56,7 +51,7 @@ namespace APPartment.Controllers
             return View("_Grid", modelObjects);
         }
 
-        [Breadcrumb(Mine_Breadcrumb)]
+        [Breadcrumb(ChoresBreadcrumbs.Mine_Breadcrumb)]
         public async Task<IActionResult> Mine()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))

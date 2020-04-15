@@ -8,6 +8,7 @@ using APPartment.Models;
 using APPartment.Models.Declaration;
 using APPartment.Services;
 using APPartment.Utilities;
+using APPartment.Utilities.Constants.Breadcrumbs;
 using APPartment.ViewResults;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,11 +20,6 @@ namespace APPartment.Controllers.Base
     public abstract class BaseCRUDController<T> : Controller
         where T : class, IBaseObject
     {
-        #region Breadcrumbs
-        private const string Details_Breadcrumb = "<i class='fas fa-info-circle'></i> Details";
-        private const string Edit_Breadcrumb = "<i class='fas fa-edit'></i> Edit";
-        #endregion
-
         #region Context, Services and Utilities
         private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper;
@@ -68,7 +64,7 @@ namespace APPartment.Controllers.Base
             return View("_Grid", modelObjects);
         }
 
-        [Breadcrumb(Details_Breadcrumb)]
+        [Breadcrumb(BaseCRUDBreadcrumbs.Details_Breadcrumb)]
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
@@ -110,7 +106,7 @@ namespace APPartment.Controllers.Base
             return RedirectToAction(nameof(Index));
         }
 
-        [Breadcrumb(Edit_Breadcrumb)]
+        [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null)
@@ -134,7 +130,7 @@ namespace APPartment.Controllers.Base
             return View("_Edit", model);
         }
 
-        [Breadcrumb(Edit_Breadcrumb)]
+        [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(long id, [Bind("Id,Name,Details,Status,IsCompleted,HouseId,ObjectId")] T model)

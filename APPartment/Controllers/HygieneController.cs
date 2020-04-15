@@ -8,17 +8,12 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using APPartment.Enums;
 using Microsoft.EntityFrameworkCore;
+using APPartment.Utilities.Constants.Breadcrumbs;
 
 namespace APPartment.Controllers
 {
     public class HygieneController : BaseCRUDController<Hygiene>
     {
-        #region Breadcrumbs
-        private const string All_Breadcrumb = "<i class='fas fa-recycle' style='font-size:20px'></i> Hygiene";
-        private const string Cleaned_Breadcrumb = "<i class='fas fa-check' style='font-size:20px'></i> Cleaned";
-        private const string Due_Cleaning_Breadcrumb = "<i class='fas fa-exclamation-triangle' style='font-size:20px'></i> Due Cleaning";
-        #endregion
-
         private readonly DataAccessContext _context;
 
         public HygieneController(DataAccessContext context) : base(context)
@@ -27,7 +22,7 @@ namespace APPartment.Controllers
         }
 
         #region Actions
-        [Breadcrumb(All_Breadcrumb)]
+        [Breadcrumb(HygieneBreadcrumbs.All_Breadcrumb)]
         public override Task<IActionResult> Index()
         {
             ViewData["GridTitle"] = "Hygiene - All";
@@ -36,7 +31,7 @@ namespace APPartment.Controllers
             return base.Index();
         }
 
-        [Breadcrumb(Cleaned_Breadcrumb)]
+        [Breadcrumb(HygieneBreadcrumbs.Cleaned_Breadcrumb)]
         public async Task<IActionResult> Cleaned()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
@@ -56,7 +51,7 @@ namespace APPartment.Controllers
             return View("_Grid", modelObjects);
         }
 
-        [Breadcrumb(Due_Cleaning_Breadcrumb)]
+        [Breadcrumb(HygieneBreadcrumbs.Due_Cleaning_Breadcrumb)]
         public async Task<IActionResult> DueCleaning()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
