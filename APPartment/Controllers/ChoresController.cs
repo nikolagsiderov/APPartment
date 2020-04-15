@@ -67,7 +67,7 @@ namespace APPartment.Controllers
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
-            var modelObjects = await _context.Set<Chore>().Where(x => x.HouseId == currentHouseId && x.AssignedToId == currentUserId).ToListAsync();
+            var modelObjects = await _context.Set<Chore>().Where(x => x.HouseId == currentHouseId && x.AssignedToId != currentUserId).ToListAsync();
 
             ViewData["GridTitle"] = "Chores - Mine";
             ViewData["Module"] = "Chores";
