@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using APPartment.DisplayModels.Calendar;
+using APPartment.Utilities.Constants.Breadcrumbs;
 using Microsoft.AspNetCore.Mvc;
+using SmartBreadcrumbs.Attributes;
 
 namespace APPartment.Controllers
 {
     public class CalendarController : Controller
     {
         [HttpGet]
+        [Breadcrumb(CalendarBreadcrumbs.Index)]
         public ActionResult Index()
         {
             return View(new EventViewModel());
