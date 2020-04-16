@@ -3,6 +3,7 @@
     var actionName = this.ViewContext.RouteData.Values["action"].ToString();
 
     string homeLink = string.Empty;
+    string calendarLink = string.Empty;
     string inventoryLink = string.Empty;
     string hygieneLink = string.Empty;
     string issuesLink = string.Empty;
@@ -14,6 +15,10 @@
     if (string.IsNullOrEmpty(controllerName) || (controllerName == "Home" && string.IsNullOrEmpty(actionName)) || (controllerName == "Home" && actionName == "Index"))
     {
         homeLink = "active";
+    }
+    else if (controllerName == "Calendar")
+    {
+        calendarLink = "active";
     }
     else if (controllerName == "Inventory")
     {
@@ -53,6 +58,10 @@
                 <a class="nav-link @homeLink" asp-controller="Home" asp-action="Index">
                     <div class="nav-link-icon"><i class="fas fa-home"></i></div>
                     Home
+                </a>
+                <a class="nav-link @calendarLink" asp-controller="Calendar" asp-action="Index">
+                    <div class="nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
+                    General Calendar
                 </a>
                 <div class="sidenav-menu-heading">Home Objects</div>
                 <a class="nav-link collapsed @inventoryLink" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseInventory" aria-expanded="false" aria-controls="collapseInventory">

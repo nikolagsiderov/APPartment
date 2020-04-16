@@ -1,0 +1,32 @@
+﻿@model APPartment.DisplayModels.Calendar.EventViewModel
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">General Calendar</h6>
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div id='calendar'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+			$(document).ready(function () {
+				$('#calendar').fullCalendar({
+        			header: {
+            			left: 'prev,next today',
+            			center: 'title',
+            			right: 'month,agendaWeek,agendaDay'
+					},
+            		firstDay: 1, //The day that each week begins (Monday=1)
+            		slotMinutes: 60,
+            		events: '@Url.RouteUrl(new{ action="GetEvents", controller="Calendar" })'
+        		});
+    		});
+</script>
