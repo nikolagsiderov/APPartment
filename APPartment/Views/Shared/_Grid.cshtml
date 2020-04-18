@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<APPartment.Models.Base.BaseObject>
 
+@using APPartment.Enums;
+
 @{
     List<string> statuses = ViewData["Statuses"].ToString().Split(',').ToList();
     var moduleName = ViewData["Module"].ToString();
@@ -17,63 +19,54 @@
     switch (moduleName)
     {
         case "Inventory":
-            titleForCheckAction = "Mark as supplied";
-            titleForUncheckAction = "Mark as not supplied";
+            titleForCheckAction = $"Mark as {BaseObjectStatus.Inventory1}";
+            titleForUncheckAction = $"Mark as {BaseObjectStatus.Inventory3}";
 
-            checkCardBody = "Are you sure you want to mark as supplied?";
-            uncheckCardBody = "Are you sure you want to mark as not supplied?";
+            checkCardBody = $"Are you sure you want to mark as {BaseObjectStatus.Inventory1}?";
+            uncheckCardBody = $"Are you sure you want to mark as {BaseObjectStatus.Inventory3}?";
 
-            checkCardButton = "Mark supplied";
-            uncheckCardButton = "Mark not supplied";
+            checkCardButton = $"Mark {BaseObjectStatus.Inventory1}";
+            uncheckCardButton = $"Mark {BaseObjectStatus.Inventory3}";
 
             newModel = new APPartment.Models.Inventory();
             break;
         case "Hygiene":
-            titleForCheckAction = "Mark as cleaned";
-            titleForUncheckAction = "Mark as not cleaned";
+            titleForCheckAction = $"Mark as {BaseObjectStatus.Hygiene1}";
+            titleForUncheckAction = $"Mark as {BaseObjectStatus.Hygiene3}";
 
-            checkCardBody = "Are you sure you want to mark as cleaned?";
-            uncheckCardBody = "Are you sure you want to mark as not cleaned?";
+            checkCardBody = $"Are you sure you want to mark as {BaseObjectStatus.Hygiene1}?";
+            uncheckCardBody = $"Are you sure you want to mark as {BaseObjectStatus.Hygiene3}?";
 
-            checkCardButton = "Mark cleaned";
-            uncheckCardButton = "Mark not cleaned";
+            checkCardButton = $"Mark {BaseObjectStatus.Hygiene1}";
+            uncheckCardButton = $"Mark {BaseObjectStatus.Hygiene3}";
 
             newModel = new APPartment.Models.Hygiene();
             break;
         case "Issues":
-            titleForCheckAction = "Mark as closed";
-            titleForUncheckAction = "Mark as open";
+            titleForCheckAction = $"Mark as {BaseObjectStatus.Issues1}";
+            titleForUncheckAction = $"Mark as {BaseObjectStatus.Issues3}";
 
-            checkCardBody = "Are you sure you want to close?";
-            uncheckCardBody = "Are you sure you want to open?";
+            checkCardBody = $"Are you sure you want mark as {BaseObjectStatus.Issues1}?";
+            uncheckCardBody = $"Are you sure you want to mark as {BaseObjectStatus.Issues3}?";
 
-            checkCardButton = "Close";
-            uncheckCardButton = "Open";
+            checkCardButton = $"{BaseObjectStatus.Issues1}";
+            uncheckCardButton = $"{BaseObjectStatus.Issues3}";
 
             newModel = new APPartment.Models.Issue();
             break;
         case "Surveys":
-            titleForCheckAction = "Mark as completed";
-            titleForUncheckAction = "Mark as pending";
+            titleForCheckAction = "Mark as Completed";
+            titleForUncheckAction = "Mark as Pending";
 
-            checkCardBody = "Are you sure you want to mark as completed?";
-            uncheckCardBody = "Are you sure you want to mark as pending?";
+            checkCardBody = "Are you sure you want to mark as Completed?";
+            uncheckCardBody = "Are you sure you want to mark as Pending?";
 
-            checkCardButton = "Mark completed";
-            uncheckCardButton = "Mark pending";
+            checkCardButton = "Mark Completed";
+            uncheckCardButton = "Mark Pending";
 
             newModel = new APPartment.Models.Survey();
             break;
         case "Chores":
-            titleForCheckAction = "Mark as completed";
-            titleForUncheckAction = "Mark as not completed";
-
-            checkCardBody = "Are you sure you want to mark as completed?";
-            uncheckCardBody = "Are you sure you want to mark as not completed?";
-
-            checkCardButton = "Mark completed";
-            uncheckCardButton = "Mark not completed";
-
             newModel = new APPartment.Models.Chore();
             break;
     }
@@ -209,53 +202,56 @@
                                         </div>
                                     }
 
-                                    if (item.IsCompleted)
+                                    if (moduleName != "Chores")
                                     {
-                                        <button type="button" title="@titleForUncheckAction" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
+                                        if (item.IsCompleted)
+                                        {
+                                            <button type="button" title="@titleForUncheckAction" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
 
-                                        <div class="modal fade" id="@modalNotCompletedId" tabindex="-1" role="dialog" aria-labelledby="markNotCompletedObjectModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="markNotCompletedObjectModalLabel">@titleForUncheckAction</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        @uncheckCardBody
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                        <a asp-action="MarkNotCompleted" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">@uncheckCardButton</button></a>
+                                            <div class="modal fade" id="@modalNotCompletedId" tabindex="-1" role="dialog" aria-labelledby="markNotCompletedObjectModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="markNotCompletedObjectModalLabel">@titleForUncheckAction</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            @uncheckCardBody
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                            <a asp-action="MarkNotCompleted" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">@uncheckCardButton</button></a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <button type="button" title="@titleForCheckAction" class="btn btn-success btn-sm" data-toggle="modal" data-target="#@modalCompletedId"><i class="fas fa-check"></i></button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" title="@titleForCheckAction" class="btn btn-success btn-sm" data-toggle="modal" data-target="#@modalCompletedId"><i class="fas fa-check"></i></button>
 
-                                        <div class="modal fade" id="@modalCompletedId" tabindex="-1" role="dialog" aria-labelledby="completeObjectModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="completeObjectModalLabel">@titleForCheckAction</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        @checkCardBody
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                        <a asp-action="Complete" asp-route-id="@item.Id"><button type="button" class="btn btn-success">@checkCardButton</button></a>
+                                            <div class="modal fade" id="@modalCompletedId" tabindex="-1" role="dialog" aria-labelledby="completeObjectModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="completeObjectModalLabel">@titleForCheckAction</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            @checkCardBody
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                            <a asp-action="Complete" asp-route-id="@item.Id"><button type="button" class="btn btn-success">@checkCardButton</button></a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        }
                                     }
 
                                     <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i></button></a>
@@ -284,6 +280,31 @@
                                 }
                                 else
                                 {
+                                    if (item.IsCompleted)
+                                    {
+                                        <button type="button" title="@titleForUncheckAction" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
+
+                                        <div class="modal fade" id="@modalNotCompletedId" tabindex="-1" role="dialog" aria-labelledby="markNotCompletedObjectModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="markNotCompletedObjectModalLabel">@titleForUncheckAction</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        @uncheckCardBody
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        <a asp-action="MarkNotCompleted" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">@uncheckCardButton</button></a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
                                     <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i> &nbsp; Details</button></a>
                                 }
                             </td>

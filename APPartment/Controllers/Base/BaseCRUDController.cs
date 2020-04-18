@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using APPartment.Core;
 using APPartment.Data;
+using APPartment.Enums;
 using APPartment.Models;
 using APPartment.Models.Declaration;
 using APPartment.Services;
@@ -56,7 +57,7 @@ namespace APPartment.Controllers.Base
 
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
-            var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId).ToListAsync();
+            var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == false).ToListAsync();
 
             ViewData["Manage"] = true;
             ViewData["Statuses"] = baseService.GetStatuses(typeof(T));
@@ -190,6 +191,7 @@ namespace APPartment.Controllers.Base
             }
 
             model.IsCompleted = true;
+            model.Status = (int)ObjectStatus.Trivial;
 
             await dataContext.UpdateAsync(model, currentUserId, currentHouseId, null);
 
@@ -215,6 +217,7 @@ namespace APPartment.Controllers.Base
             }
 
             model.IsCompleted = false;
+            model.Status = (int)ObjectStatus.High;
 
             await dataContext.UpdateAsync(model, currentUserId, currentHouseId, null);
 

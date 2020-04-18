@@ -22,12 +22,24 @@ namespace APPartment.Controllers
 
         #region Actions
         [Breadcrumb(ChoresBreadcrumbs.All_Breadcrumb)]
-        public override Task<IActionResult> Index()
+        public override async Task<IActionResult> Index()
         {
             ViewData["GridTitle"] = "Chores - All";
             ViewData["Module"] = "Chores";
 
-            return base.Index();
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            var modelObjects = await _context.Set<Chore>().Where(x => x.HouseId == currentHouseId).ToListAsync();
+
+            ViewData["Manage"] = true;
+            ViewData["Statuses"] = baseService.GetStatuses(typeof(Chore));
+
+            return View("_Grid", modelObjects);
         }
 
         [Breadcrumb(ChoresBreadcrumbs.Others_Breadcrumb)]
@@ -62,7 +74,7 @@ namespace APPartment.Controllers
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
-            var modelObjects = await _context.Set<Chore>().Where(x => x.HouseId == currentHouseId && x.AssignedToId != currentUserId).ToListAsync();
+            var modelObjects = await _context.Set<Chore>().Where(x => x.HouseId == currentHouseId && x.AssignedToId == currentUserId).ToListAsync();
 
             ViewData["GridTitle"] = "Chores - Mine";
             ViewData["Module"] = "Chores";

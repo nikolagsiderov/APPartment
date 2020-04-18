@@ -136,18 +136,7 @@ namespace APPartment.Utilities
 
                                     if (column == "IsCompleted")
                                     {
-                                        var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
-
-                                        historyEventString.Append("Marked ");
-
-                                        if (wasMarkedAsCompleted)
-                                        {
-                                            historyEventString.Append(string.Format($"as <strong>supplied</strong>."));
-                                        }
-                                        else
-                                        {
-                                            historyEventString.Append(string.Format($"as <strong>not supplied</strong>."));
-                                        }
+                                        continue;
                                     }
                                     else if (column == "Status")
                                     {
@@ -191,18 +180,7 @@ namespace APPartment.Utilities
 
                                     if (column == "IsCompleted")
                                     {
-                                        var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
-
-                                        historyEventString.Append("Marked ");
-
-                                        if (wasMarkedAsCompleted)
-                                        {
-                                            historyEventString.Append(string.Format($"as <strong>cleaned</strong>."));
-                                        }
-                                        else
-                                        {
-                                            historyEventString.Append(string.Format($"as <strong>due cleaning</strong>."));
-                                        }
+                                        continue;
                                     }
                                     else if (column == "Status")
                                     {
@@ -246,18 +224,7 @@ namespace APPartment.Utilities
 
                                     if (column == "IsCompleted")
                                     {
-                                        var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
-
-                                        historyEventString.Append("Marked ");
-
-                                        if (wasMarkedAsCompleted)
-                                        {
-                                            historyEventString.Append(string.Format($"as <strong>closed</strong>."));
-                                        }
-                                        else
-                                        {
-                                            historyEventString.Append(string.Format($"as <strong>open</strong>."));
-                                        }
+                                        continue;
                                     }
                                     else if (column == "Status")
                                     {
@@ -400,18 +367,7 @@ namespace APPartment.Utilities
 
                                         if (column == "IsCompleted")
                                         {
-                                            var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
-
-                                            historyEventString.Append("Marked as ");
-
-                                            if (wasMarkedAsCompleted)
-                                            {
-                                                historyEventString.Append("<strong>supplied</strong>.");
-                                            }
-                                            else
-                                            {
-                                                historyEventString.Append("<strong>not supplied</strong>.");
-                                            }
+                                            continue;
                                         }
                                         else if (column == "Status")
                                         {
@@ -455,18 +411,7 @@ namespace APPartment.Utilities
 
                                         if (column == "IsCompleted")
                                         {
-                                            var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
-
-                                            historyEventString.Append("Marked as ");
-
-                                            if (wasMarkedAsCompleted)
-                                            {
-                                                historyEventString.Append("<strong>cleaned</strong>.");
-                                            }
-                                            else
-                                            {
-                                                historyEventString.Append("<strong>due cleaning</strong>.");
-                                            }
+                                            continue;
                                         }
                                         else if (column == "Status")
                                         {
@@ -510,18 +455,7 @@ namespace APPartment.Utilities
 
                                         if (column == "IsCompleted")
                                         {
-                                            var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
-
-                                            historyEventString.Append("Marked as ");
-
-                                            if (wasMarkedAsCompleted)
-                                            {
-                                                historyEventString.Append("<strong>closed</strong>.");
-                                            }
-                                            else
-                                            {
-                                                historyEventString.Append("<strong>open</strong>.");
-                                            }
+                                            continue;
                                         }
                                         else if (column == "Status")
                                         {
@@ -565,18 +499,7 @@ namespace APPartment.Utilities
 
                                         if (column == "IsCompleted")
                                         {
-                                            var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
-
-                                            historyEventString.Append("Marked as ");
-
-                                            if (wasMarkedAsCompleted)
-                                            {
-                                                historyEventString.Append("<strong>completed</strong>.");
-                                            }
-                                            else
-                                            {
-                                                historyEventString.Append("<strong>pending</strong>.");
-                                            }
+                                            continue;
                                         }
                                         else if (column == "Status")
                                         {
@@ -620,24 +543,13 @@ namespace APPartment.Utilities
 
                                         if (column == "IsCompleted")
                                         {
-                                            var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
-
-                                            historyEventString.Append("Marked as ");
-
-                                            if (wasMarkedAsCompleted)
-                                            {
-                                                historyEventString.Append("<strong>completed</strong>.");
-                                            }
-                                            else
-                                            {
-                                                historyEventString.Append("<strong>pending</strong>.");
-                                            }
+                                            continue;
                                         }
                                         else if (column == "AssignedToId")
                                         {
                                             var assignedUserUsername = context.Users.Where(x => x.UserId == long.Parse(newValues[column])).FirstOrDefault().Username;
 
-                                            historyEventString.Append($"Assigned chore to {assignedUserUsername}.");
+                                            historyEventString.Append($"Assigned chore to <strong>{assignedUserUsername}</strong>.");
                                         }
                                         else if (column == "Status")
                                         {
@@ -951,18 +863,7 @@ namespace APPartment.Utilities
 
                                         if (column == "IsCompleted")
                                         {
-                                            var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
-
-                                            historyEventString.Append("Marked as ");
-
-                                            if (wasMarkedAsCompleted)
-                                            {
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Inventory1}</strong>."));
-                                            }
-                                            else
-                                            {
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
-                                            }
+                                            continue;
                                         }
                                         else if (column == "Status")
                                         {
@@ -1008,18 +909,7 @@ namespace APPartment.Utilities
 
                                         if (column == "IsCompleted")
                                         {
-                                            var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
-
-                                            historyEventString.Append("Marked as ");
-
-                                            if (wasMarkedAsCompleted)
-                                            {
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Hygiene1}</strong>."));
-                                            }
-                                            else
-                                            {
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
-                                            }
+                                            continue;
                                         }
                                         else if (column == "Status")
                                         {
@@ -1065,18 +955,7 @@ namespace APPartment.Utilities
 
                                         if (column == "IsCompleted")
                                         {
-                                            var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
-
-                                            historyEventString.Append("Marked as ");
-
-                                            if (wasMarkedAsCompleted)
-                                            {
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Issues1}</strong>."));
-                                            }
-                                            else
-                                            {
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
-                                            }
+                                            continue;
                                         }
                                         else if (column == "Status")
                                         {
@@ -1122,18 +1001,7 @@ namespace APPartment.Utilities
 
                                         if (column == "IsCompleted")
                                         {
-                                            var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
-
-                                            historyEventString.Append("Marked as ");
-
-                                            if (wasMarkedAsCompleted)
-                                            {
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Surveys1}</strong>."));
-                                            }
-                                            else
-                                            {
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
-                                            }
+                                            continue;
                                         }
                                         else if (column == "Status")
                                         {
@@ -1179,24 +1047,13 @@ namespace APPartment.Utilities
 
                                         if (column == "IsCompleted")
                                         {
-                                            var wasMarkedAsCompleted = bool.Parse(isCompletedNewValue);
-
-                                            historyEventString.Append("Marked as ");
-
-                                            if (wasMarkedAsCompleted)
-                                            {
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Chores1}</strong>."));
-                                            }
-                                            else
-                                            {
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
-                                            }
+                                            continue;
                                         }
                                         else if (column == "AssignedToId")
                                         {
                                             var assignedUserUsername = context.Users.Where(x => x.UserId == long.Parse(newValues[column])).FirstOrDefault().Username;
 
-                                            historyEventString.Append($"Assigned chore to {assignedUserUsername}.");
+                                            historyEventString.Append($"Assigned chore to <strong>{assignedUserUsername}</strong>.");
                                         }
                                         else if (column == "Status")
                                         {
