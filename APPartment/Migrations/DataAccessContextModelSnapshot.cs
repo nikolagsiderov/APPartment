@@ -74,7 +74,7 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("IsCompleted")
+                    b.Property<bool>("Marked")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -224,7 +224,7 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("IsCompleted")
+                    b.Property<bool>("Marked")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -285,7 +285,7 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("IsCompleted")
+                    b.Property<bool>("Marked")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -316,7 +316,7 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("IsCompleted")
+                    b.Property<bool>("Marked")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
@@ -491,7 +491,7 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("IsCompleted")
+                    b.Property<bool>("Marked")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")

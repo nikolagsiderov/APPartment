@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using APPartment.Core;
 using APPartment.Data;
@@ -46,6 +47,9 @@ namespace APPartment.Controllers.Base
             baseService = new BaseService<T>(_context);
         }
 
+        public abstract Expression<Func<T, bool>> ExecuteInContext { get; set; }
+        public abstract Expression<Func<T, bool>> FuncToExpression(Func<T, bool> f);
+
         #region Actions
         [Breadcrumb("Base")]
         public virtual async Task<IActionResult> Index()
@@ -55,11 +59,10 @@ namespace APPartment.Controllers.Base
                 return RedirectToAction("Login", "Account");
             }
 
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+            var predicate = ExecuteInContext.Compile();
 
-            var modelObjects = await _context.Set<T>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == false).ToListAsync();
+            var modelObjects = _context.Set<T>().ToList().Where(predicate);
 
-            ViewData["Manage"] = true;
             ViewData["Statuses"] = baseService.GetStatuses(typeof(T));
 
             return View("_Grid", modelObjects);
@@ -172,7 +175,7 @@ namespace APPartment.Controllers.Base
             return View("_Edit", model);
         }
 
-        public async Task<IActionResult> Complete(long? id)
+        public async Task<IActionResult> Mark(long? id)
         {
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
@@ -190,7 +193,7 @@ namespace APPartment.Controllers.Base
                 return new Error404NotFoundViewResult();
             }
 
-            model.IsCompleted = true;
+            model.Marked = true;
             model.Status = (int)ObjectStatus.Trivial;
 
             await dataContext.UpdateAsync(model, currentUserId, currentHouseId, null);
@@ -198,7 +201,7 @@ namespace APPartment.Controllers.Base
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> MarkNotCompleted(long? id)
+        public async Task<IActionResult> Unmark(long? id)
         {
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
             var currentHouseId = long.Parse(HttpContext.Session.GetString("UserId"));
@@ -216,7 +219,7 @@ namespace APPartment.Controllers.Base
                 return new Error404NotFoundViewResult();
             }
 
-            model.IsCompleted = false;
+            model.Marked = false;
             model.Status = (int)ObjectStatus.High;
 
             await dataContext.UpdateAsync(model, currentUserId, currentHouseId, null);

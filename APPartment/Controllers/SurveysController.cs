@@ -6,8 +6,9 @@ using System.Linq;
 using SmartBreadcrumbs.Attributes;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using APPartment.Utilities.Constants.Breadcrumbs;
+using System;
+using System.Linq.Expressions;
 
 namespace APPartment.Controllers
 {
@@ -20,12 +21,24 @@ namespace APPartment.Controllers
             _context = context;
         }
 
+        public override Expression<Func<Survey, bool>> ExecuteInContext { get; set; }
+
+        public override Expression<Func<Survey, bool>> FuncToExpression(Func<Survey, bool> f)
+        {
+            return x => f(x);
+        }
+
         #region Actions
         [Breadcrumb(SurveysBreadcrumbs.All_Breadcrumb)]
         public override Task<IActionResult> Index()
         {
             ViewData["GridTitle"] = "Surveys - All";
             ViewData["Module"] = "Surveys";
+            ViewData["Manage"] = true;
+
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId);
 
             return base.Index();
         }
@@ -40,14 +53,13 @@ namespace APPartment.Controllers
 
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
-            var modelObjects = await _context.Set<Survey>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == true).ToListAsync();
-
             ViewData["GridTitle"] = "Surveys - Completed";
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = baseService.GetStatuses(typeof(Survey));
 
-            return View("_Grid", modelObjects);
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && x.Marked == true);
+
+            return await base.Index();
         }
 
         [Breadcrumb(SurveysBreadcrumbs.Pending_Breadcrumb)]
@@ -60,14 +72,13 @@ namespace APPartment.Controllers
 
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
-            var modelObjects = await _context.Set<Survey>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == false).ToListAsync();
-
             ViewData["GridTitle"] = "Surveys - Pending";
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = baseService.GetStatuses(typeof(Survey));
 
-            return View("_Grid", modelObjects);
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && x.Marked == false);
+
+            return await base.Index();
         }
 
         public JsonResult GetPendingSurveysCount()
@@ -76,7 +87,7 @@ namespace APPartment.Controllers
             {
                 long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
-                var pendingSurveysCount = _context.Set<Survey>().ToList().Where(x => x.HouseId == currentHouseId && x.IsCompleted == false).Count();
+                var pendingSurveysCount = _context.Set<Survey>().ToList().Where(x => x.HouseId == currentHouseId && x.Marked == false).Count();
 
                 return Json(pendingSurveysCount);
             }

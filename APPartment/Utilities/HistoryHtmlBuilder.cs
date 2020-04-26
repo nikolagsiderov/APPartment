@@ -112,11 +112,7 @@ namespace APPartment.Utilities
                 }
                 else
                 {
-                    var isCompletedNewValue = string.Empty;
                     var statusNewValue = string.Empty;
-
-                    if (newValues.ContainsKey("IsCompleted"))
-                        isCompletedNewValue = newValues["IsCompleted"];
 
                     if (newValues.ContainsKey("Status"))
                         statusNewValue = newValues["Status"];
@@ -134,7 +130,7 @@ namespace APPartment.Utilities
                                         historyEventString.Append("<br/>");
                                     }
 
-                                    if (column == "IsCompleted")
+                                    if (column == "Marked")
                                     {
                                         continue;
                                     }
@@ -178,7 +174,7 @@ namespace APPartment.Utilities
                                         historyEventString.Append("<br/>");
                                     }
 
-                                    if (column == "IsCompleted")
+                                    if (column == "Marked")
                                     {
                                         continue;
                                     }
@@ -222,7 +218,7 @@ namespace APPartment.Utilities
                                         historyEventString.Append("<br/>");
                                     }
 
-                                    if (column == "IsCompleted")
+                                    if (column == "Marked")
                                     {
                                         continue;
                                     }
@@ -343,11 +339,7 @@ namespace APPartment.Utilities
                     }
                     else
                     {
-                        var isCompletedNewValue = string.Empty;
                         var statusNewValue = string.Empty;
-
-                        if (newValues.ContainsKey("IsCompleted"))
-                            isCompletedNewValue = newValues["IsCompleted"];
 
                         if (newValues.ContainsKey("Status"))
                             statusNewValue = newValues["Status"];
@@ -365,7 +357,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "IsCompleted")
+                                        if (column == "Marked")
                                         {
                                             continue;
                                         }
@@ -409,7 +401,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "IsCompleted")
+                                        if (column == "Marked")
                                         {
                                             continue;
                                         }
@@ -453,7 +445,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "IsCompleted")
+                                        if (column == "Marked")
                                         {
                                             continue;
                                         }
@@ -497,7 +489,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "IsCompleted")
+                                        if (column == "Marked")
                                         {
                                             continue;
                                         }
@@ -541,7 +533,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "IsCompleted")
+                                        if (column == "Marked")
                                         {
                                             continue;
                                         }
@@ -805,12 +797,8 @@ namespace APPartment.Utilities
                     }
                     else
                     {
-                        var isCompletedNewValue = string.Empty;
                         var statusOldValue = string.Empty;
                         var statusNewValue = string.Empty;
-
-                        if (newValues.ContainsKey("IsCompleted"))
-                            isCompletedNewValue = newValues["IsCompleted"];
 
                         if (oldValues.ContainsKey("Status"))
                             statusOldValue = oldValues["Status"];
@@ -861,7 +849,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "IsCompleted")
+                                        if (column == "Marked")
                                         {
                                             continue;
                                         }
@@ -907,7 +895,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "IsCompleted")
+                                        if (column == "Marked")
                                         {
                                             continue;
                                         }
@@ -953,7 +941,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "IsCompleted")
+                                        if (column == "Marked")
                                         {
                                             continue;
                                         }
@@ -999,7 +987,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "IsCompleted")
+                                        if (column == "Marked")
                                         {
                                             continue;
                                         }
@@ -1045,7 +1033,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "IsCompleted")
+                                        if (column == "Marked")
                                         {
                                             continue;
                                         }

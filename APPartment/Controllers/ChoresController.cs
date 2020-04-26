@@ -1,13 +1,14 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using APPartment.Data;
 using APPartment.Models;
 using APPartment.Controllers.Base;
 using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Http;
 using APPartment.Utilities.Constants.Breadcrumbs;
+using System;
+using System.Linq.Expressions;
 
 namespace APPartment.Controllers
 {
@@ -20,26 +21,31 @@ namespace APPartment.Controllers
             _context = context;
         }
 
+        public override Expression<Func<Chore, bool>> ExecuteInContext { get; set; }
+
+        public override Expression<Func<Chore, bool>> FuncToExpression(Func<Chore, bool> f)
+        {
+            return x => f(x);
+        }
+
         #region Actions
         [Breadcrumb(ChoresBreadcrumbs.All_Breadcrumb)]
         public override async Task<IActionResult> Index()
         {
-            ViewData["GridTitle"] = "Chores - All";
-            ViewData["Module"] = "Chores";
-
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
             {
                 return RedirectToAction("Login", "Account");
             }
 
+            ViewData["GridTitle"] = "Chores - All";
+            ViewData["Module"] = "Chores";
+            ViewData["Manage"] = true;
+
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
-            var modelObjects = await _context.Set<Chore>().Where(x => x.HouseId == currentHouseId).ToListAsync();
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId);
 
-            ViewData["Manage"] = true;
-            ViewData["Statuses"] = baseService.GetStatuses(typeof(Chore));
-
-            return View("_Grid", modelObjects);
+            return await base.Index();
         }
 
         [Breadcrumb(ChoresBreadcrumbs.Others_Breadcrumb)]
@@ -53,14 +59,13 @@ namespace APPartment.Controllers
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
-            var modelObjects = await _context.Set<Chore>().Where(x => x.HouseId == currentHouseId && x.AssignedToId != currentUserId).ToListAsync();
-
             ViewData["GridTitle"] = "Chores - Others";
             ViewData["Module"] = "Chores";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = baseService.GetStatuses(typeof(Chore));
 
-            return View("_Grid", modelObjects);
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && x.AssignedToId != currentUserId);
+
+            return await base.Index();
         }
 
         [Breadcrumb(ChoresBreadcrumbs.Mine_Breadcrumb)]
@@ -74,14 +79,13 @@ namespace APPartment.Controllers
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
 
-            var modelObjects = await _context.Set<Chore>().Where(x => x.HouseId == currentHouseId && x.AssignedToId == currentUserId).ToListAsync();
-
             ViewData["GridTitle"] = "Chores - Mine";
             ViewData["Module"] = "Chores";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = baseService.GetStatuses(typeof(Chore));
 
-            return View("_Grid", modelObjects);
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && x.AssignedToId == currentUserId);
+
+            return await base.Index();
         }
 
         public JsonResult GetMyChoresCount()

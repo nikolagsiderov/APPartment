@@ -37,7 +37,7 @@ namespace APPartment.Migrations
                     Name = table.Column<string>(nullable: false),
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    IsCompleted = table.Column<bool>(nullable: false),
+                    Marked = table.Column<bool>(nullable: false),
                     HouseId = table.Column<long>(nullable: true),
                     ObjectId = table.Column<long>(nullable: false),
                     AssignedToId = table.Column<long>(nullable: true)
@@ -135,7 +135,7 @@ namespace APPartment.Migrations
                     Name = table.Column<string>(nullable: false),
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    IsCompleted = table.Column<bool>(nullable: false),
+                    Marked = table.Column<bool>(nullable: false),
                     HouseId = table.Column<long>(nullable: true),
                     ObjectId = table.Column<long>(nullable: false)
                 },
@@ -171,7 +171,7 @@ namespace APPartment.Migrations
                     Name = table.Column<string>(nullable: false),
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    IsCompleted = table.Column<bool>(nullable: false),
+                    Marked = table.Column<bool>(nullable: false),
                     HouseId = table.Column<long>(nullable: true),
                     ObjectId = table.Column<long>(nullable: false)
                 },
@@ -189,7 +189,7 @@ namespace APPartment.Migrations
                     Name = table.Column<string>(nullable: false),
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    IsCompleted = table.Column<bool>(nullable: false),
+                    Marked = table.Column<bool>(nullable: false),
                     HouseId = table.Column<long>(nullable: true),
                     ObjectId = table.Column<long>(nullable: false)
                 },
@@ -255,7 +255,7 @@ namespace APPartment.Migrations
                     Name = table.Column<string>(nullable: false),
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    IsCompleted = table.Column<bool>(nullable: false),
+                    Marked = table.Column<bool>(nullable: false),
                     HouseId = table.Column<long>(nullable: true),
                     ObjectId = table.Column<long>(nullable: false)
                 },

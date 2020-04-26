@@ -204,7 +204,7 @@
 
                                     if (moduleName != "Chores")
                                     {
-                                        if (item.IsCompleted)
+                                        if (item.Marked)
                                         {
                                             <button type="button" title="@titleForUncheckAction" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
 
@@ -222,7 +222,7 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                            <a asp-action="MarkNotCompleted" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">@uncheckCardButton</button></a>
+                                                            <a asp-action="Unmark" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">@uncheckCardButton</button></a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -246,7 +246,7 @@
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                            <a asp-action="Complete" asp-route-id="@item.Id"><button type="button" class="btn btn-success">@checkCardButton</button></a>
+                                                            <a asp-action="Mark" asp-route-id="@item.Id"><button type="button" class="btn btn-success">@checkCardButton</button></a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -280,7 +280,7 @@
                                 }
                                 else
                                 {
-                                    if (item.IsCompleted)
+                                    if (item.Marked)
                                     {
                                         <button type="button" title="@titleForUncheckAction" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
 
@@ -298,7 +298,7 @@
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                        <a asp-action="MarkNotCompleted" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">@uncheckCardButton</button></a>
+                                                        <a asp-action="Unmark" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">@uncheckCardButton</button></a>
                                                     </div>
                                                 </div>
                                             </div>

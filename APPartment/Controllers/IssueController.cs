@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using APPartment.Enums;
-using Microsoft.EntityFrameworkCore;
 using APPartment.Utilities.Constants.Breadcrumbs;
+using System;
+using System.Linq.Expressions;
 
 namespace APPartment.Controllers
 {
@@ -21,12 +22,24 @@ namespace APPartment.Controllers
             _context = context;
         }
 
+        public override Expression<Func<Issue, bool>> ExecuteInContext { get; set; }
+
+        public override Expression<Func<Issue, bool>> FuncToExpression(Func<Issue, bool> f)
+        {
+            return x => f(x);
+        }
+
         #region Actions
         [Breadcrumb(IssuesBreadcrumbs.All_Breadcrumb)]
         public override Task<IActionResult> Index()
         {
             ViewData["GridTitle"] = "Issues - All";
             ViewData["Module"] = "Issues";
+            ViewData["Manage"] = true;
+
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId);
 
             return base.Index();
         }
@@ -41,14 +54,13 @@ namespace APPartment.Controllers
 
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
-            var modelObjects = await _context.Set<Issue>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == true).ToListAsync();
-
             ViewData["GridTitle"] = "Issues - Closed";
             ViewData["Module"] = "Issues";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = baseService.GetStatuses(typeof(Issue));
 
-            return View("_Grid", modelObjects);
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && x.Marked == true);
+
+            return await base.Index();
         }
 
         [Breadcrumb(IssuesBreadcrumbs.Open_Breadcrumb)]
@@ -61,14 +73,13 @@ namespace APPartment.Controllers
 
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
-            var modelObjects = await _context.Set<Issue>().Where(x => x.HouseId == currentHouseId && x.IsCompleted == false).ToListAsync();
-
             ViewData["GridTitle"] = "Issues - Open";
             ViewData["Module"] = "Issues";
             ViewData["Manage"] = false;
-            ViewData["Statuses"] = baseService.GetStatuses(typeof(Issue));
 
-            return View("_Grid", modelObjects);
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && x.Marked == false);
+
+            return await base.Index();
         }
 
         public JsonResult GetIssuesCriticalCount()
@@ -78,7 +89,7 @@ namespace APPartment.Controllers
                 long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
                 var issuesCriticalCount = _context.Set<Issue>().ToList().Where(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.Critical || 
-                x.Status == (int)ObjectStatus.High) && x.IsCompleted == false).Count();
+                x.Status == (int)ObjectStatus.High) && x.Marked == false).Count();
 
                 return Json(issuesCriticalCount);
             }

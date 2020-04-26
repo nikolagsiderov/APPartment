@@ -12,7 +12,7 @@ namespace APPartment.Models.Declaration
 
         public int Status { get; set; }
 
-        public bool IsCompleted { get; set; }
+        public bool Marked { get; set; }
 
         public long? HouseId { get; set; }
 
