@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APPartment.Migrations
 {
     [DbContext(typeof(DataAccessContext))]
-    [Migration("20200426231641_initial")]
+    [Migration("20200426235221_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,9 +75,6 @@ namespace APPartment.Migrations
 
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
-
-                    b.Property<bool>("Marked")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -226,9 +223,6 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("Marked")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -287,9 +281,6 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("Marked")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -317,9 +308,6 @@ namespace APPartment.Migrations
 
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
-
-                    b.Property<bool>("Marked")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -492,9 +480,6 @@ namespace APPartment.Migrations
 
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
-
-                    b.Property<bool>("Marked")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()

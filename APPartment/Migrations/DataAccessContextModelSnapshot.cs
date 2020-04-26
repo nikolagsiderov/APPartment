@@ -74,9 +74,6 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("Marked")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -224,9 +221,6 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("Marked")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -285,9 +279,6 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("Marked")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -315,9 +306,6 @@ namespace APPartment.Migrations
 
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
-
-                    b.Property<bool>("Marked")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -490,9 +478,6 @@ namespace APPartment.Migrations
 
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
-
-                    b.Property<bool>("Marked")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()

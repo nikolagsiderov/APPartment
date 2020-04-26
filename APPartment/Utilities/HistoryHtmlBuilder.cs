@@ -130,11 +130,7 @@ namespace APPartment.Utilities
                                         historyEventString.Append("<br/>");
                                     }
 
-                                    if (column == "Marked")
-                                    {
-                                        continue;
-                                    }
-                                    else if (column == "Status")
+                                    if (column == "Status")
                                     {
                                         historyEventString.Append("Set status as ");
 
@@ -174,11 +170,7 @@ namespace APPartment.Utilities
                                         historyEventString.Append("<br/>");
                                     }
 
-                                    if (column == "Marked")
-                                    {
-                                        continue;
-                                    }
-                                    else if (column == "Status")
+                                    if (column == "Status")
                                     {
                                         historyEventString.Append("Set status as ");
 
@@ -218,11 +210,7 @@ namespace APPartment.Utilities
                                         historyEventString.Append("<br/>");
                                     }
 
-                                    if (column == "Marked")
-                                    {
-                                        continue;
-                                    }
-                                    else if (column == "Status")
+                                    if (column == "Status")
                                     {
                                         historyEventString.Append("Set status as ");
 
@@ -357,11 +345,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "Marked")
-                                        {
-                                            continue;
-                                        }
-                                        else if (column == "Status")
+                                        if (column == "Status")
                                         {
                                             historyEventString.Append("Set status as ");
 
@@ -401,11 +385,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "Marked")
-                                        {
-                                            continue;
-                                        }
-                                        else if (column == "Status")
+                                        if (column == "Status")
                                         {
                                             historyEventString.Append("Set status as ");
 
@@ -445,11 +425,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "Marked")
-                                        {
-                                            continue;
-                                        }
-                                        else if (column == "Status")
+                                        if (column == "Status")
                                         {
                                             historyEventString.Append("Set status as ");
 
@@ -489,11 +465,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "Marked")
-                                        {
-                                            continue;
-                                        }
-                                        else if (column == "Status")
+                                        if (column == "Status")
                                         {
                                             historyEventString.Append("Set status as ");
 
@@ -533,11 +505,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "Marked")
-                                        {
-                                            continue;
-                                        }
-                                        else if (column == "AssignedToId")
+                                        if (column == "AssignedToId")
                                         {
                                             var assignedUserUsername = context.Users.Where(x => x.UserId == long.Parse(newValues[column])).FirstOrDefault().Username;
 
@@ -849,11 +817,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "Marked")
-                                        {
-                                            continue;
-                                        }
-                                        else if (column == "Status")
+                                        if (column == "Status")
                                         {
                                             historyEventString.Append("Set status as ");
 
@@ -895,11 +859,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "Marked")
-                                        {
-                                            continue;
-                                        }
-                                        else if (column == "Status")
+                                        if (column == "Status")
                                         {
                                             historyEventString.Append("Set status as ");
 
@@ -941,11 +901,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "Marked")
-                                        {
-                                            continue;
-                                        }
-                                        else if (column == "Status")
+                                        if (column == "Status")
                                         {
                                             historyEventString.Append("Set status as ");
 
@@ -987,11 +943,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "Marked")
-                                        {
-                                            continue;
-                                        }
-                                        else if (column == "Status")
+                                        if (column == "Status")
                                         {
                                             historyEventString.Append("Set status as ");
 
@@ -1033,11 +985,7 @@ namespace APPartment.Utilities
                                             historyEventString.Append("<br/>");
                                         }
 
-                                        if (column == "Marked")
-                                        {
-                                            continue;
-                                        }
-                                        else if (column == "AssignedToId")
+                                        if (column == "AssignedToId")
                                         {
                                             var assignedUserUsername = context.Users.Where(x => x.UserId == long.Parse(newValues[column])).FirstOrDefault().Username;
 

@@ -58,7 +58,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Issues";
             ViewData["Manage"] = false;
 
-            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && x.Marked == true);
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId);
 
             return await base.Index();
         }
@@ -77,7 +77,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Issues";
             ViewData["Manage"] = false;
 
-            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && x.Marked == false);
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId);
 
             return await base.Index();
         }
@@ -89,7 +89,7 @@ namespace APPartment.Controllers
                 long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
                 var issuesCriticalCount = _context.Set<Issue>().ToList().Where(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.Critical || 
-                x.Status == (int)ObjectStatus.High) && x.Marked == false).Count();
+                x.Status == (int)ObjectStatus.High)).Count();
 
                 return Json(issuesCriticalCount);
             }

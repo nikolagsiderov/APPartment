@@ -175,7 +175,7 @@ namespace APPartment.Controllers.Base
             return View("_Edit", model);
         }
 
-        public async Task<IActionResult> Mark(long? id)
+        public async Task<IActionResult> SetLowStatus(long? id)
         {
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
@@ -193,7 +193,6 @@ namespace APPartment.Controllers.Base
                 return new Error404NotFoundViewResult();
             }
 
-            model.Marked = true;
             model.Status = (int)ObjectStatus.Trivial;
 
             await dataContext.UpdateAsync(model, currentUserId, currentHouseId, null);
@@ -201,7 +200,7 @@ namespace APPartment.Controllers.Base
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> Unmark(long? id)
+        public async Task<IActionResult> SetHighStatus(long? id)
         {
             var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
             var currentHouseId = long.Parse(HttpContext.Session.GetString("UserId"));
@@ -219,7 +218,6 @@ namespace APPartment.Controllers.Base
                 return new Error404NotFoundViewResult();
             }
 
-            model.Marked = false;
             model.Status = (int)ObjectStatus.High;
 
             await dataContext.UpdateAsync(model, currentUserId, currentHouseId, null);

@@ -17,8 +17,6 @@ namespace APPartment.Models.Base
 
         public int Status { get; set; }
 
-        public bool Marked { get; set; } = false;
-
         [ForeignKey("House")]
         public long? HouseId { get; set; }
 

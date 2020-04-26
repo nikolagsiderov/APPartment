@@ -12,8 +12,6 @@ namespace APPartment.Models.Declaration
 
         public int Status { get; set; }
 
-        public bool Marked { get; set; }
-
         public long? HouseId { get; set; }
 
         public List<string> Comments { get; set; }
