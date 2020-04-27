@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using SmartBreadcrumbs.Attributes;
 using System.Linq;
-using Microsoft.AspNetCore.Http;
 using APPartment.Enums;
 using APPartment.Utilities.Constants.Breadcrumbs;
 using System;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Http;
 
 namespace APPartment.Controllers
 {
@@ -17,7 +17,7 @@ namespace APPartment.Controllers
     {
         private readonly DataAccessContext _context;
 
-        public HygieneController(DataAccessContext context) : base(context)
+        public HygieneController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
         {
             _context = context;
         }
@@ -37,9 +37,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Hygiene";
             ViewData["Manage"] = true;
 
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
-            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId);
+            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId);
 
             return base.Index();
         }
@@ -47,18 +45,11 @@ namespace APPartment.Controllers
         [Breadcrumb(HygieneBreadcrumbs.Cleaned_Breadcrumb)]
         public async Task<IActionResult> Cleaned()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
             ViewData["GridTitle"] = "Hygiene - Cleaned";
             ViewData["Module"] = "Hygiene";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.Trivial || x.Status == (int)ObjectStatus.Medium));
+            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && (x.Status == (int)ObjectStatus.Trivial || x.Status == (int)ObjectStatus.Medium));
 
             return await base.Index();
         }
@@ -66,35 +57,21 @@ namespace APPartment.Controllers
         [Breadcrumb(HygieneBreadcrumbs.Due_Cleaning_Breadcrumb)]
         public async Task<IActionResult> DueCleaning()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
             ViewData["GridTitle"] = "Hygiene - Due Cleaning";
             ViewData["Module"] = "Hygiene";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
+            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && (x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
 
             return await base.Index();
         }
-        
+
         public JsonResult GetHygieneCriticalCount()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+            var hygieneCriticalCount = _context.Set<Hygiene>().ToList().Where(x => x.HouseId == CurrentHouseId && (x.Status == (int)ObjectStatus.Critical ||
+            x.Status == (int)ObjectStatus.High)).Count();
 
-                var hygieneCriticalCount = _context.Set<Hygiene>().ToList().Where(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.Critical ||
-                x.Status == (int)ObjectStatus.High)).Count();
-
-                return Json(hygieneCriticalCount);
-            }
-
-            return Json(0);
+            return Json(hygieneCriticalCount);
         }
         #endregion
 

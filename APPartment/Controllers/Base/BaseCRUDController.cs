@@ -19,7 +19,7 @@ using SmartBreadcrumbs.Attributes;
 
 namespace APPartment.Controllers.Base
 {
-    public abstract class BaseCRUDController<T> : Controller
+    public abstract class BaseCRUDController<T> : BaseAuthorizeController
         where T : class, IBaseObject
     {
         #region Context, Services and Utilities
@@ -32,9 +32,10 @@ namespace APPartment.Controllers.Base
         private DataContext<Image> imageDataContext;
         private HistoryHtmlBuilder historyHtmlBuilder;
         public BaseService<T> baseService;
+        private IHttpContextAccessor contextAccessor;
         #endregion
 
-        public BaseCRUDController(DataAccessContext context)
+        public BaseCRUDController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
         {
             _context = context;
             htmlRenderHelper = new HtmlRenderHelper(_context);
@@ -54,11 +55,6 @@ namespace APPartment.Controllers.Base
         [Breadcrumb("Base")]
         public virtual async Task<IActionResult> Index()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
             var predicate = FilterExpression.Compile();
 
             var modelObjects = _context.Set<T>().ToList().Where(predicate);
@@ -99,12 +95,8 @@ namespace APPartment.Controllers.Base
         {
             if (ModelState.IsValid)
             {
-                var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-                var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-
-                model.HouseId = currentHouseId;
-
-                await dataContext.SaveAsync(model, currentUserId, currentHouseId, null);
+                model.HouseId = CurrentHouseId;
+                await dataContext.SaveAsync(model, CurrentUserId, CurrentHouseId, null);
             }
 
             return RedirectToAction(nameof(Index));
@@ -146,12 +138,9 @@ namespace APPartment.Controllers.Base
 
             if (ModelState.IsValid)
             {
-                var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-                var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-
                 try
                 {
-                    await dataContext.UpdateAsync(model, currentUserId, currentHouseId, null);
+                    await dataContext.UpdateAsync(model, CurrentUserId, CurrentHouseId, null);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -177,9 +166,6 @@ namespace APPartment.Controllers.Base
 
         public async Task<IActionResult> SetLowStatus(long? id)
         {
-            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
             if (id == null)
             {
                 return new Error404NotFoundViewResult();
@@ -195,16 +181,13 @@ namespace APPartment.Controllers.Base
 
             model.Status = (int)ObjectStatus.Trivial;
 
-            await dataContext.UpdateAsync(model, currentUserId, currentHouseId, null);
+            await dataContext.UpdateAsync(model, CurrentUserId, CurrentHouseId, null);
 
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> SetHighStatus(long? id)
         {
-            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("UserId"));
-
             if (id == null)
             {
                 return new Error404NotFoundViewResult();
@@ -220,16 +203,13 @@ namespace APPartment.Controllers.Base
 
             model.Status = (int)ObjectStatus.High;
 
-            await dataContext.UpdateAsync(model, currentUserId, currentHouseId, null);
+            await dataContext.UpdateAsync(model, CurrentUserId, CurrentHouseId, null);
 
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Assign(string username, long choreId)
         {
-            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
             if (choreId == null)
             {
                 return new Error404NotFoundViewResult();
@@ -246,16 +226,13 @@ namespace APPartment.Controllers.Base
             var userToAssignUserId = userToAssign.UserId;
 
             model.AssignedToId = userToAssignUserId;
-            await choreDataContext.UpdateAsync(model, currentUserId, currentHouseId, null);
+            await choreDataContext.UpdateAsync(model, CurrentUserId, CurrentHouseId, null);
 
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(long? id)
         {
-            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
             if (id == null)
             {
                 return new Error404NotFoundViewResult();
@@ -269,7 +246,7 @@ namespace APPartment.Controllers.Base
                 return new Error404NotFoundViewResult();
             }
 
-            await dataContext.DeleteAsync(model, currentUserId, currentHouseId, null);
+            await dataContext.DeleteAsync(model, CurrentUserId, CurrentHouseId, null);
 
             return RedirectToAction(nameof(Index));
         }
@@ -287,8 +264,6 @@ namespace APPartment.Controllers.Base
         public async Task<IActionResult> PostComment(long targetId, string commentText)
         {
             var username = HttpContext.Session.GetString("Username");
-            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
             var comment = new Comment()
             {
@@ -297,7 +272,7 @@ namespace APPartment.Controllers.Base
                 Username = username
             };
 
-            await commentDataContext.SaveAsync(comment, currentUserId, currentHouseId, targetId);
+            await commentDataContext.SaveAsync(comment, CurrentUserId, CurrentHouseId, targetId);
 
             var result = htmlRenderHelper.BuildPostComment(comment);
 
@@ -308,8 +283,6 @@ namespace APPartment.Controllers.Base
         public ActionResult UploadImages(string targetIdString)
         {
             var targetId = long.Parse(targetIdString);
-            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
             bool isSavedSuccessfully = true;
             string fName = "";
@@ -323,7 +296,7 @@ namespace APPartment.Controllers.Base
                     fName = file.FileName;
                     if (file != null && file.Length > 0)
                     {
-                        fileUploadService.UploadImage(file, targetId, currentUserId, currentHouseId);
+                        fileUploadService.UploadImage(file, targetId, CurrentUserId, CurrentHouseId);
                     }
                 }
             }

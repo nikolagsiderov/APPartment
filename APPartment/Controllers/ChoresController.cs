@@ -5,10 +5,10 @@ using APPartment.Data;
 using APPartment.Models;
 using APPartment.Controllers.Base;
 using SmartBreadcrumbs.Attributes;
-using Microsoft.AspNetCore.Http;
 using APPartment.Utilities.Constants.Breadcrumbs;
 using System;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Http;
 
 namespace APPartment.Controllers
 {
@@ -16,7 +16,7 @@ namespace APPartment.Controllers
     {
         private readonly DataAccessContext _context;
 
-        public ChoresController(DataAccessContext context) : base(context)
+        public ChoresController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
         {
             _context = context;
         }
@@ -32,18 +32,11 @@ namespace APPartment.Controllers
         [Breadcrumb(ChoresBreadcrumbs.All_Breadcrumb)]
         public override async Task<IActionResult> Index()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
             ViewData["GridTitle"] = "Chores - All";
             ViewData["Module"] = "Chores";
             ViewData["Manage"] = true;
 
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
-            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId);
+            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId);
 
             return await base.Index();
         }
@@ -51,19 +44,11 @@ namespace APPartment.Controllers
         [Breadcrumb(ChoresBreadcrumbs.Others_Breadcrumb)]
         public async Task<IActionResult> Others()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-
             ViewData["GridTitle"] = "Chores - Others";
             ViewData["Module"] = "Chores";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId && x.AssignedToId != currentUserId);
+            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && x.AssignedToId != CurrentUserId);
 
             return await base.Index();
         }
@@ -71,36 +56,19 @@ namespace APPartment.Controllers
         [Breadcrumb(ChoresBreadcrumbs.Mine_Breadcrumb)]
         public async Task<IActionResult> Mine()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-
             ViewData["GridTitle"] = "Chores - Mine";
             ViewData["Module"] = "Chores";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId && x.AssignedToId == currentUserId);
+            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && x.AssignedToId == CurrentUserId);
 
             return await base.Index();
         }
 
         public JsonResult GetMyChoresCount()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-                var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-
-                var myChoresCount = _context.Set<Chore>().ToList().Where(x => x.HouseId == currentHouseId && x.AssignedToId == currentUserId).Count();
-
-                return Json(myChoresCount);
-            }
-
-            return Json(0);
+            var myChoresCount = _context.Set<Chore>().ToList().Where(x => x.HouseId == CurrentHouseId && x.AssignedToId == CurrentUserId).Count();
+            return Json(myChoresCount);
         }
         #endregion
 

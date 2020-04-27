@@ -4,12 +4,12 @@ using APPartment.Controllers.Base;
 using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using System.Linq;
 using APPartment.Enums;
 using APPartment.Utilities.Constants.Breadcrumbs;
 using System.Linq.Expressions;
 using System;
+using Microsoft.AspNetCore.Http;
 
 namespace APPartment.Controllers
 {
@@ -17,7 +17,7 @@ namespace APPartment.Controllers
     {
         private readonly DataAccessContext _context;
 
-        public InventoryController(DataAccessContext context) : base(context)
+        public InventoryController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
         {
             _context = context;
         }
@@ -37,9 +37,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Inventory";
             ViewData["Manage"] = true;
 
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
-            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId);
+            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId);
 
             return base.Index();
         }
@@ -47,18 +45,11 @@ namespace APPartment.Controllers
         [Breadcrumb(InventoryBreadcrumbs.Supplied_Breadcrumb)]
         public async Task<IActionResult> Supplied()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
             ViewData["GridTitle"] = "Inventory - Supplied";
             ViewData["Module"] = "Inventory";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.Trivial || x.Status == (int)ObjectStatus.Medium));
+            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && (x.Status == (int)ObjectStatus.Trivial || x.Status == (int)ObjectStatus.Medium));
 
             return await base.Index();
         }
@@ -66,35 +57,20 @@ namespace APPartment.Controllers
         [Breadcrumb(InventoryBreadcrumbs.Not_Supplied_Breadcrumb)]
         public async Task<IActionResult> NotSupplied()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
             ViewData["GridTitle"] = "Inventory - Not Supplied";
             ViewData["Module"] = "Inventory";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
+            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && (x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
 
             return await base.Index();
         }
 
         public JsonResult GetInventoryCriticalCount()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
-                var inventoryCriticalCount = _context.Set<Inventory>().ToList().Where(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.Critical ||
-                x.Status == (int)ObjectStatus.High)).Count();
-
-                return Json(inventoryCriticalCount);
-            }
-
-            return Json(0);
+            var inventoryCriticalCount = _context.Set<Inventory>().ToList().Where(x => x.HouseId == CurrentHouseId && (x.Status == (int)ObjectStatus.Critical ||
+            x.Status == (int)ObjectStatus.High)).Count();
+            return Json(inventoryCriticalCount);
         }
         #endregion
 

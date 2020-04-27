@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using APPartment.Controllers.Base;
+using APPartment.Data;
 using APPartment.DisplayModels.Calendar;
 using APPartment.Utilities.Constants.Breadcrumbs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
 
 namespace APPartment.Controllers
 {
-    public class CalendarController : Controller
+    public class CalendarController : BaseAuthorizeController
     {
+        public CalendarController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
+        {
+        }
+
         [HttpGet]
         [Breadcrumb(CalendarBreadcrumbs.Index)]
         public ActionResult Index()

@@ -17,7 +17,7 @@ namespace APPartment.Controllers
     {
         private readonly DataAccessContext _context;
 
-        public IssuesController(DataAccessContext context) : base(context)
+        public IssuesController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
         {
             _context = context;
         }
@@ -37,9 +37,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Issues";
             ViewData["Manage"] = true;
 
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
-            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId);
+            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId);
 
             return base.Index();
         }
@@ -47,18 +45,11 @@ namespace APPartment.Controllers
         [Breadcrumb(IssuesBreadcrumbs.Closed_Breadcrumb)]
         public async Task<IActionResult> Closed()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
             ViewData["GridTitle"] = "Issues - Closed";
             ViewData["Module"] = "Issues";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId && x.Status == (int)ObjectStatus.Trivial);
+            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && x.Status == (int)ObjectStatus.Trivial);
 
             return await base.Index();
         }
@@ -66,35 +57,20 @@ namespace APPartment.Controllers
         [Breadcrumb(IssuesBreadcrumbs.Open_Breadcrumb)]
         public async Task<IActionResult> Open()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                return RedirectToAction("Login", "Account");
-            }
-
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
             ViewData["GridTitle"] = "Issues - Open";
             ViewData["Module"] = "Issues";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.Medium || x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
+            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && (x.Status == (int)ObjectStatus.Medium || x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
 
             return await base.Index();
         }
 
         public JsonResult GetIssuesCriticalCount()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
-            {
-                long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
-                var issuesCriticalCount = _context.Set<Issue>().ToList().Where(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.Medium || x.Status == (int)ObjectStatus.Critical || 
-                x.Status == (int)ObjectStatus.High)).Count();
-
-                return Json(issuesCriticalCount);
-            }
-
-            return Json(0);
+            var issuesCriticalCount = _context.Set<Issue>().ToList().Where(x => x.HouseId == CurrentHouseId && (x.Status == (int)ObjectStatus.Medium || x.Status == (int)ObjectStatus.Critical ||
+            x.Status == (int)ObjectStatus.High)).Count();
+            return Json(issuesCriticalCount);
         }
         #endregion
 

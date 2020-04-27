@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using APPartment.Controllers.Base;
 using APPartment.Core;
 using APPartment.Data;
 using APPartment.Models;
@@ -7,14 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APPartment.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController : BaseController
     {
         #region Context, Services and Utilities
         private readonly DataAccessContext _context;
         private DataContext<User> dataContext;
         #endregion
 
-        public AccountController(DataAccessContext context)
+        public AccountController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
         {
             _context = context;
             dataContext = new DataContext<User>(_context);

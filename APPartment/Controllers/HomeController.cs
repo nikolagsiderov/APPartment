@@ -14,10 +14,11 @@ using APPartment.Utilities;
 using APPartment.Enums;
 using APPartment.Core;
 using APPartment.Utilities.Constants.Breadcrumbs;
+using APPartment.Controllers.Base;
 
 namespace APPartment.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         #region Context, Services and Utilities
         private readonly DataAccessContext _context;
@@ -30,7 +31,7 @@ namespace APPartment.Controllers
         private HistoryHtmlBuilder historyHtmlBuilder;
         #endregion
 
-        public HomeController(DataAccessContext context)
+        public HomeController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
         {
             _context = context;
             htmlRenderHelper = new HtmlRenderHelper(_context);
@@ -50,27 +51,24 @@ namespace APPartment.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-            var currentUser = _context.Users.Find(currentUserId);
+            var currentUser = _context.Users.Find(CurrentUserId);
 
             ViewData["Username"] = currentUser.Username;
 
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
-            var displayObjects = GetDisplayObject(currentHouseId);
+            var displayObjects = GetDisplayObject();
 
             var homeDisplayModel = new HomeDisplayModel()
             {
-                Messages = GetMessages(currentHouseId),
+                Messages = GetMessages(),
                 BaseObjects = displayObjects
             };
 
-            if (_context.HouseStatuses.Where(x => x.HouseId == currentHouseId).Any())
+            if (_context.HouseStatuses.Where(x => x.HouseId == CurrentHouseId).Any())
             {
-                homeDisplayModel.HouseStatus = _context.HouseStatuses.Where(x => x.HouseId == currentHouseId).OrderByDescending(x => x.Id).FirstOrDefault();
+                homeDisplayModel.HouseStatus = _context.HouseStatuses.Where(x => x.HouseId == CurrentHouseId).OrderByDescending(x => x.Id).FirstOrDefault();
             }
 
-            if (_context.HouseSettings.Any(x => x.HouseId == currentHouseId))
+            if (_context.HouseSettings.Any(x => x.HouseId == CurrentHouseId))
             {
                 homeDisplayModel.RentDueDate = GetRentDueDate();
             }
@@ -93,16 +91,14 @@ namespace APPartment.Controllers
         {
             if (ModelState.IsValid)
             {
-                var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-
-                dataContext.Save(house, currentUserId, 0, null);
+                dataContext.Save(house, CurrentUserId, 0, null);
 
                 ModelState.Clear();
 
                 HttpContext.Session.SetString("HouseId", house.Id.ToString());
                 HttpContext.Session.SetString("HouseName", house.Name.ToString());
 
-                SetUserToCurrentHouse(house.Id);
+                SetUserToCurrentHouse();
 
                 return RedirectToAction("Index", "Home");
             }
@@ -127,7 +123,7 @@ namespace APPartment.Controllers
                 HttpContext.Session.SetString("HouseId", home.Id.ToString());
                 HttpContext.Session.SetString("HouseName", home.Name.ToString());
 
-                SetUserToCurrentHouse(home.Id);
+                SetUserToCurrentHouse();
 
                 return RedirectToAction("Index", "Home");
             }
@@ -143,14 +139,19 @@ namespace APPartment.Controllers
         [Breadcrumb(HomeBreadcrumbs.Settings_Breadcrumb)]
         public IActionResult Settings()
         {
-            var houseSettingsArePresent = _context.HouseSettings.Any(x => x.Id == long.Parse(HttpContext.Session.GetString("HouseId")));
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
+            var houseSettingsArePresent = _context.HouseSettings.Any(x => x.HouseId == CurrentHouseId);
             HouseSettings houseSettings = null;
 
             if (houseSettingsArePresent)
             {
-                houseSettings = _context.HouseSettings.Find(long.Parse(HttpContext.Session.GetString("HouseId")));
+                houseSettings = _context.HouseSettings.Where(x => x.HouseId == CurrentHouseId).First();
 
-                var houseModel = _context.Houses.Find(long.Parse(HttpContext.Session.GetString("HouseId")));
+                var houseModel = _context.Houses.Find(CurrentHouseId);
                 houseSettings.HouseName = houseModel.Name;
             }
 
@@ -159,7 +160,7 @@ namespace APPartment.Controllers
                 return View(houseSettings);
             }
 
-            ViewData["HouseName"] = HttpContext.Session.GetString("HouseName").ToString();
+            ViewData["HouseName"] = CurrentHouseName;
 
             return View();
         }
@@ -167,28 +168,25 @@ namespace APPartment.Controllers
         [HttpPost]
         public IActionResult Settings(HouseSettings settings)
         {
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-
-            var houseModel = _context.Find<House>(currentHouseId);
-            settings.HouseId = currentHouseId;
+            var houseModel = _context.Find<House>(CurrentHouseId);
+            settings.HouseId = CurrentHouseId;
 
             if (!string.IsNullOrEmpty(settings.HouseName) || settings.HouseName != houseModel.Name)
             {
                 houseModel.Name = settings.HouseName;
 
-                dataContext.Update(houseModel, currentUserId, currentHouseId, null);
+                dataContext.Update(houseModel, CurrentUserId, CurrentHouseId, null);
                 HttpContext.Session.SetString("HouseName", houseModel.Name.ToString());
             }
 
             if (settings.Id == 0)
             {
-                settings.HouseId = currentHouseId;
-                houseSettingsDataContext.Save(settings, currentUserId, currentHouseId, null);
+                settings.HouseId = CurrentHouseId;
+                houseSettingsDataContext.Save(settings, CurrentUserId, CurrentHouseId, null);
             }
             else
             {
-                houseSettingsDataContext.Update(settings, currentUserId, currentHouseId, null);
+                houseSettingsDataContext.Update(settings, CurrentUserId, CurrentHouseId, null);
             }
 
             return RedirectToAction(nameof(Index));
@@ -209,14 +207,11 @@ namespace APPartment.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateMessage(string username, string messageText)
         {
-            var currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+            var houseModel = _context.Find<House>(CurrentHouseId);
 
-            var houseModel = _context.Find<House>(currentHouseId);
+            var message = new Message() { Username = username, Text = messageText, UserId = (long)CurrentUserId, HouseId = (long)CurrentHouseId, CreatedDate = DateTime.Now };
 
-            var message = new Message() { Username = username, Text = messageText, UserId = currentUserId, HouseId = currentHouseId, CreatedDate = DateTime.Now };
-
-            await messageDataContext.SaveAsync(message, currentUserId, currentHouseId, null);
+            await messageDataContext.SaveAsync(message, CurrentUserId, CurrentHouseId, null);
 
             return Ok();
         }
@@ -225,14 +220,12 @@ namespace APPartment.Controllers
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
             {
-                long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-
-                if (_context.HouseStatuses.Any(x => x.HouseId == currentHouseId))
+                if (_context.HouseStatuses.Any(x => x.HouseId == CurrentHouseId))
                 {
-                    var currentHouseStatusUserId = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == currentHouseId).FirstOrDefault().UserId;
-                    var currentHouseStatus = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == currentHouseId).FirstOrDefault().Status;
+                    var currentHouseStatusUserId = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == CurrentHouseId).FirstOrDefault().UserId;
+                    var currentHouseStatus = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == CurrentHouseId).FirstOrDefault().Status;
                     var username = _context.Users.Where(x => x.UserId == currentHouseStatusUserId).FirstOrDefault().Username;
-                    var currentHouseStatusDetails = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == currentHouseId).FirstOrDefault().Details;
+                    var currentHouseStatusDetails = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == CurrentHouseId).FirstOrDefault().Details;
 
                     var result = $"{currentHouseStatus};{username};{currentHouseStatusDetails}";
 
@@ -249,10 +242,7 @@ namespace APPartment.Controllers
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
             {
-                long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-                long? currentUserId = long.Parse(HttpContext.Session.GetString("UserId"));
-
-                var houseModel = _context.Find<House>(currentHouseId);
+                var houseModel = _context.Find<House>(CurrentHouseId);
 
                 var houseStatusDetails = string.Empty;
 
@@ -261,15 +251,15 @@ namespace APPartment.Controllers
                     houseStatusDetails = houseStatusDetailsString;
                 }
 
-                if (_context.HouseStatuses.Any(x => x.HouseId == currentHouseId))
+                if (_context.HouseStatuses.Any(x => x.HouseId == CurrentHouseId))
                 {
-                    var currentHouseStatus = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == currentHouseId).FirstOrDefault();
+                    var currentHouseStatus = _context.HouseStatuses.OrderByDescending(x => x.Id).Where(x => x.HouseId == CurrentHouseId).FirstOrDefault();
 
                     currentHouseStatus.Status = int.Parse(houseStatusString);
                     currentHouseStatus.Details = houseStatusDetails;
-                    currentHouseStatus.UserId = (long)currentUserId;
+                    currentHouseStatus.UserId = (long)CurrentUserId;
 
-                    houseStatusDataContext.Update(currentHouseStatus, (long)currentUserId, (long)currentHouseId, null);
+                    houseStatusDataContext.Update(currentHouseStatus, (long)CurrentUserId, CurrentHouseId, null);
                 }
                 else
                 {
@@ -277,11 +267,11 @@ namespace APPartment.Controllers
                     {
                         Status = int.Parse(houseStatusString),
                         Details = houseStatusDetails,
-                        UserId = (long)currentUserId,
-                        HouseId = currentHouseId
+                        UserId = (long)CurrentUserId,
+                        HouseId = CurrentHouseId
                     };
 
-                    houseStatusDataContext.Save(houseStatus, (long)currentUserId, (long)currentHouseId, null);
+                    houseStatusDataContext.Save(houseStatus, CurrentUserId, CurrentHouseId, null);
                 }
             }
 
@@ -292,13 +282,17 @@ namespace APPartment.Controllers
         [Breadcrumb(HomeBreadcrumbs.History_Breadcrumb)]
         public IActionResult History()
         {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HouseId")))
+            {
+                return RedirectToAction("Login", "Home");
+            }
+
             var historyModel = new HomeHistoryDisplayView();
-            long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
-            var history = _context.Audits.Where(x => x.HouseId == currentHouseId).ToList();
+            var history = _context.Audits.Where(x => x.HouseId == CurrentHouseId).ToList();
 
             historyModel.History = historyHtmlBuilder.BuildHomeHistory(history);
 
-            ViewData["HouseName"] = HttpContext.Session.GetString("HouseName").ToString();
+            ViewData["HouseName"] = CurrentHouseName;
 
             return View(historyModel);
         }
@@ -311,8 +305,10 @@ namespace APPartment.Controllers
         }
 
         #region Getters
-        public List<BaseObject> GetDisplayObject(long? currentHouseId)
+        public List<BaseObject> GetDisplayObject()
         {
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
             var displayObjects = new List<BaseObject>();
             var lastInventoryModel = new Inventory();
             var lastHygieneModel = new Hygiene();
@@ -322,7 +318,15 @@ namespace APPartment.Controllers
 
             if (inventoryObjects.Count() > 0)
             {
-                var inventoryObject = _context.Set<Models.Object>().Where(x => x.ObjectTypeId == (long)ObjectTypes.Inventory).OrderByDescending(x => x.ModifiedDate).First();
+                var inventoryObject = new Models.Object();
+                var objects = new List<Models.Object>();
+
+                foreach (var inventory in inventoryObjects)
+                {
+                    objects.Add(_context.Set<Models.Object>().Where(x => x.ObjectId == inventory.ObjectId).FirstOrDefault());
+                }
+
+                inventoryObject = objects.OrderByDescending(x => x.ModifiedDate).FirstOrDefault();
                 lastInventoryModel = _context.Set<Inventory>().Where(x => x.ObjectId == inventoryObject.ObjectId).FirstOrDefault();
 
                 var when = _context.Audits.Where(x => x.ObjectId == lastInventoryModel.ObjectId || x.TargetObjectId == lastInventoryModel.ObjectId)
@@ -337,7 +341,15 @@ namespace APPartment.Controllers
 
             if (hygieneObjects.Count() > 0)
             {
-                var hygieneObject = _context.Set<Models.Object>().Where(x => x.ObjectTypeId == (long)ObjectTypes.Hygiene).OrderByDescending(x => x.ModifiedDate).First();
+                var hygieneObject = new Models.Object();
+                var objects = new List<Models.Object>();
+
+                foreach (var hygiene in hygieneObjects)
+                {
+                    objects.Add(_context.Set<Models.Object>().Where(x => x.ObjectId == hygiene.ObjectId).FirstOrDefault());
+                }
+
+                hygieneObject = objects.OrderByDescending(x => x.ModifiedDate).FirstOrDefault();
                 lastHygieneModel = _context.Set<Hygiene>().Where(x => x.ObjectId == hygieneObject.ObjectId).FirstOrDefault();
 
                 var when = _context.Audits.Where(x => x.ObjectId == lastHygieneModel.ObjectId || x.TargetObjectId == lastHygieneModel.ObjectId)
@@ -352,7 +364,15 @@ namespace APPartment.Controllers
 
             if (issueObjects.Count() > 0)
             {
-                var issueObject = _context.Set<Models.Object>().Where(x => x.ObjectTypeId == (long)ObjectTypes.Issue).OrderByDescending(x => x.ModifiedDate).First();
+                var issueObject = new Models.Object();
+                var objects = new List<Models.Object>();
+
+                foreach (var issue in issueObjects)
+                {
+                    objects.Add(_context.Set<Models.Object>().Where(x => x.ObjectId == issue.ObjectId).FirstOrDefault());
+                }
+
+                issueObject = objects.OrderByDescending(x => x.ModifiedDate).FirstOrDefault();
                 lastIssueModel = _context.Set<Issue>().Where(x => x.ObjectId == issueObject.ObjectId).FirstOrDefault();
 
                 var when = _context.Audits.Where(x => x.ObjectId == lastIssueModel.ObjectId || x.TargetObjectId == lastIssueModel.ObjectId)
@@ -372,10 +392,12 @@ namespace APPartment.Controllers
 
         public string GetRentDueDate()
         {
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
             var nextMonth = DateTime.Now.AddMonths(1).Month.ToString();
             var thisMonth = DateTime.Now.Month.ToString();
             var rentDueDate = string.Empty;
-            var rentDueDateDay = _context.HouseSettings.Find(long.Parse(HttpContext.Session.GetString("HouseId"))).RentDueDateDay;
+            var rentDueDateDay = _context.HouseSettings.Find(currentHouseId).RentDueDateDay;
 
             if (rentDueDateDay != null && rentDueDateDay.ToString() != "0")
             {
@@ -392,25 +414,28 @@ namespace APPartment.Controllers
             return rentDueDate;
         }
 
-        private List<string> GetMessages(long currentHouseId)
+        private List<string> GetMessages()
         {
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
             var messages = htmlRenderHelper.BuildMessagesForChat(_context.Messages.ToList(), currentHouseId);
 
             return messages;
         }
         #endregion
 
-        public void SetUserToCurrentHouse(long houseId)
+        public void SetUserToCurrentHouse()
         {
-            var userId = long.Parse(HttpContext.Session.GetString("UserId"));
-            var userIsAlreadyApartOfCurrentHouse = _context.HouseUsers.Any(x => x.UserId == userId && x.HouseId == houseId);
+            var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
+
+            var userIsAlreadyApartOfCurrentHouse = _context.HouseUsers.Any(x => x.UserId == CurrentUserId && x.HouseId == currentHouseId);
 
             if (!userIsAlreadyApartOfCurrentHouse)
             {
                 var houseUser = new HouseUser()
                 {
-                    HouseId = houseId,
-                    UserId = userId
+                    HouseId = currentHouseId,
+                    UserId = (long)CurrentUserId
                 };
 
                 _context.HouseUsers.Add(houseUser);

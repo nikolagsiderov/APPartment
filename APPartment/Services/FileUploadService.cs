@@ -20,9 +20,9 @@ namespace APPartment.Services
             this.context = context;
         }
 
-        public void UploadImage(IFormFile file, long targetId, long userId, long houseId)
+        public void UploadImage(IFormFile file, long targetId, long? userId, long? houseId)
         {
-            var imageName = SaveImageToDB(file, targetId, userId, houseId);
+            var imageName = SaveImageToDB(file, targetId, (long)userId, (long)houseId);
 
             string pathString = "wwwroot\\BaseObject_Images";
 
