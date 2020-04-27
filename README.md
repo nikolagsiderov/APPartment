@@ -4,8 +4,9 @@ APPartment is an ASP.NET Core MVC project for sharing with your housemate/s and 
 
 # What I have learned
 
+* Further experience with generics
 * Further experience with abstractions
-* Use of asynchronous programming
+* Further experience with asynchronous programming
 * Ability to publish project with Azure
 * Basic work with SignalR
 * Creating custom logos with Photoshop
