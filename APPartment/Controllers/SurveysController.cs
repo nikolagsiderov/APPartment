@@ -57,7 +57,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = false;
 
-            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId);
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && x.IsCompleted == true);
 
             return await base.Index();
         }
@@ -76,7 +76,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = false;
 
-            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId);
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && x.IsCompleted == false);
 
             return await base.Index();
         }
@@ -87,7 +87,7 @@ namespace APPartment.Controllers
             {
                 long? currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
-                var pendingSurveysCount = _context.Set<Survey>().ToList().Where(x => x.HouseId == currentHouseId).Count();
+                var pendingSurveysCount = _context.Set<Survey>().ToList().Where(x => x.HouseId == currentHouseId && x.IsCompleted == false).Count();
 
                 return Json(pendingSurveysCount);
             }

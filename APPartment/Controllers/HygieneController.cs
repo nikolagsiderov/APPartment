@@ -58,7 +58,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Hygiene";
             ViewData["Manage"] = false;
 
-            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId);
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.Trivial || x.Status == (int)ObjectStatus.Medium));
 
             return await base.Index();
         }
@@ -77,7 +77,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Hygiene";
             ViewData["Manage"] = false;
 
-            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId);
+            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
 
             return await base.Index();
         }

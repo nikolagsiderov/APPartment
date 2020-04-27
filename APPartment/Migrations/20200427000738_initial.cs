@@ -252,7 +252,8 @@ namespace APPartment.Migrations
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
                     HouseId = table.Column<long>(nullable: true),
-                    ObjectId = table.Column<long>(nullable: false)
+                    ObjectId = table.Column<long>(nullable: false),
+                    IsCompleted = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

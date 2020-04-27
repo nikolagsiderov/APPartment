@@ -479,6 +479,9 @@ namespace APPartment.Migrations
                     b.Property<long?>("HouseId")
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
