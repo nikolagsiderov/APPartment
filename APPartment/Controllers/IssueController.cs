@@ -22,7 +22,7 @@ namespace APPartment.Controllers
             _context = context;
         }
 
-        public override Expression<Func<Issue, bool>> ExecuteInContext { get; set; }
+        public override Expression<Func<Issue, bool>> FilterExpression { get; set; }
 
         public override Expression<Func<Issue, bool>> FuncToExpression(Func<Issue, bool> f)
         {
@@ -39,7 +39,7 @@ namespace APPartment.Controllers
 
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
-            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId);
+            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId);
 
             return base.Index();
         }
@@ -58,7 +58,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Issues";
             ViewData["Manage"] = false;
 
-            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && x.Status == (int)ObjectStatus.Trivial);
+            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId && x.Status == (int)ObjectStatus.Trivial);
 
             return await base.Index();
         }
@@ -77,7 +77,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Issues";
             ViewData["Manage"] = false;
 
-            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.Medium || x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
+            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId && (x.Status == (int)ObjectStatus.Medium || x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
 
             return await base.Index();
         }

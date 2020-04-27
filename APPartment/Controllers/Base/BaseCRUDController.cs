@@ -47,7 +47,7 @@ namespace APPartment.Controllers.Base
             baseService = new BaseService<T>(_context);
         }
 
-        public abstract Expression<Func<T, bool>> ExecuteInContext { get; set; }
+        public abstract Expression<Func<T, bool>> FilterExpression { get; set; }
         public abstract Expression<Func<T, bool>> FuncToExpression(Func<T, bool> f);
 
         #region Actions
@@ -59,7 +59,7 @@ namespace APPartment.Controllers.Base
                 return RedirectToAction("Login", "Account");
             }
 
-            var predicate = ExecuteInContext.Compile();
+            var predicate = FilterExpression.Compile();
 
             var modelObjects = _context.Set<T>().ToList().Where(predicate);
 

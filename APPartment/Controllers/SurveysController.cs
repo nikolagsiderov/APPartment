@@ -21,7 +21,7 @@ namespace APPartment.Controllers
             _context = context;
         }
 
-        public override Expression<Func<Survey, bool>> ExecuteInContext { get; set; }
+        public override Expression<Func<Survey, bool>> FilterExpression { get; set; }
 
         public override Expression<Func<Survey, bool>> FuncToExpression(Func<Survey, bool> f)
         {
@@ -38,7 +38,7 @@ namespace APPartment.Controllers
 
             var currentHouseId = long.Parse(HttpContext.Session.GetString("HouseId"));
 
-            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId);
+            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId);
 
             return base.Index();
         }
@@ -57,7 +57,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = false;
 
-            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && x.IsCompleted == true);
+            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId && x.IsCompleted == true);
 
             return await base.Index();
         }
@@ -76,7 +76,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = false;
 
-            ExecuteInContext = FuncToExpression(x => x.HouseId == currentHouseId && x.IsCompleted == false);
+            FilterExpression = FuncToExpression(x => x.HouseId == currentHouseId && x.IsCompleted == false);
 
             return await base.Index();
         }
