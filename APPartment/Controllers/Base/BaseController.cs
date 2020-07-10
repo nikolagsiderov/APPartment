@@ -6,10 +6,12 @@ namespace APPartment.Controllers.Base
 {
     public abstract class BaseController : Controller
     {
-        public long? CurrentUserId { get; set; }
-        public long? CurrentHouseId { get; set; }
-        public string CurrentHouseName { get; set; }
-        public string CurrentUserName { get; set; }
+        protected long? CurrentUserId { get; set; }
+        protected long? CurrentHouseId { get; set; }
+        protected string CurrentHouseName { get; set; }
+        protected string CurrentUserName { get; set; }
+        protected string CurrentControllerName { get; set; }
+        protected string ImagesPath { get; } = @"wwwroot\BaseObject_Images\";
 
         public BaseController(IHttpContextAccessor contextAccessor, DataAccessContext context)
         {
@@ -33,6 +35,11 @@ namespace APPartment.Controllers.Base
                 if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("HouseName")))
                 {
                     CurrentHouseName = contextAccessor.HttpContext.Session.GetString("HouseName").ToString();
+                }
+
+                if (ControllerContext.RouteData != null)
+                {
+                    CurrentControllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
                 }
             }
         }

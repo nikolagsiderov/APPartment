@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -32,7 +33,6 @@ namespace APPartment.Controllers.Base
         private DataContext<Image> imageDataContext;
         private HistoryHtmlBuilder historyHtmlBuilder;
         public BaseService<T> baseService;
-        private IHttpContextAccessor contextAccessor;
         #endregion
 
         public BaseCRUDController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
@@ -210,11 +210,6 @@ namespace APPartment.Controllers.Base
 
         public async Task<IActionResult> Assign(string username, long choreId)
         {
-            if (choreId == null)
-            {
-                return new Error404NotFoundViewResult();
-            }
-
             var model = await _context.Set<Chore>().FirstOrDefaultAsync(x => x.Id == choreId);
 
             if (model == null)
@@ -250,47 +245,6 @@ namespace APPartment.Controllers.Base
 
             return RedirectToAction(nameof(Index));
         }
-
-
-
-        public ActionResult DeleteImage(long id)
-        {
-            if (id == null)
-            {
-                return new Error404NotFoundViewResult();
-            }
-
-
-            var image = _context.Images.Find(id);
-
-            if (image == null)
-            {
-                return new Error404NotFoundViewResult();
-            }
-
-
-            string currentImage = image.Id.ToString();
-
-            _context.Entry(image).State = EntityState.Deleted;
-
-
-
-            if (_context.SaveChanges() > 0)
-            {
-                if (System.IO.File.Exists(currentImage))
-                {
-                    System.IO.File.Delete(currentImage);
-                }
-                TempData["msg"] = "Image Deleted";
-            }
-
-            return RedirectToAction(nameof(Index));
-        }
-
-
-
-
-
         #endregion
 
         #region Metadata
@@ -353,6 +307,40 @@ namespace APPartment.Controllers.Base
             else
             {
                 return Json(new { Message = "Error in saving file" });
+            }
+        }
+
+        public ActionResult DeleteImage(long id)
+        {
+            var image = _context.Images.Find(id);
+
+            if (image == null)
+            {
+                return Json(new { success = false, message = "404: Image does not exist." });
+            }
+            else
+            {
+                if (Directory.Exists(ImagesPath))
+                {
+                    var di = new DirectoryInfo(ImagesPath);
+                    foreach (var file in di.GetFiles())
+                    {
+                        if (file.Name == image.Name)
+                        {
+                            file.Delete();
+                            break;
+                        }
+                    }
+
+                    _context.Images.Remove(image);
+                    _context.SaveChanges();
+
+                    return Json(new { success = true, message = "Image deleted successfully." });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "404: Images path does not exist." });
+                }   
             }
         }
 
