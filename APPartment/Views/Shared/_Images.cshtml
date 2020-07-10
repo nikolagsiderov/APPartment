@@ -9,36 +9,38 @@
 <div class="row" id="images-main-div">
     @if (Model.Images.Any())
     {
-        <div class="col-md-12" style="display: contents;">
-            @foreach (var image in Model.Images)
-            {
-                <div style="margin: 10px;">
-                    <div class="square" style="margin: 10px; text-align:center;">
-                        <a href="~/BaseObject_Images/@image.Name" data-fancybox="gallery" data-caption="@image.FileName">
-                            <img src="~/BaseObject_Images/@image.Name" class="image-img" />
-                        </a>
-                    </div>
-
-                    <div class="image-metadata" style="font-size: x-small;">
-                        <hr />
-                        <span style="font-weight: bold;">
-                            @{
-                                var imageDisplayName = image.FileName.Length <= 15 ? image.FileName : image.FileName.Substring(0, 15) + "..." + image.FileName.Split('.').Last();
-                            }
-
-                            @imageDisplayName
-                            <br />
-                        </span>
-                        <span class="image-metadata-filesize">
-                            @image.FileSize |
-                        </span>
-                        <span class="image-metadata-created-date">
-                            @image.CreatedDate.ToString("dd/MM/yyyy hh:mm:ss tt")
-                        </span>
-                    </div>
+    <div class="col-md-12" style="display: contents;">
+        @foreach (var image in Model.Images)
+        {
+            <div style="text-align:center; margin:10px;">
+                <a class="btn btn-danger btn-sm" href="@Url.Action("DeleteImage","Inventory", new { id= image.Id})"><i class="far fa-trash-alt"></i></a>
+                <a class="btn btn-primary btn-sm" href="~/BaseObject_Images/@image.Name" download><i class="fa fa-download"></i></a>
+                <div class="square" style="margin: 10px; text-align:center;">
+                    <a href="~/BaseObject_Images/@image.Name" data-fancybox="gallery" data-caption="@image.FileName">
+                        <img src="~/BaseObject_Images/@image.Name" class="image-img" />
+                    </a>
                 </div>
-            }
-        </div>
+
+                <div class="image-metadata" style="font-size: x-small;">
+                    <hr />
+                    <span style="font-weight: bold;">
+                        @{
+                            var imageDisplayName = image.FileName.Length <= 15 ? image.FileName : image.FileName.Substring(0, 15) + "..." + image.FileName.Split('.').Last();
+                        }
+
+                        @imageDisplayName
+                        <br />
+                    </span>
+                    <span class="image-metadata-filesize">
+                        @image.FileSize |
+                    </span>
+                    <span class="image-metadata-created-date">
+                        @image.CreatedDate.ToString("dd/MM/yyyy hh:mm:ss tt")
+                    </span>
+                </div>
+            </div>
+        }
+    </div>
     }
     else
     {

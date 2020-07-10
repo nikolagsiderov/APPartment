@@ -250,6 +250,47 @@ namespace APPartment.Controllers.Base
 
             return RedirectToAction(nameof(Index));
         }
+
+
+
+        public ActionResult DeleteImage(long id)
+        {
+            if (id == null)
+            {
+                return new Error404NotFoundViewResult();
+            }
+
+
+            var image = _context.Images.Find(id);
+
+            if (image == null)
+            {
+                return new Error404NotFoundViewResult();
+            }
+
+
+            string currentImage = image.Id.ToString();
+
+            _context.Entry(image).State = EntityState.Deleted;
+
+
+
+            if (_context.SaveChanges() > 0)
+            {
+                if (System.IO.File.Exists(currentImage))
+                {
+                    System.IO.File.Delete(currentImage);
+                }
+                TempData["msg"] = "Image Deleted";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+
+
+
+
         #endregion
 
         #region Metadata
