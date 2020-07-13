@@ -91,6 +91,13 @@ namespace APPartment.Controllers
         {
             if (ModelState.IsValid)
             {
+                var isHomeNameAlreadyExist = _context.Houses.Any(x => x.Name == house.Name);
+                if (isHomeNameAlreadyExist)
+                {
+                    ModelState.AddModelError("Name", "This house name is already exist.");
+                    return View(house);
+                }
+
                 dataContext.Save(house, CurrentUserId, 0, null);
 
                 ModelState.Clear();
