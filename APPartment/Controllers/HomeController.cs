@@ -91,10 +91,10 @@ namespace APPartment.Controllers
         {
             if (ModelState.IsValid)
             {
-                var isHomeNameAlreadyExist = _context.Houses.Any(x => x.Name == house.Name);
-                if (isHomeNameAlreadyExist)
+                var homeNameAlreadyExists = _context.Houses.Any(x => x.Name == house.Name);
+                if (homeNameAlreadyExists)
                 {
-                    ModelState.AddModelError("Name", "This house name is already exist.");
+                    ModelState.AddModelError("Name", "This house name is already taken.");
                     return View(house);
                 }
 

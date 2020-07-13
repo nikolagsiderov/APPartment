@@ -35,8 +35,8 @@ namespace APPartment.Controllers
         {            
             if (ModelState.IsValid)
             {
-                var isNameAlreadyExist = _context.Users.Any(x => x.Username == user.Username);
-                if (isNameAlreadyExist)
+                var usernameAlreadyExists = _context.Users.Any(x => x.Username == user.Username);
+                if (usernameAlreadyExists)
                 {
                     ModelState.AddModelError("Username", "This username is already taken.");
                     return View(user); 
