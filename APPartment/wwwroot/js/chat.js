@@ -38,3 +38,9 @@ document.getElementById("sendButton").addEventListener("click", function (event)
     });
     event.preventDefault();
 });
+
+$('#messageInput').on("keydown", function (e) {
+    if (e.keyCode == 13 && !e.shiftKey) {
+        document.getElementById("sendButton").click();
+    }
+});
