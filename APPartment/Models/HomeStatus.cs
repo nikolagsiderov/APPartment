@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Models
 {
-    public class HouseStatus : Base.Object
+    public class HomeStatus : Base.Object
     {
         [Key]
         public long Id { get; set; }
@@ -15,7 +15,7 @@ namespace APPartment.Models
         [ForeignKey("User")]
         public long UserId { get; set; }
 
-        [ForeignKey("House")]
-        public long? HouseId { get; set; }
+        [ForeignKey("Home")]
+        public long? HomeId { get; set; }
     }
 }

@@ -36,7 +36,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Chores";
             ViewData["Manage"] = true;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId);
+            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId);
 
             return await base.Index();
         }
@@ -48,7 +48,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Chores";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && x.AssignedToId != CurrentUserId);
+            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && x.AssignedToId != CurrentUserId);
 
             return await base.Index();
         }
@@ -60,14 +60,14 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Chores";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && x.AssignedToId == CurrentUserId);
+            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && x.AssignedToId == CurrentUserId);
 
             return await base.Index();
         }
 
         public JsonResult GetMyChoresCount()
         {
-            var myChoresCount = _context.Set<Chore>().ToList().Where(x => x.HouseId == CurrentHouseId && x.AssignedToId == CurrentUserId).Count();
+            var myChoresCount = _context.Set<Chore>().ToList().Where(x => x.HomeId == CurrentHomeId && x.AssignedToId == CurrentUserId).Count();
             return Json(myChoresCount);
         }
         #endregion

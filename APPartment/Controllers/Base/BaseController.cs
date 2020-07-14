@@ -7,8 +7,8 @@ namespace APPartment.Controllers.Base
     public abstract class BaseController : Controller
     {
         protected long? CurrentUserId { get; set; }
-        protected long? CurrentHouseId { get; set; }
-        protected string CurrentHouseName { get; set; }
+        protected long? CurrentHomeId { get; set; }
+        protected string CurrentHomeName { get; set; }
         protected string CurrentUserName { get; set; }
         protected string CurrentControllerName { get; set; }
         protected string ImagesPath { get; } = @"wwwroot\BaseObject_Images\";
@@ -27,14 +27,14 @@ namespace APPartment.Controllers.Base
                     CurrentUserName = contextAccessor.HttpContext.Session.GetString("Username");
                 }
 
-                if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("HouseId")))
+                if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("HomeId")))
                 {
-                    CurrentHouseId = long.Parse(contextAccessor.HttpContext.Session.GetString("HouseId"));
+                    CurrentHomeId = long.Parse(contextAccessor.HttpContext.Session.GetString("HomeId"));
                 }
 
-                if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("HouseName")))
+                if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("HomeName")))
                 {
-                    CurrentHouseName = contextAccessor.HttpContext.Session.GetString("HouseName").ToString();
+                    CurrentHomeName = contextAccessor.HttpContext.Session.GetString("HomeName").ToString();
                 }
 
                 if (ControllerContext.RouteData != null)

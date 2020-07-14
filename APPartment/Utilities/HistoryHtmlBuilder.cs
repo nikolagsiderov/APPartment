@@ -720,21 +720,21 @@ namespace APPartment.Utilities
                             case (int)ObjectTypes.Chore:
                                 historyEventString.Append(string.Format($" created an object {referenceLink} in <a href='/Chores/Index'>Chores</a>."));
                                 break;
-                            case (int)ObjectTypes.HouseStatus:
+                            case (int)ObjectTypes.HomeStatus:
                                 if (statusOldValue != statusNewValue)
                                 {
-                                    var houseStatus = int.Parse(statusNewValue);
+                                    var homeStatus = int.Parse(statusNewValue);
                                     var statusString = string.Empty;
 
-                                    if (houseStatus == (int)HomeStatus.Green)
+                                    if (homeStatus == (int)Enums.HomeStatus.Green)
                                     {
                                         statusString = "<strong>free to enter</strong>";
                                     }
-                                    else if (houseStatus == (int)HomeStatus.Yellow)
+                                    else if (homeStatus == (int)Enums.HomeStatus.Yellow)
                                     {
                                         statusString = "<strong>enter catiously</strong>";
                                     }
-                                    else if (houseStatus == (int)HomeStatus.Red)
+                                    else if (homeStatus == (int)Enums.HomeStatus.Red)
                                     {
                                         statusString = "<strong>do not enter</strong>";
                                     }
@@ -776,7 +776,7 @@ namespace APPartment.Utilities
 
                         switch (objectObjectTypeId)
                         {
-                            case (int)ObjectTypes.House:
+                            case (int)ObjectTypes.Home:
                                 var oldObjectName = oldValues["Name"];
 
                                 if (oldObjectName != objectName)
@@ -784,21 +784,21 @@ namespace APPartment.Utilities
                                     historyEventString.Append(string.Format($"{username} updated home's name. Previous value: <span style=\"text-decoration: line-through\">{oldObjectName}</span>. <strong>Current value</strong>: <span style=\"background-color: #90EE90\">{objectName}</span>."));
                                 }
                                 break;
-                            case (int)ObjectTypes.HouseStatus:
+                            case (int)ObjectTypes.HomeStatus:
                                 if (statusOldValue != statusNewValue)
                                 {
-                                    var houseStatus = int.Parse(statusNewValue);
+                                    var homeStatus = int.Parse(statusNewValue);
                                     var statusString = string.Empty;
 
-                                    if (houseStatus == (int)HomeStatus.Green)
+                                    if (homeStatus == (int)Enums.HomeStatus.Green)
                                     {
                                         statusString = $"<strong>{HomeStatusString.Green}</strong>";
                                     }
-                                    else if (houseStatus == (int)HomeStatus.Yellow)
+                                    else if (homeStatus == (int)Enums.HomeStatus.Yellow)
                                     {
                                         statusString = $"<strong>{HomeStatusString.Yellow}</strong>";
                                     }
-                                    else if (houseStatus == (int)HomeStatus.Red)
+                                    else if (homeStatus == (int)Enums.HomeStatus.Red)
                                     {
                                         statusString = $"<strong>{HomeStatusString.Red}</strong>";
                                     }

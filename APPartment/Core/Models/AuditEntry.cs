@@ -19,7 +19,7 @@ namespace APPartment.Core.Models
         public Dictionary<string, object> KeyValues { get; } = new Dictionary<string, object>();
         public Dictionary<string, object> OldValues { get; } = new Dictionary<string, object>();
         public Dictionary<string, object> NewValues { get; } = new Dictionary<string, object>();
-        public long HouseId { get; set; }
+        public long HomeId { get; set; }
         public long UserId { get; set; }
         public long? TargetObjectId { get; set; }
         public long ObjectId { get; set; }
@@ -35,7 +35,7 @@ namespace APPartment.Core.Models
             audit.KeyValues = JsonConvert.SerializeObject(KeyValues);
             audit.OldValues = OldValues.Count == 0 ? null : JsonConvert.SerializeObject(OldValues);
             audit.NewValues = NewValues.Count == 0 ? null : JsonConvert.SerializeObject(NewValues);
-            audit.HouseId = HouseId;
+            audit.HomeId = HomeId;
             audit.UserId = UserId;
             audit.TargetObjectId = TargetObjectId;
             audit.ObjectId = ObjectId;

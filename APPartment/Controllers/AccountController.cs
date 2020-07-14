@@ -85,7 +85,7 @@ namespace APPartment.Controllers
         public IActionResult Logout()
         {
             HttpContext.Session.SetString("UserId", string.Empty);
-            HttpContext.Session.SetString("HouseId", string.Empty);
+            HttpContext.Session.SetString("HomeId", string.Empty);
 
             return RedirectToAction("Index", "Home");
         }

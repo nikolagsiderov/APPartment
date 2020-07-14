@@ -24,7 +24,7 @@ namespace APPartment.Core
         }
 
         #region Base Operations
-        public async Task SaveAsync(T objectModel, long? userId, long? houseId, long? targetObjectId)
+        public async Task SaveAsync(T objectModel, long? userId, long? homeId, long? targetObjectId)
         {
             var objectTypeName = objectModel.GetType().Name;
             var objectTypeId = context.Set<ObjectType>().Where(x => x.Name == objectTypeName).FirstOrDefault().Id;
@@ -43,10 +43,10 @@ namespace APPartment.Core
 
             objectModel.ObjectId = _object.ObjectId;
 
-            await this.SaveChangesAsync(true, (long)houseId, (long)userId, targetObjectId, _object.ObjectId, objectModel, ContextExecutionTypes.Create);
+            await this.SaveChangesAsync(true, (long)homeId, (long)userId, targetObjectId, _object.ObjectId, objectModel, ContextExecutionTypes.Create);
         }
 
-        public void Save(T objectModel, long? userId, long? houseId, long? targetObjectId)
+        public void Save(T objectModel, long? userId, long? homeId, long? targetObjectId)
         {
             var objectTypeName = objectModel.GetType().Name;
             var objectTypeId = context.Set<ObjectType>().Where(x => x.Name == objectTypeName).FirstOrDefault().Id;
@@ -65,10 +65,10 @@ namespace APPartment.Core
 
             objectModel.ObjectId = _object.ObjectId;
 
-            Task.Run(async () => await this.SaveChangesAsync(true, (long)houseId, (long)userId, targetObjectId, _object.ObjectId, objectModel, ContextExecutionTypes.Create)).Wait();
+            Task.Run(async () => await this.SaveChangesAsync(true, (long)homeId, (long)userId, targetObjectId, _object.ObjectId, objectModel, ContextExecutionTypes.Create)).Wait();
         }
 
-        public async Task UpdateAsync(T objectModel, long? userId, long? houseId, long? targetObjectId)
+        public async Task UpdateAsync(T objectModel, long? userId, long? homeId, long? targetObjectId)
         {
             var _object = context.Set<APPartment.Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
@@ -78,10 +78,10 @@ namespace APPartment.Core
             context.Update(_object);
             await context.SaveChangesAsync();
 
-            await this.SaveChangesAsync(true, (long)houseId, (long)userId, targetObjectId, _object.ObjectId, objectModel, ContextExecutionTypes.Update);
+            await this.SaveChangesAsync(true, (long)homeId, (long)userId, targetObjectId, _object.ObjectId, objectModel, ContextExecutionTypes.Update);
         }
 
-        public void Update(T objectModel, long? userId, long? houseId, long? targetObjectId)
+        public void Update(T objectModel, long? userId, long? homeId, long? targetObjectId)
         {
             var _object = context.Set<APPartment.Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
@@ -91,30 +91,30 @@ namespace APPartment.Core
             context.Update(_object);
             context.SaveChanges();
 
-            Task.Run(async () => await this.SaveChangesAsync(true, (long)houseId, (long)userId, targetObjectId, _object.ObjectId, objectModel, ContextExecutionTypes.Update)).Wait();
+            Task.Run(async () => await this.SaveChangesAsync(true, (long)homeId, (long)userId, targetObjectId, _object.ObjectId, objectModel, ContextExecutionTypes.Update)).Wait();
         }
 
-        public async Task DeleteAsync(T objectModel, long? userId, long? houseId, long? targetObjectId)
+        public async Task DeleteAsync(T objectModel, long? userId, long? homeId, long? targetObjectId)
         {
             var _object = context.Set<APPartment.Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
             context.Remove(_object);
 
-            await this.SaveChangesAsync(true, (long)houseId, (long)userId, targetObjectId, 0, objectModel, ContextExecutionTypes.Delete);
+            await this.SaveChangesAsync(true, (long)homeId, (long)userId, targetObjectId, 0, objectModel, ContextExecutionTypes.Delete);
         }
 
-        public void Delete(T objectModel, long? userId, long? houseId, long? targetObjectId)
+        public void Delete(T objectModel, long? userId, long? homeId, long? targetObjectId)
         {
             var _object = context.Set<APPartment.Models.Object>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
             context.Remove(_object);
 
-            Task.Run(async () => await this.SaveChangesAsync(true, (long)houseId, (long)userId, targetObjectId, 0, objectModel, ContextExecutionTypes.Delete)).Wait();
+            Task.Run(async () => await this.SaveChangesAsync(true, (long)homeId, (long)userId, targetObjectId, 0, objectModel, ContextExecutionTypes.Delete)).Wait();
         }
         #endregion
 
         #region Audit Operations
-        private async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, long currentHouseId, long currentUserId, long? targetObjectId, long objectId, T objectModel,
+        private async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, long homeId, long userId, long? targetObjectId, long objectId, T objectModel,
             ContextExecutionTypes contextExecutionType, CancellationToken cancellationToken = default(CancellationToken))
         {
             switch (contextExecutionType)
@@ -130,13 +130,13 @@ namespace APPartment.Core
                     break;
             }
 
-            var auditEntries = OnBeforeSaveChanges(currentHouseId, currentUserId, targetObjectId, objectId);
+            var auditEntries = OnBeforeSaveChanges(homeId, userId, targetObjectId, objectId);
             var result = await context.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
             await OnAfterSaveChanges(auditEntries);
             return result;
         }
 
-        private List<AuditEntry> OnBeforeSaveChanges(long currentHouseId, long currentUserId, long? targetObjectId, long objectId)
+        private List<AuditEntry> OnBeforeSaveChanges(long homeId, long userId, long? targetObjectId, long objectId)
         {
             context.ChangeTracker.DetectChanges();
             var auditEntries = new List<AuditEntry>();
@@ -147,8 +147,8 @@ namespace APPartment.Core
 
                 var auditEntry = new AuditEntry(entry);
                 auditEntry.TableName = entry.Metadata.GetTableName();
-                auditEntry.HouseId = currentHouseId;
-                auditEntry.UserId = currentUserId;
+                auditEntry.HomeId = homeId;
+                auditEntry.UserId = userId;
                 auditEntry.TargetObjectId = targetObjectId;
                 auditEntry.ObjectId = objectId;
                 auditEntries.Add(auditEntry);

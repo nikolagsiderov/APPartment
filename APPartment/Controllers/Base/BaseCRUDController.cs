@@ -91,12 +91,12 @@ namespace APPartment.Controllers.Base
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Details,Status,IsCompleted,HouseId,ObjectId")] T model)
+        public async Task<IActionResult> Create(T model)
         {
             if (ModelState.IsValid)
             {
-                model.HouseId = CurrentHouseId;
-                await dataContext.SaveAsync(model, CurrentUserId, CurrentHouseId, null);
+                model.HomeId = CurrentHomeId;
+                await dataContext.SaveAsync(model, CurrentUserId, CurrentHomeId, null);
             }
 
             return RedirectToAction(nameof(Index));
@@ -129,7 +129,7 @@ namespace APPartment.Controllers.Base
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Name,Details,Status,IsCompleted,HouseId,ObjectId")] T model)
+        public async Task<IActionResult> Edit(long id, T model)
         {
             if (id != model.Id)
             {
@@ -140,7 +140,7 @@ namespace APPartment.Controllers.Base
             {
                 try
                 {
-                    await dataContext.UpdateAsync(model, CurrentUserId, CurrentHouseId, null);
+                    await dataContext.UpdateAsync(model, CurrentUserId, CurrentHomeId, null);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -181,7 +181,7 @@ namespace APPartment.Controllers.Base
 
             model.Status = (int)ObjectStatus.Trivial;
 
-            await dataContext.UpdateAsync(model, CurrentUserId, CurrentHouseId, null);
+            await dataContext.UpdateAsync(model, CurrentUserId, CurrentHomeId, null);
 
             return RedirectToAction(nameof(Index));
         }
@@ -203,7 +203,7 @@ namespace APPartment.Controllers.Base
 
             model.Status = (int)ObjectStatus.High;
 
-            await dataContext.UpdateAsync(model, CurrentUserId, CurrentHouseId, null);
+            await dataContext.UpdateAsync(model, CurrentUserId, CurrentHomeId, null);
 
             return RedirectToAction(nameof(Index));
         }
@@ -221,7 +221,7 @@ namespace APPartment.Controllers.Base
             var userToAssignUserId = userToAssign.UserId;
 
             model.AssignedToId = userToAssignUserId;
-            await choreDataContext.UpdateAsync(model, CurrentUserId, CurrentHouseId, null);
+            await choreDataContext.UpdateAsync(model, CurrentUserId, CurrentHomeId, null);
 
             return RedirectToAction(nameof(Index));
         }
@@ -241,7 +241,7 @@ namespace APPartment.Controllers.Base
                 return new Error404NotFoundViewResult();
             }
 
-            await dataContext.DeleteAsync(model, CurrentUserId, CurrentHouseId, null);
+            await dataContext.DeleteAsync(model, CurrentUserId, CurrentHomeId, null);
 
             return RedirectToAction(nameof(Index));
         }
@@ -258,19 +258,16 @@ namespace APPartment.Controllers.Base
         [HttpPost]
         public async Task<IActionResult> PostComment(long targetId, string commentText)
         {
-            var username = HttpContext.Session.GetString("Username");
-
             var comment = new Comment()
             {
                 Text = commentText,
                 TargetId = targetId,
-                Username = username
+                Username = CurrentUserName
             };
 
-            await commentDataContext.SaveAsync(comment, CurrentUserId, CurrentHouseId, targetId);
+            await commentDataContext.SaveAsync(comment, CurrentUserId, CurrentHomeId, targetId);
 
             var result = htmlRenderHelper.BuildPostComment(comment);
-
             return Json(result);
         }
 
@@ -287,11 +284,10 @@ namespace APPartment.Controllers.Base
                 {
                     IFormFile file = HttpContext.Request.Form.Files.Where(x => x.FileName == fileName).FirstOrDefault();
 
-                    //Save file content goes here
                     fName = file.FileName;
                     if (file != null && file.Length > 0)
                     {
-                        fileUploadService.UploadImage(file, targetId, CurrentUserId, CurrentHouseId);
+                        fileUploadService.UploadImage(file, targetId, CurrentUserId, CurrentHomeId);
                     }
                 }
             }

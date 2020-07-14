@@ -26,7 +26,7 @@ namespace APPartment.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("HouseId")
+                    b.Property<long>("HomeId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("KeyValues")
@@ -71,7 +71,7 @@ namespace APPartment.Migrations
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("HouseId")
+                    b.Property<long?>("HomeId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
@@ -113,7 +113,7 @@ namespace APPartment.Migrations
                     b.ToTable("Comment");
                 });
 
-            modelBuilder.Entity("APPartment.Models.House", b =>
+            modelBuilder.Entity("APPartment.Models.Home", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -136,20 +136,20 @@ namespace APPartment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("House");
+                    b.ToTable("Home");
                 });
 
-            modelBuilder.Entity("APPartment.Models.HouseSettings", b =>
+            modelBuilder.Entity("APPartment.Models.HomeSettings", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long?>("HouseId")
+                    b.Property<long?>("HomeId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("HouseName")
+                    b.Property<string>("HomeName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("ObjectId")
@@ -160,10 +160,10 @@ namespace APPartment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HouseSettings");
+                    b.ToTable("HomeSettings");
                 });
 
-            modelBuilder.Entity("APPartment.Models.HouseStatus", b =>
+            modelBuilder.Entity("APPartment.Models.HomeStatus", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -173,7 +173,7 @@ namespace APPartment.Migrations
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("HouseId")
+                    b.Property<long?>("HomeId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ObjectId")
@@ -187,17 +187,17 @@ namespace APPartment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HouseStatus");
+                    b.ToTable("HomeStatus");
                 });
 
-            modelBuilder.Entity("APPartment.Models.HouseUser", b =>
+            modelBuilder.Entity("APPartment.Models.HomeUser", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<long>("HouseId")
+                    b.Property<long>("HomeId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("UserId")
@@ -205,7 +205,7 @@ namespace APPartment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HouseUser");
+                    b.ToTable("HomeUser");
                 });
 
             modelBuilder.Entity("APPartment.Models.Hygiene", b =>
@@ -218,7 +218,7 @@ namespace APPartment.Migrations
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("HouseId")
+                    b.Property<long?>("HomeId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
@@ -276,7 +276,7 @@ namespace APPartment.Migrations
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("HouseId")
+                    b.Property<long?>("HomeId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
@@ -304,7 +304,7 @@ namespace APPartment.Migrations
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("HouseId")
+                    b.Property<long?>("HomeId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
@@ -332,7 +332,7 @@ namespace APPartment.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("HouseId")
+                    b.Property<long>("HomeId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("ObjectId")
@@ -402,17 +402,17 @@ namespace APPartment.Migrations
                         new
                         {
                             Id = 2L,
-                            Name = "House"
+                            Name = "Home"
                         },
                         new
                         {
                             Id = 3L,
-                            Name = "HouseStatus"
+                            Name = "HomeStatus"
                         },
                         new
                         {
                             Id = 4L,
-                            Name = "HouseSettings"
+                            Name = "HomeSettings"
                         },
                         new
                         {
@@ -457,7 +457,7 @@ namespace APPartment.Migrations
                         new
                         {
                             Id = 14L,
-                            Name = "HouseUser"
+                            Name = "HomeUser"
                         },
                         new
                         {
@@ -476,7 +476,7 @@ namespace APPartment.Migrations
                     b.Property<string>("Details")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("HouseId")
+                    b.Property<long?>("HomeId")
                         .HasColumnType("bigint");
 
                     b.Property<bool>("IsCompleted")

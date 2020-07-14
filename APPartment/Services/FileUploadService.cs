@@ -20,9 +20,9 @@ namespace APPartment.Services
             this.context = context;
         }
 
-        public void UploadImage(IFormFile file, long targetId, long? userId, long? houseId)
+        public void UploadImage(IFormFile file, long targetId, long? userId, long? homeId)
         {
-            var imageName = SaveImageToDB(file, targetId, (long)userId, (long)houseId);
+            var imageName = SaveImageToDB(file, targetId, (long)userId, (long)homeId);
 
             string pathString = "wwwroot\\BaseObject_Images";
 
@@ -39,7 +39,7 @@ namespace APPartment.Services
             }
         }
 
-        private string SaveImageToDB(IFormFile file, long targetId, long userId, long houseId)
+        private string SaveImageToDB(IFormFile file, long targetId, long userId, long homeId)
         {
             var image = new Image()
             {
@@ -49,7 +49,7 @@ namespace APPartment.Services
                 TargetId = targetId,
             };
 
-            context.Save(image, userId, houseId, targetId);
+            context.Save(image, userId, homeId, targetId);
 
             image.Name = $"{image.Id}_{targetId}_{file.FileName}";
 

@@ -1,10 +1,10 @@
-﻿@model APPartment.Models.HouseSettings
+﻿@model APPartment.Models.HomeSettings
 
 <div class="row">
     <div class="col-md-6">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">House settings</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Home settings</h6>
             </div>
             <div class="card-body">
                 <form asp-action="Settings" enctype="multipart/form-data">
@@ -13,18 +13,18 @@
                     <input type="hidden" asp-for="ObjectId" />
 
                     <div class="form-group">
-                        <label asp-for="HouseName" class="control-label">Change house name</label>
+                        <label asp-for="HomeName" class="control-label">Change home name</label>
 
                         @if (Model != null)
                         {
-                            <input asp-for="HouseName" class="form-control" />
+                            <input asp-for="HomeName" class="form-control" />
                         }
                         else
                         {
-                            <input asp-for="HouseName" class="form-control" value="@ViewData["HouseName"]" />
+                            <input asp-for="HomeName" class="form-control" value="@ViewData["HomeName"]" />
                         }
 
-                        <span asp-validation-for="HouseName" class="text-danger"></span>
+                        <span asp-validation-for="HomeName" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">

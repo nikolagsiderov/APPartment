@@ -7,7 +7,7 @@ namespace APPartment.Utilities
     {
         public string ConvertFileLength(IFormFile file)
         {
-            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+            string[] sizes = { "bytes", "kB", "MB", "GB", "TB" };
             double len = file.Length;
             int order = 0;
             while (len >= 1024 && order < sizes.Length - 1)

@@ -3,16 +3,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Models
 {
-    public class HouseSettings : Base.Object
+    public class HomeSettings : Base.Object
     {
         [Key]
         public long Id { get; set; }
 
         public int RentDueDateDay { get; set; }
 
-        public string HouseName { get; set; }
+        public string HomeName { get; set; }
 
-        [ForeignKey("House")]
-        public long? HouseId { get; set; }
+        [ForeignKey("Home")]
+        public long? HomeId { get; set; }
     }
 }

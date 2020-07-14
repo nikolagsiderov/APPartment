@@ -12,7 +12,7 @@ namespace APPartment.Attributes
             base.OnActionExecuting(filterContext);
 
             var currentUserId = filterContext.HttpContext.Session.GetString("UserId");
-            var currentHouseId = filterContext.HttpContext.Session.GetString("HouseId");
+            var currentHomeId = filterContext.HttpContext.Session.GetString("HomeId");
 
             if (string.IsNullOrEmpty(currentUserId))
             {
@@ -22,7 +22,7 @@ namespace APPartment.Attributes
                     action = "Login"
                 }));
             }
-            else if (string.IsNullOrEmpty(currentHouseId))
+            else if (string.IsNullOrEmpty(currentHomeId))
             {
                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
                 {

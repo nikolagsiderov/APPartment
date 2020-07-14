@@ -4,13 +4,13 @@ using System.Collections.Generic;
 
 namespace APPartment.DisplayModels.Home
 {
-    public class HomeDisplayModel
+    public class HomePageDisplayModel
     {
         public List<string> Messages { get; set; }
 
         public List<BaseObject> BaseObjects { get; set; }
 
-        public HouseStatus HouseStatus { get; set; }
+        public HomeStatus HomeStatus { get; set; }
 
         public string RentDueDate { get; set; }
     }

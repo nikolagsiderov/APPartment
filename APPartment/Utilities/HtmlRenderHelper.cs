@@ -14,9 +14,9 @@ namespace APPartment.Utilities
             this.context = context;
         }
 
-        public List<string> BuildMessagesForChat(List<Message> messages, long currentHouseId)
+        public List<string> BuildMessagesForChat(List<Message> messages, long homeId)
         {
-            return messages.Where(x => x.HouseId == currentHouseId).OrderByDescending(x => x.Id).Take(10).OrderBy(x => x.Id).Select(x => $"{x.Username}: {x.Text}").ToList();
+            return messages.Where(x => x.HomeId == homeId).OrderByDescending(x => x.Id).Take(10).OrderBy(x => x.Id).Select(x => $"{x.Username}: {x.Text}").ToList();
         }
 
         public List<string> BuildComments(List<Comment> comments, long targetId)

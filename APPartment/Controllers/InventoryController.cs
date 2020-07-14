@@ -37,7 +37,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Inventory";
             ViewData["Manage"] = true;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId);
+            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId);
 
             return base.Index();
         }
@@ -49,7 +49,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Inventory";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && (x.Status == (int)ObjectStatus.Trivial || x.Status == (int)ObjectStatus.Medium));
+            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && (x.Status == (int)ObjectStatus.Trivial || x.Status == (int)ObjectStatus.Medium));
 
             return await base.Index();
         }
@@ -61,14 +61,14 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Inventory";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && (x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
+            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && (x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
 
             return await base.Index();
         }
 
         public JsonResult GetInventoryCriticalCount()
         {
-            var inventoryCriticalCount = _context.Set<Inventory>().ToList().Where(x => x.HouseId == CurrentHouseId && (x.Status == (int)ObjectStatus.Critical ||
+            var inventoryCriticalCount = _context.Set<Inventory>().ToList().Where(x => x.HomeId == CurrentHomeId && (x.Status == (int)ObjectStatus.Critical ||
             x.Status == (int)ObjectStatus.High)).Count();
             return Json(inventoryCriticalCount);
         }

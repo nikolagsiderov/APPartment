@@ -4,9 +4,9 @@
     public enum ObjectTypes
     {
         User = 1,
-        House = 2,
-        HouseStatus = 3, // sub-object
-        HouseSettings = 4, // sub-object
+        Home = 2,
+        HomeStatus = 3, // sub-object
+        HomeSettings = 4, // sub-object
         Inventory = 5,
         Hygiene = 6,
         Issue  = 7,
@@ -15,6 +15,7 @@
         Image = 10, // sub-object
         Survey = 12,
         Chore = 13,
-        HouseUser = 14
+        HomeUser = 14,
+        Audit = 15
     }
 }

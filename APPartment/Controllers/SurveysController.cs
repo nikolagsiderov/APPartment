@@ -36,7 +36,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = true;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId);
+            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId);
 
             return base.Index();
         }
@@ -48,7 +48,7 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && x.IsCompleted == true);
+            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && x.IsCompleted == true);
 
             return await base.Index();
         }
@@ -60,14 +60,14 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HouseId == CurrentHouseId && x.IsCompleted == false);
+            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && x.IsCompleted == false);
 
             return await base.Index();
         }
 
         public JsonResult GetPendingSurveysCount()
         {
-            var pendingSurveysCount = _context.Set<Survey>().ToList().Where(x => x.HouseId == CurrentHouseId && x.IsCompleted == false).Count();
+            var pendingSurveysCount = _context.Set<Survey>().ToList().Where(x => x.HomeId == CurrentHomeId && x.IsCompleted == false).Count();
             return Json(pendingSurveysCount);
         }
         #endregion

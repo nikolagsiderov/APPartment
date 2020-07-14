@@ -3,15 +3,15 @@
     @using Microsoft.AspNetCore.Http
 
     @{
-        var houseName = @Context.Session.GetString("HouseName");
+        var homeName = @Context.Session.GetString("HomeName");
 
-        if (houseName.Length > 10)
+        if (homeName.Length > 10)
         {
-            houseName = houseName.Substring(0, 10) + "...";
+            homeName = homeName.Substring(0, 10) + "...";
         }
     }
 
-    <a class="navbar-brand d-none d-sm-block" asp-controller="Home" asp-action="Index">@houseName</a>
+    <a class="navbar-brand d-none d-sm-block" asp-controller="Home" asp-action="Index">@homeName</a>
     <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#"><i data-feather="menu"></i></button>
     <form class="form-inline mr-auto d-none d-lg-block"><input class="form-control form-control-solid mr-sm-2" type="search" placeholder="Search for... (not implemented)" aria-label="Search" /></form>
     <ul class="navbar-nav align-items-center ml-auto">
@@ -44,7 +44,7 @@
         <li class="nav-item dropdown no-caret mr-3 dropdown-notifications">
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownMessages" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="users"></i></a>
             <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownMessages">
-                <h6 class="dropdown-header dropdown-notifications-header"><i class="mr-2" data-feather="users"></i> Present Housemates (not implemented)</h6>
+                <h6 class="dropdown-header dropdown-notifications-header"><i class="mr-2" data-feather="users"></i> Present Homemates (not implemented)</h6>
             </div>
         </li>
         <partial name="_LoginPartial" />

@@ -12,7 +12,7 @@ namespace APPartment.Models.Declaration
 
         public int Status { get; set; }
 
-        public long? HouseId { get; set; }
+        public long? HomeId { get; set; }
 
         public List<string> Comments { get; set; }
 

@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace APPartment.Migrations
 {
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,7 +19,7 @@ namespace APPartment.Migrations
                     KeyValues = table.Column<string>(nullable: true),
                     OldValues = table.Column<string>(nullable: true),
                     NewValues = table.Column<string>(nullable: true),
-                    HouseId = table.Column<long>(nullable: false),
+                    HomeId = table.Column<long>(nullable: false),
                     UserId = table.Column<long>(nullable: false),
                     TargetObjectId = table.Column<long>(nullable: true)
                 },
@@ -37,7 +37,7 @@ namespace APPartment.Migrations
                     Name = table.Column<string>(nullable: false),
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    HouseId = table.Column<long>(nullable: true),
+                    HomeId = table.Column<long>(nullable: true),
                     ObjectId = table.Column<long>(nullable: false),
                     AssignedToId = table.Column<long>(nullable: true)
                 },
@@ -63,7 +63,7 @@ namespace APPartment.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "House",
+                name: "Home",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -75,27 +75,27 @@ namespace APPartment.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_House", x => x.Id);
+                    table.PrimaryKey("PK_Home", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "HouseSettings",
+                name: "HomeSettings",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ObjectId = table.Column<long>(nullable: false),
                     RentDueDateDay = table.Column<int>(nullable: false),
-                    HouseName = table.Column<string>(nullable: true),
-                    HouseId = table.Column<long>(nullable: true)
+                    HomeName = table.Column<string>(nullable: true),
+                    HomeId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HouseSettings", x => x.Id);
+                    table.PrimaryKey("PK_HomeSettings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "HouseStatus",
+                name: "HomeStatus",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
@@ -104,25 +104,25 @@ namespace APPartment.Migrations
                     Status = table.Column<int>(nullable: false),
                     Details = table.Column<string>(nullable: true),
                     UserId = table.Column<long>(nullable: false),
-                    HouseId = table.Column<long>(nullable: true)
+                    HomeId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HouseStatus", x => x.Id);
+                    table.PrimaryKey("PK_HomeStatus", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "HouseUser",
+                name: "HomeUser",
                 columns: table => new
                 {
                     Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    HouseId = table.Column<long>(nullable: false),
+                    HomeId = table.Column<long>(nullable: false),
                     UserId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HouseUser", x => x.Id);
+                    table.PrimaryKey("PK_HomeUser", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -134,7 +134,7 @@ namespace APPartment.Migrations
                     Name = table.Column<string>(nullable: false),
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    HouseId = table.Column<long>(nullable: true),
+                    HomeId = table.Column<long>(nullable: true),
                     ObjectId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
@@ -169,7 +169,7 @@ namespace APPartment.Migrations
                     Name = table.Column<string>(nullable: false),
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    HouseId = table.Column<long>(nullable: true),
+                    HomeId = table.Column<long>(nullable: true),
                     ObjectId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
@@ -186,7 +186,7 @@ namespace APPartment.Migrations
                     Name = table.Column<string>(nullable: false),
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    HouseId = table.Column<long>(nullable: true),
+                    HomeId = table.Column<long>(nullable: true),
                     ObjectId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
@@ -205,7 +205,7 @@ namespace APPartment.Migrations
                     Text = table.Column<string>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<long>(nullable: false),
-                    HouseId = table.Column<long>(nullable: false)
+                    HomeId = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -251,7 +251,7 @@ namespace APPartment.Migrations
                     Name = table.Column<string>(nullable: false),
                     Details = table.Column<string>(nullable: true),
                     Status = table.Column<int>(nullable: false),
-                    HouseId = table.Column<long>(nullable: true),
+                    HomeId = table.Column<long>(nullable: true),
                     ObjectId = table.Column<long>(nullable: false),
                     IsCompleted = table.Column<bool>(nullable: false)
                 },
@@ -282,9 +282,9 @@ namespace APPartment.Migrations
                 values: new object[,]
                 {
                     { 1L, "User" },
-                    { 2L, "House" },
-                    { 3L, "HouseStatus" },
-                    { 4L, "HouseSettings" },
+                    { 2L, "Home" },
+                    { 3L, "HomeStatus" },
+                    { 4L, "HomeSettings" },
                     { 5L, "Inventory" },
                     { 6L, "Hygiene" },
                     { 7L, "Issue" },
@@ -293,7 +293,7 @@ namespace APPartment.Migrations
                     { 10L, "Image" },
                     { 12L, "Survey" },
                     { 13L, "Chore" },
-                    { 14L, "HouseUser" },
+                    { 14L, "HomeUser" },
                     { 15L, "Audit" }
                 });
         }
@@ -310,16 +310,16 @@ namespace APPartment.Migrations
                 name: "Comment");
 
             migrationBuilder.DropTable(
-                name: "House");
+                name: "Home");
 
             migrationBuilder.DropTable(
-                name: "HouseSettings");
+                name: "HomeSettings");
 
             migrationBuilder.DropTable(
-                name: "HouseStatus");
+                name: "HomeStatus");
 
             migrationBuilder.DropTable(
-                name: "HouseUser");
+                name: "HomeUser");
 
             migrationBuilder.DropTable(
                 name: "Hygiene");

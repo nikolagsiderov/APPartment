@@ -16,7 +16,7 @@ namespace APPartment.Models
 
         public string NewValues { get; set; }
 
-        public long HouseId { get; set; }
+        public long HomeId { get; set; }
 
         public long UserId { get; set; }
 

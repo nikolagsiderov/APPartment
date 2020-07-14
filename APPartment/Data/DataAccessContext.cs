@@ -19,10 +19,10 @@ namespace APPartment.Data
         public DbSet<APPartment.Models.ObjectType> ObjectTypes { get; set; }
         public DbSet<APPartment.Models.Object> Objects { get; set; }
         public DbSet<APPartment.Models.User> Users { get; set; }
-        public DbSet<APPartment.Models.House> Houses { get; set; }
-        public DbSet<APPartment.Models.HouseUser> HouseUsers { get; set; }
-        public DbSet<APPartment.Models.HouseStatus> HouseStatuses { get; set; }
-        public DbSet<APPartment.Models.HouseSettings> HouseSettings { get; set; }
+        public DbSet<APPartment.Models.Home> Homes { get; set; }
+        public DbSet<APPartment.Models.HomeUser> HomeUsers { get; set; }
+        public DbSet<APPartment.Models.HomeStatus> HomeStatuses { get; set; }
+        public DbSet<APPartment.Models.HomeSettings> HomeSettings { get; set; }
         public DbSet<APPartment.Models.Inventory> Inventories { get; set; }
         public DbSet<APPartment.Models.Hygiene> Hygienes { get; set; }
         public DbSet<APPartment.Models.Issue> Issues { get; set; }
@@ -40,9 +40,9 @@ namespace APPartment.Data
             // These values MUST be unique and in sync with APPartment.Enums.ObjectTypes
             modelBuilder.Entity<ObjectType>().ToTable("ObjectType").HasData(
                 new ObjectType { Id = 1, Name = "User" },
-                new ObjectType { Id = 2, Name = "House" },
-                new ObjectType { Id = 3, Name = "HouseStatus" },
-                new ObjectType { Id = 4, Name = "HouseSettings" },
+                new ObjectType { Id = 2, Name = "Home" },
+                new ObjectType { Id = 3, Name = "HomeStatus" },
+                new ObjectType { Id = 4, Name = "HomeSettings" },
                 new ObjectType { Id = 5, Name = "Inventory" },
                 new ObjectType { Id = 6, Name = "Hygiene" },
                 new ObjectType { Id = 7, Name = "Issue" },
@@ -51,15 +51,15 @@ namespace APPartment.Data
                 new ObjectType { Id = 10, Name = "Image" },
                 new ObjectType { Id = 12, Name = "Survey" },
                 new ObjectType { Id = 13, Name = "Chore" },
-                new ObjectType { Id = 14, Name = "HouseUser" },
+                new ObjectType { Id = 14, Name = "HomeUser" },
                 new ObjectType { Id = 15, Name = "Audit" }
             );
             modelBuilder.Entity<Object>().ToTable("Object");
             modelBuilder.Entity<User>().ToTable("User");
-            modelBuilder.Entity<House>().ToTable("House");
-            modelBuilder.Entity<HouseUser>().ToTable("HouseUser");
-            modelBuilder.Entity<HouseStatus>().ToTable("HouseStatus");
-            modelBuilder.Entity<HouseSettings>().ToTable("HouseSettings");
+            modelBuilder.Entity<Home>().ToTable("Home");
+            modelBuilder.Entity<HomeUser>().ToTable("HomeUser");
+            modelBuilder.Entity<HomeStatus>().ToTable("HomeStatus");
+            modelBuilder.Entity<HomeSettings>().ToTable("HomeSettings");
             modelBuilder.Entity<Inventory>().ToTable("Inventory");
             modelBuilder.Entity<Hygiene>().ToTable("Hygiene");
             modelBuilder.Entity<Issue>().ToTable("Issue");

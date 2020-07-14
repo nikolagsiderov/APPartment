@@ -4,7 +4,7 @@ namespace APPartment.Utilities
 {
     public class TimeConverter
     {
-        public string CalculateRelativeTime(DateTime objectLastUpdate)
+        public string CalculateRelativeTime(DateTime when)
         {
             const int SECOND = 1;
             const int MINUTE = 60 * SECOND;
@@ -12,7 +12,7 @@ namespace APPartment.Utilities
             const int DAY = 24 * HOUR;
             const int MONTH = 30 * DAY;
 
-            var ts = new TimeSpan(DateTime.Now.Ticks - objectLastUpdate.Ticks);
+            var ts = new TimeSpan(DateTime.Now.Ticks - when.Ticks);
             double delta = Math.Abs(ts.TotalSeconds);
 
             if (delta < 1 * MINUTE)

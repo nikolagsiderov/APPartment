@@ -2,7 +2,7 @@
 
 namespace APPartment.Models
 {
-    public class House : Base.Object
+    public class Home : Base.Object
     {
         [Key]
         public long Id { get; set; }
@@ -10,7 +10,7 @@ namespace APPartment.Models
         [Required]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "House password is required.")]
+        [Required(ErrorMessage = "Home password is required.")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
