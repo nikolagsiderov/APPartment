@@ -5,8 +5,6 @@ using APPartment.Data;
 using APPartment.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace APPartment.Controllers
 {

@@ -32,8 +32,8 @@ namespace APPartment.Controllers.Base
         private DataContext<Comment> commentDataContext;
         private DataContext<Image> imageDataContext;
         private HistoryHtmlBuilder historyHtmlBuilder;
-        public BaseService<T> baseService;
-        #endregion
+        protected BaseService<T> baseService;
+        #endregion Context, Services and Utilities
 
         public BaseCRUDController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
         {
@@ -80,10 +80,7 @@ namespace APPartment.Controllers.Base
                 return new Error404NotFoundViewResult();
             }
 
-            model.Comments = GetComments(model.ObjectId);
-            model.Images = GetImages(model.ObjectId);
-            model.History = GetHistory(model.ObjectId);
-
+            model = GetClingons(model);
             ViewData["Statuses"] = baseService.GetStatuses(typeof(T));
 
             return View("_Details", model);
@@ -117,10 +114,7 @@ namespace APPartment.Controllers.Base
                 return new Error404NotFoundViewResult();
             }
 
-            model.Comments = GetComments(model.ObjectId);
-            model.Images = GetImages(model.ObjectId);
-            model.History = GetHistory(model.ObjectId);
-
+            model = GetClingons(model);
             ViewData["Statuses"] = baseService.GetStatuses(typeof(T));
 
             return View("_Edit", model);
@@ -156,10 +150,6 @@ namespace APPartment.Controllers.Base
 
                 return RedirectToAction(nameof(Index));
             }
-
-            model.Comments = GetComments(model.ObjectId);
-            model.Images = GetImages(model.ObjectId);
-            model.History = GetHistory(model.ObjectId);
 
             return View("_Edit", model);
         }
@@ -245,10 +235,20 @@ namespace APPartment.Controllers.Base
 
             return RedirectToAction(nameof(Index));
         }
-        #endregion
+        #endregion Actions
 
-        #region Metadata
-        public List<string> GetComments(long targetId)
+        #region Clingons
+        protected T GetClingons(T model)
+        {
+            model.Comments = GetComments(model.ObjectId);
+            model.Images = GetImages(model.ObjectId);
+            model.History = GetHistory(model.ObjectId);
+
+            return model;
+        }
+
+        #region Comments
+        private List<string> GetComments(long targetId)
         {
             var comments = htmlRenderHelper.BuildComments(_context.Comments.ToList(), targetId);
 
@@ -270,7 +270,9 @@ namespace APPartment.Controllers.Base
             var result = htmlRenderHelper.BuildPostComment(comment);
             return Json(result);
         }
+        #endregion Comments
 
+        #region Images
         [HttpPost]
         public ActionResult UploadImages(string targetIdString)
         {
@@ -340,14 +342,16 @@ namespace APPartment.Controllers.Base
             }
         }
 
-        public List<Image> GetImages(long targetId)
+        private List<Image> GetImages(long targetId)
         {
             var images = _context.Images.Where(x => x.TargetId == targetId).ToList();
 
             return images;
         }
+        #endregion Images
 
-        public List<string> GetHistory(long targetId)
+        #region History
+        private List<string> GetHistory(long targetId)
         {
             var history = _context.Audits.Where(x => x.ObjectId == targetId || x.TargetObjectId == targetId).ToList();
 
@@ -355,9 +359,10 @@ namespace APPartment.Controllers.Base
 
             return objectHistoryDisplayList;
         }
-        #endregion
+        #endregion History
+        #endregion Clingons
 
-        public virtual void PopulateViewData()
+        protected virtual void PopulateViewData()
         { }
     }
 }

@@ -75,7 +75,7 @@ namespace APPartment.Controllers
         }
         #endregion
 
-        public override void PopulateViewData()
+        protected override void PopulateViewData()
         {
         }
     }
