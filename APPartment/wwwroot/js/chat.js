@@ -6,11 +6,22 @@ var connection = new signalR.HubConnectionBuilder().withUrl("/Home/Index").build
 document.getElementById("sendButton").disabled = true;
 
 connection.on("ReceiveMessage", function (user, message) {
-    var msg = message.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    var encodedMsg = user + ": " + msg;
-    var li = document.createElement("li");
-    li.textContent = encodedMsg;
-    document.getElementById("messagesList").appendChild(li);
+    var msgArr = message.split(/(?:\r\n|\r|\n)/g);
+    var firstMsg = user + ": " + msgArr[0];
+    var div = document.createElement("div");
+    var p = document.createElement("span");
+    p.textContent = firstMsg;
+    div.appendChild(p);
+
+    for (var i = 1; i < msgArr.length; i++) {
+        var encodedMsg = msgArr[i];
+        var nextP = document.createElement("span");
+        nextP.textContent = encodedMsg;
+        div.appendChild(document.createElement("br"));
+        div.appendChild(nextP);
+    }
+
+    document.getElementById("messagesList").appendChild(div);
 });
 
 connection.start().then(function () {
@@ -22,7 +33,6 @@ connection.start().then(function () {
 document.getElementById("sendButton").addEventListener("click", function (event) {
     var user = document.getElementById("userInput").value;
     var message = document.getElementById("messageInput").value;
-    debugger;
     connection.invoke("SendMessage", user, message).catch(function (err) {
         return console.error(err.toString());
     });

@@ -213,7 +213,8 @@ namespace APPartment.Controllers
         [HttpPost]
         public async Task<ActionResult> CreateMessage(string username, string messageText)
         {
-            var message = new Message() { Username = username, Text = messageText, UserId = (long)CurrentUserId, HomeId = (long)CurrentHomeId, CreatedDate = DateTime.Now };
+            var adjustedMessage = string.Join(" <br /> ", messageText.Split('\n').ToList());
+            var message = new Message() { Username = username, Text = adjustedMessage, UserId = (long)CurrentUserId, HomeId = (long)CurrentHomeId, CreatedDate = DateTime.Now };
 
             await messageDataContext.SaveAsync(message, CurrentUserId, CurrentHomeId, null);
 
