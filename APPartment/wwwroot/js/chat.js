@@ -20,13 +20,7 @@ connection.on("ReceiveMessage", function (user, message) {
         div.appendChild(nextP);
     }
 
-    document.getElementById("messagesList").appendChild(div);
-});
-
-connection.start().then(function () {
-    document.getElementById("sendButton").disabled = false;
-}).catch(function (err) {
-    return console.error(err.toString());
+    document.getElementById("messagesList").prepend(div);
 });
 
 document.getElementById("sendButton").addEventListener("click", function (event) {
