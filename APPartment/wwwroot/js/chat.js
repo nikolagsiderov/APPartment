@@ -10,7 +10,6 @@ connection.start().then(function () {
     return console.error(err.toString());
 });
 
-
 connection.on("ReceiveMessage", function (user, message) {
     var msgArr = message.split(/(?:\r\n|\r|\n)/g);
     var firstMsg = user + ": " + msgArr[0];
