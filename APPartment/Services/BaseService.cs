@@ -24,11 +24,10 @@ namespace APPartment.Services
 
         public string GetStatuses(Type objectType)
         {
-            var module = objectType.ToString().Split('.').Last();
-
+            var objectTypeString = objectType.ToString().Split('.').Last();
             var statuses = new List<string>();
 
-            switch (module)
+            switch (objectTypeString)
             {
                 case "Inventory":
                     statuses.Add(BaseObjectStatus.Inventory1);
@@ -58,7 +57,6 @@ namespace APPartment.Services
             }
 
             statuses.Add(BaseObjectStatus.Critical);
-
             var result = string.Join(",", statuses);
 
             return result;
