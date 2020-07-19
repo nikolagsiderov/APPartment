@@ -77,11 +77,21 @@ namespace APPartment.Controllers
 
         public IActionResult EnterCreateHomeOptions()
         {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
         public IActionResult Register()
         {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
@@ -114,6 +124,11 @@ namespace APPartment.Controllers
 
         public IActionResult Login()
         {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 

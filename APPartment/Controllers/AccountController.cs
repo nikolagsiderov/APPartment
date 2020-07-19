@@ -24,10 +24,14 @@ namespace APPartment.Controllers
         #region Actions
         public IActionResult Register()
         {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserId")))
+            {
+                return RedirectToAction("EnterCreateHomeOptions", "Home");
+            }
+
             return View();
         }
 
-        
         [HttpPost]
         public IActionResult Register(User user)
         {            
@@ -55,6 +59,11 @@ namespace APPartment.Controllers
 
         public IActionResult Login()
         {
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserId")))
+            {
+                return RedirectToAction("EnterCreateHomeOptions", "Home");
+            }
+
             return View();
         }
 
