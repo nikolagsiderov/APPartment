@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using APPartment.Controllers.Base;
-using APPartment.Data;
-using APPartment.DisplayModels.Calendar;
-using APPartment.Utilities.Constants.Breadcrumbs;
+using APPartment.Data.Core;
+using APPartment.UI.Controllers.Base;
+using APPartment.UI.Utilities.Constants.Breadcrumbs;
+using APPartment.UI.ViewModels.GeneralCalendar;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;

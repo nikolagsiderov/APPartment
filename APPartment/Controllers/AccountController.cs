@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using APPartment.Controllers.Base;
-using APPartment.Core;
-using APPartment.Data;
-using APPartment.Models;
+using APPartment.Data.Core;
+using APPartment.Data.Models.Core;
+using APPartment.ORM.Framework.Core;
+using APPartment.UI.Controllers.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

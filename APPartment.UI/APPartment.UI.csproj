@@ -4,4 +4,19 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+    <PackageReference Include="SmartBreadcrumbs" Version="3.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\APPartment.Data\APPartment.Data.csproj" />
+    <ProjectReference Include="..\APPartment.ORM.Framework\APPartment.ORM.Framework.csproj" />
+    <ProjectReference Include="..\APPartment.Web.Services\APPartment.Web.Services.csproj" />
+  </ItemGroup>
+
 </Project>

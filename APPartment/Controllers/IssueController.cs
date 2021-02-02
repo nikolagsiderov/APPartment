@@ -1,15 +1,15 @@
-﻿using APPartment.Data;
-using APPartment.Models;
-using APPartment.Controllers.Base;
-using SmartBreadcrumbs.Attributes;
+﻿using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
-using APPartment.Enums;
-using APPartment.Utilities.Constants.Breadcrumbs;
 using System;
 using System.Linq.Expressions;
+using APPartment.UI.Controllers.Base;
+using APPartment.Data.Core;
+using APPartment.Data.Models.Objects;
+using APPartment.UI.Utilities.Constants.Breadcrumbs;
+using APPartment.UI.Enums;
 
 namespace APPartment.Controllers
 {

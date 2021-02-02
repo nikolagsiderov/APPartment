@@ -1,6 +1,7 @@
-﻿@model IEnumerable<APPartment.Models.Base.BaseObject>
+﻿@model IEnumerable<APPartment.Data.Models.Base.BaseObject>
 
-@using APPartment.Enums;
+@using APPartment.Web.Services.Enums;
+@using APPartment.UI.Enums;
 
 @{
     List<string> statuses = ViewData["Statuses"].ToString().Split(',').ToList();
@@ -28,7 +29,7 @@
             checkCardButton = $"Mark {BaseObjectStatus.Inventory1}";
             uncheckCardButton = $"Mark {BaseObjectStatus.Inventory3}";
 
-            newModel = new APPartment.Models.Inventory();
+            newModel = new APPartment.Data.Models.Objects.Inventory();
             break;
         case "Hygiene":
             titleForCheckAction = $"Mark as {BaseObjectStatus.Hygiene1}";
@@ -40,7 +41,7 @@
             checkCardButton = $"Mark {BaseObjectStatus.Hygiene1}";
             uncheckCardButton = $"Mark {BaseObjectStatus.Hygiene3}";
 
-            newModel = new APPartment.Models.Hygiene();
+            newModel = new APPartment.Data.Models.Objects.Hygiene();
             break;
         case "Issues":
             titleForCheckAction = $"Mark as {BaseObjectStatus.Issues1}";
@@ -52,7 +53,7 @@
             checkCardButton = $"{BaseObjectStatus.Issues1}";
             uncheckCardButton = $"{BaseObjectStatus.Issues3}";
 
-            newModel = new APPartment.Models.Issue();
+            newModel = new APPartment.Data.Models.Objects.Issue();
             break;
         case "Surveys":
             titleForCheckAction = "Mark as Completed";
@@ -64,10 +65,10 @@
             checkCardButton = "Mark Completed";
             uncheckCardButton = "Mark Pending";
 
-            newModel = new APPartment.Models.Survey();
+            newModel = new APPartment.Data.Models.Objects.Survey();
             break;
         case "Chores":
-            newModel = new APPartment.Models.Chore();
+            newModel = new APPartment.Data.Models.Objects.Chore();
             break;
     }
 }

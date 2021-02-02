@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using APPartment.Models;
 using SmartBreadcrumbs.Attributes;
 using APPartment.Data;
 using Microsoft.AspNetCore.Http;
-using APPartment.Models.Base;
 using System.Threading.Tasks;
-using APPartment.DisplayModels.Home;
-using APPartment.Utilities;
-using APPartment.Core;
-using APPartment.Utilities.Constants.Breadcrumbs;
-using APPartment.Controllers.Base;
+using APPartment.UI.Controllers.Base;
+using APPartment.Data.Core;
+using APPartment.UI.Utilities;
+using APPartment.ORM.Framework.Core;
+using APPartment.Data.Models.Core;
+using APPartment.UI.Utilities.Constants.Breadcrumbs;
+using APPartment.UI.ViewModels.Home;
+using APPartment.Data.Models.Base;
+using APPartment.UI.ViewModels;
+using APPartment.Data.Models.Objects;
+using APPObject = APPartment.Data.Models.Core.Object;
 
 namespace APPartment.Controllers
 {
@@ -336,12 +340,12 @@ namespace APPartment.Controllers
 
             if (inventoryObjects.Count() > 0)
             {
-                var inventoryObject = new Models.Object();
-                var objects = new List<Models.Object>();
+                var inventoryObject = new APPObject();
+                var objects = new List<APPObject>();
 
                 foreach (var inventory in inventoryObjects)
                 {
-                    objects.Add(_context.Set<Models.Object>().Where(x => x.ObjectId == inventory.ObjectId).FirstOrDefault());
+                    objects.Add(_context.Set<APPObject>().Where(x => x.ObjectId == inventory.ObjectId).FirstOrDefault());
                 }
 
                 inventoryObject = objects.OrderByDescending(x => x.ModifiedDate).FirstOrDefault();
@@ -359,12 +363,12 @@ namespace APPartment.Controllers
 
             if (hygieneObjects.Count() > 0)
             {
-                var hygieneObject = new Models.Object();
-                var objects = new List<Models.Object>();
+                var hygieneObject = new APPObject();
+                var objects = new List<APPObject>();
 
                 foreach (var hygiene in hygieneObjects)
                 {
-                    objects.Add(_context.Set<Models.Object>().Where(x => x.ObjectId == hygiene.ObjectId).FirstOrDefault());
+                    objects.Add(_context.Set<APPObject>().Where(x => x.ObjectId == hygiene.ObjectId).FirstOrDefault());
                 }
 
                 hygieneObject = objects.OrderByDescending(x => x.ModifiedDate).FirstOrDefault();
@@ -382,12 +386,12 @@ namespace APPartment.Controllers
 
             if (issueObjects.Count() > 0)
             {
-                var issueObject = new Models.Object();
-                var objects = new List<Models.Object>();
+                var issueObject = new APPObject();
+                var objects = new List<APPObject>();
 
                 foreach (var issue in issueObjects)
                 {
-                    objects.Add(_context.Set<Models.Object>().Where(x => x.ObjectId == issue.ObjectId).FirstOrDefault());
+                    objects.Add(_context.Set<APPObject>().Where(x => x.ObjectId == issue.ObjectId).FirstOrDefault());
                 }
 
                 issueObject = objects.OrderByDescending(x => x.ModifiedDate).FirstOrDefault();

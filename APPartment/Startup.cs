@@ -2,12 +2,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using APPartment.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SmartBreadcrumbs.Extensions;
-using APPartment.Chat;
+using APPartment.Data.Core;
+using APPartment.Web.Services.Chat;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace APPartment
 {
@@ -30,7 +32,7 @@ namespace APPartment
             services.AddDbContext<DataAccessContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddIdentityCore<IdentityUser>()
                 .AddEntityFrameworkStores<DataAccessContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -44,6 +46,8 @@ namespace APPartment
                 .AllowAnyHeader()
                 .WithOrigins("http://localhost:4200");
             }));
+
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
