@@ -1,5 +1,5 @@
 ﻿using APPartment.Data.Core;
-using APPartment.Data.Models.MetaObjects;
+using APPartment.Data.Server.Models.MetaObjects;
 using APPartment.ORM.Framework.Core;
 using APPartment.Web.Services.Utilities;
 using Microsoft.AspNetCore.Http;

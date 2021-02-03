@@ -1,7 +1,7 @@
-﻿using APPartment.Data.Models.Declarations;
+﻿using APPartment.Data.Server.Declarations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace APPartment.Data.Models.Base
+namespace APPartment.Data.Server.Models.Base
 {
     public abstract class Object : IObject
     {

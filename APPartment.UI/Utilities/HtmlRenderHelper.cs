@@ -1,6 +1,6 @@
 ﻿using APPartment.Data.Core;
-using APPartment.Data.Models.Core;
-using APPartment.Data.Models.MetaObjects;
+using APPartment.Data.Server.Models.Core;
+using APPartment.Data.Server.Models.MetaObjects;
 using System.Collections.Generic;
 using System.Linq;
 

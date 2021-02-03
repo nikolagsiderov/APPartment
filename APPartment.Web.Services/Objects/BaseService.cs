@@ -1,5 +1,5 @@
 ﻿using APPartment.Data.Core;
-using APPartment.Data.Models.Declarations;
+using APPartment.Data.Server.Declarations;
 using APPartment.Web.Services.Enums;
 using System;
 using System.Collections.Generic;
@@ -53,6 +53,11 @@ namespace APPartment.Web.Services.Objects
                     statuses.Add(BaseObjectStatus.Surveys1);
                     statuses.Add(BaseObjectStatus.Surveys2);
                     statuses.Add(BaseObjectStatus.Surveys3);
+                    break;
+                case "LinkType":
+                    statuses.Add(BaseObjectStatus.LinkTypes1);
+                    statuses.Add(BaseObjectStatus.LinkTypes2);
+                    statuses.Add(BaseObjectStatus.LinkTypes3);
                     break;
             }
 

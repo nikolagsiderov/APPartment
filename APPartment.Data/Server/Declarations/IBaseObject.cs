@@ -1,7 +1,7 @@
-﻿using APPartment.Data.Models.MetaObjects;
+﻿using APPartment.Data.Server.Models.MetaObjects;
 using System.Collections.Generic;
 
-namespace APPartment.Data.Models.Declarations
+namespace APPartment.Data.Server.Declarations
 {
     public interface IBaseObject : IObject
     {

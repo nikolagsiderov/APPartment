@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace APPartment.Data.Models.Core
+namespace APPartment.Data.Server.Models.Core
 {
     public class AuditEntry
     {

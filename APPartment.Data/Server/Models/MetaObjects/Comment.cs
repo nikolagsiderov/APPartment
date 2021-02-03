@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace APPartment.Data.Models.MetaObjects
+namespace APPartment.Data.Server.Models.MetaObjects
 {
     public class Comment : Base.Object
     {

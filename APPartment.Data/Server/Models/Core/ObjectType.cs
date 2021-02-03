@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace APPartment.Data.Models.Core
+namespace APPartment.Data.Server.Models.Core
 {
     public class ObjectType
     {

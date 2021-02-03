@@ -1,6 +1,6 @@
-﻿using APPartment.Data.Models.Base;
+﻿using APPartment.Data.Server.Models.Base;
 
-namespace APPartment.Data.Models.Objects
+namespace APPartment.Data.Server.Models.Objects
 {
     public class Hygiene : BaseObject
     {

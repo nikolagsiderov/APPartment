@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using APPartment.Data.Core;
-using APPartment.Data.Models.Core;
+using APPartment.Data.Server.Models.Core;
 using APPartment.ORM.Framework.Core;
 using APPartment.UI.Controllers.Base;
 using Microsoft.AspNetCore.Http;

@@ -1,4 +1,4 @@
-﻿@model APPartment.Data.Models.Base.BaseObject
+﻿@model APPartment.Data.Server.Models.Base.BaseObject
 
 @using APPartment.Web.Services.Enums
 
@@ -39,6 +39,11 @@
                 statuses.Add(BaseObjectStatus.Surveys1);
                 statuses.Add(BaseObjectStatus.Surveys2);
                 statuses.Add(BaseObjectStatus.Surveys3);
+                break;
+            case "LinkType":
+                statuses.Add(BaseObjectStatus.LinkTypes1);
+                statuses.Add(BaseObjectStatus.LinkTypes2);
+                statuses.Add(BaseObjectStatus.LinkTypes3);
                 break;
         }
 

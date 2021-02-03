@@ -1,6 +1,6 @@
 ﻿using APPartment.Data.Core;
 using APPartment.Data.Enums;
-using APPartment.Data.Models.Core;
+using APPartment.Data.Server.Models.Core;
 using APPartment.UI.Enums;
 using APPartment.Web.Services.Enums;
 using Newtonsoft.Json;

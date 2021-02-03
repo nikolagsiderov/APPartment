@@ -1,6 +1,6 @@
-﻿using APPartment.Data.Models.Core;
-using APPartment.Data.Models.MetaObjects;
-using APPartment.Data.Models.Objects;
+﻿using APPartment.Data.Server.Models.Core;
+using APPartment.Data.Server.Models.MetaObjects;
+using APPartment.Data.Server.Models.Objects;
 using Microsoft.EntityFrameworkCore;
 
 namespace APPartment.Data.Core
@@ -34,6 +34,8 @@ namespace APPartment.Data.Core
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Audit> Audits { get; set; }
+        public DbSet<LinkType> LinkTypes { get; set; }
+        public DbSet<Link> Links { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -54,7 +56,9 @@ namespace APPartment.Data.Core
                 new ObjectType { Id = 12, Name = "Survey" },
                 new ObjectType { Id = 13, Name = "Chore" },
                 new ObjectType { Id = 14, Name = "HomeUser" },
-                new ObjectType { Id = 15, Name = "Audit" }
+                new ObjectType { Id = 15, Name = "Audit" },
+                new ObjectType { Id = 16, Name = "LinkType" },
+                new ObjectType { Id = 17, Name = "Link"}
             );
             modelBuilder.Entity<Object>().ToTable("Object");
             modelBuilder.Entity<User>().ToTable("User");
@@ -71,6 +75,8 @@ namespace APPartment.Data.Core
             modelBuilder.Entity<Comment>().ToTable("Comment");
             modelBuilder.Entity<Image>().ToTable("Image");
             modelBuilder.Entity<Audit>().ToTable("Audit");
+            modelBuilder.Entity<LinkType>().ToTable("LinkType");
+            modelBuilder.Entity<Link>().ToTable("Link");
         }
     }
 }

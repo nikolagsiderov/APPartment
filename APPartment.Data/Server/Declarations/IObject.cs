@@ -1,4 +1,4 @@
-﻿namespace APPartment.Data.Models.Declarations
+﻿namespace APPartment.Data.Server.Declarations
 {
     public interface IObject
     {

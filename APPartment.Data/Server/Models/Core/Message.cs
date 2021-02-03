@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace APPartment.Data.Models.Core
+namespace APPartment.Data.Server.Models.Core
 {
     public class Message : Base.Object
     {

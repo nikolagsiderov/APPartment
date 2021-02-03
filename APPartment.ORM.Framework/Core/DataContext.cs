@@ -1,6 +1,6 @@
 ﻿using APPartment.Data.Core;
-using APPartment.Data.Models.Core;
-using APPartment.Data.Models.Declarations;
+using APPartment.Data.Server.Models.Core;
+using APPartment.Data.Server.Declarations;
 using APPartment.ORM.Framework.Enums;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using APPObject = APPartment.Data.Models.Core.Object;
+using APPObject = APPartment.Data.Server.Models.Core.Object;
 
 namespace APPartment.ORM.Framework.Core
 {

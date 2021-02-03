@@ -6,7 +6,7 @@ using System;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http;
 using APPartment.UI.Controllers.Base;
-using APPartment.Data.Models.Objects;
+using APPartment.Data.Server.Models.Objects;
 using APPartment.Data.Core;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.Enums;

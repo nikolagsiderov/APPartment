@@ -1,74 +1,34 @@
-﻿@model IEnumerable<APPartment.Data.Models.Base.BaseObject>
+﻿@model IEnumerable<APPartment.Data.Server.Models.Base.BaseObject>
 
-@using APPartment.Web.Services.Enums;
 @using APPartment.UI.Enums;
+@using APPartment.Data.Server.Models.Objects;
+@using APPartment.Data.Server.Models.Core;
 
 @{
     List<string> statuses = ViewData["Statuses"].ToString().Split(',').ToList();
-    var moduleName = ViewData["Module"].ToString();
     var canManage = bool.Parse(ViewData["Manage"].ToString());
-
-    var titleForCheckAction = string.Empty;
-    var titleForUncheckAction = string.Empty;
-    var checkCardBody = string.Empty;
-    var uncheckCardBody = string.Empty;
-    var checkCardButton = string.Empty;
-    var uncheckCardButton = string.Empty;
 
     var newModel = new object();
 
-    switch (moduleName)
+    switch (ViewData["Module"])
     {
         case "Inventory":
-            titleForCheckAction = $"Mark as {BaseObjectStatus.Inventory1}";
-            titleForUncheckAction = $"Mark as {BaseObjectStatus.Inventory3}";
-
-            checkCardBody = $"Are you sure you want to mark as {BaseObjectStatus.Inventory1}?";
-            uncheckCardBody = $"Are you sure you want to mark as {BaseObjectStatus.Inventory3}?";
-
-            checkCardButton = $"Mark {BaseObjectStatus.Inventory1}";
-            uncheckCardButton = $"Mark {BaseObjectStatus.Inventory3}";
-
-            newModel = new APPartment.Data.Models.Objects.Inventory();
+            newModel = new Inventory();
             break;
         case "Hygiene":
-            titleForCheckAction = $"Mark as {BaseObjectStatus.Hygiene1}";
-            titleForUncheckAction = $"Mark as {BaseObjectStatus.Hygiene3}";
-
-            checkCardBody = $"Are you sure you want to mark as {BaseObjectStatus.Hygiene1}?";
-            uncheckCardBody = $"Are you sure you want to mark as {BaseObjectStatus.Hygiene3}?";
-
-            checkCardButton = $"Mark {BaseObjectStatus.Hygiene1}";
-            uncheckCardButton = $"Mark {BaseObjectStatus.Hygiene3}";
-
-            newModel = new APPartment.Data.Models.Objects.Hygiene();
+            newModel = new Hygiene();
             break;
         case "Issues":
-            titleForCheckAction = $"Mark as {BaseObjectStatus.Issues1}";
-            titleForUncheckAction = $"Mark as {BaseObjectStatus.Issues3}";
-
-            checkCardBody = $"Are you sure you want mark as {BaseObjectStatus.Issues1}?";
-            uncheckCardBody = $"Are you sure you want to mark as {BaseObjectStatus.Issues3}?";
-
-            checkCardButton = $"{BaseObjectStatus.Issues1}";
-            uncheckCardButton = $"{BaseObjectStatus.Issues3}";
-
-            newModel = new APPartment.Data.Models.Objects.Issue();
+            newModel = new Issue();
             break;
         case "Surveys":
-            titleForCheckAction = "Mark as Completed";
-            titleForUncheckAction = "Mark as Pending";
-
-            checkCardBody = "Are you sure you want to mark as Completed?";
-            uncheckCardBody = "Are you sure you want to mark as Pending?";
-
-            checkCardButton = "Mark Completed";
-            uncheckCardButton = "Mark Pending";
-
-            newModel = new APPartment.Data.Models.Objects.Survey();
+            newModel = new Survey();
             break;
         case "Chores":
-            newModel = new APPartment.Data.Models.Objects.Chore();
+            newModel = new Chore();
+            break;
+        case "Core":
+            newModel = new LinkType();
             break;
     }
 }
@@ -78,7 +38,6 @@
         <h6 class="m-0 font-weight-bold text-primary">@ViewData["GridTitle"]</h6>
     </div>
     <div class="card-body">
-
         @if (canManage)
         {
             <div class="row">
@@ -92,21 +51,14 @@
             <br />
         }
 
-
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Details
-                        </th>
-                        <th>
-                            Status
-                        </th>
+                        <th>Name</th>
+                        <th>Details</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -114,9 +66,7 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>
-                                <p>@item.ObjectId</p>
-                            </td>
+                            <td><p>@item.ObjectId</p></td>
                             <td>
                                 @if (item.Name.Length <= 20)
                                 {
@@ -173,7 +123,7 @@
 
                                 @if (canManage)
                                 {
-                                    @if (moduleName == "Chores")
+                                    @if (item.GetType().Name == "Chore")
                                     {
                                         <button type="button" title="Assign" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalAssignId"><i class="fas fa-tag"></i></button>
 
@@ -203,27 +153,27 @@
                                         </div>
                                     }
 
-                                    if (moduleName != "Chores")
+                                    if (item.GetType().Name != "Chore")
                                     {
                                         if (item.Status == (int)ObjectStatus.Trivial || item.Status == (int)ObjectStatus.Medium)
                                         {
-                                            <button type="button" title="@titleForUncheckAction" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
+                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
 
                                             <div class="modal fade" id="@modalNotCompletedId" tabindex="-1" role="dialog" aria-labelledby="markNotCompletedObjectModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="markNotCompletedObjectModalLabel">@titleForUncheckAction</h5>
+                                                            <h5 class="modal-title" id="markNotCompletedObjectModalLabel">Set high status</h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            @uncheckCardBody
+                                                            Are you sure you want to set a high status?
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                            <a asp-action="SetHighStatus" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">@uncheckCardButton</button></a>
+                                                            <a asp-action="SetHighStatus" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">Set</button></a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -231,23 +181,23 @@
                                         }
                                         else
                                         {
-                                            <button type="button" title="@titleForCheckAction" class="btn btn-success btn-sm" data-toggle="modal" data-target="#@modalCompletedId"><i class="fas fa-check"></i></button>
+                                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#@modalCompletedId"><i class="fas fa-check"></i></button>
 
                                             <div class="modal fade" id="@modalCompletedId" tabindex="-1" role="dialog" aria-labelledby="completeObjectModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="completeObjectModalLabel">@titleForCheckAction</h5>
+                                                            <h5 class="modal-title" id="completeObjectModalLabel">Set low status</h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            @checkCardBody
+                                                            Are you sure you want to set low status?
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                            <a asp-action="SetLowStatus" asp-route-id="@item.Id"><button type="button" class="btn btn-success">@checkCardButton</button></a>
+                                                            <a asp-action="SetLowStatus" asp-route-id="@item.Id"><button type="button" class="btn btn-success">Set</button></a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -283,23 +233,23 @@
                                 {
                                     if (item.Status == (int)ObjectStatus.Trivial || item.Status == (int)ObjectStatus.Medium)
                                     {
-                                        <button type="button" title="@titleForUncheckAction" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
+                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
 
                                         <div class="modal fade" id="@modalNotCompletedId" tabindex="-1" role="dialog" aria-labelledby="markNotCompletedObjectModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="markNotCompletedObjectModalLabel">@titleForUncheckAction</h5>
+                                                        <h5 class="modal-title" id="markNotCompletedObjectModalLabel">Set high status</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        @uncheckCardBody
+                                                        Are you sure you want to set high status?
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                        <a asp-action="SetHighStatus" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">@uncheckCardButton</button></a>
+                                                        <a asp-action="SetHighStatus" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">Set</button></a>
                                                     </div>
                                                 </div>
                                             </div>

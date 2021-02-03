@@ -1,5 +1,5 @@
-﻿using APPartment.Data.Models.Base;
-using APPartment.Data.Models.Core;
+﻿using APPartment.Data.Server.Models.Base;
+using APPartment.Data.Server.Models.Core;
 using System.Collections.Generic;
 
 namespace APPartment.UI.ViewModels.Home

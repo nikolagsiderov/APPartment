@@ -4,20 +4,19 @@ using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
-using APPartment.Data;
 using Microsoft.AspNetCore.Http;
 using System.Threading.Tasks;
 using APPartment.UI.Controllers.Base;
 using APPartment.Data.Core;
 using APPartment.UI.Utilities;
 using APPartment.ORM.Framework.Core;
-using APPartment.Data.Models.Core;
+using APPartment.Data.Server.Models.Core;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Home;
-using APPartment.Data.Models.Base;
+using APPartment.Data.Server.Models.Base;
 using APPartment.UI.ViewModels;
-using APPartment.Data.Models.Objects;
-using APPObject = APPartment.Data.Models.Core.Object;
+using APPartment.Data.Server.Models.Objects;
+using APPObject = APPartment.Data.Server.Models.Core.Object;
 
 namespace APPartment.Controllers
 {

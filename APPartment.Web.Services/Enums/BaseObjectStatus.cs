@@ -22,6 +22,10 @@
         public const string Surveys2 = "Recommended";
         public const string Surveys3 = "Mandatory";
 
+        public const string LinkTypes1 = "Low";
+        public const string LinkTypes2 = "Medium";
+        public const string LinkTypes3 = "High";
+
         public const string Critical = "Critical";
     }
 }

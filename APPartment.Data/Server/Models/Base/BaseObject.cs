@@ -1,10 +1,10 @@
-﻿using APPartment.Data.Models.Declarations;
-using APPartment.Data.Models.MetaObjects;
+﻿using APPartment.Data.Server.Declarations;
+using APPartment.Data.Server.Models.MetaObjects;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace APPartment.Data.Models.Base
+namespace APPartment.Data.Server.Models.Base
 {
     public abstract class BaseObject : IBaseObject
     {
