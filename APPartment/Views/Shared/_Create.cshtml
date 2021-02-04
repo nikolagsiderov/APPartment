@@ -1,60 +1,5 @@
 ﻿@model APPartment.Data.Server.Models.Base.BaseObject
 
-@using APPartment.Web.Services.Enums
-
-@{
-    var modelType = Model.GetType();
-
-    List<string> statuses = GetStatuses(modelType).ToString().Split(',').ToList();
-
-    string GetStatuses(Type objectType)
-    {
-        var module = objectType.ToString().Split('.').Last();
-
-        var statuses = new List<string>();
-
-        switch (module)
-        {
-            case "Inventory":
-                statuses.Add(BaseObjectStatus.Inventory1);
-                statuses.Add(BaseObjectStatus.Inventory2);
-                statuses.Add(BaseObjectStatus.Inventory3);
-                break;
-            case "Hygiene":
-                statuses.Add(BaseObjectStatus.Hygiene1);
-                statuses.Add(BaseObjectStatus.Hygiene2);
-                statuses.Add(BaseObjectStatus.Hygiene3);
-                break;
-            case "Issue":
-                statuses.Add(BaseObjectStatus.Issues1);
-                statuses.Add(BaseObjectStatus.Issues2);
-                statuses.Add(BaseObjectStatus.Issues3);
-                break;
-            case "Chore":
-                statuses.Add(BaseObjectStatus.Chores1);
-                statuses.Add(BaseObjectStatus.Chores2);
-                statuses.Add(BaseObjectStatus.Chores3);
-                break;
-            case "Survey":
-                statuses.Add(BaseObjectStatus.Surveys1);
-                statuses.Add(BaseObjectStatus.Surveys2);
-                statuses.Add(BaseObjectStatus.Surveys3);
-                break;
-            case "LinkType":
-                statuses.Add(BaseObjectStatus.LinkTypes1);
-                statuses.Add(BaseObjectStatus.LinkTypes2);
-                statuses.Add(BaseObjectStatus.LinkTypes3);
-                break;
-        }
-
-        statuses.Add(BaseObjectStatus.Critical);
-
-        var result = string.Join(",", statuses);
-
-        return result;
-    }
-}
-
 <div class="modal fade" id="createView" tabindex="-1" role="dialog" aria-labelledby="createViewLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -82,10 +27,10 @@
                         <div class="input-group mb-3">
                             <select class="custom-select" asp-for="Status" id="inputGroupSelect01">
                                 <option selected>Please select status...</option>
-                                <option value="1">@statuses[0]</option>
-                                <option value="2">@statuses[1]</option>
-                                <option value="3">@statuses[2]</option>
-                                <option value="4">@statuses[3]</option>
+                                <option value="1">Low</option>
+                                <option value="2">Medium</option>
+                                <option value="3">High</option>
+                                <option value="4">Critical</option>
                             </select>
                         </div>
                         <span asp-validation-for="Status" class="text-danger"></span>

@@ -2,7 +2,6 @@
 using APPartment.Data.Enums;
 using APPartment.Data.Server.Models.Core;
 using APPartment.UI.Enums;
-using APPartment.Web.Services.Enums;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
@@ -139,16 +138,16 @@ namespace APPartment.UI.Utilities
                                         switch (statusNewValue)
                                         {
                                             case "1":
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Inventory1}</strong>."));
+                                                historyEventString.Append(string.Format($"<strong>Low</strong>."));
                                                 break;
                                             case "2":
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Inventory2}</strong>."));
+                                                historyEventString.Append(string.Format($"<strong>Medium</strong>."));
                                                 break;
                                             case "3":
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Inventory3}</strong>."));
+                                                historyEventString.Append(string.Format($"<strong>High</strong>."));
                                                 break;
                                             case "4":
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
+                                                historyEventString.Append(string.Format($"<strong>Critical</strong>."));
                                                 break;
                                         }
                                     }
@@ -179,16 +178,16 @@ namespace APPartment.UI.Utilities
                                         switch (statusNewValue)
                                         {
                                             case "1":
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Hygiene1}</strong>."));
+                                                historyEventString.Append(string.Format($"<strong>Low</strong>."));
                                                 break;
                                             case "2":
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Hygiene2}</strong>."));
+                                                historyEventString.Append(string.Format($"<strong>Medium</strong>."));
                                                 break;
                                             case "3":
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Hygiene3}</strong>."));
+                                                historyEventString.Append(string.Format($"<strong>High</strong>."));
                                                 break;
                                             case "4":
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
+                                                historyEventString.Append(string.Format($"<strong>Critical</strong>."));
                                                 break;
                                         }
                                     }
@@ -219,16 +218,16 @@ namespace APPartment.UI.Utilities
                                         switch (statusNewValue)
                                         {
                                             case "1":
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Issues1}</strong>."));
+                                                historyEventString.Append(string.Format($"<strong>Low</strong>."));
                                                 break;
                                             case "2":
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Issues2}</strong>."));
+                                                historyEventString.Append(string.Format($"<strong>Medium</strong>."));
                                                 break;
                                             case "3":
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Issues3}</strong>."));
+                                                historyEventString.Append(string.Format($"<strong>High</strong>."));
                                                 break;
                                             case "4":
-                                                historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
+                                                historyEventString.Append(string.Format($"<strong>Critical</strong>."));
                                                 break;
                                         }
                                     }
@@ -354,16 +353,16 @@ namespace APPartment.UI.Utilities
                                             switch (statusNewValue)
                                             {
                                                 case "1":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Inventory1}</strong>.");
+                                                    historyEventString.Append($"<strong>Low</strong>.");
                                                     break;
                                                 case "2":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Inventory2}</strong>.");
+                                                    historyEventString.Append($"<strong>Medium</strong>.");
                                                     break;
                                                 case "3":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Inventory3}</strong>.");
+                                                    historyEventString.Append($"<strong>High</strong>.");
                                                     break;
                                                 case "4":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Critical}</strong>.");
+                                                    historyEventString.Append($"<strong>Critical</strong>.");
                                                     break;
                                             }
                                         }
@@ -394,16 +393,16 @@ namespace APPartment.UI.Utilities
                                             switch (statusNewValue)
                                             {
                                                 case "1":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Hygiene1}</strong>.");
+                                                    historyEventString.Append($"<strong>Low</strong>.");
                                                     break;
                                                 case "2":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Hygiene2}</strong>.");
+                                                    historyEventString.Append($"<strong>Medium</strong>.");
                                                     break;
                                                 case "3":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Hygiene3}</strong>.");
+                                                    historyEventString.Append($"<strong>High</strong>.");
                                                     break;
                                                 case "4":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Critical}</strong>.");
+                                                    historyEventString.Append($"<strong>Critical</strong>.");
                                                     break;
                                             }
                                         }
@@ -434,16 +433,16 @@ namespace APPartment.UI.Utilities
                                             switch (statusNewValue)
                                             {
                                                 case "1":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Issues1}</strong>.");
+                                                    historyEventString.Append($"<strong>Low</strong>.");
                                                     break;
                                                 case "2":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Issues2}</strong>.");
+                                                    historyEventString.Append($"<strong>Medium</strong>.");
                                                     break;
                                                 case "3":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Issues3}</strong>.");
+                                                    historyEventString.Append($"<strong>High</strong>.");
                                                     break;
                                                 case "4":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Critical}</strong>.");
+                                                    historyEventString.Append($"<strong>Critical</strong>.");
                                                     break;
                                             }
                                         }
@@ -474,16 +473,16 @@ namespace APPartment.UI.Utilities
                                             switch (statusNewValue)
                                             {
                                                 case "1":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Surveys1}</strong>.");
+                                                    historyEventString.Append($"<strong>Low</strong>.");
                                                     break;
                                                 case "2":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Surveys2}</strong>.");
+                                                    historyEventString.Append($"<strong>Medium</strong>.");
                                                     break;
                                                 case "3":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Surveys3}</strong>.");
+                                                    historyEventString.Append($"<strong>High</strong>.");
                                                     break;
                                                 case "4":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Critical}</strong>.");
+                                                    historyEventString.Append($"<strong>Critical</strong>.");
                                                     break;
                                             }
                                         }
@@ -520,16 +519,16 @@ namespace APPartment.UI.Utilities
                                             switch (statusNewValue)
                                             {
                                                 case "1":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Chores1}</strong>.");
+                                                    historyEventString.Append($"<strong>Low</strong>.");
                                                     break;
                                                 case "2":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Chores2}</strong>.");
+                                                    historyEventString.Append($"<strong>Medium</strong>.");
                                                     break;
                                                 case "3":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Chores3}</strong>.");
+                                                    historyEventString.Append($"<strong>High</strong>.");
                                                     break;
                                                 case "4":
-                                                    historyEventString.Append($"<strong>{BaseObjectStatus.Critical}</strong>.");
+                                                    historyEventString.Append($"<strong>Critical</strong>.");
                                                     break;
                                             }
                                         }
@@ -826,16 +825,16 @@ namespace APPartment.UI.Utilities
                                             switch (statusNewValue)
                                             {
                                                 case "1":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Inventory1}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Low</strong>."));
                                                     break;
                                                 case "2":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Inventory2}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Medium</strong>."));
                                                     break;
                                                 case "3":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Inventory3}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>High</strong>."));
                                                     break;
                                                 case "4":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Critical</strong>."));
                                                     break;
                                             }
                                         }
@@ -868,16 +867,16 @@ namespace APPartment.UI.Utilities
                                             switch (statusNewValue)
                                             {
                                                 case "1":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Hygiene1}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Low</strong>."));
                                                     break;
                                                 case "2":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Hygiene2}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Medium</strong>."));
                                                     break;
                                                 case "3":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Hygiene3}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>High</strong>."));
                                                     break;
                                                 case "4":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Critical</strong>."));
                                                     break;
                                             }
                                         }
@@ -910,16 +909,16 @@ namespace APPartment.UI.Utilities
                                             switch (statusNewValue)
                                             {
                                                 case "1":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Issues1}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Low</strong>."));
                                                     break;
                                                 case "2":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Issues2}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Medium</strong>."));
                                                     break;
                                                 case "3":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Issues3}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>High</strong>."));
                                                     break;
                                                 case "4":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Critical</strong>."));
                                                     break;
                                             }
                                         }
@@ -952,16 +951,16 @@ namespace APPartment.UI.Utilities
                                             switch (statusNewValue)
                                             {
                                                 case "1":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Surveys1}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Low</strong>."));
                                                     break;
                                                 case "2":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Surveys2}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Medium</strong>."));
                                                     break;
                                                 case "3":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Surveys3}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>High</strong>."));
                                                     break;
                                                 case "4":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Critical</strong>."));
                                                     break;
                                             }
                                         }
@@ -1000,16 +999,16 @@ namespace APPartment.UI.Utilities
                                             switch (statusNewValue)
                                             {
                                                 case "1":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Chores1}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Low</strong>."));
                                                     break;
                                                 case "2":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Chores2}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Medium</strong>."));
                                                     break;
                                                 case "3":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Chores3}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>High</strong>."));
                                                     break;
                                                 case "4":
-                                                    historyEventString.Append(string.Format($"<strong>{BaseObjectStatus.Critical}</strong>."));
+                                                    historyEventString.Append(string.Format($"<strong>Critical</strong>."));
                                                     break;
                                             }
                                         }

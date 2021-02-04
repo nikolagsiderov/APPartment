@@ -1,9 +1,5 @@
 ﻿@model APPartment.Data.Server.Models.Base.BaseObject
 
-@{
-    List<string> statuses = ViewData["Statuses"].ToString().Split(',').ToList();
-}
-
 <div class="card">
     <div class="card-header">
         @{
@@ -34,10 +30,10 @@
                         <label asp-for="Status" class="control-label">Status</label>
                         <div class="input-group mb-3">
                             <select class="custom-select" asp-for="Status" id="inputGroupSelect01">
-                                <option value="1">@statuses[0]</option>
-                                <option value="2">@statuses[1]</option>
-                                <option value="3">@statuses[2]</option>
-                                <option value="4">@statuses[3]</option>
+                                <option value="1">Low</option>
+                                <option value="2">Medium</option>
+                                <option value="3">High</option>
+                                <option value="4">Critical</option>
                             </select>
                         </div>
                         <span asp-validation-for="Status" class="text-danger"></span>

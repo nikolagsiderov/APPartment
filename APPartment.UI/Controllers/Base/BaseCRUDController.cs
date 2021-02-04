@@ -15,7 +15,6 @@ using APPartment.UI.Utilities;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels;
 using APPartment.Web.Services.MetaObjects;
-using APPartment.Web.Services.Objects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +34,6 @@ namespace APPartment.UI.Controllers.Base
         private DataContext<Comment> commentDataContext;
         private DataContext<Image> imageDataContext;
         private HistoryHtmlBuilder historyHtmlBuilder;
-        protected BaseService<T> baseService;
         #endregion Context, Services and Utilities
 
         public BaseCRUDController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
@@ -48,7 +46,6 @@ namespace APPartment.UI.Controllers.Base
             choreDataContext = new DataContext<Chore>(_context);
             commentDataContext = new DataContext<Comment>(_context);
             historyHtmlBuilder = new HistoryHtmlBuilder(_context);
-            baseService = new BaseService<T>(_context);
         }
 
         public abstract Expression<Func<T, bool>> FilterExpression { get; set; }
@@ -61,8 +58,6 @@ namespace APPartment.UI.Controllers.Base
             var predicate = FilterExpression.Compile();
 
             var modelObjects = _context.Set<T>().ToList().Where(predicate);
-
-            ViewData["Statuses"] = baseService.GetStatuses(typeof(T));
 
             return View("_Grid", modelObjects);
         }
@@ -84,7 +79,6 @@ namespace APPartment.UI.Controllers.Base
             }
 
             model = GetClingons(model);
-            ViewData["Statuses"] = baseService.GetStatuses(typeof(T));
 
             return View("_Details", model);
         }
@@ -118,7 +112,6 @@ namespace APPartment.UI.Controllers.Base
             }
 
             model = GetClingons(model);
-            ViewData["Statuses"] = baseService.GetStatuses(typeof(T));
 
             return View("_Edit", model);
         }
@@ -141,14 +134,7 @@ namespace APPartment.UI.Controllers.Base
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!baseService.ObjectExists(model.Id))
-                    {
-                        return new Error404NotFoundViewResult();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return new Error404NotFoundViewResult();
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -341,7 +327,7 @@ namespace APPartment.UI.Controllers.Base
                 else
                 {
                     return Json(new { success = false, message = "404: Images path does not exist." });
-                }   
+                }
             }
         }
 

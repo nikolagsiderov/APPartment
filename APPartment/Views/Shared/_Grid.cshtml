@@ -1,11 +1,9 @@
 ﻿@model IEnumerable<APPartment.Data.Server.Models.Base.BaseObject>
 
-@using APPartment.UI.Enums;
 @using APPartment.Data.Server.Models.Objects;
 @using APPartment.Data.Server.Models.Core;
 
 @{
-    List<string> statuses = ViewData["Statuses"].ToString().Split(',').ToList();
     var canManage = bool.Parse(ViewData["Manage"].ToString());
 
     var newModel = new object();
@@ -97,15 +95,15 @@
                             <td class="text-center">
                                 @if (item.Status == 1)
                                 {
-                                    <span class="badge badge-success">@statuses[0]</span>
+                                    <span class="badge badge-success">Low</span>
                                 }
                                 else if (item.Status == 2)
                                 {
-                                    <span class="badge badge-warning">@statuses[1]</span>
+                                    <span class="badge badge-warning">Medium</span>
                                 }
                                 else if (item.Status == 3)
                                 {
-                                    <span class="badge badge-danger">@statuses[2]</span>
+                                    <span class="badge badge-danger">High</span>
                                 }
                                 else
                                 {
@@ -155,7 +153,7 @@
 
                                     if (item.GetType().Name != "Chore")
                                     {
-                                        if (item.Status == (int)ObjectStatus.Trivial || item.Status == (int)ObjectStatus.Medium)
+                                        if (item.Status == 1 || item.Status == 2)
                                         {
                                             <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
 
@@ -231,7 +229,7 @@
                                 }
                                 else
                                 {
-                                    if (item.Status == (int)ObjectStatus.Trivial || item.Status == (int)ObjectStatus.Medium)
+                                    if (item.Status == 1 || item.Status == 2)
                                     {
                                         <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
 

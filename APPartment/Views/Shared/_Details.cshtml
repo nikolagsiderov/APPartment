@@ -1,14 +1,11 @@
 ﻿@model APPartment.Data.Server.Models.Base.BaseObject
 
-@{ 
-    List<string> statuses = ViewData["Statuses"].ToString().Split(',').ToList();
+@{
+    var header = string.Format("ID: {0}, Name: {1}", Model.ObjectId, Model.Name);
 }
 
 <div class="card">
     <div class="card-header">
-        @{
-            var header = string.Format("ID: {0}, Name: {1}", Model.ObjectId, Model.Name);
-        }
         @header
     </div>
     <div class="card-body">
@@ -21,26 +18,26 @@
         <div>
             <div class="row">
                 <div class="col-md-3">
-                    <strong>Name:</strong> 
+                    <strong>Name:</strong>
                     <p>@Model.Name</p>
                 </div>
                 <div class="col-md-3">
                     <strong>Status:</strong>
                     @if (Model.Status == 1)
                     {
-                        <p>@statuses[0]</p>
+                        <p>Low</p>
                     }
                     else if (Model.Status == 2)
                     {
-                        <p>@statuses[1]</p>
+                        <p>Medium</p>
                     }
                     else if (Model.Status == 3)
                     {
-                        <p>@statuses[2]</p>
+                        <p>High</p>
                     }
                     else
                     {
-                        <p>@statuses[3]</p>
+                        <p>Critical</p>
                     }
                 </div>
             </div>
@@ -49,7 +46,7 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <strong>Details:</strong> 
+                    <strong>Details:</strong>
                     <p>@Model.Details</p>
                 </div>
             </div>
