@@ -5,19 +5,20 @@ using APPartment.Web.Services.Utilities;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace APPartment.Web.Services.MetaObjects
 {
     public class FileUploadService
     {
         private DataAccessContext _context;
-        private DataContext<Image> context;
+        private DataContext dataContext;
         private HumanSizeConverter humanSizeConverter = new HumanSizeConverter();
 
-        public FileUploadService(DataAccessContext _context, DataContext<Image> context)
+        public FileUploadService(DataAccessContext _context, DataContext dataContext)
         {
             this._context = _context;
-            this.context = context;
+            this.dataContext = dataContext;
         }
 
         public void UploadImage(IFormFile file, long targetId, long? userId, long? homeId)
@@ -49,7 +50,7 @@ namespace APPartment.Web.Services.MetaObjects
                 TargetId = targetId,
             };
 
-            context.Save(image, userId, homeId, targetId);
+            Task.Run(() => dataContext.SaveAsync(image, userId, homeId, targetId)).Wait();
 
             image.Name = $"{image.Id}_{targetId}_{file.FileName}";
 

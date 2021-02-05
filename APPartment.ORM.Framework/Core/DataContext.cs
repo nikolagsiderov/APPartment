@@ -13,8 +13,7 @@ using APPObject = APPartment.Data.Server.Models.Core.Object;
 
 namespace APPartment.ORM.Framework.Core
 {
-    public class DataContext<T>
-        where T : class, IObject
+    public class DataContext
     {
         private DataAccessContext context;
 
@@ -24,7 +23,8 @@ namespace APPartment.ORM.Framework.Core
         }
 
         #region Base Operations
-        public async Task SaveAsync(T objectModel, long? userId, long? homeId, long? targetObjectId)
+        public async Task SaveAsync<T>(T objectModel, long? userId, long? homeId, long? targetObjectId)
+            where T : class, IObject
         {
             var objectTypeName = objectModel.GetType().Name;
             var objectTypeId = context.Set<ObjectType>().Where(x => x.Name == objectTypeName).FirstOrDefault().Id;
@@ -46,29 +46,8 @@ namespace APPartment.ORM.Framework.Core
             await this.SaveChangesAsync(true, (long)homeId, (long)userId, targetObjectId, _object.ObjectId, objectModel, ContextExecutionTypes.Create);
         }
 
-        public void Save(T objectModel, long? userId, long? homeId, long? targetObjectId)
-        {
-            var objectTypeName = objectModel.GetType().Name;
-            var objectTypeId = context.Set<ObjectType>().Where(x => x.Name == objectTypeName).FirstOrDefault().Id;
-
-            var _object = new APPObject()
-            {
-                CreatedById = (long)userId,
-                ModifiedById = (long)userId,
-                CreatedDate = DateTime.Now,
-                ModifiedDate = DateTime.Now,
-                ObjectTypeId = objectTypeId
-            };
-
-            context.Add(_object);
-            context.SaveChanges();
-
-            objectModel.ObjectId = _object.ObjectId;
-
-            Task.Run(async () => await this.SaveChangesAsync(true, (long)homeId, (long)userId, targetObjectId, _object.ObjectId, objectModel, ContextExecutionTypes.Create)).Wait();
-        }
-
-        public async Task UpdateAsync(T objectModel, long? userId, long? homeId, long? targetObjectId)
+        public async Task UpdateAsync<T>(T objectModel, long? userId, long? homeId, long? targetObjectId)
+            where T : class, IObject
         {
             var _object = context.Set<APPObject>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
@@ -81,20 +60,8 @@ namespace APPartment.ORM.Framework.Core
             await this.SaveChangesAsync(true, (long)homeId, (long)userId, targetObjectId, _object.ObjectId, objectModel, ContextExecutionTypes.Update);
         }
 
-        public void Update(T objectModel, long? userId, long? homeId, long? targetObjectId)
-        {
-            var _object = context.Set<APPObject>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
-
-            _object.ModifiedById = (long)userId;
-            _object.ModifiedDate = DateTime.Now;
-
-            context.Update(_object);
-            context.SaveChanges();
-
-            Task.Run(async () => await this.SaveChangesAsync(true, (long)homeId, (long)userId, targetObjectId, _object.ObjectId, objectModel, ContextExecutionTypes.Update)).Wait();
-        }
-
-        public async Task DeleteAsync(T objectModel, long? userId, long? homeId, long? targetObjectId)
+        public async Task DeleteAsync<T>(T objectModel, long? userId, long? homeId, long? targetObjectId)
+            where T : class, IObject
         {
             var _object = context.Set<APPObject>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
 
@@ -102,20 +69,12 @@ namespace APPartment.ORM.Framework.Core
 
             await this.SaveChangesAsync(true, (long)homeId, (long)userId, targetObjectId, 0, objectModel, ContextExecutionTypes.Delete);
         }
-
-        public void Delete(T objectModel, long? userId, long? homeId, long? targetObjectId)
-        {
-            var _object = context.Set<APPObject>().Where(x => x.ObjectId == objectModel.ObjectId).FirstOrDefault();
-
-            context.Remove(_object);
-
-            Task.Run(async () => await this.SaveChangesAsync(true, (long)homeId, (long)userId, targetObjectId, 0, objectModel, ContextExecutionTypes.Delete)).Wait();
-        }
         #endregion
 
         #region Audit Operations
-        private async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, long homeId, long userId, long? targetObjectId, long objectId, T objectModel,
+        private async Task<int> SaveChangesAsync<T>(bool acceptAllChangesOnSuccess, long homeId, long userId, long? targetObjectId, long objectId, T objectModel,
             ContextExecutionTypes contextExecutionType, CancellationToken cancellationToken = default(CancellationToken))
+            where T : class, IObject
         {
             switch (contextExecutionType)
             {

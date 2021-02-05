@@ -26,10 +26,7 @@ namespace APPartment.Controllers
         private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper;
         private TimeConverter timeConverter = new TimeConverter();
-        private DataContext<Home> dataContext;
-        private DataContext<HomeSettings> homeSettingsDataContext;
-        private DataContext<Message> messageDataContext;
-        private DataContext<HomeStatus> homeStatusDataContext;
+        private DataContext dataContext;
         private HistoryHtmlBuilder historyHtmlBuilder;
         #endregion
 
@@ -37,10 +34,7 @@ namespace APPartment.Controllers
         {
             _context = context;
             htmlRenderHelper = new HtmlRenderHelper(_context);
-            dataContext = new DataContext<Home>(_context);
-            homeSettingsDataContext = new DataContext<HomeSettings>(_context);
-            messageDataContext = new DataContext<Message>(_context);
-            homeStatusDataContext = new DataContext<HomeStatus>(_context);
+            dataContext = new DataContext(_context);
             historyHtmlBuilder = new HistoryHtmlBuilder(_context);
         }
 
@@ -99,7 +93,7 @@ namespace APPartment.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(Home home)
+        public async Task<IActionResult> Register(Home home)
         {
             if (ModelState.IsValid)
             {
@@ -110,7 +104,7 @@ namespace APPartment.Controllers
                     return View(home);
                 }
 
-                dataContext.Save(home, CurrentUserId, 0, null);
+                await dataContext.SaveAsync<Home>(home, CurrentUserId, 0, null);
 
                 ModelState.Clear();
 
@@ -190,7 +184,7 @@ namespace APPartment.Controllers
         }
 
         [HttpPost]
-        public IActionResult Settings(HomeSettings settings)
+        public async Task<IActionResult> Settings(HomeSettings settings)
         {
             var homeModel = _context.Find<Home>(CurrentHomeId);
             settings.HomeId = CurrentHomeId;
@@ -199,18 +193,18 @@ namespace APPartment.Controllers
             {
                 homeModel.Name = settings.HomeName;
 
-                dataContext.Update(homeModel, CurrentUserId, CurrentHomeId, null);
+                await dataContext.UpdateAsync(homeModel, CurrentUserId, CurrentHomeId, null);
                 HttpContext.Session.SetString("HomeName", homeModel.Name.ToString());
             }
 
             if (settings.Id == 0)
             {
                 settings.HomeId = CurrentHomeId;
-                homeSettingsDataContext.Save(settings, CurrentUserId, CurrentHomeId, null);
+                await dataContext.SaveAsync(settings, CurrentUserId, CurrentHomeId, null);
             }
             else
             {
-                homeSettingsDataContext.Update(settings, CurrentUserId, CurrentHomeId, null);
+                await dataContext.UpdateAsync(settings, CurrentUserId, CurrentHomeId, null);
             }
 
             return RedirectToAction(nameof(Index));
@@ -234,7 +228,7 @@ namespace APPartment.Controllers
             var adjustedMessage = string.Join(" <br /> ", messageText.Split('\n').ToList());
             var message = new Message() { Username = username, Text = adjustedMessage, UserId = (long)CurrentUserId, HomeId = (long)CurrentHomeId, CreatedDate = DateTime.Now };
 
-            await messageDataContext.SaveAsync(message, CurrentUserId, CurrentHomeId, null);
+            await dataContext.SaveAsync(message, CurrentUserId, CurrentHomeId, null);
 
             return Ok();
         }
@@ -261,7 +255,7 @@ namespace APPartment.Controllers
             return Json(elseResult);
         }
 
-        public ActionResult SetHomeStatus(string homeStatusString, string homeStatusDetailsString)
+        public async Task<ActionResult> SetHomeStatus(string homeStatusString, string homeStatusDetailsString)
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
             {
@@ -282,7 +276,7 @@ namespace APPartment.Controllers
                     currentHomeStatus.Details = homeStatusDetails;
                     currentHomeStatus.UserId = (long)CurrentUserId;
 
-                    homeStatusDataContext.Update(currentHomeStatus, (long)CurrentUserId, CurrentHomeId, null);
+                    await dataContext.UpdateAsync(currentHomeStatus, (long)CurrentUserId, CurrentHomeId, null);
                 }
                 else
                 {
@@ -294,7 +288,7 @@ namespace APPartment.Controllers
                         HomeId = CurrentHomeId
                     };
 
-                    homeStatusDataContext.Save(homeStatus, CurrentUserId, CurrentHomeId, null);
+                    await dataContext.SaveAsync(homeStatus, CurrentUserId, CurrentHomeId, null);
                 }
             }
 

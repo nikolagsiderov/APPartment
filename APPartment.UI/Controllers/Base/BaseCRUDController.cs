@@ -29,10 +29,7 @@ namespace APPartment.UI.Controllers.Base
         private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper;
         private FileUploadService fileUploadService;
-        private DataContext<T> dataContext;
-        private DataContext<Chore> choreDataContext;
-        private DataContext<Comment> commentDataContext;
-        private DataContext<Image> imageDataContext;
+        private DataContext dataContext;
         private HistoryHtmlBuilder historyHtmlBuilder;
         #endregion Context, Services and Utilities
 
@@ -40,11 +37,8 @@ namespace APPartment.UI.Controllers.Base
         {
             _context = context;
             htmlRenderHelper = new HtmlRenderHelper(_context);
-            imageDataContext = new DataContext<Image>(_context);
-            fileUploadService = new FileUploadService(_context, imageDataContext);
-            dataContext = new DataContext<T>(_context);
-            choreDataContext = new DataContext<Chore>(_context);
-            commentDataContext = new DataContext<Comment>(_context);
+            fileUploadService = new FileUploadService(_context, dataContext);
+            dataContext = new DataContext(_context);
             historyHtmlBuilder = new HistoryHtmlBuilder(_context);
         }
 
@@ -200,7 +194,7 @@ namespace APPartment.UI.Controllers.Base
             var userToAssignUserId = userToAssign.UserId;
 
             model.AssignedToId = userToAssignUserId;
-            await choreDataContext.UpdateAsync(model, CurrentUserId, CurrentHomeId, null);
+            await dataContext.UpdateAsync(model, CurrentUserId, CurrentHomeId, null);
 
             return RedirectToAction(nameof(Index));
         }
@@ -254,7 +248,7 @@ namespace APPartment.UI.Controllers.Base
                 Username = CurrentUserName
             };
 
-            await commentDataContext.SaveAsync(comment, CurrentUserId, CurrentHomeId, targetId);
+            await dataContext.SaveAsync(comment, CurrentUserId, CurrentHomeId, targetId);
 
             var result = htmlRenderHelper.BuildPostComment(comment);
             return Json(result);

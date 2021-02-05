@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using APPartment.Data.Core;
 using APPartment.Data.Server.Models.Core;
 using APPartment.ORM.Framework.Core;
@@ -12,13 +13,13 @@ namespace APPartment.Controllers
     {
         #region Context, Services and Utilities
         private readonly DataAccessContext _context;
-        private DataContext<User> dataContext;
+        private DataContext dataContext;
         #endregion
 
         public AccountController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
         {
             _context = context;
-            dataContext = new DataContext<User>(_context);
+            dataContext = new DataContext(_context);
         }
 
         #region Actions
@@ -33,7 +34,7 @@ namespace APPartment.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(User user)
+        public async Task<IActionResult> Register(User user)
         {            
             if (ModelState.IsValid)
             {
@@ -44,7 +45,7 @@ namespace APPartment.Controllers
                     return View(user); 
                 }
 
-                dataContext.Save(user, 0, 0, null);
+                await dataContext.SaveAsync(user, 0, 0, null);
 
                 ModelState.Clear();
 
