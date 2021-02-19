@@ -28,7 +28,7 @@ namespace APPartment.Controllers
 
         #region Actions
         [Breadcrumb(ChoresBreadcrumbs.All_Breadcrumb)]
-        public override async Task<IActionResult> Index()
+        public override IActionResult Index()
         {
             ViewData["GridTitle"] = "Chores - All";
             ViewData["Module"] = "Chores";
@@ -36,11 +36,11 @@ namespace APPartment.Controllers
 
             FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId);
 
-            return await base.Index();
+            return base.Index();
         }
 
         [Breadcrumb(ChoresBreadcrumbs.Others_Breadcrumb)]
-        public async Task<IActionResult> Others()
+        public IActionResult Others()
         {
             ViewData["GridTitle"] = "Chores - Others";
             ViewData["Module"] = "Chores";
@@ -48,11 +48,11 @@ namespace APPartment.Controllers
 
             FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && x.AssignedToUserId != CurrentUserId);
 
-            return await base.Index();
+            return base.Index();
         }
 
         [Breadcrumb(ChoresBreadcrumbs.Mine_Breadcrumb)]
-        public async Task<IActionResult> Mine()
+        public IActionResult Mine()
         {
             ViewData["GridTitle"] = "Chores - Mine";
             ViewData["Module"] = "Chores";
@@ -60,21 +60,19 @@ namespace APPartment.Controllers
 
             FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && x.AssignedToUserId == CurrentUserId);
 
-            return await base.Index();
+            return base.Index();
         }
 
-        public async Task<IActionResult> Assign(string username, long choreId)
+        public IActionResult Assign(string username, long choreId)
         {
-            var searchedChore = new Chore() { Id = choreId };
-            var searchedUser = new User() { Name = username };
-            var model = dao.GetObject(searchedChore, x => x.Id == searchedChore.Id);
+            var model = dao.GetObject<Chore>(choreId);
 
             if (model == null)
             {
                 return new Error404NotFoundViewResult();
             }
 
-            var userToAssign = dao.GetObject(searchedUser, x => x.Name == searchedUser.Name);
+            var userToAssign = dao.GetObject<User>(x => x.Name == username);
             var userToAssignUserId = userToAssign.Id;
 
             model.AssignedToUserId = userToAssignUserId;
@@ -85,8 +83,7 @@ namespace APPartment.Controllers
 
         public JsonResult GetMyChoresCount()
         {
-            var searchedChore = new Chore() { HomeId = (long)CurrentHomeId, AssignedToUserId = CurrentUserId };
-            var myChoresCount = dao.GetObjects(searchedChore, x => x.HomeId == searchedChore.HomeId && x.AssignedToUserId == searchedChore.AssignedToUserId).Count();
+            var myChoresCount = dao.GetObjects<Chore>(x => x.HomeId == (long)CurrentHomeId && x.AssignedToUserId == (long)CurrentUserId).Count();
             return Json(myChoresCount);
         }
         #endregion

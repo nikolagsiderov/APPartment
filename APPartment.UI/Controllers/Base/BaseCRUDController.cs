@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using APPartment.Data.Server.Declarations;
+using APPartment.Data.Server.Models.Base;
 using APPartment.Data.Server.Models.MetaObjects;
 using APPartment.ORM.Framework.Core;
 using APPartment.UI.Utilities;
@@ -18,7 +18,7 @@ using SmartBreadcrumbs.Attributes;
 namespace APPartment.UI.Controllers.Base
 {
     public abstract class BaseCRUDController<T> : BaseAuthorizeController
-        where T : class, IHomeBaseObject
+        where T : HomeBaseObject, new()
     {
         #region Context, Services and Utilities
         private HtmlRenderHelper htmlRenderHelper;
@@ -218,8 +218,7 @@ namespace APPartment.UI.Controllers.Base
 
         public ActionResult DeleteImage(long id)
         {
-            var searchedImage = new Image() { Id = id };
-            var image = dao.GetObject(searchedImage, id);
+            var image = dao.GetObject<Image>(id);
 
             if (image == null)
             {
@@ -252,9 +251,7 @@ namespace APPartment.UI.Controllers.Base
 
         private List<Image> GetImages(long targetObjectId)
         {
-            var searchedImage = new Image() { TargetObjectId = targetObjectId };
-            var images = dao.GetObjects(searchedImage, x => x.TargetObjectId == searchedImage.TargetObjectId);
-
+            var images = dao.GetObjects<Image>(x => x.TargetObjectId == targetObjectId);
             return images;
         }
         #endregion Images

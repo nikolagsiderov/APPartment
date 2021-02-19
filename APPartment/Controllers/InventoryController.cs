@@ -27,7 +27,7 @@ namespace APPartment.Controllers
 
         #region Actions
         [Breadcrumb(InventoryBreadcrumbs.All_Breadcrumb)]
-        public override Task<IActionResult> Index()
+        public override IActionResult Index()
         {
             ViewData["GridTitle"] = "Inventory - All";
             ViewData["Module"] = "Inventory";
@@ -39,7 +39,7 @@ namespace APPartment.Controllers
         }
 
         [Breadcrumb(InventoryBreadcrumbs.Supplied_Breadcrumb)]
-        public async Task<IActionResult> Supplied()
+        public IActionResult Supplied()
         {
             ViewData["GridTitle"] = "Inventory - Supplied";
             ViewData["Module"] = "Inventory";
@@ -47,11 +47,11 @@ namespace APPartment.Controllers
 
             FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && (x.Status == (int)ObjectStatus.Trivial || x.Status == (int)ObjectStatus.Medium));
 
-            return await base.Index();
+            return base.Index();
         }
 
         [Breadcrumb(InventoryBreadcrumbs.Not_Supplied_Breadcrumb)]
-        public async Task<IActionResult> NotSupplied()
+        public IActionResult NotSupplied()
         {
             ViewData["GridTitle"] = "Inventory - Not Supplied";
             ViewData["Module"] = "Inventory";
@@ -59,13 +59,12 @@ namespace APPartment.Controllers
 
             FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && (x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
 
-            return await base.Index();
+            return base.Index();
         }
 
         public JsonResult GetInventoryCriticalCount()
         {
-            var seachedInventory = new Inventory() { HomeId = (long)CurrentHomeId };
-            var inventoryCriticalCount = dao.GetObjects(seachedInventory, x => x.HomeId == seachedInventory.HomeId).Count();
+            var inventoryCriticalCount = dao.GetObjects<Inventory>(x => x.HomeId == (long)CurrentHomeId).Count();
             return Json(inventoryCriticalCount);
         }
         #endregion

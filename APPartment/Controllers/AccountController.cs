@@ -33,7 +33,7 @@ namespace APPartment.Controllers
         {            
             if (ModelState.IsValid)
             {
-                var alreadyExistingUser = dao.GetObject(user, x => x.Name == user.Name);
+                var alreadyExistingUser = dao.GetObject<User>(x => x.Name == user.Name);
                 if (alreadyExistingUser != null)
                 {
                     ModelState.AddModelError("Username", "This username is already taken.");
@@ -41,7 +41,7 @@ namespace APPartment.Controllers
                 }
 
                 dao.Create(user);
-                user = dao.GetObject(user, x => x.Name == user.Name);
+                user = dao.GetObject<User>(x => x.Name == user.Name);
 
                 ModelState.Clear();
 
@@ -67,7 +67,7 @@ namespace APPartment.Controllers
         [HttpPost]
         public IActionResult Login(User user)
         {
-            var existingUserWithPassedCredentials = dao.GetObject(user, x => x.Name == user.Name && x.Password == user.Password);
+            var existingUserWithPassedCredentials = dao.GetObject<User>(x => x.Name == user.Name && x.Password == user.Password);
             
             if (existingUserWithPassedCredentials != null)
             {

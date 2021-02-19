@@ -26,7 +26,7 @@ namespace APPartment.Controllers
 
         #region Actions
         [Breadcrumb(SurveysBreadcrumbs.All_Breadcrumb)]
-        public override Task<IActionResult> Index()
+        public override IActionResult Index()
         {
             ViewData["GridTitle"] = "Surveys - All";
             ViewData["Module"] = "Surveys";
@@ -38,7 +38,7 @@ namespace APPartment.Controllers
         }
 
         [Breadcrumb(SurveysBreadcrumbs.Completed_Breadcrumb)]
-        public async Task<IActionResult> Completed()
+        public IActionResult Completed()
         {
             ViewData["GridTitle"] = "Surveys - Completed";
             ViewData["Module"] = "Surveys";
@@ -46,11 +46,11 @@ namespace APPartment.Controllers
 
             FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && x.IsCompleted == true);
 
-            return await base.Index();
+            return base.Index();
         }
 
         [Breadcrumb(SurveysBreadcrumbs.Pending_Breadcrumb)]
-        public async Task<IActionResult> Pending()
+        public IActionResult Pending()
         {
             ViewData["GridTitle"] = "Surveys - Pending";
             ViewData["Module"] = "Surveys";
@@ -58,13 +58,12 @@ namespace APPartment.Controllers
 
             FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && x.IsCompleted == false);
 
-            return await base.Index();
+            return base.Index();
         }
 
         public JsonResult GetPendingSurveysCount()
         {
-            var searchedSurvey = new Survey() { HomeId = (long)CurrentHomeId };
-            var pendingSurveysCount = dao.GetObjects(searchedSurvey, x => x.HomeId == searchedSurvey.HomeId).Count();
+            var pendingSurveysCount = dao.GetObjects<Survey>(x => x.HomeId == (long)CurrentHomeId).Count();
             return Json(pendingSurveysCount);
         }
         #endregion

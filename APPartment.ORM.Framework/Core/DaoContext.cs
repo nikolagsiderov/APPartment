@@ -20,41 +20,31 @@ namespace APPartment.ORM.Framework.Core
 
         #region CRUD Operations
         public T GetObject<T>(long id)
-            where T : class, IIdentityBaseObject
+            where T : class, IIdentityBaseObject, new()
         {
-            return null;
+            var result = new T();
+            result = SelectGetObject<T>(result, id);
+            return result;
         }
 
-        public T GetObject<T>(T businessObject, long id)
-            where T : class, IIdentityBaseObject
+        public T GetObject<T>(Expression<Func<T, bool>> filter)
+            where T : class, IIdentityBaseObject, new()
         {
-            businessObject = SelectGetObject<T>(businessObject, id);
-            return businessObject;
-        }
-
-        public T GetObject<T>(T businessObject, Expression<Func<T, bool>> filter)
-            where T : class, IIdentityBaseObject
-        {
-            businessObject = SelectFilterGetObject<T>(businessObject, filter);
-            return businessObject;
+            var result = new T();
+            result = SelectFilterGetObject<T>(result, filter);
+            return result;
         }
 
         // TODO: Finish this here...
         public List<T> GetObjects<T>()
-            where T : class, IIdentityBaseObject
+            where T : class, IIdentityBaseObject, new()
         {
             return new List<T>();
         }
 
         // TODO: Finish this here...
-        public List<T> GetObjects<T>(T businessObject, Expression<Func<T, bool>> filter)
-            where T : class, IIdentityBaseObject
-        {
-            return new List<T>();
-        }
-
         public List<T> GetObjects<T>(Expression<Func<T, bool>> filter)
-            where T : class, IIdentityBaseObject
+            where T : class, IIdentityBaseObject, new()
         {
             return new List<T>();
         }
@@ -81,10 +71,10 @@ namespace APPartment.ORM.Framework.Core
         #endregion
 
         #region SQL
-        private T SelectGetObject<T>(T businessObject, long id)
-            where T : class, IIdentityBaseObject
+        private T SelectGetObject<T>(T result, long id)
+            where T : class, IIdentityBaseObject, new()
         {
-            var mainTableName = businessObject.GetType().Name;
+            var mainTableName = typeof(T).Name;
             var selectBusinessObjectSqlQuery = $"SELECT * FROM [dbo].[{mainTableName}] WHERE [Id] = '{id}'";
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
@@ -97,10 +87,10 @@ namespace APPartment.ORM.Framework.Core
                 {
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
-                        PropertyInfo property = businessObject.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
+                        PropertyInfo property = result.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
                         if (null != property && property.CanWrite)
                         {
-                            property.SetValue(businessObject, reader.GetValue(i), null);
+                            property.SetValue(result, reader.GetValue(i), null);
                         }
                     }
                 }
@@ -108,14 +98,15 @@ namespace APPartment.ORM.Framework.Core
                 conn.Close();
             }
 
-            return businessObject;
+            return result;
         }
 
-        private T SelectFilterGetObject<T>(T businessObject, Expression<Func<T, bool>> filter)
-            where T : class, IIdentityBaseObject
+        private T SelectFilterGetObject<T>(T result, Expression<Func<T, bool>> filter)
+            where T : class, IIdentityBaseObject, new()
         {
-            var mainTableName = businessObject.GetType().Name;
-            var sqlWhereClause = ExpressionToSqlHelper.GetWhereClause(filter, businessObject);
+            var mainTableName = typeof(T).Name;
+            var expressionTranslator = new ExpressionToSqlHelper();
+            var sqlWhereClause = expressionTranslator.Translate(filter);
 
             var selectBusinessObjectSqlQuery = $"SELECT TOP(1) * FROM [dbo].[{mainTableName}] LEFT JOIN [dbo].[Object] ON [dbo].[{mainTableName}].[ObjectId] = [dbo].[Object].[ObjectId] WHERE {sqlWhereClause}";
 
@@ -129,13 +120,13 @@ namespace APPartment.ORM.Framework.Core
                 {
                     for (int i = 0; i < reader.FieldCount; i++)
                     {
-                        PropertyInfo property = businessObject.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
+                        PropertyInfo property = result.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
                         if (null != property && property.CanWrite)
                         {
                             if (reader.GetValue(i) == DBNull.Value)
                                 continue;
 
-                            property.SetValue(businessObject, reader.GetValue(i), null);
+                            property.SetValue(result, reader.GetValue(i), null);
                         }
                     }
                 }
@@ -143,10 +134,10 @@ namespace APPartment.ORM.Framework.Core
                 conn.Close();
             }
 
-            if (businessObject.ObjectId == 0)
-                businessObject = null;
+            if (result.ObjectId == 0)
+                result = null;
 
-            return businessObject;
+            return result;
         }
 
         private long SaveCreateBaseObject<T>(T businessObject)

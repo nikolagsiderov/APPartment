@@ -27,7 +27,7 @@ namespace APPartment.Controllers
 
         #region Actions
         [Breadcrumb(IssuesBreadcrumbs.All_Breadcrumb)]
-        public override Task<IActionResult> Index()
+        public override IActionResult Index()
         {
             ViewData["GridTitle"] = "Issues - All";
             ViewData["Module"] = "Issues";
@@ -39,7 +39,7 @@ namespace APPartment.Controllers
         }
 
         [Breadcrumb(IssuesBreadcrumbs.Closed_Breadcrumb)]
-        public async Task<IActionResult> Closed()
+        public IActionResult Closed()
         {
             ViewData["GridTitle"] = "Issues - Closed";
             ViewData["Module"] = "Issues";
@@ -47,11 +47,11 @@ namespace APPartment.Controllers
 
             FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && x.Status == (int)ObjectStatus.Trivial);
 
-            return await base.Index();
+            return base.Index();
         }
 
         [Breadcrumb(IssuesBreadcrumbs.Open_Breadcrumb)]
-        public async Task<IActionResult> Open()
+        public IActionResult Open()
         {
             ViewData["GridTitle"] = "Issues - Open";
             ViewData["Module"] = "Issues";
@@ -59,13 +59,12 @@ namespace APPartment.Controllers
 
             FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && (x.Status == (int)ObjectStatus.Medium || x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
 
-            return await base.Index();
+            return base.Index();
         }
 
         public JsonResult GetIssuesCriticalCount()
         {
-            var searchedIssue = new Issue() { HomeId = (long)CurrentHomeId };
-            var issuesCriticalCount = dao.GetObjects(searchedIssue, x => x.HomeId == searchedIssue.HomeId).Count();
+            var issuesCriticalCount = dao.GetObjects<Issue>(x => x.HomeId == (long)CurrentHomeId).Count();
             return Json(issuesCriticalCount);
         }
         #endregion

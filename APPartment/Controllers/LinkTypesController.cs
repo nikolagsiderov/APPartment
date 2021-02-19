@@ -24,7 +24,7 @@ namespace APPartment.Controllers
         }
 
         [Breadcrumb(SurveysBreadcrumbs.All_Breadcrumb)]
-        public override Task<IActionResult> Index()
+        public override IActionResult Index()
         {
             ViewData["GridTitle"] = "Link Types";
             ViewData["Module"] = "Core";
