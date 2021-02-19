@@ -1,5 +1,8 @@
-﻿namespace APPartment.ORM.Framework.Enums
+﻿using System;
+
+namespace APPartment.ORM.Framework.Enums
 {
+    [Obsolete]
     public enum ContextExecutionTypes
     {
         Create = 1,

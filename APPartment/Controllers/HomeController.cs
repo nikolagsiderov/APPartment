@@ -5,9 +5,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
 using APPartment.UI.Controllers.Base;
-using APPartment.Data.Core;
 using APPartment.UI.Utilities;
 using APPartment.ORM.Framework.Core;
 using APPartment.Data.Server.Models.Core;
@@ -16,26 +14,23 @@ using APPartment.UI.ViewModels.Home;
 using APPartment.Data.Server.Models.Base;
 using APPartment.UI.ViewModels;
 using APPartment.Data.Server.Models.Objects;
-using APPObject = APPartment.Data.Server.Models.Core.Object;
 
 namespace APPartment.Controllers
 {
     public class HomeController : BaseController
     {
         #region Context, Services and Utilities
-        private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper;
         private TimeConverter timeConverter = new TimeConverter();
-        private DataContext dataContext;
-        private HistoryHtmlBuilder historyHtmlBuilder;
+        private DaoContext dao;
+        //private HistoryHtmlBuilder historyHtmlBuilder;
         #endregion
 
-        public HomeController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
+        public HomeController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            _context = context;
-            htmlRenderHelper = new HtmlRenderHelper(_context);
-            dataContext = new DataContext(_context);
-            historyHtmlBuilder = new HistoryHtmlBuilder(_context);
+            dao = new DaoContext();
+            htmlRenderHelper = new HtmlRenderHelper();
+            //historyHtmlBuilder = new HistoryHtmlBuilder();
         }
 
         #region Actions
@@ -47,9 +42,10 @@ namespace APPartment.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var currentUser = _context.Users.Find(CurrentUserId);
+            var searchedUser = new User() { Id = (long)CurrentUserId };
+            var currentUser = dao.GetObject(searchedUser, x => x.Id == searchedUser.Id);
 
-            ViewData["Username"] = currentUser.Username;
+            ViewData["Username"] = currentUser.Name;
 
             var displayObjects = GetDisplayObject();
 
@@ -59,12 +55,15 @@ namespace APPartment.Controllers
                 BaseObjects = displayObjects
             };
 
-            if (_context.HomeStatuses.Where(x => x.HomeId == CurrentHomeId).Any())
+            var searchedHomeStatus = new HomeStatus() { HomeId = (long)CurrentHomeId };
+            var searchedHomeSettings = new HomeSetting() { HomeId = (long)CurrentHomeId };
+
+            if (dao.GetObjects(searchedHomeStatus, x => x.HomeId == searchedHomeStatus.HomeId).Any())
             {
-                homePageDisplayModel.HomeStatus = _context.HomeStatuses.Where(x => x.HomeId == CurrentHomeId).OrderByDescending(x => x.Id).FirstOrDefault();
+                homePageDisplayModel.HomeStatus = dao.GetObject(searchedHomeStatus, x => x.HomeId == searchedHomeStatus.HomeId);
             }
 
-            if (_context.HomeSettings.Any(x => x.HomeId == CurrentHomeId))
+            if (dao.GetObjects(searchedHomeSettings, x => x.HomeId == searchedHomeSettings.HomeId).Any())
             {
                 homePageDisplayModel.RentDueDate = GetRentDueDate();
             }
@@ -93,18 +92,20 @@ namespace APPartment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(Home home)
+        public IActionResult Register(Home home)
         {
             if (ModelState.IsValid)
             {
-                var homeNameAlreadyExists = _context.Homes.Any(x => x.Name == home.Name);
-                if (homeNameAlreadyExists)
+                var homeNameAlreadyExists = dao.GetObject(home, x => x.Name == home.Name);
+
+                if (homeNameAlreadyExists != null)
                 {
                     ModelState.AddModelError("Name", "This home name is already taken.");
                     return View(home);
                 }
 
-                await dataContext.SaveAsync<Home>(home, CurrentUserId, 0, null);
+                dao.Create(home);
+                home = dao.GetObject(home, x => x.Name == home.Name);
 
                 ModelState.Clear();
 
@@ -132,14 +133,12 @@ namespace APPartment.Controllers
         [HttpPost]
         public IActionResult Login(Home home)
         {
-            var homeIsContainedInDb = _context.Homes.Any(x => x.Name == home.Name && x.Password == home.Password);
+            var existingHome = dao.GetObject(home, x => x.Name == home.Name && x.Password == home.Password);
 
-            if (homeIsContainedInDb)
+            if (existingHome != null)
             {
-                var thisHome = _context.Homes.Single(h => h.Name == home.Name && h.Password == home.Password);
-
-                HttpContext.Session.SetString("HomeId", thisHome.Id.ToString());
-                HttpContext.Session.SetString("HomeName", thisHome.Name.ToString());
+                HttpContext.Session.SetString("HomeId", existingHome.Id.ToString());
+                HttpContext.Session.SetString("HomeName", existingHome.Name.ToString());
 
                 SetUserToCurrentHome(home.Id);
 
@@ -162,20 +161,19 @@ namespace APPartment.Controllers
                 return RedirectToAction("Login", "Home");
             }
 
-            var homeSettingsArePresent = _context.HomeSettings.Any(x => x.HomeId == CurrentHomeId);
-            HomeSettings homeSettings = null;
+            var searchedHomeSettings = new HomeSetting() { HomeId = (long)CurrentHomeId };
+            var existingHomeSettings = dao.GetObject(searchedHomeSettings, x => x.HomeId == searchedHomeSettings.HomeId);
 
-            if (homeSettingsArePresent)
+            if (existingHomeSettings != null)
             {
-                homeSettings = _context.HomeSettings.Where(x => x.HomeId == CurrentHomeId).First();
-
-                var homeModel = _context.Homes.Find(CurrentHomeId);
-                homeSettings.HomeName = homeModel.Name;
+                var searchedHome = new Home() { Id = (long)CurrentHomeId };
+                var homeModel = dao.GetObject(searchedHome, (long)CurrentHomeId);
+                existingHomeSettings.HomeName = homeModel.Name;
             }
 
-            if (homeSettings != null)
+            if (existingHomeSettings != null)
             {
-                return View(homeSettings);
+                return View(existingHomeSettings);
             }
 
             ViewData["HomeName"] = CurrentHomeName;
@@ -184,27 +182,28 @@ namespace APPartment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Settings(HomeSettings settings)
+        public IActionResult Settings(HomeSetting settings)
         {
-            var homeModel = _context.Find<Home>(CurrentHomeId);
-            settings.HomeId = CurrentHomeId;
+            var searchedHome = new Home() { Id = (long)CurrentHomeId };
+            var homeModel = dao.GetObject(searchedHome, (long)CurrentHomeId);
+            settings.HomeId = (long)CurrentHomeId;
 
             if (!string.IsNullOrEmpty(settings.HomeName) || settings.HomeName != homeModel.Name)
             {
                 homeModel.Name = settings.HomeName;
 
-                await dataContext.UpdateAsync(homeModel, CurrentUserId, CurrentHomeId, null);
+                dao.Update(homeModel);
                 HttpContext.Session.SetString("HomeName", homeModel.Name.ToString());
             }
 
             if (settings.Id == 0)
             {
-                settings.HomeId = CurrentHomeId;
-                await dataContext.SaveAsync(settings, CurrentUserId, CurrentHomeId, null);
+                settings.HomeId = (long)CurrentHomeId;
+                dao.Create(settings);
             }
             else
             {
-                await dataContext.UpdateAsync(settings, CurrentUserId, CurrentHomeId, null);
+                dao.Update(settings);
             }
 
             return RedirectToAction(nameof(Index));
@@ -223,12 +222,12 @@ namespace APPartment.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateMessage(string username, string messageText)
+        public ActionResult CreateMessage(string username, string messageText)
         {
             var adjustedMessage = string.Join(" <br /> ", messageText.Split('\n').ToList());
-            var message = new Message() { Username = username, Text = adjustedMessage, UserId = (long)CurrentUserId, HomeId = (long)CurrentHomeId, CreatedDate = DateTime.Now };
+            var message = new Message() { Details = adjustedMessage, CreatedById = (long)CurrentUserId, HomeId = (long)CurrentHomeId, CreatedDate = DateTime.Now };
 
-            await dataContext.SaveAsync(message, CurrentUserId, CurrentHomeId, null);
+            dao.Create(message);
 
             return Ok();
         }
@@ -237,14 +236,14 @@ namespace APPartment.Controllers
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
             {
-                if (_context.HomeStatuses.Any(x => x.HomeId == CurrentHomeId))
+                var searchedHomeStatus = new HomeStatus() { HomeId = (long)CurrentHomeId };
+                if (dao.GetObjects(searchedHomeStatus, x => x.HomeId == searchedHomeStatus.HomeId).Any())
                 {
-                    var currentHomeStatusUserId = _context.HomeStatuses.OrderByDescending(x => x.Id).Where(x => x.HomeId == CurrentHomeId).FirstOrDefault().UserId;
-                    var currentHomeStatus = _context.HomeStatuses.OrderByDescending(x => x.Id).Where(x => x.HomeId == CurrentHomeId).FirstOrDefault().Status;
-                    var username = _context.Users.Where(x => x.UserId == currentHomeStatusUserId).FirstOrDefault().Username;
-                    var currentHomeStatusDetails = _context.HomeStatuses.OrderByDescending(x => x.Id).Where(x => x.HomeId == CurrentHomeId).FirstOrDefault().Details;
+                    var currentHomeStatus = dao.GetObject(searchedHomeStatus, x => x.HomeId == searchedHomeStatus.HomeId);
+                    var searchedUser = new User() { Id = currentHomeStatus.UserId };
+                    var user = dao.GetObject(searchedUser, x => x.Id == searchedUser.Id);
 
-                    var result = $"{currentHomeStatus};{username};{currentHomeStatusDetails}";
+                    var result = $"{currentHomeStatus.Status};{user.Name};{currentHomeStatus.Details}";
 
                     return Json(result);
                 }
@@ -255,11 +254,12 @@ namespace APPartment.Controllers
             return Json(elseResult);
         }
 
-        public async Task<ActionResult> SetHomeStatus(string homeStatusString, string homeStatusDetailsString)
+        public ActionResult SetHomeStatus(string homeStatusString, string homeStatusDetailsString)
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
             {
-                var homeModel = _context.Find<Home>(CurrentHomeId);
+                var searchedHome = new Home() { Id = (long)CurrentHomeId };
+                var homeModel = dao.GetObject(searchedHome, (long)CurrentHomeId);
 
                 var homeStatusDetails = string.Empty;
 
@@ -268,15 +268,17 @@ namespace APPartment.Controllers
                     homeStatusDetails = homeStatusDetailsString;
                 }
 
-                if (_context.HomeStatuses.Any(x => x.HomeId == CurrentHomeId))
+                var searchedHomeStatus = new HomeStatus() { HomeId = (long)CurrentHomeId };
+
+                if (dao.GetObjects(searchedHomeStatus, x => x.HomeId == searchedHomeStatus.HomeId).Any())
                 {
-                    var currentHomeStatus = _context.HomeStatuses.OrderByDescending(x => x.Id).Where(x => x.HomeId == CurrentHomeId).FirstOrDefault();
+                    var currentHomeStatus = dao.GetObject(searchedHomeStatus, x => x.HomeId == searchedHomeStatus.HomeId);
 
                     currentHomeStatus.Status = int.Parse(homeStatusString);
                     currentHomeStatus.Details = homeStatusDetails;
                     currentHomeStatus.UserId = (long)CurrentUserId;
 
-                    await dataContext.UpdateAsync(currentHomeStatus, (long)CurrentUserId, CurrentHomeId, null);
+                    dao.Update(currentHomeStatus);
                 }
                 else
                 {
@@ -285,34 +287,34 @@ namespace APPartment.Controllers
                         Status = int.Parse(homeStatusString),
                         Details = homeStatusDetails,
                         UserId = (long)CurrentUserId,
-                        HomeId = CurrentHomeId
+                        HomeId = (long)CurrentHomeId
                     };
 
-                    await dataContext.SaveAsync(homeStatus, CurrentUserId, CurrentHomeId, null);
+                    dao.Create(homeStatus);
                 }
             }
 
             return Json("");
         }
 
-        [HttpGet]
-        [Breadcrumb(HomeBreadcrumbs.History_Breadcrumb)]
-        public IActionResult History()
-        {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
-            {
-                return RedirectToAction("Login", "Home");
-            }
+        //[HttpGet]
+        //[Breadcrumb(HomeBreadcrumbs.History_Breadcrumb)]
+        //public IActionResult History()
+        //{
+        //    if (string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
+        //    {
+        //        return RedirectToAction("Login", "Home");
+        //    }
 
-            var historyModel = new HomeHistoryDisplayView();
-            var history = _context.Audits.Where(x => x.HomeId == CurrentHomeId).ToList();
+        //    var historyModel = new HomeHistoryDisplayView();
+        //    var history = _context.Audits.Where(x => x.HomeId == CurrentHomeId).ToList();
 
-            historyModel.History = historyHtmlBuilder.BuildHomeHistory(history);
+        //    historyModel.History = historyHtmlBuilder.BuildHomeHistory(history);
 
-            ViewData["HomeName"] = CurrentHomeName;
+        //    ViewData["HomeName"] = CurrentHomeName;
 
-            return View(historyModel);
-        }
+        //    return View(historyModel);
+        //}
         #endregion
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -322,80 +324,44 @@ namespace APPartment.Controllers
         }
 
         #region Getters
-        public List<BaseObject> GetDisplayObject()
+        public List<IdentityBaseObject> GetDisplayObject()
         {
-            var displayObjects = new List<BaseObject>();
+            var displayObjects = new List<IdentityBaseObject>();
             var lastInventoryModel = new Inventory();
             var lastHygieneModel = new Hygiene();
             var lastIssueModel = new Issue();
 
-            var inventoryObjects = _context.Set<Inventory>().Where(x => x.HomeId == CurrentHomeId);
+            var searchedInventory = new Inventory() { HomeId = (long)CurrentHomeId };
+            var inventoryObject = dao.GetObject(searchedInventory, x => x.HomeId == searchedInventory.HomeId);
 
-            if (inventoryObjects.Count() > 0)
+            if (inventoryObject != null)
             {
-                var inventoryObject = new APPObject();
-                var objects = new List<APPObject>();
-
-                foreach (var inventory in inventoryObjects)
-                {
-                    objects.Add(_context.Set<APPObject>().Where(x => x.ObjectId == inventory.ObjectId).FirstOrDefault());
-                }
-
-                inventoryObject = objects.OrderByDescending(x => x.ModifiedDate).FirstOrDefault();
-                lastInventoryModel = _context.Set<Inventory>().Where(x => x.ObjectId == inventoryObject.ObjectId).FirstOrDefault();
-
-                var when = _context.Audits.Where(x => x.ObjectId == lastInventoryModel.ObjectId || x.TargetObjectId == lastInventoryModel.ObjectId)
-                    .OrderByDescending(x => x.Id).FirstOrDefault().When;
-
-                lastInventoryModel.LastUpdated = when == null ? string.Empty : timeConverter.CalculateRelativeTime(when);
-                lastInventoryModel.LastUpdatedBy = _context.Users.Where(x => x.UserId == inventoryObject.ModifiedById).FirstOrDefault().Username;
-                lastInventoryModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastInventoryModel.ObjectId);
+                inventoryObject.LastUpdated = inventoryObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime((DateTime)inventoryObject.ModifiedDate);
+                //var searchedUser = new User() { Id = (long)inventoryObject.ModifiedById };
+                //inventoryObject.LastUpdatedBy = dao.GetObject(searchedUser, x => x.Id == (long)inventoryObject.ModifiedById).Name;
+                //lastInventoryModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastInventoryModel.ObjectId);
             }
 
-            var hygieneObjects = _context.Set<Hygiene>().Where(x => x.HomeId == CurrentHomeId);
+            var searchedHygiene = new Hygiene() { HomeId = (long)CurrentHomeId };
+            var hygieneObjects = dao.GetObject(searchedHygiene, x => x.HomeId == searchedHygiene.HomeId);
 
-            if (hygieneObjects.Count() > 0)
+            if (hygieneObjects != null)
             {
-                var hygieneObject = new APPObject();
-                var objects = new List<APPObject>();
-
-                foreach (var hygiene in hygieneObjects)
-                {
-                    objects.Add(_context.Set<APPObject>().Where(x => x.ObjectId == hygiene.ObjectId).FirstOrDefault());
-                }
-
-                hygieneObject = objects.OrderByDescending(x => x.ModifiedDate).FirstOrDefault();
-                lastHygieneModel = _context.Set<Hygiene>().Where(x => x.ObjectId == hygieneObject.ObjectId).FirstOrDefault();
-
-                var when = _context.Audits.Where(x => x.ObjectId == lastHygieneModel.ObjectId || x.TargetObjectId == lastHygieneModel.ObjectId)
-                    .OrderByDescending(x => x.Id).FirstOrDefault().When;
-
-                lastHygieneModel.LastUpdated = when == null ? string.Empty : timeConverter.CalculateRelativeTime(when);
-                lastHygieneModel.LastUpdatedBy = _context.Users.Where(x => x.UserId == hygieneObject.ModifiedById).FirstOrDefault().Username;
-                lastHygieneModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastHygieneModel.ObjectId);
+                lastHygieneModel.LastUpdated = hygieneObjects.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime((DateTime)hygieneObjects.ModifiedDate);
+                //var searchedUser = new User() { Id = (long)hygieneObjects.ModifiedById };
+                //lastHygieneModel.LastUpdatedBy = dao.GetObject(searchedUser, x => x.Id == (long)hygieneObjects.ModifiedById).Name;
+                //lastHygieneModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastHygieneModel.ObjectId);
             }
 
-            var issueObjects = _context.Set<Issue>().Where(x => x.HomeId == CurrentHomeId);
+            var searchedIssue = new Issue() { HomeId = (long)CurrentHomeId };
+            var issueObjects = dao.GetObject(searchedIssue, x => x.HomeId == searchedIssue.HomeId);
 
-            if (issueObjects.Count() > 0)
+            if (issueObjects != null)
             {
-                var issueObject = new APPObject();
-                var objects = new List<APPObject>();
-
-                foreach (var issue in issueObjects)
-                {
-                    objects.Add(_context.Set<APPObject>().Where(x => x.ObjectId == issue.ObjectId).FirstOrDefault());
-                }
-
-                issueObject = objects.OrderByDescending(x => x.ModifiedDate).FirstOrDefault();
-                lastIssueModel = _context.Set<Issue>().Where(x => x.ObjectId == issueObject.ObjectId).FirstOrDefault();
-
-                var when = _context.Audits.Where(x => x.ObjectId == lastIssueModel.ObjectId || x.TargetObjectId == lastIssueModel.ObjectId)
-                    .OrderByDescending(x => x.Id).FirstOrDefault().When;
-
-                lastIssueModel.LastUpdated = when == null ? string.Empty : timeConverter.CalculateRelativeTime(when);
-                lastIssueModel.LastUpdatedBy = _context.Users.Where(x => x.UserId == issueObject.ModifiedById).FirstOrDefault().Username;
-                lastIssueModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastIssueModel.ObjectId); 
+                lastIssueModel.LastUpdated = issueObjects.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime((DateTime)issueObjects.ModifiedDate);
+                //var searchedUser = new User() { Id = (long)issueObjects.ModifiedById };
+                //lastIssueModel.LastUpdatedBy = dao.GetObject(searchedUser, x => x.Id == (long)issueObjects.ModifiedById).Name;
+                //lastIssueModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastIssueModel.ObjectId); 
             }
 
             displayObjects.Add(lastInventoryModel);
@@ -410,9 +376,10 @@ namespace APPartment.Controllers
             var nextMonth = DateTime.Now.AddMonths(1).Month.ToString();
             var thisMonth = DateTime.Now.Month.ToString();
             var rentDueDate = string.Empty;
-            var rentDueDateDay = _context.HomeSettings.Find(CurrentHomeId).RentDueDateDay;
+            var searchedHomeSetting = new HomeSetting() { HomeId = (long)CurrentHomeId };
+            var rentDueDateDay = dao.GetObject(searchedHomeSetting, x => x.HomeId == searchedHomeSetting.HomeId).RentDueDateDay;
 
-            if (rentDueDateDay != null && rentDueDateDay.ToString() != "0")
+            if (rentDueDateDay.ToString() != "0")
             {
                 var dateString = $"{rentDueDateDay}/{nextMonth}/{DateTime.Now.Year.ToString()}";
 
@@ -429,7 +396,7 @@ namespace APPartment.Controllers
 
         private List<string> GetMessages()
         {
-            var messages = htmlRenderHelper.BuildMessagesForChat(_context.Messages.ToList(), (long)CurrentHomeId);
+            var messages = htmlRenderHelper.BuildMessagesForChat(dao.GetObjects<Message>(), (long)CurrentHomeId);
 
             return messages;
         }
@@ -437,18 +404,17 @@ namespace APPartment.Controllers
 
         public void SetUserToCurrentHome(long homeId)
         {
-            var userIsAlreadyApartOfCurrentHome = _context.HomeUsers.Any(x => x.UserId == CurrentUserId && x.HomeId == homeId);
-
-            if (!userIsAlreadyApartOfCurrentHome)
+            var homeUser = new HomeUser()
             {
-                var homeUser = new HomeUser()
-                {
-                    HomeId = (long)homeId,
-                    UserId = (long)CurrentUserId
-                };
+                HomeId = homeId,
+                UserId = (long)CurrentUserId
+            };
 
-                _context.HomeUsers.Add(homeUser);
-                _context.SaveChanges();
+            var userIsAlreadyApartOfCurrentHome = dao.GetObject(homeUser, x => x.UserId == homeUser.UserId && x.HomeId == homeUser.HomeId);
+
+            if (userIsAlreadyApartOfCurrentHome == null)
+            {
+                dao.Create(homeUser);
             }
         }
     }

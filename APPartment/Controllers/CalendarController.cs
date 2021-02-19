@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using APPartment.Data.Core;
 using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.GeneralCalendar;
@@ -12,7 +11,7 @@ namespace APPartment.Controllers
 {
     public class CalendarController : BaseAuthorizeController
     {
-        public CalendarController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
+        public CalendarController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 

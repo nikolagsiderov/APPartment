@@ -1,7 +1,7 @@
-USE APPartment2
+USE APPartment
 
 CREATE TABLE [dbo].[Comment] (
-    Id bigint NOT NULL,
+    Id bigint IDENTITY(1, 1) NOT NULL,
 	ObjectId bigint NOT NULL,
 	TargetObjectId bigint NOT NULL,
 	CONSTRAINT PK_Comment PRIMARY KEY (Id),

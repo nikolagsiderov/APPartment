@@ -1,4 +1,4 @@
-﻿@model APPartment.Data.Server.Models.Base.BaseObject
+﻿@model APPartment.Data.Server.Models.Base.IdentityBaseObject
 
 @{
     var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
@@ -14,7 +14,7 @@
             {
                 <div style="text-align:center; margin:10px;">
                     <div class="square" style="margin: 10px; text-align:center;">
-                        <a href="~/BaseObject_Images/@image.Name" data-fancybox="gallery" data-caption="@image.FileName">
+                        <a href="~/BaseObject_Images/@image.Name" data-fancybox="gallery" data-caption="@image.Name">
                             <img src="~/BaseObject_Images/@image.Name" class="image-img" />
                         </a>
                     </div>
@@ -23,7 +23,7 @@
                         <hr />
                         <span style="font-weight: bold;">
                             @{
-                                var imageDisplayName = image.FileName.Length <= 15 ? image.FileName : image.FileName.Substring(0, 15) + "..." + image.FileName.Split('.').Last();
+                                var imageDisplayName = image.Name.Length <= 15 ? image.Name : image.Name.Substring(0, 15) + "..." + image.Name.Split('.').Last();
                             }
 
                             @imageDisplayName

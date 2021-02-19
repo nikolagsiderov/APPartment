@@ -1,4 +1,4 @@
-﻿@model APPartment.Data.Server.Models.Base.BaseObject
+﻿@model APPartment.Data.Server.Models.Base.IdentityBaseObject
 
 <div class="modal fade" id="createView" tabindex="-1" role="dialog" aria-labelledby="createViewLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -21,19 +21,6 @@
                         <label asp-for="Details" class="control-label">Details</label>
                         <textarea asp-for="Details" class="form-control" rows="5"></textarea>
                         <span asp-validation-for="Details" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Status" class="control-label">Status</label>
-                        <div class="input-group mb-3">
-                            <select class="custom-select" asp-for="Status" id="inputGroupSelect01">
-                                <option selected>Please select status...</option>
-                                <option value="1">Low</option>
-                                <option value="2">Medium</option>
-                                <option value="3">High</option>
-                                <option value="4">Critical</option>
-                            </select>
-                        </div>
-                        <span asp-validation-for="Status" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="modal-footer">

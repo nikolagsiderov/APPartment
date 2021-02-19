@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using APPartment.Data.Core;
-using APPartment.Data.Server.Models.Core;
+﻿using APPartment.Data.Server.Models.Core;
 using APPartment.ORM.Framework.Core;
 using APPartment.UI.Controllers.Base;
 using Microsoft.AspNetCore.Http;
@@ -12,14 +9,12 @@ namespace APPartment.Controllers
     public class AccountController : BaseController
     {
         #region Context, Services and Utilities
-        private readonly DataAccessContext _context;
-        private DataContext dataContext;
+        private DaoContext dao;
         #endregion
 
-        public AccountController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
+        public AccountController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            _context = context;
-            dataContext = new DataContext(_context);
+            dao = new DaoContext();
         }
 
         #region Actions
@@ -34,23 +29,24 @@ namespace APPartment.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(User user)
+        public IActionResult Register(User user)
         {            
             if (ModelState.IsValid)
             {
-                var usernameAlreadyExists = _context.Users.Any(x => x.Username == user.Username);
-                if (usernameAlreadyExists)
+                var alreadyExistingUser = dao.GetObject(user, x => x.Name == user.Name);
+                if (alreadyExistingUser != null)
                 {
                     ModelState.AddModelError("Username", "This username is already taken.");
                     return View(user); 
                 }
 
-                await dataContext.SaveAsync(user, 0, 0, null);
+                dao.Create(user);
+                user = dao.GetObject(user, x => x.Name == user.Name);
 
                 ModelState.Clear();
 
-                HttpContext.Session.SetString("UserId", user.UserId.ToString());
-                HttpContext.Session.SetString("Username", user.Username.ToString());
+                HttpContext.Session.SetString("UserId", user.Id.ToString());
+                HttpContext.Session.SetString("Username", user.Name.ToString());
 
                 return RedirectToAction("EnterCreateHomeOptions", "Home");
             }
@@ -71,14 +67,12 @@ namespace APPartment.Controllers
         [HttpPost]
         public IActionResult Login(User user)
         {
-            var userIsContainedInDb = _context.Users.Any(x => x.Username == user.Username && x.Password == user.Password);
+            var existingUserWithPassedCredentials = dao.GetObject(user, x => x.Name == user.Name && x.Password == user.Password);
             
-            if (userIsContainedInDb)
+            if (existingUserWithPassedCredentials != null)
             {
-                var usr = _context.Users.Single(u => u.Username == user.Username && u.Password == user.Password);
-
-                HttpContext.Session.SetString("UserId", usr.UserId.ToString());
-                HttpContext.Session.SetString("Username", usr.Username.ToString());
+                HttpContext.Session.SetString("UserId", existingUserWithPassedCredentials.Id.ToString());
+                HttpContext.Session.SetString("Username", existingUserWithPassedCredentials.Name.ToString());
 
                 return RedirectToAction("EnterCreateHomeOptions", "Home");
             }

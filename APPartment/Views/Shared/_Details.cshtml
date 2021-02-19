@@ -1,4 +1,4 @@
-﻿@model APPartment.Data.Server.Models.Base.BaseObject
+﻿@model APPartment.Data.Server.Models.Base.IdentityBaseObject
 
 @{
     var header = string.Format("ID: {0}, Name: {1}", Model.ObjectId, Model.Name);
@@ -20,25 +20,6 @@
                 <div class="col-md-3">
                     <strong>Name:</strong>
                     <p>@Model.Name</p>
-                </div>
-                <div class="col-md-3">
-                    <strong>Status:</strong>
-                    @if (Model.Status == 1)
-                    {
-                        <p>Low</p>
-                    }
-                    else if (Model.Status == 2)
-                    {
-                        <p>Medium</p>
-                    }
-                    else if (Model.Status == 3)
-                    {
-                        <p>High</p>
-                    }
-                    else
-                    {
-                        <p>Critical</p>
-                    }
                 </div>
             </div>
 

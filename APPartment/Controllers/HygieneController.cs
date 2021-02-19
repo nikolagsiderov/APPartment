@@ -7,7 +7,6 @@ using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http;
 using APPartment.UI.Controllers.Base;
 using APPartment.Data.Server.Models.Objects;
-using APPartment.Data.Core;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.Enums;
 
@@ -15,11 +14,8 @@ namespace APPartment.Controllers
 {
     public class HygieneController : BaseCRUDController<Hygiene>
     {
-        private readonly DataAccessContext _context;
-
-        public HygieneController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
+        public HygieneController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            _context = context;
         }
 
         public override Expression<Func<Hygiene, bool>> FilterExpression { get; set; }
@@ -68,8 +64,8 @@ namespace APPartment.Controllers
 
         public JsonResult GetHygieneCriticalCount()
         {
-            var hygieneCriticalCount = _context.Set<Hygiene>().ToList().Where(x => x.HomeId == CurrentHomeId && (x.Status == (int)ObjectStatus.Critical ||
-            x.Status == (int)ObjectStatus.High)).Count();
+            var seachedHygiene = new Hygiene() { HomeId = (long)CurrentHomeId };
+            var hygieneCriticalCount = dao.GetObjects(seachedHygiene, x => x.HomeId == seachedHygiene.HomeId).Count();
 
             return Json(hygieneCriticalCount);
         }

@@ -1,32 +1,26 @@
-﻿using APPartment.Data.Core;
-using APPartment.Data.Server.Models.MetaObjects;
+﻿using APPartment.Data.Server.Models.MetaObjects;
 using APPartment.ORM.Framework.Core;
 using APPartment.Web.Services.Utilities;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace APPartment.Web.Services.MetaObjects
 {
     public class FileUploadService
     {
-        private DataAccessContext _context;
-        private DataContext dataContext;
+        private readonly DaoContext dao;
         private HumanSizeConverter humanSizeConverter = new HumanSizeConverter();
 
-        public FileUploadService(DataAccessContext _context, DataContext dataContext)
+        public FileUploadService()
         {
-            this._context = _context;
-            this.dataContext = dataContext;
+            this.dao = new DaoContext();
         }
 
-        public void UploadImage(IFormFile file, long targetId, long? userId, long? homeId)
+        public void UploadImage(IFormFile file, long targetObjectId)
         {
-            var imageName = SaveImageToDB(file, targetId, (long)userId, (long)homeId);
-
+            var imageName = SaveImageToDB(file, targetObjectId);
             string pathString = "wwwroot\\BaseObject_Images";
-
             bool isExists = System.IO.Directory.Exists(pathString);
 
             if (!isExists)
@@ -40,22 +34,21 @@ namespace APPartment.Web.Services.MetaObjects
             }
         }
 
-        private string SaveImageToDB(IFormFile file, long targetId, long userId, long homeId)
+        private string SaveImageToDB(IFormFile file, long targetObjectId)
         {
             var image = new Image()
             {
-                FileName = file.FileName,
+                Name = file.FileName,
                 FileSize = humanSizeConverter.ConvertFileLength(file),
                 CreatedDate = DateTime.Now,
-                TargetId = targetId,
+                TargetObjectId = targetObjectId,
             };
 
-            Task.Run(() => dataContext.SaveAsync(image, userId, homeId, targetId)).Wait();
+            dao.Create(image);
 
-            image.Name = $"{image.Id}_{targetId}_{file.FileName}";
+            image.Name = $"{image.Id}_{targetObjectId}_{file.FileName}";
 
-            _context.Update(image);
-            _context.SaveChanges();
+            dao.Update(image);
 
             return image.Name;
         }

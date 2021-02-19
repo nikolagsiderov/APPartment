@@ -1,4 +1,4 @@
-﻿@model APPartment.Data.Server.Models.Base.BaseObject
+﻿@model APPartment.Data.Server.Models.Base.HomeBaseObject
 
 <div class="card">
     <div class="card-header">
@@ -23,20 +23,6 @@
                         <label asp-for="Name" class="control-label">Name</label>
                         <input asp-for="Name" class="form-control" />
                         <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label asp-for="Status" class="control-label">Status</label>
-                        <div class="input-group mb-3">
-                            <select class="custom-select" asp-for="Status" id="inputGroupSelect01">
-                                <option value="1">Low</option>
-                                <option value="2">Medium</option>
-                                <option value="3">High</option>
-                                <option value="4">Critical</option>
-                            </select>
-                        </div>
-                        <span asp-validation-for="Status" class="text-danger"></span>
                     </div>
                 </div>
             </div>

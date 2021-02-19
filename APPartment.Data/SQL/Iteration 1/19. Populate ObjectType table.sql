@@ -1,49 +1,49 @@
-USE APPartment2
+USE APPartment
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (1, 'User');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('User');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (2, 'Home');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('Home');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (3, 'HomeStatus');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('HomeStatus');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (4, 'HomeSetting');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('HomeSetting');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (5, 'Inventory');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('Inventory');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (6, 'Hygiene');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('Hygiene');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (7, 'Issue');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('Issue');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (8, 'Message');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('Message');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (9, 'Comment');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('Comment');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (10, 'Image');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('Image');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (11, 'Survey');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('Survey');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (12, 'Chore');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('Chore');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (13, 'HomeUser');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('HomeUser');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (14, 'Audit');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('Audit');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (15, 'LinkType');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('LinkType');
 
-INSERT INTO [dbo].[ObjectType] (Id, [Name])
-VALUES (16, 'Link');
+INSERT INTO [dbo].[ObjectType] ([Name])
+VALUES ('Link');

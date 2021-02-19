@@ -6,6 +6,7 @@ using System.Linq;
 
 namespace APPartment.Data.Server.Models.Core
 {
+    [Obsolete]
     public class AuditEntry
     {
         public AuditEntry(EntityEntry entry)

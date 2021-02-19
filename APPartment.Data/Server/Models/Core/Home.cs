@@ -1,23 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using APPartment.Data.Attributes;
+using APPartment.Data.Server.Models.Base;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Data.Server.Models.Core
 {
-    public class Home : Base.Object
+    [Table("Home", Schema = "dbo")]
+    public class Home : IdentityBaseObject
     {
-        [Key]
-        public long Id { get; set; }
-
-        [Required]
-        public string Name { get; set; }
-
+        [FieldMappingForMainTable]
         [Required(ErrorMessage = "Home password is required.")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [Compare("Password", ErrorMessage = "Please confirm your password.")]
         [DataType(DataType.Password)]
-
         [NotMapped]
         public string ConfirmPassword { get; set; }
     }

@@ -6,7 +6,6 @@ using System.Linq;
 using System;
 using System.Linq.Expressions;
 using APPartment.UI.Controllers.Base;
-using APPartment.Data.Core;
 using APPartment.Data.Server.Models.Objects;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.Enums;
@@ -15,11 +14,8 @@ namespace APPartment.Controllers
 {
     public class IssuesController : BaseCRUDController<Issue>
     {
-        private readonly DataAccessContext _context;
-
-        public IssuesController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
+        public IssuesController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            _context = context;
         }
 
         public override Expression<Func<Issue, bool>> FilterExpression { get; set; }
@@ -68,8 +64,8 @@ namespace APPartment.Controllers
 
         public JsonResult GetIssuesCriticalCount()
         {
-            var issuesCriticalCount = _context.Set<Issue>().ToList().Where(x => x.HomeId == CurrentHomeId && (x.Status == (int)ObjectStatus.Medium || x.Status == (int)ObjectStatus.Critical ||
-            x.Status == (int)ObjectStatus.High)).Count();
+            var searchedIssue = new Issue() { HomeId = (long)CurrentHomeId };
+            var issuesCriticalCount = dao.GetObjects(searchedIssue, x => x.HomeId == searchedIssue.HomeId).Count();
             return Json(issuesCriticalCount);
         }
         #endregion

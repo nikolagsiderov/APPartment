@@ -1,7 +1,7 @@
-USE APPartment2
+USE APPartment
 
 CREATE TABLE [dbo].[Message] (
-    Id bigint NOT NULL,
+    Id bigint IDENTITY(1, 1) NOT NULL,
 	ObjectId bigint NOT NULL,
 	HomeId bigint NOT NULL,
 	CONSTRAINT PK_Message PRIMARY KEY (Id),

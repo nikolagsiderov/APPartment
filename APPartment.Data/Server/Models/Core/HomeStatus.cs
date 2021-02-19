@@ -1,21 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using APPartment.Data.Attributes;
+using APPartment.Data.Server.Models.Base;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Data.Server.Models.Core
 {
-    public class HomeStatus : Base.Object
+    [Table("HomeStatus", Schema = "dbo")]
+    public class HomeStatus : HomeBaseObject
     {
-        [Key]
-        public long Id { get; set; }
-
+        [FieldMappingForMainTable]
         public int Status { get; set; } = 1;
 
-        public string Details { get; set; }
-
-        [ForeignKey("User")]
+        [FieldMappingForMainTable]
         public long UserId { get; set; }
-
-        [ForeignKey("Home")]
-        public long? HomeId { get; set; }
     }
 }

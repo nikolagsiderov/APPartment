@@ -1,9 +1,16 @@
-﻿using APPartment.Data.Server.Models.Base;
+﻿using APPartment.Data.Attributes;
+using APPartment.Data.Server.Models.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Data.Server.Models.Objects
 {
-    public class Chore : BaseObject
+    [Table("Chore", Schema = "dbo")]
+    public class Chore : HomeBaseObject
     {
-        public long? AssignedToId { get; set; }
+        [FieldMappingForMainTable]
+        public int Status { get; set; }
+
+        [FieldMappingForMainTable]
+        public long? AssignedToUserId { get; set; }
     }
 }

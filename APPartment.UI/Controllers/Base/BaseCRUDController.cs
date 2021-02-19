@@ -3,14 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
-using APPartment.Data.Core;
-using APPartment.Data.Server.Models.Core;
 using APPartment.Data.Server.Declarations;
 using APPartment.Data.Server.Models.MetaObjects;
-using APPartment.Data.Server.Models.Objects;
 using APPartment.ORM.Framework.Core;
-using APPartment.UI.Enums;
 using APPartment.UI.Utilities;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels;
@@ -23,23 +18,21 @@ using SmartBreadcrumbs.Attributes;
 namespace APPartment.UI.Controllers.Base
 {
     public abstract class BaseCRUDController<T> : BaseAuthorizeController
-        where T : class, IBaseObject
+        where T : class, IHomeBaseObject
     {
         #region Context, Services and Utilities
-        private readonly DataAccessContext _context;
         private HtmlRenderHelper htmlRenderHelper;
         private FileUploadService fileUploadService;
-        private DataContext dataContext;
-        private HistoryHtmlBuilder historyHtmlBuilder;
+        protected DaoContext dao;
+        //private HistoryHtmlBuilder historyHtmlBuilder;
         #endregion Context, Services and Utilities
 
-        public BaseCRUDController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
+        public BaseCRUDController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            _context = context;
-            htmlRenderHelper = new HtmlRenderHelper(_context);
-            fileUploadService = new FileUploadService(_context, dataContext);
-            dataContext = new DataContext(_context);
-            historyHtmlBuilder = new HistoryHtmlBuilder(_context);
+            dao = new DaoContext();
+            htmlRenderHelper = new HtmlRenderHelper();
+            fileUploadService = new FileUploadService();
+            //historyHtmlBuilder = new HistoryHtmlBuilder();
         }
 
         public abstract Expression<Func<T, bool>> FilterExpression { get; set; }
@@ -47,25 +40,21 @@ namespace APPartment.UI.Controllers.Base
 
         #region Actions
         [Breadcrumb("Base")]
-        public virtual async Task<IActionResult> Index()
+        public virtual IActionResult Index()
         {
-            var predicate = FilterExpression.Compile();
-
-            var modelObjects = _context.Set<T>().ToList().Where(predicate);
-
+            var modelObjects = dao.GetObjects<T>(FilterExpression);
             return View("_Grid", modelObjects);
         }
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Details_Breadcrumb)]
-        public async Task<IActionResult> Details(long? id)
+        public IActionResult Details(long? id)
         {
             if (id == null)
             {
                 return new Error404NotFoundViewResult();
             }
 
-            var model = await _context.Set<T>()
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var model = dao.GetObject<T>((long)id);
 
             if (model == null)
             {
@@ -79,26 +68,26 @@ namespace APPartment.UI.Controllers.Base
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(T model)
+        public IActionResult Create(T model)
         {
             if (ModelState.IsValid)
             {
-                model.HomeId = CurrentHomeId;
-                await dataContext.SaveAsync(model, CurrentUserId, CurrentHomeId, null);
+                model.HomeId = (long)CurrentHomeId;
+                dao.Create(model);
             }
 
             return RedirectToAction(nameof(Index));
         }
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
-        public async Task<IActionResult> Edit(long? id)
+        public IActionResult Edit(long? id)
         {
             if (id == null)
             {
                 return new Error404NotFoundViewResult();
             }
 
-            var model = await _context.Set<T>().FindAsync(id);
+            var model = dao.GetObject<T>((long)id);
 
             if (model == null)
             {
@@ -113,7 +102,7 @@ namespace APPartment.UI.Controllers.Base
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, T model)
+        public IActionResult Edit(long id, T model)
         {
             if (id != model.Id)
             {
@@ -124,7 +113,7 @@ namespace APPartment.UI.Controllers.Base
             {
                 try
                 {
-                    await dataContext.UpdateAsync(model, CurrentUserId, CurrentHomeId, null);
+                    dao.Update(model);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -137,84 +126,21 @@ namespace APPartment.UI.Controllers.Base
             return View("_Edit", model);
         }
 
-        public async Task<IActionResult> SetLowStatus(long? id)
+        public IActionResult Delete(long? id)
         {
             if (id == null)
             {
                 return new Error404NotFoundViewResult();
             }
 
-            var model = await _context.Set<T>()
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var model = dao.GetObject<T>((long)id);
 
             if (model == null)
             {
                 return new Error404NotFoundViewResult();
             }
 
-            model.Status = (int)ObjectStatus.Trivial;
-
-            await dataContext.UpdateAsync(model, CurrentUserId, CurrentHomeId, null);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> SetHighStatus(long? id)
-        {
-            if (id == null)
-            {
-                return new Error404NotFoundViewResult();
-            }
-
-            var model = await _context.Set<T>()
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (model == null)
-            {
-                return new Error404NotFoundViewResult();
-            }
-
-            model.Status = (int)ObjectStatus.High;
-
-            await dataContext.UpdateAsync(model, CurrentUserId, CurrentHomeId, null);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> Assign(string username, long choreId)
-        {
-            var model = await _context.Set<Chore>().FirstOrDefaultAsync(x => x.Id == choreId);
-
-            if (model == null)
-            {
-                return new Error404NotFoundViewResult();
-            }
-
-            var userToAssign = await _context.Set<User>().FirstOrDefaultAsync(x => x.Username == username);
-            var userToAssignUserId = userToAssign.UserId;
-
-            model.AssignedToId = userToAssignUserId;
-            await dataContext.UpdateAsync(model, CurrentUserId, CurrentHomeId, null);
-
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> Delete(long? id)
-        {
-            if (id == null)
-            {
-                return new Error404NotFoundViewResult();
-            }
-
-            var model = await _context.Set<T>()
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (model == null)
-            {
-                return new Error404NotFoundViewResult();
-            }
-
-            await dataContext.DeleteAsync(model, CurrentUserId, CurrentHomeId, null);
+            dao.Delete(model);
 
             return RedirectToAction(nameof(Index));
         }
@@ -225,30 +151,29 @@ namespace APPartment.UI.Controllers.Base
         {
             model.Comments = GetComments(model.ObjectId);
             model.Images = GetImages(model.ObjectId);
-            model.History = GetHistory(model.ObjectId);
+            //model.History = GetHistory(model.ObjectId);
 
             return model;
         }
 
         #region Comments
-        private List<string> GetComments(long targetId)
+        private List<string> GetComments(long targetObjectId)
         {
-            var comments = htmlRenderHelper.BuildComments(_context.Comments.ToList(), targetId);
+            var comments = htmlRenderHelper.BuildComments(dao.GetObjects<Comment>(), targetObjectId);
 
             return comments;
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostComment(long targetId, string commentText)
+        public IActionResult PostComment(long targetId, string commentText)
         {
             var comment = new Comment()
             {
-                Text = commentText,
-                TargetId = targetId,
-                Username = CurrentUserName
+                Details = commentText,
+                TargetObjectId = targetId,
             };
 
-            await dataContext.SaveAsync(comment, CurrentUserId, CurrentHomeId, targetId);
+            dao.Create(comment);
 
             var result = htmlRenderHelper.BuildPostComment(comment);
             return Json(result);
@@ -257,9 +182,9 @@ namespace APPartment.UI.Controllers.Base
 
         #region Images
         [HttpPost]
-        public ActionResult UploadImages(string targetIdString)
+        public ActionResult UploadImages(string targetObjectIdString)
         {
-            var targetId = long.Parse(targetIdString);
+            var targetObjectId = long.Parse(targetObjectIdString);
 
             bool isSavedSuccessfully = true;
             string fName = "";
@@ -272,7 +197,7 @@ namespace APPartment.UI.Controllers.Base
                     fName = file.FileName;
                     if (file != null && file.Length > 0)
                     {
-                        fileUploadService.UploadImage(file, targetId, CurrentUserId, CurrentHomeId);
+                        fileUploadService.UploadImage(file, targetObjectId);
                     }
                 }
             }
@@ -293,7 +218,8 @@ namespace APPartment.UI.Controllers.Base
 
         public ActionResult DeleteImage(long id)
         {
-            var image = _context.Images.Find(id);
+            var searchedImage = new Image() { Id = id };
+            var image = dao.GetObject(searchedImage, id);
 
             if (image == null)
             {
@@ -313,8 +239,7 @@ namespace APPartment.UI.Controllers.Base
                         }
                     }
 
-                    _context.Images.Remove(image);
-                    _context.SaveChanges();
+                    dao.Delete(image);
 
                     return Json(new { success = true, message = "Image deleted successfully." });
                 }
@@ -325,24 +250,25 @@ namespace APPartment.UI.Controllers.Base
             }
         }
 
-        private List<Image> GetImages(long targetId)
+        private List<Image> GetImages(long targetObjectId)
         {
-            var images = _context.Images.Where(x => x.TargetId == targetId).ToList();
+            var searchedImage = new Image() { TargetObjectId = targetObjectId };
+            var images = dao.GetObjects(searchedImage, x => x.TargetObjectId == searchedImage.TargetObjectId);
 
             return images;
         }
         #endregion Images
 
-        #region History
-        private List<string> GetHistory(long targetId)
-        {
-            var history = _context.Audits.Where(x => x.ObjectId == targetId || x.TargetObjectId == targetId).ToList();
+        //#region History
+        //private List<string> GetHistory(long targetId)
+        //{
+        //    var history = _context.Audits.Where(x => x.ObjectId == targetId || x.TargetObjectId == targetId).ToList();
 
-            var objectHistoryDisplayList = historyHtmlBuilder.BuildBaseObjectHistory(history);
+        //    var objectHistoryDisplayList = historyHtmlBuilder.BuildBaseObjectHistory(history);
 
-            return objectHistoryDisplayList;
-        }
-        #endregion History
+        //    return objectHistoryDisplayList;
+        //}
+        //#endregion History
         #endregion Clingons
 
         protected virtual void PopulateViewData()

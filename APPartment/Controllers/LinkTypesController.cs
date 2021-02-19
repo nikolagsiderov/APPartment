@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using APPartment.Data.Core;
 using APPartment.Data.Server.Models.Core;
 using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
@@ -13,11 +12,8 @@ namespace APPartment.Controllers
 {
     public class LinkTypesController : BaseCRUDController<LinkType>
     {
-        private readonly DataAccessContext _context;
-
-        public LinkTypesController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
+        public LinkTypesController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            _context = context;
         }
 
         public override Expression<Func<LinkType, bool>> FilterExpression { get; set; }

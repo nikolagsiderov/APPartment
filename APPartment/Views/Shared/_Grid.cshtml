@@ -1,4 +1,4 @@
-﻿@model IEnumerable<APPartment.Data.Server.Models.Base.BaseObject>
+﻿@model IEnumerable<APPartment.Data.Server.Models.Base.IdentityBaseObject>
 
 @using APPartment.Data.Server.Models.Objects;
 @using APPartment.Data.Server.Models.Core;
@@ -56,7 +56,6 @@
                         <th>ID</th>
                         <th>Name</th>
                         <th>Details</th>
-                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -92,30 +91,9 @@
                                     }
                                 }
                             </td>
-                            <td class="text-center">
-                                @if (item.Status == 1)
-                                {
-                                    <span class="badge badge-success">Low</span>
-                                }
-                                else if (item.Status == 2)
-                                {
-                                    <span class="badge badge-warning">Medium</span>
-                                }
-                                else if (item.Status == 3)
-                                {
-                                    <span class="badge badge-danger">High</span>
-                                }
-                                else
-                                {
-                                    <span class="badge badge-danger">Critical</span>
-                                }
-                            </td>
                             <td>
                                 @{
-                                    var modalNotCompletedId = "markNotCompletedObjectModal-" + item.Id.ToString();
-                                    var modalCompletedId = "completeObjectModal-" + item.Id.ToString();
                                     var modalAssignId = "assignModal-" + item.Id.ToString();
-
                                     var modalDeleteId = "deleteModal-" + item.Id.ToString();
                                 }
 
@@ -151,58 +129,6 @@
                                         </div>
                                     }
 
-                                    if (item.GetType().Name != "Chore")
-                                    {
-                                        if (item.Status == 1 || item.Status == 2)
-                                        {
-                                            <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
-
-                                            <div class="modal fade" id="@modalNotCompletedId" tabindex="-1" role="dialog" aria-labelledby="markNotCompletedObjectModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="markNotCompletedObjectModalLabel">Set high status</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            Are you sure you want to set a high status?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                            <a asp-action="SetHighStatus" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">Set</button></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#@modalCompletedId"><i class="fas fa-check"></i></button>
-
-                                            <div class="modal fade" id="@modalCompletedId" tabindex="-1" role="dialog" aria-labelledby="completeObjectModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="completeObjectModalLabel">Set low status</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            Are you sure you want to set low status?
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                            <a asp-action="SetLowStatus" asp-route-id="@item.Id"><button type="button" class="btn btn-success">Set</button></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                    }
-
                                     <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i></button></a>
                                     <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-primary btn-sm"><i class="far fa-edit"></i></button></a>
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#@modalDeleteId"><i class="far fa-trash-alt"></i></button>
@@ -229,31 +155,6 @@
                                 }
                                 else
                                 {
-                                    if (item.Status == 1 || item.Status == 2)
-                                    {
-                                        <button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalNotCompletedId"><i class="fas fa-exclamation-triangle"></i></button>
-
-                                        <div class="modal fade" id="@modalNotCompletedId" tabindex="-1" role="dialog" aria-labelledby="markNotCompletedObjectModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="markNotCompletedObjectModalLabel">Set high status</h5>
-                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        Are you sure you want to set high status?
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                        <a asp-action="SetHighStatus" asp-route-id="@item.Id"><button type="button" class="btn btn-warning">Set</button></a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-
                                     <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i> &nbsp; Details</button></a>
                                 }
                             </td>

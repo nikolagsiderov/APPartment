@@ -1,17 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using APPartment.Data.Attributes;
+using APPartment.Data.Server.Models.Base;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Data.Server.Models.Core
 {
-    public class HomeUser
+    [Table("HomeUser", Schema = "dbo")]
+    public class HomeUser : HomeBaseObject
     {
-        [Key]
-        public long Id { get; set; }
-
-        [ForeignKey("Home")]
-        public long HomeId { get; set; }
-
-        [ForeignKey("User")]
+        [FieldMappingForMainTable]
         public long UserId { get; set; }
     }
 }

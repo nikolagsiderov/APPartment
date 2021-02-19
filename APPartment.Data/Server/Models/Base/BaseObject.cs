@@ -1,37 +1,55 @@
-﻿using APPartment.Data.Server.Declarations;
+﻿using APPartment.Data.Attributes;
+using APPartment.Data.Server.Declarations;
 using APPartment.Data.Server.Models.MetaObjects;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Data.Server.Models.Base
 {
     public abstract class BaseObject : IBaseObject
     {
-        [Key]
-        public long Id { get; set; }
-
-        [Required]
-        public string Name { get; set; }
-
-        public string Details { get; set; }
-
-        public int Status { get; set; }
-
-        [ForeignKey("Home")]
-        public long? HomeId { get; set; }
-
-        [ForeignKey("Object")]
+        [FieldMappingForObjectTablePrimaryKey]
         public long ObjectId { get; set; }
 
+        [FieldMappingForObjectTable]
         [NotMapped]
-        public List<string> Comments { get; set; } = new List<string>();
+        public long ObjectTypeId { get; set; }
+
+        [FieldMappingForObjectTable]
+        [NotMapped]
+        public string Name { get; set; }
+
+        [FieldMappingForObjectTable]
+        [NotMapped]
+        public string Details { get; set; }
+
+        [FieldMappingForObjectTable]
+        [NotMapped]
+        public long CreatedById { get; set; }
+
+        [FieldMappingForObjectTable]
+        [NotMapped]
+        public DateTime CreatedDate { get; set; }
+
+        [FieldMappingForObjectTable]
+        [NotMapped]
+        public long? ModifiedById { get; set; }
+
+        [FieldMappingForObjectTable]
+        [NotMapped]
+        public DateTime? ModifiedDate { get; set; }
+
+        public Core.Object @Object { get; set; }
 
         [NotMapped]
-        public List<Image> Images { get; set; } = new List<Image>();
+        public List<string> Comments { get; set; }
 
         [NotMapped]
-        public List<string> History { get; set; } = new List<string>();
+        public List<Image> Images { get; set; }
+
+        [NotMapped]
+        public List<string> History { get; set; }
 
         [NotMapped]
         public string LastUpdated { get; set; }

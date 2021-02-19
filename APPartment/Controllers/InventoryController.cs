@@ -7,7 +7,6 @@ using System;
 using Microsoft.AspNetCore.Http;
 using APPartment.UI.Controllers.Base;
 using APPartment.Data.Server.Models.Objects;
-using APPartment.Data.Core;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.Enums;
 
@@ -15,11 +14,8 @@ namespace APPartment.Controllers
 {
     public class InventoryController : BaseCRUDController<Inventory>
     {
-        private readonly DataAccessContext _context;
-
-        public InventoryController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
+        public InventoryController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            _context = context;
         }
 
         public override Expression<Func<Inventory, bool>> FilterExpression { get; set; }
@@ -68,8 +64,8 @@ namespace APPartment.Controllers
 
         public JsonResult GetInventoryCriticalCount()
         {
-            var inventoryCriticalCount = _context.Set<Inventory>().ToList().Where(x => x.HomeId == CurrentHomeId && (x.Status == (int)ObjectStatus.Critical ||
-            x.Status == (int)ObjectStatus.High)).Count();
+            var seachedInventory = new Inventory() { HomeId = (long)CurrentHomeId };
+            var inventoryCriticalCount = dao.GetObjects(seachedInventory, x => x.HomeId == seachedInventory.HomeId).Count();
             return Json(inventoryCriticalCount);
         }
         #endregion

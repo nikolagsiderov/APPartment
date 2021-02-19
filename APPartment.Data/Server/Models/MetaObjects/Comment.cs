@@ -1,16 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using APPartment.Data.Attributes;
+using APPartment.Data.Server.Models.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Data.Server.Models.MetaObjects
 {
-    public class Comment : Base.Object
+    [Table("Comment", Schema = "dbo")]
+    public class Comment : IdentityBaseObject
     {
-        [Key]
-        public long Id { get; set; }
-
-        public string Text { get; set; }
-
-        public string Username { get; set; }
-
-        public long TargetId { get; set; }
+        [FieldMappingForMainTable]
+        public long TargetObjectId { get; set; }
     }
 }

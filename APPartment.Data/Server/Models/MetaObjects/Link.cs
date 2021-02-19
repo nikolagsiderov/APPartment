@@ -1,25 +1,19 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using APPartment.Data.Attributes;
+using APPartment.Data.Server.Models.Base;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Data.Server.Models.MetaObjects
 {
-    public class Link : Base.Object
+    [Table("Link", Schema = "dbo")]
+    public class Link : IdentityBaseObject
     {
-        [Key]
-        public long Id { get; set; }
-
-        [NotMapped]
-        public string Display { get; set; }
-
+        [FieldMappingForMainTable]
         public long LinkTypeId { get; set; }
 
+        [FieldMappingForMainTable]
         public long LinkedObjectId { get; set; }
 
-        public long CreatedById { get; set; }
-
-        public DateTime CreatedDate { get; set; }
-
+        [FieldMappingForMainTable]
         public long TargetObjectId { get; set; }
     }
 }

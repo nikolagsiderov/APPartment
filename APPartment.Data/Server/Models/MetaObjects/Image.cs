@@ -1,21 +1,16 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using APPartment.Data.Attributes;
+using APPartment.Data.Server.Models.Base;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Data.Server.Models.MetaObjects
 {
-    public class Image : Base.Object
+    [Table("Image", Schema = "dbo")]
+    public class Image : IdentityBaseObject
     {
-        [Key]
-        public long Id { get; set; }
-
-        public string Name { get; set; }
-
-        public string FileName { get; set; }
-
+        [FieldMappingForMainTable]
         public string FileSize { get; set; }
 
-        public DateTime CreatedDate { get; set; }
-
-        public long TargetId { get; set; }
+        [FieldMappingForMainTable]
+        public long TargetObjectId { get; set; }
     }
 }

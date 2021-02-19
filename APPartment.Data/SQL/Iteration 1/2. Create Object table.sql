@@ -1,7 +1,7 @@
-USE APPartment2
+USE APPartment
 
 CREATE TABLE [dbo].[Object] (
-    ObjectId bigint NOT NULL,
+    ObjectId bigint IDENTITY(1, 1) NOT NULL,
 	ObjectTypeId bigint NOT NULL,
     Name nvarchar(MAX) NOT NULL,
 	Details nvarchar(MAX),

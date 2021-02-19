@@ -1,5 +1,4 @@
-﻿using APPartment.Data.Core;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APPartment.UI.Controllers.Base
@@ -13,7 +12,7 @@ namespace APPartment.UI.Controllers.Base
         protected string CurrentControllerName { get; set; }
         protected string ImagesPath { get; } = @"wwwroot\BaseObject_Images\";
 
-        public BaseController(IHttpContextAccessor contextAccessor, DataAccessContext context)
+        public BaseController(IHttpContextAccessor contextAccessor)
         {
             if (contextAccessor.HttpContext != null && contextAccessor.HttpContext.Session != null)
             {

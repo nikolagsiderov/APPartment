@@ -1,7 +1,7 @@
-USE APPartment2
+USE APPartment
 
 CREATE TABLE [dbo].[Inventory] (
-    Id bigint NOT NULL,
+    Id bigint IDENTITY(1, 1) NOT NULL,
 	ObjectId bigint NOT NULL,
 	Status int NOT NULL,
 	HomeId bigint NOT NULL,

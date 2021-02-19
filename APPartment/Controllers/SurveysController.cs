@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq.Expressions;
 using APPartment.UI.Controllers.Base;
-using APPartment.Data.Core;
 using APPartment.Data.Server.Models.Objects;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 
@@ -14,11 +13,8 @@ namespace APPartment.Controllers
 {
     public class SurveysController : BaseCRUDController<Survey>
     {
-        private readonly DataAccessContext _context;
-
-        public SurveysController(IHttpContextAccessor contextAccessor, DataAccessContext context) : base(contextAccessor, context)
+        public SurveysController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            _context = context;
         }
 
         public override Expression<Func<Survey, bool>> FilterExpression { get; set; }
@@ -67,7 +63,8 @@ namespace APPartment.Controllers
 
         public JsonResult GetPendingSurveysCount()
         {
-            var pendingSurveysCount = _context.Set<Survey>().ToList().Where(x => x.HomeId == CurrentHomeId && x.IsCompleted == false).Count();
+            var searchedSurvey = new Survey() { HomeId = (long)CurrentHomeId };
+            var pendingSurveysCount = dao.GetObjects(searchedSurvey, x => x.HomeId == searchedSurvey.HomeId).Count();
             return Json(pendingSurveysCount);
         }
         #endregion
