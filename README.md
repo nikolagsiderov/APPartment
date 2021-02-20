@@ -18,7 +18,7 @@ Later on, the purpose changed to an entirely educational one. Thoughout the proj
 
 * Double authentication process - authentication for user, then authentication for home
 * Home presence status, with ability to modify and set custom messages, informing other housemates
-* Storage and traceability of invetory, hygiene tasks and issues
+* Storage and traceability of inventory, hygiene tasks, chores and issues
 * Metadata for all objects. Commenting and image storing functionalites
 * Home settings
 
