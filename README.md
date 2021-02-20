@@ -1,24 +1,32 @@
 # APPartment
 
-APPartment is an ASP.NET Core MVC project for sharing with your housemate/s and keeping track of everything at the apartment, simplifying the whole process of living with people under a common roof.
+APPartment is an **ASP.NET Core MVC** project with an original purpose to serve as a platform where housemates keep track of everything in their apartment/house.
+Later on, the purpose changed to an entirely educational one. Thoughout the project's development, lots of modifications have been made, for example, at the beginning **Entity Framework Core with code first** approach was used, then I migrated it to **database first**, later **EF Core** was entirely removed and I developed my **own custom object-relational mapping framework with a facade design pattern**.
 
 # What I have learned
 
-* Further experience with generics
-* Further experience with abstractions
-* Further experience with asynchronous programming
-* Ability to publish project with Azure
-* Basic work with SignalR
-* Creating custom logos with Photoshop
+* Further experience with **generics**, **abstractions**, **reflection** and **asynchronous programming**
+* Ability to publish with **Azure**
+* Basic work with **SignalR**
+* Creating custom logos with **Photoshop**
+* Further understanding of **Entity Framework Core**
+* Further experience with **JavaScript**, **jQuery**, **AJAX** and **JSON**
+* Building my own custom **ORM Framework**
+* Incorporating **Facade Design Pattern**
 
 # Further description
 
-* Web project with double authorization (login, register) - first authorization for user, second authorization for house/home, because one user can have many houses/homes and a home can have many participants/users.
-* Top navigation menu with dropdowns for profile, home status with ability to display and set current home status.
-* Side menu with home page where widgets with latest information about last updated object for each module are displayed, widget for rent due date with ability to redirect to settings to change rent due date, widget for home status, also chat room using SignalR. Three pages from different modules which inherite similar views, base controller and models. Create, details, edit, mark and delete options in grid view for every object, with metadata sub-object in details in edit pages for every object. Grid view stands for data table, provided from datatables.net, with search, pagination, info and displaying selected number of objects functionalities.
-* Metadata for objects stands for comments, images and history - every user can add a comment for every object, attach an image or see its history. History is used in widgets for home page.
-* Settings page where users can modify their home's name or change rent due date.
+* Double authentication process - authentication for user, then authentication for home
+* Home presence status, with ability to modify and set custom messages, informing other housemates
+* Storage and traceability of invetory, hygiene tasks and issues
+* Metadata for all objects. Commenting and image storing functionalites
+* Home settings
 
-# Hierarchy of classes
+# Code base
 
-![APPartment DB Structure Image](https://trello-attachments.s3.amazonaws.com/5d531c3be843f538bdff0d0d/5e6bb43f0aefba3e8a28a962/d70cdb6086d01007ac01c6c1712792ca/db-structure-scheme.png)
+* `APPartment.csproj` - controllers, views, startup, etc.
+* `APPartment.UI.csproj` - base controllers (check out `BaseCRUDController.cs`), authorization, viewmodels, utilites, etc.
+* `APPartment.Web.Services.csproj` - chat service, fileUpload service, utilites, etc.
+* `APPartment.Data.csproj` - facade, server models, sql scripts, etc.
+* `APPartment.ORM.Framework.csproj` - `DaoContext.cs`, sql query provider, lambda expression to sql clause translator, declarations, attributes, etc.
+* `APPartment.Test.csproj` - xUnit tests
