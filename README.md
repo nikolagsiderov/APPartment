@@ -29,4 +29,4 @@ Later on, the purpose changed to an entirely educational one. Thoughout the proj
 * `APPartment.Web.Services.csproj` - chat service, file service, utilites, etc.
 * `APPartment.Data.csproj` - facade, server models, sql scripts, etc.
 * `APPartment.ORM.Framework.csproj` - `DaoContext.cs`, sql query provider, lambda expression to sql clause translator, declarations, attributes, etc.
-* `APPartment.Test.csproj` - xUnit tests
+* `APPartment.Tests.csproj` - xUnit tests
