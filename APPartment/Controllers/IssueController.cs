@@ -1,6 +1,5 @@
 ﻿using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
 using System;
@@ -64,7 +63,7 @@ namespace APPartment.Controllers
 
         public JsonResult GetIssuesCriticalCount()
         {
-            var issuesCriticalCount = dao.GetObjects<Issue>(x => x.HomeId == (long)CurrentHomeId).Count();
+            var issuesCriticalCount = baseFacade.GetObjects<Issue>(x => x.HomeId == (long)CurrentHomeId).Count();
             return Json(issuesCriticalCount);
         }
         #endregion

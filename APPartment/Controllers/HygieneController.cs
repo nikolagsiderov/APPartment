@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using SmartBreadcrumbs.Attributes;
 using System.Linq;
 using System;
@@ -64,7 +63,7 @@ namespace APPartment.Controllers
 
         public JsonResult GetHygieneCriticalCount()
         {
-            var hygieneCriticalCount = dao.GetObjects<Hygiene>(x => x.HomeId == (long)CurrentUserId).Count();
+            var hygieneCriticalCount = baseFacade.GetObjects<Hygiene>(x => x.HomeId == (long)CurrentUserId).Count();
 
             return Json(hygieneCriticalCount);
         }

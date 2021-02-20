@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using APPartment.Data.Core;
 using APPartment.Data.Server.Models.Base;
 using APPartment.Data.Server.Models.MetaObjects;
-using APPartment.ORM.Framework.Core;
 using APPartment.UI.Utilities;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels;
 using APPartment.Web.Services.MetaObjects;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SmartBreadcrumbs.Attributes;
 
 namespace APPartment.UI.Controllers.Base
@@ -23,16 +22,14 @@ namespace APPartment.UI.Controllers.Base
         #region Context, Services and Utilities
         private HtmlRenderHelper htmlRenderHelper;
         private FileUploadService fileUploadService;
-        protected DaoContext dao;
-        //private HistoryHtmlBuilder historyHtmlBuilder;
+        protected BaseFacade baseFacade;
         #endregion Context, Services and Utilities
 
         public BaseCRUDController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            dao = new DaoContext();
+            baseFacade = new BaseFacade();
             htmlRenderHelper = new HtmlRenderHelper();
             fileUploadService = new FileUploadService();
-            //historyHtmlBuilder = new HistoryHtmlBuilder();
         }
 
         public abstract Expression<Func<T, bool>> FilterExpression { get; set; }
@@ -42,7 +39,7 @@ namespace APPartment.UI.Controllers.Base
         [Breadcrumb("Base")]
         public virtual IActionResult Index()
         {
-            var modelObjects = dao.GetObjects<T>(FilterExpression);
+            var modelObjects = baseFacade.GetObjects<T>(FilterExpression);
             return View("_Grid", modelObjects);
         }
 
@@ -54,7 +51,7 @@ namespace APPartment.UI.Controllers.Base
                 return new Error404NotFoundViewResult();
             }
 
-            var model = dao.GetObject<T>((long)id);
+            var model = baseFacade.GetObject<T>((long)id);
 
             if (model == null)
             {
@@ -73,7 +70,7 @@ namespace APPartment.UI.Controllers.Base
             if (ModelState.IsValid)
             {
                 model.HomeId = (long)CurrentHomeId;
-                dao.Create(model);
+                baseFacade.Create(model);
             }
 
             return RedirectToAction(nameof(Index));
@@ -87,7 +84,7 @@ namespace APPartment.UI.Controllers.Base
                 return new Error404NotFoundViewResult();
             }
 
-            var model = dao.GetObject<T>((long)id);
+            var model = baseFacade.GetObject<T>((long)id);
 
             if (model == null)
             {
@@ -113,9 +110,9 @@ namespace APPartment.UI.Controllers.Base
             {
                 try
                 {
-                    dao.Update(model);
+                    baseFacade.Update(model);
                 }
-                catch (DbUpdateConcurrencyException)
+                catch (Exception)
                 {
                     return new Error404NotFoundViewResult();
                 }
@@ -133,14 +130,14 @@ namespace APPartment.UI.Controllers.Base
                 return new Error404NotFoundViewResult();
             }
 
-            var model = dao.GetObject<T>((long)id);
+            var model = baseFacade.GetObject<T>((long)id);
 
             if (model == null)
             {
                 return new Error404NotFoundViewResult();
             }
 
-            dao.Delete(model);
+            baseFacade.Delete(model);
 
             return RedirectToAction(nameof(Index));
         }
@@ -151,7 +148,6 @@ namespace APPartment.UI.Controllers.Base
         {
             model.Comments = GetComments(model.ObjectId);
             model.Images = GetImages(model.ObjectId);
-            //model.History = GetHistory(model.ObjectId);
 
             return model;
         }
@@ -159,7 +155,7 @@ namespace APPartment.UI.Controllers.Base
         #region Comments
         private List<string> GetComments(long targetObjectId)
         {
-            var comments = htmlRenderHelper.BuildComments(dao.GetObjects<Comment>(), targetObjectId);
+            var comments = htmlRenderHelper.BuildComments(baseFacade.GetObjects<Comment>(), targetObjectId);
 
             return comments;
         }
@@ -173,7 +169,7 @@ namespace APPartment.UI.Controllers.Base
                 TargetObjectId = targetId,
             };
 
-            dao.Create(comment);
+            baseFacade.Create(comment);
 
             var result = htmlRenderHelper.BuildPostComment(comment);
             return Json(result);
@@ -218,7 +214,7 @@ namespace APPartment.UI.Controllers.Base
 
         public ActionResult DeleteImage(long id)
         {
-            var image = dao.GetObject<Image>(id);
+            var image = baseFacade.GetObject<Image>(id);
 
             if (image == null)
             {
@@ -238,7 +234,7 @@ namespace APPartment.UI.Controllers.Base
                         }
                     }
 
-                    dao.Delete(image);
+                    baseFacade.Delete(image);
 
                     return Json(new { success = true, message = "Image deleted successfully." });
                 }
@@ -251,21 +247,10 @@ namespace APPartment.UI.Controllers.Base
 
         private List<Image> GetImages(long targetObjectId)
         {
-            var images = dao.GetObjects<Image>(x => x.TargetObjectId == targetObjectId);
+            var images = baseFacade.GetObjects<Image>(x => x.TargetObjectId == targetObjectId);
             return images;
         }
         #endregion Images
-
-        //#region History
-        //private List<string> GetHistory(long targetId)
-        //{
-        //    var history = _context.Audits.Where(x => x.ObjectId == targetId || x.TargetObjectId == targetId).ToList();
-
-        //    var objectHistoryDisplayList = historyHtmlBuilder.BuildBaseObjectHistory(history);
-
-        //    return objectHistoryDisplayList;
-        //}
-        //#endregion History
         #endregion Clingons
 
         protected virtual void PopulateViewData()

@@ -10,7 +10,6 @@
     string surveysLink = string.Empty;
     string choresLink = string.Empty;
     string settingsLink = string.Empty;
-    string historyLink = string.Empty;
 
     if (string.IsNullOrEmpty(controllerName) || (controllerName == "Home" && string.IsNullOrEmpty(actionName)) || (controllerName == "Home" && actionName == "Index"))
     {
@@ -43,10 +42,6 @@
     else if (controllerName == "Home" && actionName == "Settings")
     {
         settingsLink = "active";
-    }
-    else if (controllerName == "Home" && actionName == "History")
-    {
-        historyLink = "active";
     }
 }
 
@@ -128,10 +123,6 @@
                 <a class="nav-link @settingsLink" asp-controller="Home" asp-action="Settings">
                     <div class="nav-link-icon"><i class="fas fa-cog"></i></div>
                     Settings
-                </a>
-                <a class="nav-link @historyLink" asp-controller="Home" asp-action="History">
-                    <div class="nav-link-icon"><i class="fas fa-history"></i></div>
-                    History
                 </a>
             </div>
         </div>

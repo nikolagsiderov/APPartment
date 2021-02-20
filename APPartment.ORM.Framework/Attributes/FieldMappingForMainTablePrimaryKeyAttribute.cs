@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APPartment.Data.Attributes
+namespace APPartment.ORM.Framework.Attributes
 {
     public class FieldMappingForMainTablePrimaryKeyAttribute : Attribute
     {

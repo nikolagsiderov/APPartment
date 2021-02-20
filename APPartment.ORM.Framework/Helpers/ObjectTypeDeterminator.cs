@@ -1,4 +1,4 @@
-﻿using APPartment.Data.Enums;
+﻿using APPartment.ORM.Framework.Enums;
 using System;
 
 namespace APPartment.ORM.Framework.Helpers

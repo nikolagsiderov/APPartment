@@ -1,5 +1,5 @@
-﻿using APPartment.Data.Server.Models.MetaObjects;
-using APPartment.ORM.Framework.Core;
+﻿using APPartment.Data.Core;
+using APPartment.Data.Server.Models.MetaObjects;
 using APPartment.Web.Services.Utilities;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -9,12 +9,12 @@ namespace APPartment.Web.Services.MetaObjects
 {
     public class FileUploadService
     {
-        private readonly DaoContext dao;
+        private readonly BaseFacade baseFacade;
         private HumanSizeConverter humanSizeConverter = new HumanSizeConverter();
 
         public FileUploadService()
         {
-            this.dao = new DaoContext();
+            this.baseFacade = new BaseFacade();
         }
 
         public void UploadImage(IFormFile file, long targetObjectId)
@@ -44,11 +44,11 @@ namespace APPartment.Web.Services.MetaObjects
                 TargetObjectId = targetObjectId,
             };
 
-            dao.Create(image);
+            baseFacade.Create(image);
 
             image.Name = $"{image.Id}_{targetObjectId}_{file.FileName}";
 
-            dao.Update(image);
+            baseFacade.Update(image);
 
             return image.Name;
         }

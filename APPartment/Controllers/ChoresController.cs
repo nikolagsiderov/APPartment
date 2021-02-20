@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
 using System;
@@ -65,25 +64,25 @@ namespace APPartment.Controllers
 
         public IActionResult Assign(string username, long choreId)
         {
-            var model = dao.GetObject<Chore>(choreId);
+            var model = baseFacade.GetObject<Chore>(choreId);
 
             if (model == null)
             {
                 return new Error404NotFoundViewResult();
             }
 
-            var userToAssign = dao.GetObject<User>(x => x.Name == username);
+            var userToAssign = baseFacade.GetObject<User>(x => x.Name == username);
             var userToAssignUserId = userToAssign.Id;
 
             model.AssignedToUserId = userToAssignUserId;
-            dao.Update(model);
+            baseFacade.Update(model);
 
             return RedirectToAction(nameof(Index));
         }
 
         public JsonResult GetMyChoresCount()
         {
-            var myChoresCount = dao.GetObjects<Chore>(x => x.HomeId == (long)CurrentHomeId && x.AssignedToUserId == (long)CurrentUserId).Count();
+            var myChoresCount = baseFacade.GetObjects<Chore>(x => x.HomeId == (long)CurrentHomeId && x.AssignedToUserId == (long)CurrentUserId).Count();
             return Json(myChoresCount);
         }
         #endregion

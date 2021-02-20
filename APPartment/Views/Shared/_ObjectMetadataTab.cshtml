@@ -7,9 +7,6 @@
     <li class="nav-item">
         <a class="nav-link" id="images-tab" data-toggle="tab" href="#imagesTab" role="tab" aria-controls="imagesTab" aria-selected="false"><i class="far fa-images"></i> Images</a>
     </li>
-    <li class="nav-item">
-        <a class="nav-link" id="history-tab" data-toggle="tab" href="#historyTab" role="tab" aria-controls="historyTab" aria-selected="false"><i class="fas fa-history"></i> History</a>
-    </li>
 </ul>
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="commentsTab" role="tabpanel" aria-labelledby="comments-tab">
@@ -19,9 +16,5 @@
     <div class="tab-pane fade" id="imagesTab" role="tabpanel" aria-labelledby="images-tab">
         <br />
         @Html.Partial("_Images", Model)
-    </div>
-    <div class="tab-pane fade" id="historyTab" role="tabpanel" aria-labelledby="history-tab">
-        <br />
-        @Html.Partial("_History", Model)
     </div>
 </div>

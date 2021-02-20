@@ -1,4 +1,4 @@
-﻿namespace APPartment.Data.Core
+﻿namespace APPartment.ORM.Framework
 {
     public static class Configuration
     {

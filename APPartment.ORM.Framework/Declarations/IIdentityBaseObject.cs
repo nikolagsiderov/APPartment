@@ -1,6 +1,6 @@
-﻿using APPartment.Data.Attributes;
+﻿using APPartment.ORM.Framework.Attributes;
 
-namespace APPartment.Data.Server.Declarations
+namespace APPartment.ORM.Framework.Declarations
 {
     public interface IIdentityBaseObject : IBaseObject
     {

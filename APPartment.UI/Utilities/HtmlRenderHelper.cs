@@ -1,6 +1,5 @@
 ﻿using APPartment.Data.Server.Models.Core;
 using APPartment.Data.Server.Models.MetaObjects;
-using APPartment.ORM.Framework.Core;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,11 +7,8 @@ namespace APPartment.UI.Utilities
 {
     public class HtmlRenderHelper
     {
-        private readonly DaoContext dao;
-
         public HtmlRenderHelper()
         {
-            dao = new DaoContext();
         }
 
         public List<string> BuildMessagesForChat(List<Message> messages, long homeId)

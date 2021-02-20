@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\APPartment.Data\APPartment.Data.csproj" />
-    <ProjectReference Include="..\APPartment.ORM.Framework\APPartment.ORM.Framework.csproj" />
     <ProjectReference Include="..\APPartment.Web.Services\APPartment.Web.Services.csproj" />
   </ItemGroup>
 

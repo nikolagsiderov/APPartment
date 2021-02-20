@@ -1,6 +1,6 @@
-﻿using APPartment.Data.Attributes;
-using APPartment.Data.Server.Declarations;
-using APPartment.Data.Server.Models.MetaObjects;
+﻿using APPartment.Data.Server.Models.MetaObjects;
+using APPartment.ORM.Framework.Attributes;
+using APPartment.ORM.Framework.Declarations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -40,16 +40,11 @@ namespace APPartment.Data.Server.Models.Base
         [NotMapped]
         public DateTime? ModifiedDate { get; set; }
 
-        public Core.Object @Object { get; set; }
-
         [NotMapped]
         public List<string> Comments { get; set; }
 
         [NotMapped]
         public List<Image> Images { get; set; }
-
-        [NotMapped]
-        public List<string> History { get; set; }
 
         [NotMapped]
         public string LastUpdated { get; set; }

@@ -1,5 +1,5 @@
-﻿using APPartment.Data.Server.Models.Core;
-using APPartment.ORM.Framework.Core;
+﻿using APPartment.Data.Core;
+using APPartment.Data.Server.Models.Core;
 using APPartment.UI.Controllers.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,12 +9,12 @@ namespace APPartment.Controllers
     public class AccountController : BaseController
     {
         #region Context, Services and Utilities
-        private DaoContext dao;
+        private readonly BaseFacade baseFacade;
         #endregion
 
         public AccountController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            dao = new DaoContext();
+            baseFacade = new BaseFacade();
         }
 
         #region Actions
@@ -33,15 +33,15 @@ namespace APPartment.Controllers
         {            
             if (ModelState.IsValid)
             {
-                var alreadyExistingUser = dao.GetObject<User>(x => x.Name == user.Name);
+                var alreadyExistingUser = baseFacade.GetObject<User>(x => x.Name == user.Name);
                 if (alreadyExistingUser != null)
                 {
                     ModelState.AddModelError("Username", "This username is already taken.");
                     return View(user); 
                 }
 
-                dao.Create(user);
-                user = dao.GetObject<User>(x => x.Name == user.Name);
+                baseFacade.Create(user);
+                user = baseFacade.GetObject<User>(x => x.Name == user.Name);
 
                 ModelState.Clear();
 
@@ -67,7 +67,7 @@ namespace APPartment.Controllers
         [HttpPost]
         public IActionResult Login(User user)
         {
-            var existingUserWithPassedCredentials = dao.GetObject<User>(x => x.Name == user.Name && x.Password == user.Password);
+            var existingUserWithPassedCredentials = baseFacade.GetObject<User>(x => x.Name == user.Name && x.Password == user.Password);
             
             if (existingUserWithPassedCredentials != null)
             {

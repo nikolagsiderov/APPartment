@@ -1,81 +1,25 @@
-﻿using APPartment.Data.Core;
-using APPartment.Data.Server.Declarations;
-using System;
+﻿using System;
 using System.Linq;
-using APPartment.Data.Attributes;
-using Microsoft.Data.SqlClient;
 using System.Linq.Expressions;
 using APPartment.ORM.Framework.Helpers;
 using System.Reflection;
-using System.Collections.Generic;
+using APPartment.ORM.Framework.Declarations;
+using System.Data.SqlClient;
+using APPartment.ORM.Framework.Attributes;
 
 namespace APPartment.ORM.Framework.Core
 {
-    // TODO: More work here needs to be done...
     public class DaoContext
     {
         public DaoContext()
         {
         }
 
-        #region CRUD Operations
-        public T GetObject<T>(long id)
-            where T : class, IIdentityBaseObject, new()
-        {
-            var result = new T();
-            result = SelectGetObject<T>(result, id);
-            return result;
-        }
-
-        public T GetObject<T>(Expression<Func<T, bool>> filter)
-            where T : class, IIdentityBaseObject, new()
-        {
-            var result = new T();
-            result = SelectFilterGetObject<T>(result, filter);
-            return result;
-        }
-
-        // TODO: Finish this here...
-        public List<T> GetObjects<T>()
-            where T : class, IIdentityBaseObject, new()
-        {
-            return new List<T>();
-        }
-
-        // TODO: Finish this here...
-        public List<T> GetObjects<T>(Expression<Func<T, bool>> filter)
-            where T : class, IIdentityBaseObject, new()
-        {
-            return new List<T>();
-        }
-
-        public void Create<T>(T businessObject)
-            where T : class, IIdentityBaseObject
-        {
-            var objectId = SaveCreateBaseObject(businessObject);
-            SaveCreateBusinessObject(businessObject, objectId);
-        }
-
-        public void Update<T>(T businessObject)
-            where T : class, IIdentityBaseObject
-        {
-            SaveUpdateBaseObject(businessObject);
-            SaveUpdateBusinessObject(businessObject);
-        }
-
-        public void Delete<T>(T businessObject)
-            where T : class, IIdentityBaseObject
-        {
-            DeleteBusinessAndBaseObject(businessObject);
-        }
-        #endregion
-
-        #region SQL
-        private T SelectGetObject<T>(T result, long id)
+        public T SelectGetObject<T>(T result, long id)
             where T : class, IIdentityBaseObject, new()
         {
             var mainTableName = typeof(T).Name;
-            var selectBusinessObjectSqlQuery = $"SELECT * FROM [dbo].[{mainTableName}] WHERE [Id] = '{id}'";
+            var selectBusinessObjectSqlQuery = SqlQueryProvider.SelectBusinessObjectById(mainTableName, id.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(selectBusinessObjectSqlQuery, conn))
@@ -101,14 +45,14 @@ namespace APPartment.ORM.Framework.Core
             return result;
         }
 
-        private T SelectFilterGetObject<T>(T result, Expression<Func<T, bool>> filter)
+        public T SelectFilterGetObject<T>(T result, Expression<Func<T, bool>> filter)
             where T : class, IIdentityBaseObject, new()
         {
             var mainTableName = typeof(T).Name;
             var expressionTranslator = new ExpressionToSqlHelper();
-            var sqlWhereClause = expressionTranslator.Translate(filter);
+            var sqlClause = expressionTranslator.Translate(filter);
 
-            var selectBusinessObjectSqlQuery = $"SELECT TOP(1) * FROM [dbo].[{mainTableName}] LEFT JOIN [dbo].[Object] ON [dbo].[{mainTableName}].[ObjectId] = [dbo].[Object].[ObjectId] WHERE {sqlWhereClause}";
+            var selectBusinessObjectSqlQuery = SqlQueryProvider.SelectBusinessObjectByClause(mainTableName, sqlClause);
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(selectBusinessObjectSqlQuery, conn))
@@ -140,7 +84,7 @@ namespace APPartment.ORM.Framework.Core
             return result;
         }
 
-        private long SaveCreateBaseObject<T>(T businessObject)
+        public long SaveCreateBaseObject<T>(T businessObject)
             where T : class, IIdentityBaseObject
         {
             object objectId = 0;
@@ -167,7 +111,7 @@ namespace APPartment.ORM.Framework.Core
                 .Select(x => x.PropertyType == typeof(string) || x.PropertyType == typeof(DateTime) || x.PropertyType == typeof(DateTime?) ?
             $"'{x.GetValue(businessObject).ToString()}'" : $"{x.GetValue(businessObject).ToString()}"));
 
-            string insertSqlQuery = $"INSERT INTO [dbo].[Object] ({propsNamesForMainTable}) VALUES ({propValuesForMainTable})" + "SELECT SCOPE_IDENTITY()";
+            string insertSqlQuery = SqlQueryProvider.InsertBaseObject(propsNamesForMainTable, propValuesForMainTable);
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(insertSqlQuery, conn))
@@ -187,18 +131,18 @@ namespace APPartment.ORM.Framework.Core
             }
         }
 
-        private void SaveCreateBusinessObject<T>(T businessObject, long objectId)
+        public void SaveCreateBusinessObject<T>(T businessObject, long objectId)
             where T : class, IIdentityBaseObject
         {
+            var mainTableName = businessObject.GetType().Name;
             var propsForMainTable = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute)));
             var propsNamesForMainTable = string.Join(", ", propsForMainTable.Select(x => $"[{x.Name}]")) + ", [ObjectId]";
             var propValuesForMainTable = string.Join(", ", propsForMainTable
                 .Select(x => x.PropertyType == typeof(string) || x.PropertyType == typeof(DateTime) || x.PropertyType == typeof(DateTime?) ?
             $"'{x.GetValue(businessObject).ToString()}'" : $"{x.GetValue(businessObject).ToString()}")) + $", {objectId}";
-            var mainTableName = businessObject.GetType().Name;
 
-            string insertSqlQuery = $"INSERT INTO [dbo].[{mainTableName}] ({propsNamesForMainTable}) VALUES ({propValuesForMainTable})";
+            string insertSqlQuery = SqlQueryProvider.InsertBusinessObject(mainTableName, propsNamesForMainTable, propValuesForMainTable);
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(insertSqlQuery, conn))
@@ -209,7 +153,7 @@ namespace APPartment.ORM.Framework.Core
             }
         }
 
-        private void SaveUpdateBaseObject<T>(T businessObject)
+        public void SaveUpdateBaseObject<T>(T businessObject)
             where T : class, IIdentityBaseObject
         {
             businessObject.ModifiedById = 0;
@@ -245,7 +189,7 @@ namespace APPartment.ORM.Framework.Core
             var updateProps = string.Join(", ", propsForMainTable
                 .Select(x => $"[{x.Name}] =" + (x.PropertyType == typeof(string) || x.PropertyType == typeof(DateTime) || x.PropertyType == typeof(DateTime?) ? $"'{x.GetValue(businessObject).ToString()}'" : $"{x.GetValue(businessObject).ToString()}")));
 
-            string updateSqlQuery = $"UPDATE [dbo].[Object] SET {updateProps} WHERE ObjectId = {businessObject.ObjectId}";
+            string updateSqlQuery = SqlQueryProvider.UpdateBaseObject(updateProps, businessObject.ObjectId.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(updateSqlQuery, conn))
@@ -256,17 +200,16 @@ namespace APPartment.ORM.Framework.Core
             }
         }
 
-        private void SaveUpdateBusinessObject<T>(T businessObject)
+        public void SaveUpdateBusinessObject<T>(T businessObject)
             where T : class, IIdentityBaseObject
         {
+            var mainTableName = businessObject.GetType().Name;
             var propsForMainTable = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute)));
             var updateProps = string.Join(", ", propsForMainTable
                 .Select(x => $"[{x.Name}] =" + (x.PropertyType == typeof(string) || x.PropertyType == typeof(DateTime) || x.PropertyType == typeof(DateTime?) ? $"'{x.GetValue(businessObject).ToString()}'" : $"{x.GetValue(businessObject).ToString()}")));
             
-            var mainTableName = businessObject.GetType().Name;
-
-            string updateSqlQuery = $"UPDATE [dbo].[{mainTableName}] SET {updateProps} WHERE ObjectId = {businessObject.ObjectId}";
+            string updateSqlQuery = SqlQueryProvider.UpdateBusinessObject(mainTableName, updateProps, businessObject.ObjectId.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(updateSqlQuery, conn))
@@ -277,13 +220,13 @@ namespace APPartment.ORM.Framework.Core
             }
         }
 
-        private void DeleteBusinessAndBaseObject<T>(T businessObject)
+        public void DeleteBusinessAndBaseObject<T>(T businessObject)
             where T : class, IIdentityBaseObject
         {
             var mainTableName = businessObject.GetType().Name;
 
-            string deleteBusinessObjectSqlQuery = $"DELETE FROM [dbo].[{mainTableName}] WHERE ObjectId = {businessObject.ObjectId}";
-            string deleteBaseObjectSqlQuery = $"DELETE FROM [dbo].[Object] WHERE ObjectId = {businessObject.ObjectId}";
+            string deleteBusinessObjectSqlQuery = SqlQueryProvider.DeleteBusinessObject(mainTableName, businessObject.ObjectId.ToString());
+            string deleteBaseObjectSqlQuery = SqlQueryProvider.DeleteBaseObject(businessObject.ObjectId.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(deleteBusinessObjectSqlQuery, conn))
@@ -301,6 +244,5 @@ namespace APPartment.ORM.Framework.Core
                 conn.Close();
             }
         }
-        #endregion
     }
 }

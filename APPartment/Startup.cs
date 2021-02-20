@@ -1,12 +1,9 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SmartBreadcrumbs.Extensions;
-using APPartment.Data.Core;
 using APPartment.Web.Services.Chat;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -29,11 +26,6 @@ namespace APPartment
         .AddSessionStateTempDataProvider();
             services.AddSignalR();
             services.AddSession();
-            services.AddDbContext<DataAccessContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddIdentityCore<IdentityUser>()
-                .AddEntityFrameworkStores<DataAccessContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
 

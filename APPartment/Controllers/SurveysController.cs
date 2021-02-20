@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Linq;
 using SmartBreadcrumbs.Attributes;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq.Expressions;
@@ -63,7 +62,7 @@ namespace APPartment.Controllers
 
         public JsonResult GetPendingSurveysCount()
         {
-            var pendingSurveysCount = dao.GetObjects<Survey>(x => x.HomeId == (long)CurrentHomeId).Count();
+            var pendingSurveysCount = baseFacade.GetObjects<Survey>(x => x.HomeId == (long)CurrentHomeId).Count();
             return Json(pendingSurveysCount);
         }
         #endregion

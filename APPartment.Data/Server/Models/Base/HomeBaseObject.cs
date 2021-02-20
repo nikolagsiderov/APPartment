@@ -1,5 +1,5 @@
-﻿using APPartment.Data.Attributes;
-using APPartment.Data.Server.Declarations;
+﻿using APPartment.ORM.Framework.Attributes;
+using APPartment.ORM.Framework.Declarations;
 
 namespace APPartment.Data.Server.Models.Base
 {

@@ -1,4 +1,4 @@
-﻿namespace APPartment.Data.Enums
+﻿namespace APPartment.ORM.Framework.Enums
 {
     // These need to be always in sync with values in DB
     public enum ObjectTypes
@@ -9,7 +9,7 @@
         HomeSetting = 4,
         Inventory = 5,
         Hygiene = 6,
-        Issue  = 7,
+        Issue = 7,
         Message = 8,
         Comment = 9,
         Image = 10,
