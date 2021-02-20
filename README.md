@@ -1,7 +1,7 @@
 # APPartment
 
 APPartment is an **ASP.NET Core MVC** project with an original purpose to serve as a platform where housemates keep track of everything in their apartment/house.
-Later on, the purpose changed to an entirely educational one. Thoughout the project's development, lots of modifications have been made, for example, at the beginning **Entity Framework Core with code first** approach was used, then I migrated it to **database first**, later **EF Core** was entirely removed and I developed my **own custom object-relational mapping framework with a facade design pattern**.
+Later on, the purpose changed to an entirely educational one. Throughout the project's development, lots of modifications have been made, for example, at the beginning **Entity Framework Core with code first** approach was used, then I migrated it to **database first**, later **EF Core** was entirely removed and I developed my **own custom object-relational mapping framework with a facade design pattern**.
 
 # What I have learned
 
@@ -19,7 +19,7 @@ Later on, the purpose changed to an entirely educational one. Thoughout the proj
 * Double authentication process - authentication for user, then authentication for home
 * Home presence status, with ability to modify and set custom messages, informing other housemates
 * Storage and traceability of inventory, hygiene tasks, chores and issues
-* Metadata for all objects. Commenting and image storing functionalites
+* Metadata for all objects. Commenting and image storing functionalities
 * Home settings
 
 # Code base
