@@ -25,8 +25,8 @@ Later on, the purpose changed to an entirely educational one. Thoughout the proj
 # Code base
 
 * `APPartment.csproj` - controllers, views, startup, etc.
-* `APPartment.UI.csproj` - base controllers (check out `BaseCRUDController.cs`), authorization, viewmodels, utilites, etc.
-* `APPartment.Web.Services.csproj` - chat service, fileUpload service, utilites, etc.
+* `APPartment.UI.csproj` - base controllers (check out `BaseCRUDController.cs`), authorization, view models (DTOs), utilites, etc.
+* `APPartment.Web.Services.csproj` - chat service, file service, utilites, etc.
 * `APPartment.Data.csproj` - facade, server models, sql scripts, etc.
 * `APPartment.ORM.Framework.csproj` - `DaoContext.cs`, sql query provider, lambda expression to sql clause translator, declarations, attributes, etc.
 * `APPartment.Test.csproj` - xUnit tests
