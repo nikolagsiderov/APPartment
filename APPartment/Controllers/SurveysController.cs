@@ -16,11 +16,12 @@ namespace APPartment.Controllers
         {
         }
 
-        public override Expression<Func<Survey, bool>> FilterExpression { get; set; }
-
-        public override Expression<Func<Survey, bool>> FuncToExpression(Func<Survey, bool> f)
+        public override Expression<Func<Survey, bool>> FilterExpression
         {
-            return x => f(x);
+            get
+            {
+                return x => x.HomeId == CurrentHomeId;
+            }
         }
 
         #region Actions
@@ -30,8 +31,6 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Surveys - All";
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = true;
-
-            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId);
 
             return base.Index();
         }
@@ -43,8 +42,6 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && x.IsCompleted == true);
-
             return base.Index();
         }
 
@@ -54,8 +51,6 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Surveys - Pending";
             ViewData["Module"] = "Surveys";
             ViewData["Manage"] = false;
-
-            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && x.IsCompleted == false);
 
             return base.Index();
         }

@@ -254,7 +254,10 @@ namespace APPartment.ORM.Framework.Helpers
             }
             else if (m.Expression.NodeType == ExpressionType.MemberAccess || m.Expression.NodeType == ExpressionType.Constant)
             {
-                var val = Expression.Lambda(m).Compile().DynamicInvoke();
+                var objectMember = Expression.Convert(m, typeof(object));
+                var getterLambda = Expression.Lambda<Func<object>>(objectMember);
+                var getterInvoked = getterLambda.Compile().DynamicInvoke();
+                var val = getterInvoked;
                 var valStr = val.ToString();
                 var isNumeric = int.TryParse(valStr, out _);
 

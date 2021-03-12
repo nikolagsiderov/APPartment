@@ -17,11 +17,12 @@ namespace APPartment.Controllers
         {
         }
 
-        public override Expression<Func<Hygiene, bool>> FilterExpression { get; set; }
-
-        public override Expression<Func<Hygiene, bool>> FuncToExpression(Func<Hygiene, bool> f)
+        public override Expression<Func<Hygiene, bool>> FilterExpression
         {
-            return x => f(x);
+            get
+            {
+                return x => x.HomeId == CurrentHomeId;
+            }
         }
 
         #region Actions
@@ -31,8 +32,6 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Hygiene - All";
             ViewData["Module"] = "Hygiene";
             ViewData["Manage"] = true;
-
-            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId);
 
             return base.Index();
         }
@@ -44,8 +43,6 @@ namespace APPartment.Controllers
             ViewData["Module"] = "Hygiene";
             ViewData["Manage"] = false;
 
-            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && (x.Status == (int)ObjectStatus.Trivial || x.Status == (int)ObjectStatus.Medium));
-
             return base.Index();
         }
 
@@ -55,8 +52,6 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Hygiene - Due Cleaning";
             ViewData["Module"] = "Hygiene";
             ViewData["Manage"] = false;
-
-            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId && (x.Status == (int)ObjectStatus.High || x.Status == (int)ObjectStatus.Critical));
 
             return base.Index();
         }

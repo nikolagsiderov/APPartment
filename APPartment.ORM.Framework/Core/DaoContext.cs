@@ -6,6 +6,7 @@ using System.Reflection;
 using APPartment.ORM.Framework.Declarations;
 using System.Data.SqlClient;
 using APPartment.ORM.Framework.Attributes;
+using System.Collections.Generic;
 
 namespace APPartment.ORM.Framework.Core
 {
@@ -80,6 +81,93 @@ namespace APPartment.ORM.Framework.Core
 
             if (result.ObjectId == 0)
                 result = null;
+
+            return result;
+        }
+
+        public List<T> SelectGetObjects<T>(List<T> result)
+            where T : class, IIdentityBaseObject, new()
+        {
+            var mainTableName = typeof(T).Name;
+            var selectBusinessObjectsSqlQuery = SqlQueryProvider.SelectBusinessObjects(mainTableName);
+            T obj = null;
+            var propertiesCount = typeof(T)
+                .GetProperties()
+                .Where(prop =>
+                Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute))
+                || Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute))
+                || Attribute.IsDefined(prop, typeof(FieldMappingForObjectTablePrimaryKeyAttribute))
+                || Attribute.IsDefined(prop, typeof(FieldMappingForMainTablePrimaryKeyAttribute))).Count();
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(selectBusinessObjectsSqlQuery, conn))
+            {
+                conn.Open();
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    obj = (T)Activator.CreateInstance(typeof(T));
+
+                    for (int i = 0; i < propertiesCount; i++)
+                    {
+                        PropertyInfo property = obj.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
+                        if (null != property && property.CanWrite)
+                        {
+                            property.SetValue(obj, reader.GetValue(i), null);
+                        }
+                    }
+
+                    result.Add(obj);
+                }
+
+                conn.Close();
+            }
+
+            return result;
+        }
+
+        public List<T> SelectGetObjects<T>(List<T> result, Expression<Func<T, bool>> filter)
+            where T : class, IIdentityBaseObject, new()
+        {
+            var mainTableName = typeof(T).Name;
+            var expressionTranslator = new ExpressionToSqlHelper();
+            var sqlClause = expressionTranslator.Translate(filter);
+
+            var selectBusinessObjectsSqlQuery = SqlQueryProvider.SelectBusinessObjectsByClause(mainTableName, sqlClause);
+            T obj = null;
+            var propertiesCount = typeof(T)
+                .GetProperties()
+                .Where(prop =>
+                Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute))
+                || Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute))
+                || Attribute.IsDefined(prop, typeof(FieldMappingForObjectTablePrimaryKeyAttribute))
+                || Attribute.IsDefined(prop, typeof(FieldMappingForMainTablePrimaryKeyAttribute))).Count();
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(selectBusinessObjectsSqlQuery, conn))
+            {
+                conn.Open();
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    obj = (T)Activator.CreateInstance(typeof(T));
+
+                    for (int i = 0; i < propertiesCount; i++)
+                    {
+                        PropertyInfo property = obj.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
+                        if (null != property && property.CanWrite)
+                        {
+                            property.SetValue(obj, reader.GetValue(i), null);
+                        }
+                    }
+
+                    result.Add(obj);
+                }
+
+                conn.Close();
+            }
 
             return result;
         }

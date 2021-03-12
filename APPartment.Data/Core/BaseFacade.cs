@@ -35,14 +35,18 @@ namespace APPartment.Data.Core
         public List<T> GetObjects<T>()
             where T : class, IIdentityBaseObject, new()
         {
-            return new List<T>();
+            var result = new List<T>();
+            result = dao.SelectGetObjects<T>(result);
+            return result;
         }
 
         // TODO: Finish this here...
         public List<T> GetObjects<T>(Expression<Func<T, bool>> filter)
             where T : class, IIdentityBaseObject, new()
         {
-            return new List<T>();
+            var result = new List<T>();
+            result = dao.SelectGetObjects<T>(result, filter);
+            return result;
         }
 
         public void Create<T>(T businessObject)

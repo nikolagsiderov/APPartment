@@ -15,11 +15,12 @@ namespace APPartment.Controllers
         {
         }
 
-        public override Expression<Func<LinkType, bool>> FilterExpression { get; set; }
-
-        public override Expression<Func<LinkType, bool>> FuncToExpression(Func<LinkType, bool> f)
+        public override Expression<Func<LinkType, bool>> FilterExpression
         {
-            return x => f(x);
+            get
+            {
+                return x => x.HomeId == CurrentHomeId;
+            }
         }
 
         [Breadcrumb(SurveysBreadcrumbs.All_Breadcrumb)]
@@ -28,8 +29,6 @@ namespace APPartment.Controllers
             ViewData["GridTitle"] = "Link Types";
             ViewData["Module"] = "Core";
             ViewData["Manage"] = true;
-
-            FilterExpression = FuncToExpression(x => x.HomeId == CurrentHomeId);
 
             return base.Index();
         }

@@ -32,8 +32,7 @@ namespace APPartment.UI.Controllers.Base
             fileUploadService = new FileUploadService();
         }
 
-        public abstract Expression<Func<T, bool>> FilterExpression { get; set; }
-        public abstract Expression<Func<T, bool>> FuncToExpression(Func<T, bool> f);
+        public abstract Expression<Func<T, bool>> FilterExpression { get; }
 
         #region Actions
         [Breadcrumb("Base")]
