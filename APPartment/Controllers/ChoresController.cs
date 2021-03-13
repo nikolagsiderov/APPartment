@@ -70,7 +70,7 @@ namespace APPartment.Controllers
             var userToAssignUserId = userToAssign.Id;
 
             model.AssignedToUserId = userToAssignUserId;
-            baseFacade.Update(model);
+            baseFacade.Update(model, (long)CurrentUserId);
 
             return RedirectToAction(nameof(Index));
         }

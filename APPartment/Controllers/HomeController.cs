@@ -36,9 +36,7 @@ namespace APPartment.Controllers
         public IActionResult Index()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
-            {
                 return RedirectToAction("Login", "Account");
-            }
 
             var currentUser = baseFacade.GetObject<User>((long)CurrentUserId);
 
@@ -52,15 +50,11 @@ namespace APPartment.Controllers
                 BaseObjects = displayObjects
             };
 
-            if (baseFacade.GetObjects<HomeStatus>(x => x.HomeId == (long)CurrentHomeId).Any())
-            {
+            if (baseFacade.Any<HomeStatus>(x => x.HomeId == (long)CurrentHomeId))
                 homePageDisplayModel.HomeStatus = baseFacade.GetObject<HomeStatus>(x => x.HomeId == (long)CurrentHomeId);
-            }
 
-            if (baseFacade.GetObjects<HomeSetting>(x => x.HomeId == (long)CurrentHomeId).Any())
-            {
+            if (baseFacade.Any<HomeSetting>(x => x.HomeId == (long)CurrentHomeId))
                 homePageDisplayModel.RentDueDate = GetRentDueDate();
-            }
 
             return View(homePageDisplayModel);
         }
@@ -68,9 +62,7 @@ namespace APPartment.Controllers
         public IActionResult EnterCreateHomeOptions()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
-            {
                 return RedirectToAction("Index", "Home");
-            }
 
             return View();
         }
@@ -78,9 +70,7 @@ namespace APPartment.Controllers
         public IActionResult Register()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
-            {
                 return RedirectToAction("Index", "Home");
-            }
 
             return View();
         }
@@ -90,15 +80,15 @@ namespace APPartment.Controllers
         {
             if (ModelState.IsValid)
             {
-                var homeNameAlreadyExists = baseFacade.GetObject<Home>(x => x.Name == home.Name);
+                var homeExists = baseFacade.Any<Home>(x => x.Name == home.Name);
 
-                if (homeNameAlreadyExists != null)
+                if (homeExists)
                 {
                     ModelState.AddModelError("Name", "This home name is already taken.");
                     return View(home);
                 }
 
-                baseFacade.Create(home);
+                baseFacade.Create(home, (long)CurrentUserId);
                 home = baseFacade.GetObject<Home>(x => x.Name == home.Name);
 
                 ModelState.Clear();
@@ -117,9 +107,7 @@ namespace APPartment.Controllers
         public IActionResult Login()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
-            {
                 return RedirectToAction("Index", "Home");
-            }
 
             return View();
         }
@@ -139,9 +127,7 @@ namespace APPartment.Controllers
                 return RedirectToAction("Index", "Home");
             }
             else
-            {
                 ModelState.AddModelError("", "Home name or password is wrong.");
-            }
 
             return View();
         }
@@ -151,9 +137,7 @@ namespace APPartment.Controllers
         public IActionResult Settings()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
-            {
                 return RedirectToAction("Login", "Home");
-            }
 
             var existingHomeSettings = baseFacade.GetObject<HomeSetting>(x => x.HomeId == (long)CurrentHomeId);
 
@@ -164,9 +148,7 @@ namespace APPartment.Controllers
             }
 
             if (existingHomeSettings != null)
-            {
                 return View(existingHomeSettings);
-            }
 
             ViewData["HomeName"] = CurrentHomeName;
 
@@ -183,18 +165,18 @@ namespace APPartment.Controllers
             {
                 homeModel.Name = settings.HomeName;
 
-                baseFacade.Update(homeModel);
+                baseFacade.Update(homeModel, (long)CurrentUserId);
                 HttpContext.Session.SetString("HomeName", homeModel.Name.ToString());
             }
 
             if (settings.Id == 0)
             {
                 settings.HomeId = (long)CurrentHomeId;
-                baseFacade.Create(settings);
+                baseFacade.Create(settings, (long)CurrentUserId);
             }
             else
             {
-                baseFacade.Update(settings);
+                baseFacade.Update(settings, (long)CurrentUserId);
             }
 
             return RedirectToAction(nameof(Index));
@@ -205,9 +187,7 @@ namespace APPartment.Controllers
         public IActionResult About()
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
-            {
                 return RedirectToAction("Login", "Account");
-            }
 
             return View();
         }
@@ -218,7 +198,7 @@ namespace APPartment.Controllers
             var adjustedMessage = string.Join(" <br /> ", messageText.Split('\n').ToList());
             var message = new Message() { Details = adjustedMessage, CreatedById = (long)CurrentUserId, HomeId = (long)CurrentHomeId, CreatedDate = DateTime.Now };
 
-            baseFacade.Create(message);
+            baseFacade.Create(message, (long)CurrentUserId);
 
             return Ok();
         }
@@ -227,7 +207,7 @@ namespace APPartment.Controllers
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
             {
-                if (baseFacade.GetObjects<HomeStatus>(x => x.HomeId == (long)CurrentHomeId).Any())
+                if (baseFacade.Any<HomeStatus>(x => x.HomeId == (long)CurrentHomeId))
                 {
                     var currentHomeStatus = baseFacade.GetObject<HomeStatus>(x => x.HomeId == (long)CurrentHomeId);
                     var user = baseFacade.GetObject<User>(currentHomeStatus.UserId);
@@ -252,11 +232,9 @@ namespace APPartment.Controllers
                 var homeStatusDetails = string.Empty;
 
                 if (!string.IsNullOrEmpty(homeStatusDetailsString))
-                {
                     homeStatusDetails = homeStatusDetailsString;
-                }
 
-                if (baseFacade.GetObjects<HomeStatus>(x => x.HomeId == (long)CurrentHomeId).Any())
+                if (baseFacade.Any<HomeStatus>(x => x.HomeId == (long)CurrentHomeId))
                 {
                     var currentHomeStatus = baseFacade.GetObject<HomeStatus>(x => x.HomeId == (long)CurrentHomeId);
 
@@ -264,7 +242,7 @@ namespace APPartment.Controllers
                     currentHomeStatus.Details = homeStatusDetails;
                     currentHomeStatus.UserId = (long)CurrentUserId;
 
-                    baseFacade.Update(currentHomeStatus);
+                    baseFacade.Update(currentHomeStatus, (long)CurrentUserId);
                 }
                 else
                 {
@@ -276,7 +254,7 @@ namespace APPartment.Controllers
                         HomeId = (long)CurrentHomeId
                     };
 
-                    baseFacade.Create(homeStatus);
+                    baseFacade.Create(homeStatus, (long)CurrentUserId);
                 }
             }
 
@@ -359,9 +337,11 @@ namespace APPartment.Controllers
 
         private List<string> GetMessages()
         {
-            var messages = htmlRenderHelper.BuildMessagesForChat(baseFacade.GetObjects<Message>(), (long)CurrentHomeId);
+            // TODO: x.CreatedById != 0 should be handled as case when user is deleted
+            var messages = baseFacade.GetObjects<Message>(x => x.HomeId == (long)CurrentHomeId && x.CreatedById != 0);
+            var messagesResult = htmlRenderHelper.BuildMessagesForChat(messages, (long)CurrentHomeId);
 
-            return messages;
+            return messagesResult;
         }
         #endregion
 
@@ -373,12 +353,10 @@ namespace APPartment.Controllers
                 UserId = (long)CurrentUserId
             };
 
-            var userIsAlreadyApartOfCurrentHome = baseFacade.GetObject<HomeUser>(x => x.UserId == homeUser.UserId && x.HomeId == homeUser.HomeId);
+            var userIsAlreadyApartOfCurrentHome = baseFacade.Any<HomeUser>(x => x.UserId == homeUser.UserId && x.HomeId == homeUser.HomeId);
 
-            if (userIsAlreadyApartOfCurrentHome == null)
-            {
-                baseFacade.Create(homeUser);
-            }
+            if (!userIsAlreadyApartOfCurrentHome)
+                baseFacade.Create(homeUser, (long)CurrentUserId);
         }
     }
 }

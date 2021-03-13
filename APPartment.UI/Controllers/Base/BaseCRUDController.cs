@@ -46,16 +46,12 @@ namespace APPartment.UI.Controllers.Base
         public IActionResult Details(long? id)
         {
             if (id == null)
-            {
                 return new Error404NotFoundViewResult();
-            }
 
             var model = baseFacade.GetObject<T>((long)id);
 
             if (model == null)
-            {
                 return new Error404NotFoundViewResult();
-            }
 
             model = GetClingons(model);
 
@@ -69,7 +65,7 @@ namespace APPartment.UI.Controllers.Base
             if (ModelState.IsValid)
             {
                 model.HomeId = (long)CurrentHomeId;
-                baseFacade.Create(model);
+                baseFacade.Create(model, (long)CurrentUserId);
             }
 
             return RedirectToAction(nameof(Index));
@@ -79,16 +75,12 @@ namespace APPartment.UI.Controllers.Base
         public IActionResult Edit(long? id)
         {
             if (id == null)
-            {
                 return new Error404NotFoundViewResult();
-            }
 
             var model = baseFacade.GetObject<T>((long)id);
 
             if (model == null)
-            {
                 return new Error404NotFoundViewResult();
-            }
 
             model = GetClingons(model);
 
@@ -101,15 +93,13 @@ namespace APPartment.UI.Controllers.Base
         public IActionResult Edit(long id, T model)
         {
             if (id != model.Id)
-            {
                 return new Error404NotFoundViewResult();
-            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    baseFacade.Update(model);
+                    baseFacade.Update(model, (long)CurrentUserId);
                 }
                 catch (Exception)
                 {
@@ -125,16 +115,12 @@ namespace APPartment.UI.Controllers.Base
         public IActionResult Delete(long? id)
         {
             if (id == null)
-            {
                 return new Error404NotFoundViewResult();
-            }
 
             var model = baseFacade.GetObject<T>((long)id);
 
             if (model == null)
-            {
                 return new Error404NotFoundViewResult();
-            }
 
             baseFacade.Delete(model);
 
@@ -154,9 +140,11 @@ namespace APPartment.UI.Controllers.Base
         #region Comments
         private List<string> GetComments(long targetObjectId)
         {
-            var comments = htmlRenderHelper.BuildComments(baseFacade.GetObjects<Comment>(), targetObjectId);
+            // TODO: x.CreatedById != 0 should be handled as case when user is deleted
+            var comment = baseFacade.GetObjects<Comment>(x => x.TargetObjectId == targetObjectId && x.CreatedById != 0);
+            var commentsResult = htmlRenderHelper.BuildComments(comment, targetObjectId);
 
-            return comments;
+            return commentsResult;
         }
 
         [HttpPost]
@@ -168,7 +156,7 @@ namespace APPartment.UI.Controllers.Base
                 TargetObjectId = targetId,
             };
 
-            baseFacade.Create(comment);
+            baseFacade.Create(comment, (long)CurrentUserId);
 
             var result = htmlRenderHelper.BuildPostComment(comment);
             return Json(result);
@@ -191,9 +179,7 @@ namespace APPartment.UI.Controllers.Base
 
                     fName = file.FileName;
                     if (file != null && file.Length > 0)
-                    {
-                        fileUploadService.UploadImage(file, targetObjectId);
-                    }
+                        fileUploadService.UploadImage(file, targetObjectId, (long)CurrentUserId);
                 }
             }
             catch (Exception ex)
@@ -202,13 +188,9 @@ namespace APPartment.UI.Controllers.Base
             }
 
             if (isSavedSuccessfully)
-            {
                 return Json(new { Message = fName });
-            }
             else
-            {
                 return Json(new { Message = "Error in saving file" });
-            }
         }
 
         public ActionResult DeleteImage(long id)
@@ -216,9 +198,7 @@ namespace APPartment.UI.Controllers.Base
             var image = baseFacade.GetObject<Image>(id);
 
             if (image == null)
-            {
                 return Json(new { success = false, message = "404: Image does not exist." });
-            }
             else
             {
                 if (Directory.Exists(ImagesPath))
@@ -238,9 +218,7 @@ namespace APPartment.UI.Controllers.Base
                     return Json(new { success = true, message = "Image deleted successfully." });
                 }
                 else
-                {
                     return Json(new { success = false, message = "404: Images path does not exist." });
-                }
             }
         }
 

@@ -12,8 +12,11 @@ namespace APPartment.ORM.Framework.Core
 {
     public class DaoContext
     {
+        private ExpressionToSqlHelper expressionTranslator;
+
         public DaoContext()
         {
+            expressionTranslator = new ExpressionToSqlHelper();
         }
 
         public T SelectGetObject<T>(T result, long id)
@@ -50,7 +53,6 @@ namespace APPartment.ORM.Framework.Core
             where T : class, IIdentityBaseObject, new()
         {
             var mainTableName = typeof(T).Name;
-            var expressionTranslator = new ExpressionToSqlHelper();
             var sqlClause = expressionTranslator.Translate(filter);
 
             var selectBusinessObjectSqlQuery = SqlQueryProvider.SelectBusinessObjectByClause(mainTableName, sqlClause);
@@ -131,7 +133,6 @@ namespace APPartment.ORM.Framework.Core
             where T : class, IIdentityBaseObject, new()
         {
             var mainTableName = typeof(T).Name;
-            var expressionTranslator = new ExpressionToSqlHelper();
             var sqlClause = expressionTranslator.Translate(filter);
 
             var selectBusinessObjectsSqlQuery = SqlQueryProvider.SelectBusinessObjectsByClause(mainTableName, sqlClause);
@@ -172,25 +173,21 @@ namespace APPartment.ORM.Framework.Core
             return result;
         }
 
-        public long SaveCreateBaseObject<T>(T businessObject)
+        public long SaveCreateBaseObject<T>(T businessObject, long userId)
             where T : class, IIdentityBaseObject
         {
             object objectId = 0;
             businessObject.ObjectTypeId = ObjectTypeDeterminator.GetObjectTypeIdByName(businessObject.GetType().Name);
-            businessObject.CreatedById = 0;
+            businessObject.CreatedById = userId;
             businessObject.CreatedDate = DateTime.Now;
-            businessObject.ModifiedById = 0;
+            businessObject.ModifiedById = userId;
             businessObject.ModifiedDate = DateTime.Now;
 
             if (string.IsNullOrEmpty(businessObject.Name))
-            {
                 businessObject.Name = "none";
-            }
 
             if (string.IsNullOrEmpty(businessObject.Details))
-            {
                 businessObject.Details = "none";
-            }
 
             var propsForMainTable = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute)));
@@ -241,36 +238,26 @@ namespace APPartment.ORM.Framework.Core
             }
         }
 
-        public void SaveUpdateBaseObject<T>(T businessObject)
+        public void SaveUpdateBaseObject<T>(T businessObject, long userId)
             where T : class, IIdentityBaseObject
         {
-            businessObject.ModifiedById = 0;
+            businessObject.ModifiedById = userId;
             businessObject.ModifiedDate = DateTime.Now;
 
             if (businessObject.ObjectTypeId == null || businessObject.ObjectTypeId == 0)
-            {
                 businessObject.ObjectTypeId = ObjectTypeDeterminator.GetObjectTypeIdByName(businessObject.GetType().Name);
-            }
 
             if (string.IsNullOrEmpty(businessObject.Name))
-            {
                 businessObject.Name = "none";
-            }
 
             if (string.IsNullOrEmpty(businessObject.Details))
-            {
                 businessObject.Details = "none";
-            }
 
             if (businessObject.CreatedById == null || businessObject.CreatedById == 0)
-            {
-                businessObject.CreatedById = 0;
-            }
+                businessObject.CreatedById = userId;
 
             if (businessObject.CreatedDate == null)
-            {
                 businessObject.CreatedDate = DateTime.Now;
-            }
 
             var propsForMainTable = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute)));
@@ -331,6 +318,64 @@ namespace APPartment.ORM.Framework.Core
                 cmd.ExecuteNonQuery();
                 conn.Close();
             }
+        }
+
+        public bool AnyBusinessObjects<T>(bool result)
+        {
+            var mainTableName = typeof(T).Name;
+            var selectCountBusinessObjectsSqlQuery = SqlQueryProvider.AnyBusinessObjects(mainTableName);
+            object count = null;
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(selectCountBusinessObjectsSqlQuery, conn))
+            {
+                conn.Open();
+                count = cmd.ExecuteScalar();
+                conn.Close();
+            }
+
+            if (count != null)
+            {
+                if ((int)count > 0)
+                {
+                    result = true;
+                    return result;
+                }
+                else
+                    return result;
+            }
+
+            return result;
+        }
+
+        public bool AnyBusinessObjects<T>(bool result, Expression<Func<T, bool>> filter)
+        {
+            var mainTableName = typeof(T).Name;
+            var sqlClause = expressionTranslator.Translate(filter);
+
+            var selectCountBusinessObjectsSqlQuery = SqlQueryProvider.AnyBusinessObjects(mainTableName, sqlClause);
+            object count = null;
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(selectCountBusinessObjectsSqlQuery, conn))
+            {
+                conn.Open();
+                count = cmd.ExecuteScalar();
+                conn.Close();
+            }
+
+            if (count != null)
+            {
+                if ((int)count > 0)
+                {
+                    result = true;
+                    return result;
+                }
+                else
+                    return result;
+            }
+
+            return result;
         }
     }
 }

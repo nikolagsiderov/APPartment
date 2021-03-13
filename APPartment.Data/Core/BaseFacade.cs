@@ -31,7 +31,6 @@ namespace APPartment.Data.Core
             return result;
         }
 
-        // TODO: Finish this here...
         public List<T> GetObjects<T>()
             where T : class, IIdentityBaseObject, new()
         {
@@ -40,7 +39,6 @@ namespace APPartment.Data.Core
             return result;
         }
 
-        // TODO: Finish this here...
         public List<T> GetObjects<T>(Expression<Func<T, bool>> filter)
             where T : class, IIdentityBaseObject, new()
         {
@@ -49,17 +47,18 @@ namespace APPartment.Data.Core
             return result;
         }
 
-        public void Create<T>(T businessObject)
+        public void Create<T>(T businessObject, long userId)
             where T : class, IIdentityBaseObject
         {
-            var objectId = dao.SaveCreateBaseObject(businessObject);
+
+            var objectId = dao.SaveCreateBaseObject(businessObject, userId);
             dao.SaveCreateBusinessObject(businessObject, objectId);
         }
 
-        public void Update<T>(T businessObject)
+        public void Update<T>(T businessObject, long userId)
             where T : class, IIdentityBaseObject
         {
-            dao.SaveUpdateBaseObject(businessObject);
+            dao.SaveUpdateBaseObject(businessObject, userId);
             dao.SaveUpdateBusinessObject(businessObject);
         }
 
@@ -67,6 +66,18 @@ namespace APPartment.Data.Core
             where T : class, IIdentityBaseObject
         {
             dao.DeleteBusinessAndBaseObject(businessObject);
+        }
+
+        public bool Any<T>()
+        {
+            var result = false;
+            return dao.AnyBusinessObjects<T>(result);
+        }
+
+        public bool Any<T>(Expression<Func<T, bool>> filter)
+        {
+            var result = false;
+            return dao.AnyBusinessObjects<T>(result, filter);
         }
     }
 }

@@ -21,9 +21,7 @@ namespace APPartment.Controllers
         public IActionResult Register()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserId")))
-            {
                 return RedirectToAction("EnterCreateHomeOptions", "Home");
-            }
 
             return View();
         }
@@ -33,14 +31,14 @@ namespace APPartment.Controllers
         {            
             if (ModelState.IsValid)
             {
-                var alreadyExistingUser = baseFacade.GetObject<User>(x => x.Name == user.Name);
-                if (alreadyExistingUser != null)
+                var userExists = baseFacade.Any<User>(x => x.Name == user.Name);
+                if (userExists)
                 {
-                    ModelState.AddModelError("Username", "This username is already taken.");
+                    ModelState.AddModelError("Name", "This username is already taken.");
                     return View(user); 
                 }
 
-                baseFacade.Create(user);
+                baseFacade.Create(user, 0);
                 user = baseFacade.GetObject<User>(x => x.Name == user.Name);
 
                 ModelState.Clear();
@@ -57,9 +55,7 @@ namespace APPartment.Controllers
         public IActionResult Login()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserId")))
-            {
                 return RedirectToAction("EnterCreateHomeOptions", "Home");
-            }
 
             return View();
         }
@@ -67,12 +63,12 @@ namespace APPartment.Controllers
         [HttpPost]
         public IActionResult Login(User user)
         {
-            var existingUserWithPassedCredentials = baseFacade.GetObject<User>(x => x.Name == user.Name && x.Password == user.Password);
+            var userWithPassedCredsExists = baseFacade.GetObject<User>(x => x.Name == user.Name && x.Password == user.Password);
             
-            if (existingUserWithPassedCredentials != null)
+            if (userWithPassedCredsExists != null)
             {
-                HttpContext.Session.SetString("UserId", existingUserWithPassedCredentials.Id.ToString());
-                HttpContext.Session.SetString("Username", existingUserWithPassedCredentials.Name.ToString());
+                HttpContext.Session.SetString("UserId", userWithPassedCredsExists.Id.ToString());
+                HttpContext.Session.SetString("Username", userWithPassedCredsExists.Name.ToString());
 
                 return RedirectToAction("EnterCreateHomeOptions", "Home");
             }
@@ -94,13 +90,9 @@ namespace APPartment.Controllers
         public IActionResult LoggedIn()
         {
             if (HttpContext.Session.GetString("UserId") != null)
-            {
                 return View();
-            }
             else
-            {
                 return RedirectToAction("Login");
-            }
         }
         #endregion
     }

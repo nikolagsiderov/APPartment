@@ -17,9 +17,9 @@ namespace APPartment.Web.Services.MetaObjects
             this.baseFacade = new BaseFacade();
         }
 
-        public void UploadImage(IFormFile file, long targetObjectId)
+        public void UploadImage(IFormFile file, long targetObjectId, long currentUserId)
         {
-            var imageName = SaveImageToDB(file, targetObjectId);
+            var imageName = SaveImageToDB(file, targetObjectId, currentUserId);
             string pathString = "wwwroot\\BaseObject_Images";
             bool isExists = System.IO.Directory.Exists(pathString);
 
@@ -34,7 +34,7 @@ namespace APPartment.Web.Services.MetaObjects
             }
         }
 
-        private string SaveImageToDB(IFormFile file, long targetObjectId)
+        private string SaveImageToDB(IFormFile file, long targetObjectId, long currentUserId)
         {
             var image = new Image()
             {
@@ -44,11 +44,11 @@ namespace APPartment.Web.Services.MetaObjects
                 TargetObjectId = targetObjectId,
             };
 
-            baseFacade.Create(image);
+            baseFacade.Create(image, currentUserId);
 
             image.Name = $"{image.Id}_{targetObjectId}_{file.FileName}";
 
-            baseFacade.Update(image);
+            baseFacade.Update(image, currentUserId);
 
             return image.Name;
         }

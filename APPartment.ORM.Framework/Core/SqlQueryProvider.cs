@@ -51,5 +51,15 @@
         {
             return string.Format("DELETE FROM [dbo].[Object] WHERE ObjectId = {0}", objectId);
         }
+
+        public static string AnyBusinessObjects(string mainTableName)
+        {
+            return string.Format("SELECT COUNT(*) FROM [dbo].[{0}]", mainTableName);
+        }
+
+        public static string AnyBusinessObjects(string mainTableName, string sqlClause)
+        {
+            return string.Format("SELECT COUNT(*) FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectId] = [dbo].[Object].[ObjectId] WHERE {1}", mainTableName, sqlClause);
+        }
     }
 }
