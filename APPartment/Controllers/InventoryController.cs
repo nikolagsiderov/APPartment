@@ -58,7 +58,7 @@ namespace APPartment.Controllers
 
         public JsonResult GetInventoryCriticalCount()
         {
-            var inventoryCriticalCount = baseFacade.GetObjects<Inventory>(x => x.HomeId == (long)CurrentHomeId).Count();
+            var inventoryCriticalCount = baseFacade.Count<Inventory>(x => x.HomeId == (long)CurrentHomeId);
             return Json(inventoryCriticalCount);
         }
         #endregion

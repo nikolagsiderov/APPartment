@@ -58,7 +58,7 @@ namespace APPartment.Controllers
 
         public JsonResult GetIssuesCriticalCount()
         {
-            var issuesCriticalCount = baseFacade.GetObjects<Issue>(x => x.HomeId == (long)CurrentHomeId).Count();
+            var issuesCriticalCount = baseFacade.Count<Issue>(x => x.HomeId == (long)CurrentHomeId);
             return Json(issuesCriticalCount);
         }
         #endregion

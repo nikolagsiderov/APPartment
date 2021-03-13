@@ -79,5 +79,17 @@ namespace APPartment.Data.Core
             var result = false;
             return dao.AnyBusinessObjects<T>(result, filter);
         }
+
+        public int Count<T>()
+        {
+            var result = 0;
+            return dao.CountBusinessObjects<T>(result);
+        }
+
+        public int Count<T>(Expression<Func<T, bool>> filter)
+        {
+            var result = 0;
+            return dao.CountBusinessObjects<T>(result, filter);
+        }
     }
 }

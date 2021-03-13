@@ -77,7 +77,7 @@ namespace APPartment.Controllers
 
         public JsonResult GetMyChoresCount()
         {
-            var myChoresCount = baseFacade.GetObjects<Chore>(x => x.HomeId == (long)CurrentHomeId && x.AssignedToUserId == (long)CurrentUserId).Count();
+            var myChoresCount = baseFacade.Count<Chore>(x => x.HomeId == (long)CurrentHomeId && x.AssignedToUserId == (long)CurrentUserId);
             return Json(myChoresCount);
         }
         #endregion

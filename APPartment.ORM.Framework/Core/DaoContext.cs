@@ -323,7 +323,7 @@ namespace APPartment.ORM.Framework.Core
         public bool AnyBusinessObjects<T>(bool result)
         {
             var mainTableName = typeof(T).Name;
-            var selectCountBusinessObjectsSqlQuery = SqlQueryProvider.AnyBusinessObjects(mainTableName);
+            var selectCountBusinessObjectsSqlQuery = SqlQueryProvider.AnyCountBusinessObjects(mainTableName);
             object count = null;
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
@@ -353,7 +353,7 @@ namespace APPartment.ORM.Framework.Core
             var mainTableName = typeof(T).Name;
             var sqlClause = expressionTranslator.Translate(filter);
 
-            var selectCountBusinessObjectsSqlQuery = SqlQueryProvider.AnyBusinessObjects(mainTableName, sqlClause);
+            var selectCountBusinessObjectsSqlQuery = SqlQueryProvider.AnyCountBusinessObjects(mainTableName, sqlClause);
             object count = null;
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
@@ -369,6 +369,64 @@ namespace APPartment.ORM.Framework.Core
                 if ((int)count > 0)
                 {
                     result = true;
+                    return result;
+                }
+                else
+                    return result;
+            }
+
+            return result;
+        }
+
+        public int CountBusinessObjects<T>(int result)
+        {
+            var mainTableName = typeof(T).Name;
+            var selectCountBusinessObjectsSqlQuery = SqlQueryProvider.AnyCountBusinessObjects(mainTableName);
+            object count = null;
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(selectCountBusinessObjectsSqlQuery, conn))
+            {
+                conn.Open();
+                count = cmd.ExecuteScalar();
+                conn.Close();
+            }
+
+            if (count != null)
+            {
+                if ((int)count > 0)
+                {
+                    result = (int)count;
+                    return result;
+                }
+                else
+                    return result;
+            }
+
+            return result;
+        }
+
+        public int CountBusinessObjects<T>(int result, Expression<Func<T, bool>> filter)
+        {
+            var mainTableName = typeof(T).Name;
+            var sqlClause = expressionTranslator.Translate(filter);
+
+            var selectCountBusinessObjectsSqlQuery = SqlQueryProvider.AnyCountBusinessObjects(mainTableName, sqlClause);
+            object count = null;
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(selectCountBusinessObjectsSqlQuery, conn))
+            {
+                conn.Open();
+                count = cmd.ExecuteScalar();
+                conn.Close();
+            }
+
+            if (count != null)
+            {
+                if ((int)count > 0)
+                {
+                    result = (int)count;
                     return result;
                 }
                 else

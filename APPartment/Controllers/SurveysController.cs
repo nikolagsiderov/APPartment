@@ -57,7 +57,7 @@ namespace APPartment.Controllers
 
         public JsonResult GetPendingSurveysCount()
         {
-            var pendingSurveysCount = baseFacade.GetObjects<Survey>(x => x.HomeId == (long)CurrentHomeId).Count();
+            var pendingSurveysCount = baseFacade.Count<Survey>(x => x.HomeId == (long)CurrentHomeId);
             return Json(pendingSurveysCount);
         }
         #endregion

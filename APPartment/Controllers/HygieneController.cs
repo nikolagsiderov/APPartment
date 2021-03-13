@@ -58,7 +58,7 @@ namespace APPartment.Controllers
 
         public JsonResult GetHygieneCriticalCount()
         {
-            var hygieneCriticalCount = baseFacade.GetObjects<Hygiene>(x => x.HomeId == (long)CurrentUserId).Count();
+            var hygieneCriticalCount = baseFacade.Count<Hygiene>(x => x.HomeId == (long)CurrentUserId);
 
             return Json(hygieneCriticalCount);
         }
