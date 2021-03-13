@@ -15,7 +15,6 @@ namespace APPartment.Data.Server.Models.Core
 
         [Compare("Password", ErrorMessage = "Please confirm your password.")]
         [DataType(DataType.Password)]
-        [NotMapped]
         public string ConfirmPassword { get; set; }
     }
 }
