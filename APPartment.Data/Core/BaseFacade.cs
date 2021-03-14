@@ -47,10 +47,41 @@ namespace APPartment.Data.Core
             return result;
         }
 
+        public T GetLookupObject<T>(long id)
+            where T : class, ILookupObject, new()
+        {
+            var result = new T();
+            result = dao.SelectGetLookupObject<T>(result, id);
+            return result;
+        }
+
+        public T GetLookupObject<T>(Expression<Func<T, bool>> filter)
+            where T : class, ILookupObject, new()
+        {
+            var result = new T();
+            result = dao.SelectGetLookupObject<T>(result, filter);
+            return result;
+        }
+
+        public List<T> GetLookupObjects<T>()
+            where T : class, ILookupObject, new()
+        {
+            var result = new List<T>();
+            result = dao.SelectGetLookupObjects<T>(result);
+            return result;
+        }
+
+        public List<T> GetLookupObjects<T>(Expression<Func<T, bool>> filter)
+            where T : class, ILookupObject, new()
+        {
+            var result = new List<T>();
+            result = dao.SelectGetLookupObjects<T>(result, filter);
+            return result;
+        }
+
         public void Create<T>(T businessObject, long userId)
             where T : class, IIdentityBaseObject
         {
-
             var objectId = dao.SaveCreateBaseObject(businessObject, userId);
             dao.SaveCreateBusinessObject(businessObject, objectId);
         }

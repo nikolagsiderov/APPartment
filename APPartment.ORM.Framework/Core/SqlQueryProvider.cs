@@ -22,6 +22,26 @@
             return string.Format("SELECT * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectId] = [dbo].[Object].[ObjectId] WHERE {1}", mainTableName, sqlClause);
         }
 
+        public static string SelectLookupObjectById(string mainTableName, string id)
+        {
+            return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] WHERE [Id] = {1}", mainTableName, id);
+        }
+
+        public static string SelectLookupObjectByClause(string mainTableName, string sqlClause)
+        {
+            return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] WHERE {1}", mainTableName, sqlClause);
+        }
+
+        public static string SelectLookupObjects(string mainTableName)
+        {
+            return string.Format("SELECT * FROM [dbo].[{0}]", mainTableName);
+        }
+
+        public static string SelectLookupObjectsByClause(string mainTableName, string sqlClause)
+        {
+            return string.Format("SELECT * FROM [dbo].[{0}] WHERE {1}", mainTableName, sqlClause);
+        }
+
         public static string InsertBaseObject(string propsNamesForMainTable, string propValuesForMainTable)
         {
             return string.Format("INSERT INTO [dbo].[Object] ({0}) VALUES ({1})" + "SELECT SCOPE_IDENTITY()", propsNamesForMainTable, propValuesForMainTable);

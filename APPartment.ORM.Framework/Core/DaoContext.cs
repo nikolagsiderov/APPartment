@@ -173,6 +173,148 @@ namespace APPartment.ORM.Framework.Core
             return result;
         }
 
+        public T SelectGetLookupObject<T>(T result, long id)
+            where T : class, ILookupObject, new()
+        {
+            var mainTableName = typeof(T).Name;
+            var selectLookupObjectSqlQuery = SqlQueryProvider.SelectLookupObjectById(mainTableName, id.ToString());
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(selectLookupObjectSqlQuery, conn))
+            {
+                conn.Open();
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        PropertyInfo property = result.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
+                        if (null != property && property.CanWrite)
+                        {
+                            property.SetValue(result, reader.GetValue(i), null);
+                        }
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return result;
+        }
+
+        public T SelectGetLookupObject<T>(T result, Expression<Func<T, bool>> filter)
+            where T : class, ILookupObject, new()
+        {
+            var mainTableName = typeof(T).Name;
+            var sqlClause = expressionTranslator.Translate(filter);
+
+            var selectLookupObjectSqlQuery = SqlQueryProvider.SelectLookupObjectByClause(mainTableName, sqlClause);
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(selectLookupObjectSqlQuery, conn))
+            {
+                conn.Open();
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        PropertyInfo property = result.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
+                        if (null != property && property.CanWrite)
+                        {
+                            property.SetValue(result, reader.GetValue(i), null);
+                        }
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return result;
+        }
+
+        public List<T> SelectGetLookupObjects<T>(List<T> result)
+            where T : class, ILookupObject, new()
+        {
+            var mainTableName = typeof(T).Name;
+            var selectLookupObjectsSqlQuery = SqlQueryProvider.SelectLookupObjects(mainTableName);
+            T obj = null;
+            var propertiesCount = typeof(T)
+                .GetProperties()
+                .Where(prop =>
+                Attribute.IsDefined(prop, typeof(FieldMappingForLookupTableAttribute))).Count();
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(selectLookupObjectsSqlQuery, conn))
+            {
+                conn.Open();
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    obj = (T)Activator.CreateInstance(typeof(T));
+
+                    for (int i = 0; i < propertiesCount; i++)
+                    {
+                        PropertyInfo property = obj.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
+                        if (null != property && property.CanWrite)
+                        {
+                            property.SetValue(obj, reader.GetValue(i), null);
+                        }
+                    }
+
+                    result.Add(obj);
+                }
+
+                conn.Close();
+            }
+
+            return result;
+        }
+
+        public List<T> SelectGetLookupObjects<T>(List<T> result, Expression<Func<T, bool>> filter)
+            where T : class, ILookupObject, new()
+        {
+            var mainTableName = typeof(T).Name;
+            var sqlClause = expressionTranslator.Translate(filter);
+
+            var selectLookupObjectsSqlQuery = SqlQueryProvider.SelectLookupObjectsByClause(mainTableName, sqlClause);
+            T obj = null;
+            var propertiesCount = typeof(T)
+                .GetProperties()
+                .Where(prop =>
+                Attribute.IsDefined(prop, typeof(FieldMappingForLookupTableAttribute))).Count();
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(selectLookupObjectsSqlQuery, conn))
+            {
+                conn.Open();
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    obj = (T)Activator.CreateInstance(typeof(T));
+
+                    for (int i = 0; i < propertiesCount; i++)
+                    {
+                        PropertyInfo property = obj.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
+                        if (null != property && property.CanWrite)
+                        {
+                            property.SetValue(obj, reader.GetValue(i), null);
+                        }
+                    }
+
+                    result.Add(obj);
+                }
+
+                conn.Close();
+            }
+
+            return result;
+        }
+
         public long SaveCreateBaseObject<T>(T businessObject, long userId)
             where T : class, IIdentityBaseObject
         {

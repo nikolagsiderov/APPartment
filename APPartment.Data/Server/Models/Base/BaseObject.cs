@@ -3,7 +3,6 @@ using APPartment.ORM.Framework.Attributes;
 using APPartment.ORM.Framework.Declarations;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Data.Server.Models.Base
 {
