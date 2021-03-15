@@ -263,8 +263,16 @@ namespace APPartment.ORM.Framework.Helpers
 
                 if (isNumeric)
                 {
-                    var value = int.Parse(valStr);
-                    sb.Append(value);
+                    if (objectMember.Operand.Type.Equals(typeof(String)))
+                    {
+                        var value = $"'{valStr}'";
+                        sb.Append(value);
+                    }
+                    else
+                    {
+                        var value = int.Parse(valStr);
+                        sb.Append(value);
+                    }
                 }
                 else
                 {
