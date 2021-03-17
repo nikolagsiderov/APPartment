@@ -334,9 +334,23 @@ namespace APPartment.ORM.Framework.Core
             var propsForMainTable = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute)));
             var propsNamesForMainTable = string.Join(", ", propsForMainTable.Select(x => $"[{x.Name}]"));
-            var propValuesForMainTable = string.Join(", ", propsForMainTable
-                .Select(x => x.PropertyType == typeof(string) || x.PropertyType == typeof(DateTime) || x.PropertyType == typeof(DateTime?) ?
-            $"'{x.GetValue(businessObject).ToString()}'" : $"{x.GetValue(businessObject).ToString()}"));
+            var propValuesForMainTableList = new List<string>();
+            var propValuesForMainTable = string.Empty;
+
+            foreach (var prop in propsForMainTable)
+            {
+                if (prop.PropertyType == typeof(string))
+                    propValuesForMainTableList.Add($"'{prop.GetValue(businessObject).ToString()}'");
+                else if (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
+                {
+                    var datetimeVal = (DateTime)prop.GetValue(businessObject);
+                    propValuesForMainTableList.Add($"'{datetimeVal.ToString("yyyy-MM-dd HH:mm:ss.fff")}'");
+                }
+                else
+                    propValuesForMainTableList.Add($"{prop.GetValue(businessObject).ToString()}");
+            }
+
+            propValuesForMainTable = string.Join(", ", propValuesForMainTableList);
 
             string insertSqlQuery = SqlQueryProvider.InsertBaseObject(propsNamesForMainTable, propValuesForMainTable);
 
