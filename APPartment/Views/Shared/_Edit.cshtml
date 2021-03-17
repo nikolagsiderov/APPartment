@@ -13,31 +13,12 @@
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="HomeId" />
-            <input type="hidden" asp-for="ObjectId" />
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label asp-for="Name" class="control-label">Name</label>
-                        <input asp-for="Name" class="form-control" />
-                        <span asp-validation-for="Name" class="text-danger"></span>
-                    </div>
+            @foreach (var property in ViewData.ModelMetadata.Properties)
+            {
+                <div class="editor-field">
+                    @Html.Editor(property.PropertyName)
                 </div>
-            </div>
-
-            <br />
-
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <label asp-for="Details" class="control-label">Details</label>
-                        <textarea asp-for="Details" class="form-control" rows="5"></textarea>
-                        <span asp-validation-for="Details" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
+            }
         </form>
     </div>
 </div>

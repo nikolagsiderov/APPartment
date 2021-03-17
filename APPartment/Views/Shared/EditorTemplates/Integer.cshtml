@@ -1,0 +1,7 @@
+﻿@model int
+
+<div class="form-group">
+    @Html.LabelFor(m => m, @ViewData.ModelMetadata.GetDisplayName())
+    <input name="@ViewData.ModelMetadata.PropertyName" value="@ViewData.Model" class="form-control" placeholder="@ViewData.ModelMetadata.GetDisplayName()" />
+    <span asp-validation-for="@ViewData.ModelMetadata.PropertyName" class="text-danger"></span>
+</div>

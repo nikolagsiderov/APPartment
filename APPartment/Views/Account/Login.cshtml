@@ -32,18 +32,11 @@
                                 </div>
                                 <hr class="my-0" />
                                 <div class="card-body p-5">
-                                    <form asp-action="Login">
+                                    <form asp-action="Login" method="post" >
                                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                        <div class="form-group">
-                                            <label asp-for="Name" class="control-label"></label>
-                                            <input asp-for="Name" class="form-control" />
-                                            <span asp-validation-for="Name" class="text-danger"></span>
-                                        </div>
-                                        <div class="form-group">
-                                            <label asp-for="Password" class="control-label"></label>
-                                            <input asp-for="Password" class="form-control" />
-                                            <span asp-validation-for="Password" class="text-danger"></span>
-                                        </div>
+                                        @Html.EditorFor(x => x.Name)
+
+                                        @Html.EditorFor(x => x.Password)
                                         <div class="form-group">
                                             <input type="submit" value="Sign in account" class="btn btn-primary" />
                                         </div>

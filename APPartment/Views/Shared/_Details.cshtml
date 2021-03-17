@@ -15,23 +15,12 @@
 
         <br />
 
-        <div>
-            <div class="row">
-                <div class="col-md-3">
-                    <strong>Name:</strong>
-                    <p>@Model.Name</p>
-                </div>
+        @foreach (var property in ViewData.ModelMetadata.Properties)
+        {
+            <div class="editor-field">
+                @Html.Display(property.PropertyName)
             </div>
-
-            <br />
-
-            <div class="row">
-                <div class="col-md-6">
-                    <strong>Details:</strong>
-                    <p>@Model.Details</p>
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </div>
 

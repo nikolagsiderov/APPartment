@@ -40,11 +40,9 @@
         {
             <div class="row">
                 <div class="col-md-1">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createView"><i class="fas fa-plus"></i> &nbsp; Add</button>
+                    <a asp-action="Create"><button type="button" class="btn btn-primary"><i class="fas fa-plus"></i> &nbsp; Add</button></a>
                 </div>
             </div>
-
-            @Html.Partial("_Create", newModel)
 
             <br />
         }

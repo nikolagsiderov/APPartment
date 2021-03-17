@@ -58,6 +58,16 @@ namespace APPartment.UI.Controllers.Base
             return View("_Details", model);
         }
 
+
+        [Breadcrumb("<i class='fas fa-plus'></i> Create")]
+        public IActionResult Create()
+        {
+            var newModel = new T();
+
+            return View("_Create", newModel);
+        }
+
+        [Breadcrumb("<i class='fas fa-plus'></i> Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(T model)
@@ -66,9 +76,11 @@ namespace APPartment.UI.Controllers.Base
             {
                 model.HomeId = (long)CurrentHomeId;
                 baseFacade.Create(model, (long)CurrentUserId);
+
+                return RedirectToAction(nameof(Index));
             }
 
-            return RedirectToAction(nameof(Index));
+            return View("_Create", model);
         }
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]

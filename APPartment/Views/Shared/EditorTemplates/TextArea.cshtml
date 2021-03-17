@@ -1,0 +1,7 @@
+﻿@model string
+
+<div class="form-group">
+    @Html.LabelFor(m => m, @ViewData.ModelMetadata.GetDisplayName())
+    <textarea name="@ViewData.ModelMetadata.PropertyName" class="form-control" rows="5" placeholder="@ViewData.ModelMetadata.GetDisplayName()">@ViewData.Model</textarea>
+    <span asp-validation-for="@ViewData.ModelMetadata.PropertyName" class="text-danger"></span>
+</div>
