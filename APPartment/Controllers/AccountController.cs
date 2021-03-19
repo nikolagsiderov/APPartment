@@ -1,6 +1,5 @@
-﻿using APPartment.Data.Core;
-using APPartment.Data.Server.Models.Core;
-using APPartment.UI.Controllers.Base;
+﻿using APPartment.UI.Controllers.Base;
+using APPartment.UI.ViewModels.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,13 +7,8 @@ namespace APPartment.Controllers
 {
     public class AccountController : BaseController
     {
-        #region Context, Services and Utilities
-        private readonly BaseFacade baseFacade;
-        #endregion
-
         public AccountController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            baseFacade = new BaseFacade();
         }
 
         #region Actions
@@ -27,19 +21,19 @@ namespace APPartment.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(User user)
+        public IActionResult Register(UserPostViewModel user)
         {            
             if (ModelState.IsValid)
             {
-                var userExists = baseFacade.Any<User>(x => x.Name == user.Name);
+                var userExists = BaseWebService.Any<UserPostViewModel>(x => x.Name == user.Name);
                 if (userExists)
                 {
                     ModelState.AddModelError("Name", "This username is already taken.");
                     return View(user); 
                 }
 
-                baseFacade.Create(user, 0);
-                user = baseFacade.GetObject<User>(x => x.Name == user.Name);
+                BaseWebService.Save(user);
+                user = BaseWebService.GetEntity<UserPostViewModel>(x => x.Name == user.Name);
 
                 ModelState.Clear();
 
@@ -61,9 +55,9 @@ namespace APPartment.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(User user)
+        public IActionResult Login(UserPostViewModel user)
         {
-            var userWithPassedCredsExists = baseFacade.GetObject<User>(x => x.Name == user.Name && x.Password == user.Password);
+            var userWithPassedCredsExists = BaseWebService.GetEntity<UserPostViewModel>(x => x.Name == user.Name && x.Password == user.Password);
             
             if (userWithPassedCredsExists != null)
             {

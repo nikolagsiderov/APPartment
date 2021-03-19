@@ -3,7 +3,6 @@ USE APPartment
 CREATE TABLE [dbo].[Chore] (
     Id bigint IDENTITY(1, 1) NOT NULL,
 	ObjectId bigint NOT NULL,
-	Status int NOT NULL,
 	AssignedToUserId bigint,
 	HomeId bigint NOT NULL,
 	CONSTRAINT PK_Chore PRIMARY KEY (Id),

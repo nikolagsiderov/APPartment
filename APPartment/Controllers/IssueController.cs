@@ -1,23 +1,21 @@
 ﻿using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using System.Linq;
 using System;
 using System.Linq.Expressions;
 using APPartment.UI.Controllers.Base;
-using APPartment.Data.Server.Models.Objects;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
-using APPartment.UI.Enums;
+using APPartment.UI.ViewModels.Issue;
 
 namespace APPartment.Controllers
 {
-    public class IssuesController : BaseCRUDController<Issue>
+    public class IssuesController : BaseCRUDController<IssueDisplayViewModel, IssuePostViewModel>
     {
         public IssuesController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
-        public override Expression<Func<Issue, bool>> FilterExpression
+        public override Expression<Func<IssueDisplayViewModel, bool>> FilterExpression
         {
             get
             {
@@ -58,7 +56,7 @@ namespace APPartment.Controllers
 
         public JsonResult GetIssuesCriticalCount()
         {
-            var issuesCriticalCount = baseFacade.Count<Issue>(x => x.HomeId == (long)CurrentHomeId);
+            var issuesCriticalCount = BaseWebService.Count<IssuePostViewModel>(x => x.HomeId == (long)CurrentHomeId);
             return Json(issuesCriticalCount);
         }
         #endregion

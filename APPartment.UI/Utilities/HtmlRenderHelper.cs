@@ -1,6 +1,7 @@
-﻿using APPartment.Data.Core;
-using APPartment.Data.Server.Models.Core;
-using APPartment.Data.Server.Models.MetaObjects;
+﻿using APPartment.UI.Services.Base;
+using APPartment.UI.ViewModels.Chat;
+using APPartment.UI.ViewModels.Comment;
+using APPartment.UI.ViewModels.User;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,34 +9,34 @@ namespace APPartment.UI.Utilities
 {
     public class HtmlRenderHelper
     {
-        private readonly BaseFacade baseFacade;
+        private readonly BaseWebService BaseWebService;
 
-        public HtmlRenderHelper()
+        public HtmlRenderHelper(long? currentUserId)
         {
-            baseFacade = new BaseFacade();
+            BaseWebService = new BaseWebService(currentUserId);
         }
 
-        public List<string> BuildMessagesForChat(List<Message> messages, long homeId)
+        public List<string> BuildMessagesForChat(List<MessageDisplayViewModel> messages, long homeId)
         {
             return messages
                 .OrderByDescending(x => x.Id)
                 .Take(10)
-                .Select(x => $"{baseFacade.GetObject<User>(x.CreatedById).Name}: {x.Details}")
+                .Select(x => $"{BaseWebService.GetEntity<UserPostViewModel>(x.CreatedById).Name}: {x.Details}")
                 .ToList();
         }
 
-        public List<string> BuildComments(List<Comment> comments, long targetObjectId)
+        public List<string> BuildComments(List<CommentPostViewModel> comments, long targetObjectId)
         {
             return comments
                 .OrderByDescending(x => x.Id)
                 .Take(20)
-                .Select(x => $"<strong>{baseFacade.GetObject<User>(x.CreatedById).Name}</strong>: {x.Details} <br/> <strong><span class=\"text-muted\" style=\"font-size: x-small;\">{x.CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")}</span></strong>")
+                .Select(x => $"<strong>{BaseWebService.GetEntity<UserPostViewModel>(x.CreatedById).Name}</strong>: {x.Details} <br/> <strong><span class=\"text-muted\" style=\"font-size: x-small;\">{x.CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")}</span></strong>")
                 .ToList();
         }
 
-        public string BuildPostComment(Comment comment)
+        public string BuildPostComment(CommentPostViewModel comment)
         {
-            return $"<strong>{baseFacade.GetObject<User>(comment.CreatedById).Name}</strong>: {comment.Details} <br/> <strong><span class=\"text-muted\" style=\"font-size: x-small;\">{comment.CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")}</span></strong>";
+            return $"<strong>{BaseWebService.GetEntity<UserPostViewModel>(comment.CreatedById).Name}</strong>: {comment.Details} <br/> <strong><span class=\"text-muted\" style=\"font-size: x-small;\">{comment.CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")}</span></strong>";
         }
     }
 }

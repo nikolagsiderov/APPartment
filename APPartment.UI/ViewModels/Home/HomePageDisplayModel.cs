@@ -1,5 +1,4 @@
-﻿using APPartment.Data.Server.Models.Base;
-using APPartment.Data.Server.Models.Core;
+﻿using APPartment.UI.ViewModels.Base;
 using System.Collections.Generic;
 
 namespace APPartment.UI.ViewModels.Home
@@ -8,9 +7,9 @@ namespace APPartment.UI.ViewModels.Home
     {
         public List<string> Messages { get; set; }
 
-        public List<IdentityBaseObject> BaseObjects { get; set; }
+        public List<PostViewModel> ViewModels { get; set; }
 
-        public HomeStatus HomeStatus { get; set; }
+        public HomeStatusPostViewModel HomeStatus { get; set; }
 
         public string RentDueDate { get; set; }
     }

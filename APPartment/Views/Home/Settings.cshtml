@@ -1,4 +1,4 @@
-﻿@model APPartment.Data.Server.Models.Core.HomeSetting
+﻿@model APPartment.UI.ViewModels.Home.HomeSettingPostViewModel
 
 <div class="row">
     <div class="col-md-6">
@@ -12,20 +12,7 @@
                     <input type="hidden" asp-for="Id" />
                     <input type="hidden" asp-for="ObjectId" />
 
-                    <div class="form-group">
-                        <label asp-for="HomeName" class="control-label">Change home name</label>
-
-                        @if (Model != null)
-                        {
-                            <input asp-for="HomeName" class="form-control" />
-                        }
-                        else
-                        {
-                            <input asp-for="HomeName" class="form-control" value="@ViewData["HomeName"]" />
-                        }
-
-                        <span asp-validation-for="HomeName" class="text-danger"></span>
-                    </div>
+                    @Html.EditorFor(s => s.HomeName)
 
                     <div class="form-group">
                         <label asp-for="RentDueDateDay" class="control-label">Rent due in</label>

@@ -3,7 +3,6 @@ USE APPartment
 CREATE TABLE [dbo].[Issue] (
     Id bigint IDENTITY(1, 1) NOT NULL,
 	ObjectId bigint NOT NULL,
-	Status int NOT NULL,
 	HomeId bigint NOT NULL,
 	CONSTRAINT PK_Issue PRIMARY KEY (Id),
 	CONSTRAINT FK_ObjectIssue FOREIGN KEY (ObjectId)

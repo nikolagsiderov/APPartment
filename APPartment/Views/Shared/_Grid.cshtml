@@ -1,34 +1,7 @@
-﻿@model IEnumerable<APPartment.Data.Server.Models.Base.IdentityBaseObject>
-
-@using APPartment.Data.Server.Models.Objects;
-@using APPartment.Data.Server.Models.Core;
+﻿@model IEnumerable<APPartment.UI.ViewModels.Base.GridItemViewModel>
 
 @{
     var canManage = bool.Parse(ViewData["Manage"].ToString());
-
-    var newModel = new object();
-
-    switch (ViewData["Module"])
-    {
-        case "Inventory":
-            newModel = new Inventory();
-            break;
-        case "Hygiene":
-            newModel = new Hygiene();
-            break;
-        case "Issues":
-            newModel = new Issue();
-            break;
-        case "Surveys":
-            newModel = new Survey();
-            break;
-        case "Chores":
-            newModel = new Chore();
-            break;
-        case "Core":
-            newModel = new LinkType();
-            break;
-    }
 }
 
 <div class="card shadow mb-4">

@@ -5,7 +5,7 @@ namespace APPartment.ORM.Framework.Helpers
 {
     public static class ObjectTypeDeterminator
     {
-        public static long GetObjectTypeIdByName(string objectTypeName)
+        public static long GetObjectTypeId(string objectTypeName)
         {
             var objectType = (ObjectTypes)Enum.Parse(typeof(ObjectTypes), objectTypeName);
             return (long)objectType;

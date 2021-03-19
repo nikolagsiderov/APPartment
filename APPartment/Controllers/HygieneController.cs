@@ -1,23 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
-using System.Linq;
 using System;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http;
 using APPartment.UI.Controllers.Base;
-using APPartment.Data.Server.Models.Objects;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
-using APPartment.UI.Enums;
+using APPartment.UI.ViewModels.Hygiene;
 
 namespace APPartment.Controllers
 {
-    public class HygieneController : BaseCRUDController<Hygiene>
+    public class HygieneController : BaseCRUDController<HygieneDisplayViewModel, HygienePostViewModel>
     {
         public HygieneController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
-        public override Expression<Func<Hygiene, bool>> FilterExpression
+        public override Expression<Func<HygieneDisplayViewModel, bool>> FilterExpression
         {
             get
             {
@@ -58,7 +56,7 @@ namespace APPartment.Controllers
 
         public JsonResult GetHygieneCriticalCount()
         {
-            var hygieneCriticalCount = baseFacade.Count<Hygiene>(x => x.HomeId == (long)CurrentUserId);
+            var hygieneCriticalCount = BaseWebService.Count<HygienePostViewModel>(x => x.HomeId == (long)CurrentUserId);
 
             return Json(hygieneCriticalCount);
         }

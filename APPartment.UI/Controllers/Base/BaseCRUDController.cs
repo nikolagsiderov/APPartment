@@ -3,33 +3,32 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
-using APPartment.Data.Core;
-using APPartment.Data.Server.Models.Base;
-using APPartment.Data.Server.Models.MetaObjects;
+using APPartment.UI.Services;
 using APPartment.UI.Utilities;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels;
-using APPartment.Web.Services.MetaObjects;
+using APPartment.UI.ViewModels.Base;
+using APPartment.UI.ViewModels.Comment;
+using APPartment.UI.ViewModels.Image;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
 
 namespace APPartment.UI.Controllers.Base
 {
-    public abstract class BaseCRUDController<T> : BaseAuthorizeController
-        where T : HomeBaseObject, new()
+    public abstract class BaseCRUDController<T, U> : BaseAuthorizeController
+        where T : GridItemViewModelWithHome, new()
+        where U : PostViewModelWithHome, new()
     {
-        #region Context, Services and Utilities
+        #region Services and Utilities
         private HtmlRenderHelper htmlRenderHelper;
         private FileUploadService fileUploadService;
-        protected BaseFacade baseFacade;
-        #endregion Context, Services and Utilities
+        #endregion Services and Utilities
 
         public BaseCRUDController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            baseFacade = new BaseFacade();
-            htmlRenderHelper = new HtmlRenderHelper();
-            fileUploadService = new FileUploadService();
+            htmlRenderHelper = new HtmlRenderHelper(CurrentUserId);
+            fileUploadService = new FileUploadService(CurrentUserId);
         }
 
         public abstract Expression<Func<T, bool>> FilterExpression { get; }
@@ -38,7 +37,7 @@ namespace APPartment.UI.Controllers.Base
         [Breadcrumb("Base")]
         public virtual IActionResult Index()
         {
-            var modelObjects = baseFacade.GetObjects<T>(FilterExpression);
+            var modelObjects = BaseWebService.GetCollection<T>(FilterExpression);
             return View("_Grid", modelObjects);
         }
 
@@ -48,7 +47,7 @@ namespace APPartment.UI.Controllers.Base
             if (id == null)
                 return new Error404NotFoundViewResult();
 
-            var model = baseFacade.GetObject<T>((long)id);
+            var model = BaseWebService.GetEntity<U>((long)id);
 
             if (model == null)
                 return new Error404NotFoundViewResult();
@@ -62,7 +61,7 @@ namespace APPartment.UI.Controllers.Base
         [Breadcrumb("<i class='fas fa-plus'></i> Create")]
         public IActionResult Create()
         {
-            var newModel = new T();
+            var newModel = new U();
 
             return View("_Create", newModel);
         }
@@ -70,12 +69,12 @@ namespace APPartment.UI.Controllers.Base
         [Breadcrumb("<i class='fas fa-plus'></i> Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(T model)
+        public IActionResult Create(U model)
         {
             if (ModelState.IsValid)
             {
                 model.HomeId = (long)CurrentHomeId;
-                baseFacade.Create(model, (long)CurrentUserId);
+                BaseWebService.Save(model);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -89,7 +88,7 @@ namespace APPartment.UI.Controllers.Base
             if (id == null)
                 return new Error404NotFoundViewResult();
 
-            var model = baseFacade.GetObject<T>((long)id);
+            var model = BaseWebService.GetEntity<U>((long)id);
 
             if (model == null)
                 return new Error404NotFoundViewResult();
@@ -102,7 +101,7 @@ namespace APPartment.UI.Controllers.Base
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(long id, T model)
+        public IActionResult Edit(long id, U model)
         {
             if (id != model.Id)
                 return new Error404NotFoundViewResult();
@@ -111,7 +110,7 @@ namespace APPartment.UI.Controllers.Base
             {
                 try
                 {
-                    baseFacade.Update(model, (long)CurrentUserId);
+                    BaseWebService.Save(model);
                 }
                 catch (Exception)
                 {
@@ -129,19 +128,19 @@ namespace APPartment.UI.Controllers.Base
             if (id == null)
                 return new Error404NotFoundViewResult();
 
-            var model = baseFacade.GetObject<T>((long)id);
+            var model = BaseWebService.GetEntity<U>((long)id);
 
             if (model == null)
                 return new Error404NotFoundViewResult();
 
-            baseFacade.Delete(model);
+            BaseWebService.Delete(model);
 
             return RedirectToAction(nameof(Index));
         }
         #endregion Actions
 
         #region Clingons
-        protected T GetClingons(T model)
+        protected U GetClingons(U model)
         {
             model.Comments = GetComments(model.ObjectId);
             model.Images = GetImages(model.ObjectId);
@@ -153,7 +152,7 @@ namespace APPartment.UI.Controllers.Base
         private List<string> GetComments(long targetObjectId)
         {
             // TODO: x.CreatedById != 0 should be handled as case when user is deleted
-            var comment = baseFacade.GetObjects<Comment>(x => x.TargetObjectId == targetObjectId && x.CreatedById != 0);
+            var comment = BaseWebService.GetCollection<CommentPostViewModel>(x => x.TargetObjectId == targetObjectId && x.CreatedById != 0);
             var commentsResult = htmlRenderHelper.BuildComments(comment, targetObjectId);
 
             return commentsResult;
@@ -162,13 +161,13 @@ namespace APPartment.UI.Controllers.Base
         [HttpPost]
         public IActionResult PostComment(long targetId, string commentText)
         {
-            var comment = new Comment()
+            var comment = new CommentPostViewModel()
             {
                 Details = commentText,
                 TargetObjectId = targetId,
             };
 
-            baseFacade.Create(comment, (long)CurrentUserId);
+            BaseWebService.Save(comment);
 
             var result = htmlRenderHelper.BuildPostComment(comment);
             return Json(result);
@@ -207,7 +206,7 @@ namespace APPartment.UI.Controllers.Base
 
         public ActionResult DeleteImage(long id)
         {
-            var image = baseFacade.GetObject<Image>(id);
+            var image = BaseWebService.GetEntity<ImagePostViewModel>(id);
 
             if (image == null)
                 return Json(new { success = false, message = "404: Image does not exist." });
@@ -225,7 +224,7 @@ namespace APPartment.UI.Controllers.Base
                         }
                     }
 
-                    baseFacade.Delete(image);
+                    BaseWebService.Delete(image);
 
                     return Json(new { success = true, message = "Image deleted successfully." });
                 }
@@ -234,9 +233,9 @@ namespace APPartment.UI.Controllers.Base
             }
         }
 
-        private List<Image> GetImages(long targetObjectId)
+        private List<ImagePostViewModel> GetImages(long targetObjectId)
         {
-            var images = baseFacade.GetObjects<Image>(x => x.TargetObjectId == targetObjectId);
+            var images = BaseWebService.GetCollection<ImagePostViewModel>(x => x.TargetObjectId == targetObjectId);
             return images;
         }
         #endregion Images

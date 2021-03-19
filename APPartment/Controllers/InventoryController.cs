@@ -1,23 +1,21 @@
 ﻿using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Linq.Expressions;
 using System;
 using Microsoft.AspNetCore.Http;
 using APPartment.UI.Controllers.Base;
-using APPartment.Data.Server.Models.Objects;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
-using APPartment.UI.Enums;
+using APPartment.UI.ViewModels.Inventory;
 
 namespace APPartment.Controllers
 {
-    public class InventoryController : BaseCRUDController<Inventory>
+    public class InventoryController : BaseCRUDController<InventoryDisplayViewModel, InventoryPostViewModel>
     {
         public InventoryController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
-        public override Expression<Func<Inventory, bool>> FilterExpression
+        public override Expression<Func<InventoryDisplayViewModel, bool>> FilterExpression
         {
             get
             {
@@ -58,7 +56,7 @@ namespace APPartment.Controllers
 
         public JsonResult GetInventoryCriticalCount()
         {
-            var inventoryCriticalCount = baseFacade.Count<Inventory>(x => x.HomeId == (long)CurrentHomeId);
+            var inventoryCriticalCount = BaseWebService.Count<InventoryPostViewModel>(x => x.HomeId == (long)CurrentHomeId);
             return Json(inventoryCriticalCount);
         }
         #endregion

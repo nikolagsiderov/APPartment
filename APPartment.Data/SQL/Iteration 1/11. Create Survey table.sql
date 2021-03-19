@@ -3,7 +3,6 @@ USE APPartment
 CREATE TABLE [dbo].[Survey] (
     Id bigint IDENTITY(1, 1) NOT NULL,
 	ObjectId bigint NOT NULL,
-	Status int NOT NULL,
 	IsCompleted bit NOT NULL,
 	HomeId bigint NOT NULL,
 	CONSTRAINT PK_Survey PRIMARY KEY (Id),

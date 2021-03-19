@@ -3,7 +3,6 @@ USE APPartment
 CREATE TABLE [dbo].[Hygiene] (
     Id bigint IDENTITY(1, 1) NOT NULL,
 	ObjectId bigint NOT NULL,
-	Status int NOT NULL,
 	HomeId bigint NOT NULL,
 	CONSTRAINT PK_Hygiene PRIMARY KEY (Id),
 	CONSTRAINT FK_ObjectHygiene FOREIGN KEY (ObjectId)

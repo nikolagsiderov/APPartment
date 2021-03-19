@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
-using APPartment.ORM.Framework.Helpers;
 using System.Reflection;
-using APPartment.ORM.Framework.Declarations;
 using System.Data.SqlClient;
-using APPartment.ORM.Framework.Attributes;
 using System.Collections.Generic;
+using APPartment.ORM.Framework.Helpers;
+using APPartment.ORM.Framework.Declarations;
+using APPartment.ORM.Framework.Attributes;
 
 namespace APPartment.ORM.Framework.Core
 {
@@ -20,7 +20,7 @@ namespace APPartment.ORM.Framework.Core
         }
 
         public T SelectGetObject<T>(T result, long id)
-            where T : class, IIdentityBaseObject, new()
+            where T : class, IBaseObject, new()
         {
             var mainTableName = typeof(T).Name;
             var selectBusinessObjectSqlQuery = SqlQueryProvider.SelectBusinessObjectById(mainTableName, id.ToString());
@@ -50,7 +50,7 @@ namespace APPartment.ORM.Framework.Core
         }
 
         public T SelectFilterGetObject<T>(T result, Expression<Func<T, bool>> filter)
-            where T : class, IIdentityBaseObject, new()
+            where T : class, IBaseObject, new()
         {
             var mainTableName = typeof(T).Name;
             var sqlClause = expressionTranslator.Translate(filter);
@@ -88,7 +88,7 @@ namespace APPartment.ORM.Framework.Core
         }
 
         public List<T> SelectGetObjects<T>(List<T> result)
-            where T : class, IIdentityBaseObject, new()
+            where T : class, IBaseObject, new()
         {
             var mainTableName = typeof(T).Name;
             var selectBusinessObjectsSqlQuery = SqlQueryProvider.SelectBusinessObjects(mainTableName);
@@ -130,7 +130,7 @@ namespace APPartment.ORM.Framework.Core
         }
 
         public List<T> SelectGetObjects<T>(List<T> result, Expression<Func<T, bool>> filter)
-            where T : class, IIdentityBaseObject, new()
+            where T : class, IBaseObject, new()
         {
             var mainTableName = typeof(T).Name;
             var sqlClause = expressionTranslator.Translate(filter);
@@ -316,10 +316,10 @@ namespace APPartment.ORM.Framework.Core
         }
 
         public long SaveCreateBaseObject<T>(T businessObject, long userId)
-            where T : class, IIdentityBaseObject
+            where T : class, IBaseObject
         {
             object objectId = 0;
-            businessObject.ObjectTypeId = ObjectTypeDeterminator.GetObjectTypeIdByName(businessObject.GetType().Name);
+            businessObject.ObjectTypeId = ObjectTypeDeterminator.GetObjectTypeId(businessObject.GetType().Name);
             businessObject.CreatedById = userId;
             businessObject.CreatedDate = DateTime.Now;
             businessObject.ModifiedById = userId;
@@ -373,7 +373,7 @@ namespace APPartment.ORM.Framework.Core
         }
 
         public void SaveCreateBusinessObject<T>(T businessObject, long objectId)
-            where T : class, IIdentityBaseObject
+            where T : class, IBaseObject
         {
             var mainTableName = businessObject.GetType().Name;
             var propsForMainTable = businessObject.GetType().GetProperties().Where(
@@ -395,13 +395,13 @@ namespace APPartment.ORM.Framework.Core
         }
 
         public void SaveUpdateBaseObject<T>(T businessObject, long userId)
-            where T : class, IIdentityBaseObject
+            where T : class, IBaseObject
         {
             businessObject.ModifiedById = userId;
             businessObject.ModifiedDate = DateTime.Now;
 
             if (businessObject.ObjectTypeId == null || businessObject.ObjectTypeId == 0)
-                businessObject.ObjectTypeId = ObjectTypeDeterminator.GetObjectTypeIdByName(businessObject.GetType().Name);
+                businessObject.ObjectTypeId = ObjectTypeDeterminator.GetObjectTypeId(businessObject.GetType().Name);
 
             if (string.IsNullOrEmpty(businessObject.Name))
                 businessObject.Name = "none";
@@ -432,7 +432,7 @@ namespace APPartment.ORM.Framework.Core
         }
 
         public void SaveUpdateBusinessObject<T>(T businessObject)
-            where T : class, IIdentityBaseObject
+            where T : class, IBaseObject
         {
             var mainTableName = businessObject.GetType().Name;
             var propsForMainTable = businessObject.GetType().GetProperties().Where(
@@ -452,7 +452,7 @@ namespace APPartment.ORM.Framework.Core
         }
 
         public void DeleteBusinessAndBaseObject<T>(T businessObject)
-            where T : class, IIdentityBaseObject
+            where T : class, IBaseObject
         {
             var mainTableName = businessObject.GetType().Name;
 

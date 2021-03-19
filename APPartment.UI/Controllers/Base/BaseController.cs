@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using APPartment.UI.Services.Base;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APPartment.UI.Controllers.Base
 {
     public abstract class BaseController : Controller
     {
+        protected BaseWebService BaseWebService;
         protected long? CurrentUserId { get; set; }
         protected long? CurrentHomeId { get; set; }
         protected string CurrentHomeName { get; set; }
@@ -19,6 +21,11 @@ namespace APPartment.UI.Controllers.Base
                 if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("UserId")))
                 {
                     CurrentUserId = long.Parse(contextAccessor.HttpContext.Session.GetString("UserId"));
+                    BaseWebService = new BaseWebService(CurrentUserId);
+                }
+                else
+                {
+                    BaseWebService = new BaseWebService(0);
                 }
 
                 if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("Username")))

@@ -16,7 +16,7 @@ namespace APPartment.Data.Core
         }
 
         public T GetObject<T>(long id)
-            where T : class, IIdentityBaseObject, new()
+            where T : class, IBaseObject, new()
         {
             var result = new T();
             result = dao.SelectGetObject<T>(result, id);
@@ -24,7 +24,7 @@ namespace APPartment.Data.Core
         }
 
         public T GetObject<T>(Expression<Func<T, bool>> filter)
-            where T : class, IIdentityBaseObject, new()
+            where T : class, IBaseObject, new()
         {
             var result = new T();
             result = dao.SelectFilterGetObject<T>(result, filter);
@@ -32,7 +32,7 @@ namespace APPartment.Data.Core
         }
 
         public List<T> GetObjects<T>()
-            where T : class, IIdentityBaseObject, new()
+            where T : class, IBaseObject, new()
         {
             var result = new List<T>();
             result = dao.SelectGetObjects<T>(result);
@@ -40,7 +40,7 @@ namespace APPartment.Data.Core
         }
 
         public List<T> GetObjects<T>(Expression<Func<T, bool>> filter)
-            where T : class, IIdentityBaseObject, new()
+            where T : class, IBaseObject, new()
         {
             var result = new List<T>();
             result = dao.SelectGetObjects<T>(result, filter);
@@ -80,21 +80,21 @@ namespace APPartment.Data.Core
         }
 
         public void Create<T>(T businessObject, long userId)
-            where T : class, IIdentityBaseObject
+            where T : class, IBaseObject
         {
             var objectId = dao.SaveCreateBaseObject(businessObject, userId);
             dao.SaveCreateBusinessObject(businessObject, objectId);
         }
 
         public void Update<T>(T businessObject, long userId)
-            where T : class, IIdentityBaseObject
+            where T : class, IBaseObject
         {
             dao.SaveUpdateBaseObject(businessObject, userId);
             dao.SaveUpdateBusinessObject(businessObject);
         }
 
         public void Delete<T>(T businessObject)
-            where T : class, IIdentityBaseObject
+            where T : class, IBaseObject
         {
             dao.DeleteBusinessAndBaseObject(businessObject);
         }

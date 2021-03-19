@@ -15,9 +15,6 @@
         Image = 10,
         Survey = 11,
         Chore = 12,
-        HomeUser = 13,
-        Audit = 14,
-        LinkType = 15,
-        Link = 16
+        HomeUser = 13
     }
 }

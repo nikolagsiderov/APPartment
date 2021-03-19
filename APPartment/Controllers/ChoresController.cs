@@ -1,24 +1,23 @@
-﻿using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
 using System;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http;
 using APPartment.UI.Controllers.Base;
-using APPartment.Data.Server.Models.Objects;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels;
-using APPartment.Data.Server.Models.Core;
+using APPartment.UI.ViewModels.Chore;
+using APPartment.UI.ViewModels.User;
 
 namespace APPartment.Controllers
 {
-    public class ChoresController : BaseCRUDController<Chore>
+    public class ChoresController : BaseCRUDController<ChoreDisplayViewModel, ChorePostViewModel>
     {
         public ChoresController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
-        public override Expression<Func<Chore, bool>> FilterExpression
+        public override Expression<Func<ChoreDisplayViewModel, bool>> FilterExpression
         {
             get
             {
@@ -59,25 +58,25 @@ namespace APPartment.Controllers
 
         public IActionResult Assign(string username, long choreId)
         {
-            var model = baseFacade.GetObject<Chore>(choreId);
+            var model = BaseWebService.GetEntity<ChorePostViewModel>(choreId);
 
             if (model == null)
             {
                 return new Error404NotFoundViewResult();
             }
 
-            var userToAssign = baseFacade.GetObject<User>(x => x.Name == username);
+            var userToAssign = BaseWebService.GetEntity<UserPostViewModel>(x => x.Name == username);
             var userToAssignUserId = userToAssign.Id;
 
             model.AssignedToUserId = userToAssignUserId;
-            baseFacade.Update(model, (long)CurrentUserId);
+            BaseWebService.Save(model);
 
             return RedirectToAction(nameof(Index));
         }
 
         public JsonResult GetMyChoresCount()
         {
-            var myChoresCount = baseFacade.Count<Chore>(x => x.HomeId == (long)CurrentHomeId && x.AssignedToUserId == (long)CurrentUserId);
+            var myChoresCount = BaseWebService.Count<ChorePostViewModel>(x => x.HomeId == (long)CurrentHomeId && x.AssignedToUserId == (long)CurrentUserId);
             return Json(myChoresCount);
         }
         #endregion

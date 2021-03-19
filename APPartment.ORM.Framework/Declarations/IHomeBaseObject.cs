@@ -1,10 +1,7 @@
-﻿using APPartment.ORM.Framework.Attributes;
-
-namespace APPartment.ORM.Framework.Declarations
+﻿namespace APPartment.ORM.Framework.Declarations
 {
-    public interface IHomeBaseObject : IIdentityBaseObject
+    public interface IHomeBaseObject : IBaseObject
     {
-        [FieldMappingForMainTable]
         public long HomeId { get; set; }
     }
 }

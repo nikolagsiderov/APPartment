@@ -1,22 +1,21 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System.Linq;
 using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq.Expressions;
 using APPartment.UI.Controllers.Base;
-using APPartment.Data.Server.Models.Objects;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
+using APPartment.UI.ViewModels.Survey;
 
 namespace APPartment.Controllers
 {
-    public class SurveysController : BaseCRUDController<Survey>
+    public class SurveysController : BaseCRUDController<SurveyDisplayViewModel, SurveyPostViewModel>
     {
         public SurveysController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
-        public override Expression<Func<Survey, bool>> FilterExpression
+        public override Expression<Func<SurveyDisplayViewModel, bool>> FilterExpression
         {
             get
             {
@@ -57,7 +56,7 @@ namespace APPartment.Controllers
 
         public JsonResult GetPendingSurveysCount()
         {
-            var pendingSurveysCount = baseFacade.Count<Survey>(x => x.HomeId == (long)CurrentHomeId);
+            var pendingSurveysCount = BaseWebService.Count<SurveyPostViewModel>(x => x.HomeId == (long)CurrentHomeId);
             return Json(pendingSurveysCount);
         }
         #endregion
