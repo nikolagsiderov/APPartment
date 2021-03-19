@@ -12,7 +12,7 @@ namespace APPartment.UI.ViewModels.Base
     {
         [Required]
         [APPUIHint(Templates.Input)]
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         [APPUIHint(Templates.TextArea)]
         public string Details { get; set; }

@@ -7,7 +7,7 @@ namespace APPartment.UI.ViewModels.Base
 {
     public abstract class GridItemViewModel : IBaseObject
     {
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         public string Details { get; set; }
 
