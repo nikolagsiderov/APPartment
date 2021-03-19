@@ -13,6 +13,7 @@ Later on, the purpose changed to an entirely educational one. Throughout the pro
 * Further experience with **JavaScript**, **jQuery**, **AJAX** and **JSON**
 * Building my own custom **ORM Framework**
 * Incorporating **Facade Design Pattern**
+* Working with **AutoMapper**
 
 # Further description
 
