@@ -21,17 +21,17 @@ namespace APPartment.Controllers
 {
     public class HomeController : BaseController
     {
-        #region Context, Services and Utilities
+        #region Services and Utilities
         private HtmlRenderHelper htmlRenderHelper;
-        private TimeConverter timeConverter = new TimeConverter();
+        private TimeConverter timeConverter;
         #endregion
 
         public HomeController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
             htmlRenderHelper = new HtmlRenderHelper(CurrentUserId);
+            timeConverter = new TimeConverter();
         }
 
-        #region Actions
         [DefaultBreadcrumb(HomeBreadcrumbs.Default_Breadcrumb)]
         public IActionResult Index()
         {
@@ -158,15 +158,15 @@ namespace APPartment.Controllers
         [HttpPost]
         public IActionResult Settings(HomeSettingPostViewModel settings)
         {
-            var homeModel = BaseWebService.GetEntity<HomePostViewModel>((long)CurrentHomeId);
+            var home = BaseWebService.GetEntity<HomePostViewModel>((long)CurrentHomeId);
             settings.HomeId = (long)CurrentHomeId;
 
-            if (!string.IsNullOrEmpty(settings.HomeName) || settings.HomeName != homeModel.Name)
+            if (!string.IsNullOrEmpty(settings.HomeName) || settings.HomeName != home.Name)
             {
-                homeModel.Name = settings.HomeName;
+                home.Name = settings.HomeName;
+                BaseWebService.Save(home);
 
-                BaseWebService.Save(homeModel);
-                HttpContext.Session.SetString("HomeName", homeModel.Name.ToString());
+                HttpContext.Session.SetString("HomeName", home.Name.ToString());
             }
 
             if (settings.Id == 0)
@@ -175,9 +175,7 @@ namespace APPartment.Controllers
                 BaseWebService.Save(settings);
             }
             else
-            {
                 BaseWebService.Save(settings);
-            }
 
             return RedirectToAction(nameof(Index));
         }
@@ -227,8 +225,6 @@ namespace APPartment.Controllers
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
             {
-                var homeModel = BaseWebService.GetEntity<HomePostViewModel>((long)CurrentHomeId);
-
                 var homeStatusDetails = string.Empty;
 
                 if (!string.IsNullOrEmpty(homeStatusDetailsString))
@@ -260,7 +256,6 @@ namespace APPartment.Controllers
 
             return Json("");
         }
-        #endregion
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

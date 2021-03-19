@@ -25,7 +25,7 @@ namespace APPartment.UI.Services
             bool isExists = System.IO.Directory.Exists(pathString);
 
             if (!isExists)
-                System.IO.Directory.CreateDirectory(pathString);
+                Directory.CreateDirectory(pathString);
 
             var path = string.Format($"{pathString}\\{imageName}");
 
@@ -45,10 +45,10 @@ namespace APPartment.UI.Services
                 TargetObjectId = targetObjectId,
             };
 
+            // We save the image once
+            // Then we save again with modified Name property to add its ID
             BaseWebService.Save(image);
-
             image.Name = $"{image.Id}_{targetObjectId}_{file.FileName}";
-
             BaseWebService.Save(image);
 
             return image.Name;

@@ -11,7 +11,6 @@ namespace APPartment.Controllers
         {
         }
 
-        #region Actions
         public IActionResult Register()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserId")))
@@ -26,6 +25,7 @@ namespace APPartment.Controllers
             if (ModelState.IsValid)
             {
                 var userExists = BaseWebService.Any<UserPostViewModel>(x => x.Name == user.Name);
+
                 if (userExists)
                 {
                     ModelState.AddModelError("Name", "This username is already taken.");
@@ -88,6 +88,5 @@ namespace APPartment.Controllers
             else
                 return RedirectToAction("Login");
         }
-        #endregion
     }
 }

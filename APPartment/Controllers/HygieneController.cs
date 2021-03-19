@@ -23,7 +23,6 @@ namespace APPartment.Controllers
             }
         }
 
-        #region Actions
         [Breadcrumb(HygieneBreadcrumbs.All_Breadcrumb)]
         public override IActionResult Index()
         {
@@ -57,10 +56,8 @@ namespace APPartment.Controllers
         public JsonResult GetHygieneCriticalCount()
         {
             var hygieneCriticalCount = BaseWebService.Count<HygienePostViewModel>(x => x.HomeId == (long)CurrentUserId);
-
             return Json(hygieneCriticalCount);
         }
-        #endregion
 
         protected override void PopulateViewData()
         {

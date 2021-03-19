@@ -33,12 +33,11 @@ namespace APPartment.UI.Controllers.Base
 
         public abstract Expression<Func<T, bool>> FilterExpression { get; }
 
-        #region Actions
         [Breadcrumb("Base")]
         public virtual IActionResult Index()
         {
-            var modelObjects = BaseWebService.GetCollection<T>(FilterExpression);
-            return View("_Grid", modelObjects);
+            var models = BaseWebService.GetCollection<T>(FilterExpression);
+            return View("_Grid", models);
         }
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Details_Breadcrumb)]
@@ -62,7 +61,6 @@ namespace APPartment.UI.Controllers.Base
         public IActionResult Create()
         {
             var newModel = new U();
-
             return View("_Create", newModel);
         }
 
@@ -108,15 +106,7 @@ namespace APPartment.UI.Controllers.Base
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    BaseWebService.Save(model);
-                }
-                catch (Exception)
-                {
-                    return new Error404NotFoundViewResult();
-                }
-
+                BaseWebService.Save(model);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -137,7 +127,6 @@ namespace APPartment.UI.Controllers.Base
 
             return RedirectToAction(nameof(Index));
         }
-        #endregion Actions
 
         #region Clingons
         protected U GetClingons(U model)

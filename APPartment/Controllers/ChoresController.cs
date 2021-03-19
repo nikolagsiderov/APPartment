@@ -25,7 +25,6 @@ namespace APPartment.Controllers
             }
         }
 
-        #region Actions
         [Breadcrumb(ChoresBreadcrumbs.All_Breadcrumb)]
         public override IActionResult Index()
         {
@@ -61,14 +60,11 @@ namespace APPartment.Controllers
             var model = BaseWebService.GetEntity<ChorePostViewModel>(choreId);
 
             if (model == null)
-            {
                 return new Error404NotFoundViewResult();
-            }
 
             var userToAssign = BaseWebService.GetEntity<UserPostViewModel>(x => x.Name == username);
-            var userToAssignUserId = userToAssign.Id;
+            model.AssignedToUserId = userToAssign.Id;
 
-            model.AssignedToUserId = userToAssignUserId;
             BaseWebService.Save(model);
 
             return RedirectToAction(nameof(Index));
@@ -79,7 +75,6 @@ namespace APPartment.Controllers
             var myChoresCount = BaseWebService.Count<ChorePostViewModel>(x => x.HomeId == (long)CurrentHomeId && x.AssignedToUserId == (long)CurrentUserId);
             return Json(myChoresCount);
         }
-        #endregion
 
         protected override void PopulateViewData()
         {

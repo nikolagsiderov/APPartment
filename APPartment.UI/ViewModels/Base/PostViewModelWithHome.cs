@@ -5,7 +5,9 @@ namespace APPartment.UI.ViewModels.Base
 {
     public abstract class PostViewModelWithHome : PostViewModel
     {
+        #region Hidden properties
         [APPUIHint(Templates.Hidden)]
         public long HomeId { get; set; }
+        #endregion
     }
 }

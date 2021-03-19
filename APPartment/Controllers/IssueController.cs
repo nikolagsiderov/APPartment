@@ -23,7 +23,6 @@ namespace APPartment.Controllers
             }
         }
 
-        #region Actions
         [Breadcrumb(IssuesBreadcrumbs.All_Breadcrumb)]
         public override IActionResult Index()
         {
@@ -59,7 +58,6 @@ namespace APPartment.Controllers
             var issuesCriticalCount = BaseWebService.Count<IssuePostViewModel>(x => x.HomeId == (long)CurrentHomeId);
             return Json(issuesCriticalCount);
         }
-        #endregion
 
         protected override void PopulateViewData()
         {

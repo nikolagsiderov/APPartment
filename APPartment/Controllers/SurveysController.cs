@@ -23,7 +23,6 @@ namespace APPartment.Controllers
             }
         }
 
-        #region Actions
         [Breadcrumb(SurveysBreadcrumbs.All_Breadcrumb)]
         public override IActionResult Index()
         {
@@ -59,7 +58,6 @@ namespace APPartment.Controllers
             var pendingSurveysCount = BaseWebService.Count<SurveyPostViewModel>(x => x.HomeId == (long)CurrentHomeId);
             return Json(pendingSurveysCount);
         }
-        #endregion
 
         protected override void PopulateViewData()
         {

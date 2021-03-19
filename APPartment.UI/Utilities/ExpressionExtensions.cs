@@ -15,13 +15,13 @@ namespace APPartment.UI.Utilities
 
             protected override Expression VisitLambda<T>(Expression<T> node)
             {
-                // replace parameter here
+                // Replace parameter here
                 return Expression.Lambda(Visit(node.Body), _parameter);
             }
 
             protected override Expression VisitMember(MemberExpression node)
             {
-                // replace parameter member access with new type
+                // Replace parameter member access with new type
                 if (node.Member.DeclaringType == typeof(TFrom) && node.Expression is ParameterExpression)
                 {
                     return Expression.PropertyOrField(_parameter, node.Member.Name);
