@@ -1,0 +1,4 @@
+USE APPartment
+
+ALTER TABLE Inventory
+ADD IsSupplied BIT NOT NULL DEFAULT(0);

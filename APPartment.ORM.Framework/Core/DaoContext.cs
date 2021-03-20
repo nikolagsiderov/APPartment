@@ -346,11 +346,17 @@ namespace APPartment.ORM.Framework.Core
                     var datetimeVal = (DateTime)prop.GetValue(businessObject);
                     propValuesForMainTableList.Add($"'{datetimeVal.ToString("yyyy-MM-dd HH:mm:ss.fff")}'");
                 }
+                else if (prop.PropertyType == typeof(bool))
+                {
+                    var boolValue = (bool)prop.GetValue(businessObject);
+                    var value = Convert.ToInt32(boolValue);
+                    propValuesForMainTableList.Add($"{value.ToString()}");
+                }
                 else
                     propValuesForMainTableList.Add($"{prop.GetValue(businessObject).ToString()}");
             }
 
-            propValuesForMainTable = string.Join(", ", propValuesForMainTableList);
+            propValuesForMainTable += string.Join(", ", propValuesForMainTableList);
 
             string insertSqlQuery = SqlQueryProvider.InsertBaseObject(propsNamesForMainTable, propValuesForMainTable);
 
@@ -379,9 +385,29 @@ namespace APPartment.ORM.Framework.Core
             var propsForMainTable = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute)));
             var propsNamesForMainTable = string.Join(", ", propsForMainTable.Select(x => $"[{x.Name}]")) + ", [ObjectId]";
-            var propValuesForMainTable = string.Join(", ", propsForMainTable
-                .Select(x => x.PropertyType == typeof(string) || x.PropertyType == typeof(DateTime) || x.PropertyType == typeof(DateTime?) ?
-            $"'{x.GetValue(businessObject).ToString()}'" : $"{x.GetValue(businessObject).ToString()}")) + $", {objectId}";
+            var propValuesForMainTableList = new List<string>();
+            var propValuesForMainTable = string.Empty;
+
+            foreach (var prop in propsForMainTable)
+            {
+                if (prop.PropertyType == typeof(string))
+                    propValuesForMainTableList.Add($"'{prop.GetValue(businessObject).ToString()}'");
+                else if (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
+                {
+                    var datetimeVal = (DateTime)prop.GetValue(businessObject);
+                    propValuesForMainTableList.Add($"'{datetimeVal.ToString("yyyy-MM-dd HH:mm:ss.fff")}'");
+                }
+                else if (prop.PropertyType == typeof(bool))
+                {
+                    var boolValue = (bool)prop.GetValue(businessObject);
+                    var value = Convert.ToInt32(boolValue);
+                    propValuesForMainTableList.Add($"{value.ToString()}");
+                }
+                else
+                    propValuesForMainTableList.Add($"{prop.GetValue(businessObject).ToString()}");
+            }
+
+            propValuesForMainTable += string.Join(", ", propValuesForMainTableList) + $", {objectId}";
 
             string insertSqlQuery = SqlQueryProvider.InsertBusinessObject(mainTableName, propsNamesForMainTable, propValuesForMainTable);
 
@@ -417,8 +443,29 @@ namespace APPartment.ORM.Framework.Core
 
             var propsForMainTable = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute)));
-            var updateProps = string.Join(", ", propsForMainTable
-                .Select(x => $"[{x.Name}] =" + (x.PropertyType == typeof(string) || x.PropertyType == typeof(DateTime) || x.PropertyType == typeof(DateTime?) ? $"'{x.GetValue(businessObject).ToString()}'" : $"{x.GetValue(businessObject).ToString()}")));
+            var propValuesForMainTableList = new List<string>();
+            var updateProps = string.Empty;
+
+            foreach (var prop in propsForMainTable)
+            {
+                if (prop.PropertyType == typeof(string))
+                    propValuesForMainTableList.Add($"[{prop.Name}] = '{prop.GetValue(businessObject).ToString()}'");
+                else if (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
+                {
+                    var datetimeVal = (DateTime)prop.GetValue(businessObject);
+                    propValuesForMainTableList.Add($"[{prop.Name}] = '{datetimeVal.ToString("yyyy-MM-dd HH:mm:ss.fff")}'");
+                }
+                else if (prop.PropertyType == typeof(bool))
+                {
+                    var boolValue = (bool)prop.GetValue(businessObject);
+                    var value = Convert.ToInt32(boolValue);
+                    propValuesForMainTableList.Add($"[{prop.Name}] = {value.ToString()}");
+                }
+                else
+                    propValuesForMainTableList.Add($"[{prop.Name}] = {prop.GetValue(businessObject).ToString()}");
+            }
+
+            updateProps = string.Join(", ", propValuesForMainTableList);
 
             string updateSqlQuery = SqlQueryProvider.UpdateBaseObject(updateProps, businessObject.ObjectId.ToString());
 
@@ -437,9 +484,30 @@ namespace APPartment.ORM.Framework.Core
             var mainTableName = businessObject.GetType().Name;
             var propsForMainTable = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute)));
-            var updateProps = string.Join(", ", propsForMainTable
-                .Select(x => $"[{x.Name}] =" + (x.PropertyType == typeof(string) || x.PropertyType == typeof(DateTime) || x.PropertyType == typeof(DateTime?) ? $"'{x.GetValue(businessObject).ToString()}'" : $"{x.GetValue(businessObject).ToString()}")));
-            
+            var propValuesForMainTableList = new List<string>();
+            var updateProps = string.Empty;
+
+            foreach (var prop in propsForMainTable)
+            {
+                if (prop.PropertyType == typeof(string))
+                    propValuesForMainTableList.Add($"[{prop.Name}] = '{prop.GetValue(businessObject).ToString()}'");
+                else if (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
+                {
+                    var datetimeVal = (DateTime)prop.GetValue(businessObject);
+                    propValuesForMainTableList.Add($"[{prop.Name}] = '{datetimeVal.ToString("yyyy-MM-dd HH:mm:ss.fff")}'");
+                }
+                else if (prop.PropertyType == typeof(bool))
+                {
+                    var boolValue = (bool)prop.GetValue(businessObject);
+                    var value = Convert.ToInt32(boolValue);
+                    propValuesForMainTableList.Add($"[{prop.Name}] = {value.ToString()}");
+                }
+                else
+                    propValuesForMainTableList.Add($"[{prop.Name}] = {prop.GetValue(businessObject).ToString()}");
+            }
+
+            updateProps = string.Join(", ", propValuesForMainTableList);
+
             string updateSqlQuery = SqlQueryProvider.UpdateBusinessObject(mainTableName, updateProps, businessObject.ObjectId.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))

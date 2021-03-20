@@ -1,7 +1,9 @@
 ﻿@model bool
 
 <div class="form-check">
-    @Html.LabelFor(m => m, @ViewData.ModelMetadata.GetDisplayName())
-    <input name="@ViewData.ModelMetadata.PropertyName" class="form-check-input" type="checkbox" value="@ViewData.Model">
+    <input class="form-check-input" name="@ViewData.ModelMetadata.PropertyName" type="checkbox" value="@ViewData.Model" id="checkboxInput">
+    <label class="form-check-label" for="checkboxInput">
+        @ViewData.ModelMetadata.GetDisplayName()
+    </label>
     <span asp-validation-for="@ViewData.ModelMetadata.PropertyName" class="text-danger"></span>
 </div>

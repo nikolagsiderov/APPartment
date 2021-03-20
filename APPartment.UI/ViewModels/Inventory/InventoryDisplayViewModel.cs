@@ -7,5 +7,6 @@ namespace APPartment.UI.ViewModels.Inventory
     [IMapFrom(typeof(APPInventory))]
     public class InventoryDisplayViewModel : GridItemViewModelWithHome
     {
+        public bool IsSupplied { get; set; }
     }
 }

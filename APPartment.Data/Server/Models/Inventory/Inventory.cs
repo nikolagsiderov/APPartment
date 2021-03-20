@@ -7,5 +7,7 @@ namespace APPartment.Data.Server.Models.Inventory
     [Table("Inventory", Schema = "dbo")]
     public class Inventory : HomeBaseObject
     {
+        [FieldMappingForMainTable]
+        public bool IsSupplied { get; set; }
     }
 }

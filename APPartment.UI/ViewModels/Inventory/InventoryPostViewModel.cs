@@ -8,5 +8,7 @@ namespace APPartment.UI.ViewModels.Inventory
     [IMapFrom(typeof(APPInventory))]
     public class InventoryPostViewModel : PostViewModelWithHome
     {
+        [APPUIHint(Templates.Boolean)]
+        public bool IsSupplied { get; set; }
     }
 }
