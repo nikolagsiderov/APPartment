@@ -22,11 +22,11 @@ namespace APPartment.ORM.Framework.Core
         public T SelectGetObject<T>(T result, long id)
             where T : class, IBaseObject, new()
         {
-            var mainTableName = typeof(T).Name;
-            var selectBusinessObjectSqlQuery = SqlQueryProvider.SelectBusinessObjectById(mainTableName, id.ToString());
+            var table = typeof(T).Name;
+            var query = SqlQueryProvider.SelectBusinessObjectById(table, id.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(selectBusinessObjectSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 var reader = cmd.ExecuteReader();
@@ -38,7 +38,12 @@ namespace APPartment.ORM.Framework.Core
                         PropertyInfo property = result.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
                         if (null != property && property.CanWrite)
                         {
-                            property.SetValue(result, reader.GetValue(i), null);
+                            var value = reader.GetValue(i);
+
+                            if (value == DBNull.Value)
+                                continue;
+
+                            property.SetValue(result, value, null);
                         }
                     }
                 }
@@ -52,13 +57,12 @@ namespace APPartment.ORM.Framework.Core
         public T SelectFilterGetObject<T>(T result, Expression<Func<T, bool>> filter)
             where T : class, IBaseObject, new()
         {
-            var mainTableName = typeof(T).Name;
+            var table = typeof(T).Name;
             var sqlClause = expressionTranslator.Translate(filter);
-
-            var selectBusinessObjectSqlQuery = SqlQueryProvider.SelectBusinessObjectByClause(mainTableName, sqlClause);
+            var query = SqlQueryProvider.SelectBusinessObjectByClause(table, sqlClause);
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(selectBusinessObjectSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 var reader = cmd.ExecuteReader();
@@ -70,10 +74,12 @@ namespace APPartment.ORM.Framework.Core
                         PropertyInfo property = result.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
                         if (null != property && property.CanWrite)
                         {
-                            if (reader.GetValue(i) == DBNull.Value)
+                            var value = reader.GetValue(i);
+
+                            if (value == DBNull.Value)
                                 continue;
 
-                            property.SetValue(result, reader.GetValue(i), null);
+                            property.SetValue(result, value, null);
                         }
                     }
                 }
@@ -90,8 +96,8 @@ namespace APPartment.ORM.Framework.Core
         public List<T> SelectGetObjects<T>(List<T> result)
             where T : class, IBaseObject, new()
         {
-            var mainTableName = typeof(T).Name;
-            var selectBusinessObjectsSqlQuery = SqlQueryProvider.SelectBusinessObjects(mainTableName);
+            var table = typeof(T).Name;
+            var query = SqlQueryProvider.SelectBusinessObjects(table);
             T obj = null;
             var propertiesCount = typeof(T)
                 .GetProperties()
@@ -99,10 +105,11 @@ namespace APPartment.ORM.Framework.Core
                 Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute))
                 || Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute))
                 || Attribute.IsDefined(prop, typeof(FieldMappingForObjectTablePrimaryKeyAttribute))
-                || Attribute.IsDefined(prop, typeof(FieldMappingForMainTablePrimaryKeyAttribute))).Count();
+                || Attribute.IsDefined(prop, typeof(FieldMappingForMainTablePrimaryKeyAttribute)))
+                .Count();
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(selectBusinessObjectsSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 var reader = cmd.ExecuteReader();
@@ -116,7 +123,12 @@ namespace APPartment.ORM.Framework.Core
                         PropertyInfo property = obj.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
                         if (null != property && property.CanWrite)
                         {
-                            property.SetValue(obj, reader.GetValue(i), null);
+                            var value = reader.GetValue(i);
+
+                            if (value == DBNull.Value)
+                                continue;
+
+                            property.SetValue(obj, value, null);
                         }
                     }
 
@@ -132,10 +144,9 @@ namespace APPartment.ORM.Framework.Core
         public List<T> SelectGetObjects<T>(List<T> result, Expression<Func<T, bool>> filter)
             where T : class, IBaseObject, new()
         {
-            var mainTableName = typeof(T).Name;
+            var table = typeof(T).Name;
             var sqlClause = expressionTranslator.Translate(filter);
-
-            var selectBusinessObjectsSqlQuery = SqlQueryProvider.SelectBusinessObjectsByClause(mainTableName, sqlClause);
+            var query = SqlQueryProvider.SelectBusinessObjectsByClause(table, sqlClause);
             T obj = null;
             var propertiesCount = typeof(T)
                 .GetProperties()
@@ -143,10 +154,11 @@ namespace APPartment.ORM.Framework.Core
                 Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute))
                 || Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute))
                 || Attribute.IsDefined(prop, typeof(FieldMappingForObjectTablePrimaryKeyAttribute))
-                || Attribute.IsDefined(prop, typeof(FieldMappingForMainTablePrimaryKeyAttribute))).Count();
+                || Attribute.IsDefined(prop, typeof(FieldMappingForMainTablePrimaryKeyAttribute)))
+                .Count();
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(selectBusinessObjectsSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 var reader = cmd.ExecuteReader();
@@ -160,7 +172,12 @@ namespace APPartment.ORM.Framework.Core
                         PropertyInfo property = obj.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
                         if (null != property && property.CanWrite)
                         {
-                            property.SetValue(obj, reader.GetValue(i), null);
+                            var value = reader.GetValue(i);
+
+                            if (value == DBNull.Value)
+                                continue;
+
+                            property.SetValue(obj, value, null);
                         }
                     }
 
@@ -176,11 +193,11 @@ namespace APPartment.ORM.Framework.Core
         public T SelectGetLookupObject<T>(T result, long id)
             where T : class, ILookupObject, new()
         {
-            var mainTableName = typeof(T).Name;
-            var selectLookupObjectSqlQuery = SqlQueryProvider.SelectLookupObjectById(mainTableName, id.ToString());
+            var table = typeof(T).Name;
+            var query = SqlQueryProvider.SelectLookupObjectById(table, id.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(selectLookupObjectSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 var reader = cmd.ExecuteReader();
@@ -192,7 +209,12 @@ namespace APPartment.ORM.Framework.Core
                         PropertyInfo property = result.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
                         if (null != property && property.CanWrite)
                         {
-                            property.SetValue(result, reader.GetValue(i), null);
+                            var value = reader.GetValue(i);
+
+                            if (value == DBNull.Value)
+                                continue;
+
+                            property.SetValue(result, value, null);
                         }
                     }
                 }
@@ -206,13 +228,12 @@ namespace APPartment.ORM.Framework.Core
         public T SelectGetLookupObject<T>(T result, Expression<Func<T, bool>> filter)
             where T : class, ILookupObject, new()
         {
-            var mainTableName = typeof(T).Name;
+            var table = typeof(T).Name;
             var sqlClause = expressionTranslator.Translate(filter);
-
-            var selectLookupObjectSqlQuery = SqlQueryProvider.SelectLookupObjectByClause(mainTableName, sqlClause);
+            var query = SqlQueryProvider.SelectLookupObjectByClause(table, sqlClause);
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(selectLookupObjectSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 var reader = cmd.ExecuteReader();
@@ -224,7 +245,12 @@ namespace APPartment.ORM.Framework.Core
                         PropertyInfo property = result.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
                         if (null != property && property.CanWrite)
                         {
-                            property.SetValue(result, reader.GetValue(i), null);
+                            var value = reader.GetValue(i);
+
+                            if (value == DBNull.Value)
+                                continue;
+
+                            property.SetValue(result, value, null);
                         }
                     }
                 }
@@ -238,16 +264,17 @@ namespace APPartment.ORM.Framework.Core
         public List<T> SelectGetLookupObjects<T>(List<T> result)
             where T : class, ILookupObject, new()
         {
-            var mainTableName = typeof(T).Name;
-            var selectLookupObjectsSqlQuery = SqlQueryProvider.SelectLookupObjects(mainTableName);
+            var table = typeof(T).Name;
+            var query = SqlQueryProvider.SelectLookupObjects(table);
             T obj = null;
             var propertiesCount = typeof(T)
                 .GetProperties()
                 .Where(prop =>
-                Attribute.IsDefined(prop, typeof(FieldMappingForLookupTableAttribute))).Count();
+                Attribute.IsDefined(prop, typeof(FieldMappingForLookupTableAttribute)))
+                .Count();
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(selectLookupObjectsSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 var reader = cmd.ExecuteReader();
@@ -261,7 +288,12 @@ namespace APPartment.ORM.Framework.Core
                         PropertyInfo property = obj.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
                         if (null != property && property.CanWrite)
                         {
-                            property.SetValue(obj, reader.GetValue(i), null);
+                            var value = reader.GetValue(i);
+
+                            if (value == DBNull.Value)
+                                continue;
+
+                            property.SetValue(obj, value, null);
                         }
                     }
 
@@ -277,18 +309,18 @@ namespace APPartment.ORM.Framework.Core
         public List<T> SelectGetLookupObjects<T>(List<T> result, Expression<Func<T, bool>> filter)
             where T : class, ILookupObject, new()
         {
-            var mainTableName = typeof(T).Name;
+            var table = typeof(T).Name;
             var sqlClause = expressionTranslator.Translate(filter);
-
-            var selectLookupObjectsSqlQuery = SqlQueryProvider.SelectLookupObjectsByClause(mainTableName, sqlClause);
+            var query = SqlQueryProvider.SelectLookupObjectsByClause(table, sqlClause);
             T obj = null;
             var propertiesCount = typeof(T)
                 .GetProperties()
                 .Where(prop =>
-                Attribute.IsDefined(prop, typeof(FieldMappingForLookupTableAttribute))).Count();
+                Attribute.IsDefined(prop, typeof(FieldMappingForLookupTableAttribute)))
+                .Count();
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(selectLookupObjectsSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 var reader = cmd.ExecuteReader();
@@ -302,7 +334,12 @@ namespace APPartment.ORM.Framework.Core
                         PropertyInfo property = obj.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
                         if (null != property && property.CanWrite)
                         {
-                            property.SetValue(obj, reader.GetValue(i), null);
+                            var value = reader.GetValue(i);
+
+                            if (value == DBNull.Value)
+                                continue;
+
+                            property.SetValue(obj, value, null);
                         }
                     }
 
@@ -331,37 +368,14 @@ namespace APPartment.ORM.Framework.Core
             if (string.IsNullOrEmpty(businessObject.Details))
                 businessObject.Details = "none";
 
-            var propsForMainTable = businessObject.GetType().GetProperties().Where(
+            var properties = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute)));
-            var propsNamesForMainTable = string.Join(", ", propsForMainTable.Select(x => $"[{x.Name}]"));
-            var propValuesForMainTableList = new List<string>();
-            var propValuesForMainTable = string.Empty;
-
-            foreach (var prop in propsForMainTable)
-            {
-                if (prop.PropertyType == typeof(string))
-                    propValuesForMainTableList.Add($"'{prop.GetValue(businessObject).ToString()}'");
-                else if (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
-                {
-                    var datetimeVal = (DateTime)prop.GetValue(businessObject);
-                    propValuesForMainTableList.Add($"'{datetimeVal.ToString("yyyy-MM-dd HH:mm:ss.fff")}'");
-                }
-                else if (prop.PropertyType == typeof(bool))
-                {
-                    var boolValue = (bool)prop.GetValue(businessObject);
-                    var value = Convert.ToInt32(boolValue);
-                    propValuesForMainTableList.Add($"{value.ToString()}");
-                }
-                else
-                    propValuesForMainTableList.Add($"{prop.GetValue(businessObject).ToString()}");
-            }
-
-            propValuesForMainTable += string.Join(", ", propValuesForMainTableList);
-
-            string insertSqlQuery = SqlQueryProvider.InsertBaseObject(propsNamesForMainTable, propValuesForMainTable);
+            var propertyColumnNames = SqlQueryProvider.GetPropertyNamesForDBColumns(properties);
+            var propertyValues = SqlQueryProvider.GetPropertyValues<T>(properties, businessObject);
+            string query = SqlQueryProvider.InsertBaseObject(propertyColumnNames, propertyValues);
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(insertSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 objectId = cmd.ExecuteScalar();
@@ -369,50 +383,23 @@ namespace APPartment.ORM.Framework.Core
             }
 
             if (objectId != null)
-            {
                 return (int)(decimal)objectId;
-            }
             else
-            {
                 return 0;
-            }
         }
 
         public void SaveCreateBusinessObject<T>(T businessObject, long objectId)
             where T : class, IBaseObject
         {
-            var mainTableName = businessObject.GetType().Name;
-            var propsForMainTable = businessObject.GetType().GetProperties().Where(
+            var table = businessObject.GetType().Name;
+            var properties = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute)));
-            var propsNamesForMainTable = string.Join(", ", propsForMainTable.Select(x => $"[{x.Name}]")) + ", [ObjectId]";
-            var propValuesForMainTableList = new List<string>();
-            var propValuesForMainTable = string.Empty;
-
-            foreach (var prop in propsForMainTable)
-            {
-                if (prop.PropertyType == typeof(string))
-                    propValuesForMainTableList.Add($"'{prop.GetValue(businessObject).ToString()}'");
-                else if (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
-                {
-                    var datetimeVal = (DateTime)prop.GetValue(businessObject);
-                    propValuesForMainTableList.Add($"'{datetimeVal.ToString("yyyy-MM-dd HH:mm:ss.fff")}'");
-                }
-                else if (prop.PropertyType == typeof(bool))
-                {
-                    var boolValue = (bool)prop.GetValue(businessObject);
-                    var value = Convert.ToInt32(boolValue);
-                    propValuesForMainTableList.Add($"{value.ToString()}");
-                }
-                else
-                    propValuesForMainTableList.Add($"{prop.GetValue(businessObject).ToString()}");
-            }
-
-            propValuesForMainTable += string.Join(", ", propValuesForMainTableList) + $", {objectId}";
-
-            string insertSqlQuery = SqlQueryProvider.InsertBusinessObject(mainTableName, propsNamesForMainTable, propValuesForMainTable);
+            var propertyColumnNames = SqlQueryProvider.GetPropertyNamesForDBColumns(properties) + ", [ObjectId]";
+            var propertyValues = SqlQueryProvider.GetPropertyValues<T>(properties, businessObject) + $", {objectId}";
+            var query = SqlQueryProvider.InsertBusinessObject(table, propertyColumnNames, propertyValues);
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(insertSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 cmd.ExecuteNonQuery();
@@ -441,36 +428,13 @@ namespace APPartment.ORM.Framework.Core
             if (businessObject.CreatedDate == null)
                 businessObject.CreatedDate = DateTime.Now;
 
-            var propsForMainTable = businessObject.GetType().GetProperties().Where(
+            var properties = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute)));
-            var propValuesForMainTableList = new List<string>();
-            var updateProps = string.Empty;
-
-            foreach (var prop in propsForMainTable)
-            {
-                if (prop.PropertyType == typeof(string))
-                    propValuesForMainTableList.Add($"[{prop.Name}] = '{prop.GetValue(businessObject).ToString()}'");
-                else if (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
-                {
-                    var datetimeVal = (DateTime)prop.GetValue(businessObject);
-                    propValuesForMainTableList.Add($"[{prop.Name}] = '{datetimeVal.ToString("yyyy-MM-dd HH:mm:ss.fff")}'");
-                }
-                else if (prop.PropertyType == typeof(bool))
-                {
-                    var boolValue = (bool)prop.GetValue(businessObject);
-                    var value = Convert.ToInt32(boolValue);
-                    propValuesForMainTableList.Add($"[{prop.Name}] = {value.ToString()}");
-                }
-                else
-                    propValuesForMainTableList.Add($"[{prop.Name}] = {prop.GetValue(businessObject).ToString()}");
-            }
-
-            updateProps = string.Join(", ", propValuesForMainTableList);
-
-            string updateSqlQuery = SqlQueryProvider.UpdateBaseObject(updateProps, businessObject.ObjectId.ToString());
+            var propertyNamesAndValues = SqlQueryProvider.GetPropertyNamesForDBColumnsAndValuesForUpdate<T>(properties, businessObject);
+            string query = SqlQueryProvider.UpdateBaseObject(propertyNamesAndValues, businessObject.ObjectId.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(updateSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 cmd.ExecuteNonQuery();
@@ -481,37 +445,14 @@ namespace APPartment.ORM.Framework.Core
         public void SaveUpdateBusinessObject<T>(T businessObject)
             where T : class, IBaseObject
         {
-            var mainTableName = businessObject.GetType().Name;
-            var propsForMainTable = businessObject.GetType().GetProperties().Where(
+            var table = businessObject.GetType().Name;
+            var properties = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute)));
-            var propValuesForMainTableList = new List<string>();
-            var updateProps = string.Empty;
-
-            foreach (var prop in propsForMainTable)
-            {
-                if (prop.PropertyType == typeof(string))
-                    propValuesForMainTableList.Add($"[{prop.Name}] = '{prop.GetValue(businessObject).ToString()}'");
-                else if (prop.PropertyType == typeof(DateTime) || prop.PropertyType == typeof(DateTime?))
-                {
-                    var datetimeVal = (DateTime)prop.GetValue(businessObject);
-                    propValuesForMainTableList.Add($"[{prop.Name}] = '{datetimeVal.ToString("yyyy-MM-dd HH:mm:ss.fff")}'");
-                }
-                else if (prop.PropertyType == typeof(bool))
-                {
-                    var boolValue = (bool)prop.GetValue(businessObject);
-                    var value = Convert.ToInt32(boolValue);
-                    propValuesForMainTableList.Add($"[{prop.Name}] = {value.ToString()}");
-                }
-                else
-                    propValuesForMainTableList.Add($"[{prop.Name}] = {prop.GetValue(businessObject).ToString()}");
-            }
-
-            updateProps = string.Join(", ", propValuesForMainTableList);
-
-            string updateSqlQuery = SqlQueryProvider.UpdateBusinessObject(mainTableName, updateProps, businessObject.ObjectId.ToString());
+            var propertyNamesAndValues = SqlQueryProvider.GetPropertyNamesForDBColumnsAndValuesForUpdate<T>(properties, businessObject);
+            string query = SqlQueryProvider.UpdateBusinessObject(table, propertyNamesAndValues, businessObject.ObjectId.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(updateSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 cmd.ExecuteNonQuery();
@@ -522,9 +463,8 @@ namespace APPartment.ORM.Framework.Core
         public void DeleteBusinessAndBaseObject<T>(T businessObject)
             where T : class, IBaseObject
         {
-            var mainTableName = businessObject.GetType().Name;
-
-            string deleteBusinessObjectSqlQuery = SqlQueryProvider.DeleteBusinessObject(mainTableName, businessObject.ObjectId.ToString());
+            var table = businessObject.GetType().Name;
+            string deleteBusinessObjectSqlQuery = SqlQueryProvider.DeleteBusinessObject(table, businessObject.ObjectId.ToString());
             string deleteBaseObjectSqlQuery = SqlQueryProvider.DeleteBaseObject(businessObject.ObjectId.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
@@ -546,12 +486,12 @@ namespace APPartment.ORM.Framework.Core
 
         public bool AnyBusinessObjects<T>(bool result)
         {
-            var mainTableName = typeof(T).Name;
-            var selectCountBusinessObjectsSqlQuery = SqlQueryProvider.AnyCountBusinessObjects(mainTableName);
+            var table = typeof(T).Name;
+            var query = SqlQueryProvider.AnyCountBusinessObjects(table);
             object count = null;
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(selectCountBusinessObjectsSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 count = cmd.ExecuteScalar();
@@ -574,14 +514,13 @@ namespace APPartment.ORM.Framework.Core
 
         public bool AnyBusinessObjects<T>(bool result, Expression<Func<T, bool>> filter)
         {
-            var mainTableName = typeof(T).Name;
+            var table = typeof(T).Name;
             var sqlClause = expressionTranslator.Translate(filter);
-
-            var selectCountBusinessObjectsSqlQuery = SqlQueryProvider.AnyCountBusinessObjects(mainTableName, sqlClause);
+            var query = SqlQueryProvider.AnyCountBusinessObjects(table, sqlClause);
             object count = null;
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(selectCountBusinessObjectsSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 count = cmd.ExecuteScalar();
@@ -604,12 +543,12 @@ namespace APPartment.ORM.Framework.Core
 
         public int CountBusinessObjects<T>(int result)
         {
-            var mainTableName = typeof(T).Name;
-            var selectCountBusinessObjectsSqlQuery = SqlQueryProvider.AnyCountBusinessObjects(mainTableName);
+            var table = typeof(T).Name;
+            var query = SqlQueryProvider.AnyCountBusinessObjects(table);
             object count = null;
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(selectCountBusinessObjectsSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 count = cmd.ExecuteScalar();
@@ -632,14 +571,13 @@ namespace APPartment.ORM.Framework.Core
 
         public int CountBusinessObjects<T>(int result, Expression<Func<T, bool>> filter)
         {
-            var mainTableName = typeof(T).Name;
+            var table = typeof(T).Name;
             var sqlClause = expressionTranslator.Translate(filter);
-
-            var selectCountBusinessObjectsSqlQuery = SqlQueryProvider.AnyCountBusinessObjects(mainTableName, sqlClause);
+            var query = SqlQueryProvider.AnyCountBusinessObjects(table, sqlClause);
             object count = null;
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(selectCountBusinessObjectsSqlQuery, conn))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
                 count = cmd.ExecuteScalar();

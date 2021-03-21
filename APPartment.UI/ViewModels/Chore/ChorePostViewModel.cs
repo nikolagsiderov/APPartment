@@ -10,7 +10,7 @@ namespace APPartment.UI.ViewModels.Chore
     public class ChorePostViewModel : PostViewModelWithHome
     {
         [APPUIHint(Templates.Hidden)]
-        [Display(Name = "Done")]
+        [Display(Name = "Assigned to")]
         public long? AssignedToUserId { get; set; }
     }
 }

@@ -10,7 +10,7 @@
         {
             get
             {
-                return JorkataConnectionString;
+                return KoletoConnectionString;
             }
         }
     }
