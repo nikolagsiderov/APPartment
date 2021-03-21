@@ -3,7 +3,7 @@ using APPartment.UI.Utilities.Constants;
 using APPartment.UI.ViewModels.Base;
 using APPImage = APPartment.Data.Server.Models.Clingons.Image;
 
-namespace APPartment.UI.ViewModels.Image
+namespace APPartment.UI.ViewModels.Clingons.Image
 {
     [IMapFrom(typeof(APPImage))]
     public class ImagePostViewModel : PostViewModel

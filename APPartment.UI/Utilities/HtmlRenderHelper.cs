@@ -1,6 +1,6 @@
 ﻿using APPartment.UI.Services.Base;
 using APPartment.UI.ViewModels.Chat;
-using APPartment.UI.ViewModels.Comment;
+using APPartment.UI.ViewModels.Clingons.Comment;
 using APPartment.UI.ViewModels.User;
 using System.Collections.Generic;
 using System.Linq;

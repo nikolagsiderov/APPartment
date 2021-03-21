@@ -1,5 +1,5 @@
 ﻿using APPartment.ORM.Framework.Declarations;
-using APPartment.UI.ViewModels.Image;
+using APPartment.UI.ViewModels.Clingons.Image;
 using System;
 using System.Collections.Generic;
 

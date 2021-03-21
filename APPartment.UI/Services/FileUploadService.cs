@@ -1,6 +1,6 @@
 ﻿using APPartment.UI.Services.Base;
 using APPartment.UI.Utilities;
-using APPartment.UI.ViewModels.Image;
+using APPartment.UI.ViewModels.Clingons.Image;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
