@@ -1,0 +1,4 @@
+USE APPartment
+
+ALTER TABLE Hygiene
+ADD IsDone BIT NOT NULL DEFAULT(0)

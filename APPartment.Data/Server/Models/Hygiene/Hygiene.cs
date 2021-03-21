@@ -7,5 +7,7 @@ namespace APPartment.Data.Server.Models.Hygiene
     [Table("Hygiene", Schema = "dbo")]
     public class Hygiene : HomeBaseObject
     {
+        [FieldMappingForMainTable]
+        public bool IsDone { get; set; }
     }
 }

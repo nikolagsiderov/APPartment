@@ -7,5 +7,7 @@ namespace APPartment.Data.Server.Models.Issue
     [Table("Issue", Schema = "dbo")]
     public class Issue : HomeBaseObject
     {
+        [FieldMappingForMainTable]
+        public bool IsClosed { get; set; }
     }
 }

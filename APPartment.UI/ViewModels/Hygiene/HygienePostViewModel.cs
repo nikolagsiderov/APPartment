@@ -8,5 +8,7 @@ namespace APPartment.UI.ViewModels.Hygiene
     [IMapFrom(typeof(APPHygiene))]
     public class HygienePostViewModel : PostViewModelWithHome
     {
+        [APPUIHint(Templates.Boolean)]
+        public bool IsDone { get; set; }
     }
 }

@@ -8,5 +8,7 @@ namespace APPartment.UI.ViewModels.Issue
     [IMapFrom(typeof(APPIssue))]
     public class IssuePostViewModel : PostViewModelWithHome
     {
+        [APPUIHint(Templates.Boolean)]
+        public bool IsClosed { get; set; }
     }
 }

@@ -1,0 +1,4 @@
+USE APPartment
+
+ALTER TABLE Issue
+ADD IsClosed BIT NOT NULL DEFAULT(0)

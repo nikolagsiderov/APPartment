@@ -7,5 +7,6 @@ namespace APPartment.UI.ViewModels.Hygiene
     [IMapFrom(typeof(APPHygiene))]
     public class HygieneDisplayViewModel : GridItemViewModelWithHome
     {
+        public bool IsDone { get; set; }
     }
 }
