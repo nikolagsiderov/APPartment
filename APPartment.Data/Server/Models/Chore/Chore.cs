@@ -7,6 +7,7 @@ namespace APPartment.Data.Server.Models.Chore
     [Table("Chore", Schema = "dbo")]
     public class Chore : HomeBaseObject
     {
+        [FieldMappingForMainTable]
         public long? AssignedToUserId { get; set; }
     }
 }
