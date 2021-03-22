@@ -9,6 +9,8 @@ namespace APPartment.Data.Server.Models.Chore
     {
         [FieldMappingForMainTable]
         public long? AssignedToUserId { get; set; }
+
+        [FieldMappingForMainTable]
         public bool IsDone { get; set; }
     }
 }

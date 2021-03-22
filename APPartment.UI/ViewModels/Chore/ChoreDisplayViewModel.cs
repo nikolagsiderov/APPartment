@@ -8,6 +8,7 @@ namespace APPartment.UI.ViewModels.Chore
     public class ChoreDisplayViewModel : GridItemViewModelWithHome
     {
         public long? AssignedToUserId { get; set; }
+
         public bool IsDone { get; set; }
     }
 }

@@ -13,6 +13,8 @@ namespace APPartment.UI.ViewModels.Chore
         [Display(Name = "Assigned to")]
         public long? AssignedToUserId { get; set; }
         [APPUIHint(Templates.Boolean)]
+
+        [APPUIHint(Templates.Boolean)]
         public bool IsDone { get; set; }
     }
 }

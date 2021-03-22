@@ -1,3 +1,4 @@
 USE APPartment
+
 ALTER TABLE Chore
 ADD IsDone BIT NOT NULL DEFAULT(0)
