@@ -1,4 +1,6 @@
 ﻿$(document).ready(function () {
+    $('.breadcrumb-item > a').addClass('no-underline');
+
     $.ajax({
         url: "/Home/GetHomeStatus",
         success: function (data) {

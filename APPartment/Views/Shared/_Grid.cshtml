@@ -13,7 +13,7 @@
         {
             <div class="row">
                 <div class="col-md-1">
-                    <a asp-action="Create"><button type="button" class="btn btn-primary"><i class="fas fa-plus"></i> &nbsp; Add</button></a>
+                    <a asp-action="Create" class="no-underline btn btn-success btn-sm" style="font-size: small;"><i class="fas fa-plus"></i>&nbsp; Add</a>
                 </div>
             </div>
 
@@ -100,8 +100,8 @@
                                         </div>
                                     }
 
-                                    <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i></button></a>
-                                    <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button></a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i></button></a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button></a>
                                     <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#@modalDeleteId"><i class="fas fa-trash-alt"></i></button>
 
                                     <div class="modal fade" id="@modalDeleteId" tabindex="-1" role="dialog" aria-labelledby="deleteObjectModalLabel" aria-hidden="true">
@@ -118,7 +118,7 @@
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                    <a asp-action="Delete" asp-route-id="@item.Id"><button type="button" class="btn btn-danger">Delete</button></a>
+                                                    <a asp-action="Delete" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-danger">Delete</button></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -126,7 +126,7 @@
                                 }
                                 else
                                 {
-                                    <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i> &nbsp; Details</button></a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i> &nbsp; Details</button></a>
                                 }
                             </td>
                         </tr>

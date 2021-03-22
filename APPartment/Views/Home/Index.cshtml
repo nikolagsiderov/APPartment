@@ -8,7 +8,8 @@
     <div class="col-md-4">
         <div class="card shadow mb-4 text-center">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Inventory - latest updates</h6>
+                <h6 class="m-0 font-weight-bold text-primary"><a asp-controller="Inventory" asp-action="Index" class="no-underline"><i class='fas fa-tasks'></i> Inventory - latest updates</a></h6>
+                <div style="margin-left: auto;"><a asp-controller="Inventory" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
             </div>
             <div class="card-body">
                 @if (widgetObjects[0].Name != null)
@@ -19,9 +20,8 @@
                 }
                 else
                 {
-                    <p class="card-text">No items in the inventory.</p>
+                    <p class="card-text">No items present.</p>
                 }
-                <a asp-controller="Inventory" asp-action="Index" class="btn btn-primary"><i class="fas fa-link"></i> &nbsp; Go to inventory</a>
             </div>
             <div class="card-footer text-muted">
                 @if (widgetObjects[0].Name != null)
@@ -38,7 +38,8 @@
     <div class="col-md-4">
         <div class="card shadow mb-4 text-center">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Hygiene - latest updates</h6>
+                <h6 class="m-0 font-weight-bold text-primary"><a asp-controller="Hygiene" asp-action="Index" class="no-underline"><i class='fas fa-recycle'></i> Hygiene - latest updates</a></h6>
+                <div style="margin-left: auto;"><a asp-controller="Hygiene" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
             </div>
             <div class="card-body">
                 @if (widgetObjects[1].Name != null)
@@ -49,10 +50,8 @@
                 }
                 else
                 {
-                    <p class="card-text">No items in the hygiene.</p>
+            <p class="card-text">No items present.</p>
                 }
-
-                <a asp-controller="Hygiene" asp-action="Index" class="btn btn-primary"><i class="fas fa-link"></i> &nbsp; Go to hygiene</a>
             </div>
             <div class="card-footer text-muted">
                 @if (widgetObjects[1].Name != null)
@@ -69,7 +68,8 @@
     <div class="col-md-4">
         <div class="card shadow mb-4 text-center">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Issues - latest updates</h6>
+                <h6 class="m-0 font-weight-bold text-primary"><a asp-controller="Issues" asp-action="Index" class="no-underline"><i class='fas fa-exclamation-circle'></i> Issues - latest updates</a></h6>
+                <div style="margin-left: auto;"><a asp-controller="Issues" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
             </div>
             <div class="card-body">
                 @if (widgetObjects[2].Name != null)
@@ -82,7 +82,6 @@
                 {
                     <p class="card-text">No issues present.</p>
                 }
-                <a asp-controller="Issues" asp-action="Index" class="btn btn-primary"><i class="fas fa-link"></i> &nbsp; Go to issues</a>
             </div>
             <div class="card-footer text-muted">
                 @if (widgetObjects[2].Name != null)
@@ -104,7 +103,7 @@
     <div class="col-md-6">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Home chat room</h6>
+                <h6 class="m-0 font-weight-bold text-primary"><i class="far fa-comment-dots"></i> Chat with housemates</h6>
             </div>
             <div class="card-body">
                 <div class="container">
@@ -115,7 +114,7 @@
                     <div class="row">&nbsp;</div>
                     <div class="row">
                         <div class="col-6">
-                            <button type="submit" class="btn btn-primary" id="sendButton"><i class="fas fa-reply"></i> &nbsp; Send</button>
+                            <button type="submit" class="btn btn-primary btn-sm" id="sendButton" style="font-size: small;"><i class="fas fa-reply"></i> &nbsp; Send</button>
                         </div>
                     </div>
                 </div>
