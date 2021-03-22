@@ -7,7 +7,7 @@ using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Issue;
 
-namespace APPartment.Controllers
+namespace APPartment.Web.Controllers
 {
     public class IssuesController : BaseCRUDController<IssueDisplayViewModel, IssuePostViewModel>
     {

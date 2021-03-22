@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace APPartment
+namespace APPartment.Web
 {
     public class Program
     {

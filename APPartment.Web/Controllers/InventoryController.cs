@@ -7,7 +7,7 @@ using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Inventory;
 
-namespace APPartment.Controllers
+namespace APPartment.Web.Controllers
 {
     public class InventoryController : BaseCRUDController<InventoryDisplayViewModel, InventoryPostViewModel>
     {

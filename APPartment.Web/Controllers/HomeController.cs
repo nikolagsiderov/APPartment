@@ -17,7 +17,7 @@ using APPartment.UI.ViewModels.Base;
 using APPartment.UI.ViewModels.User;
 using APPartment.UI.ViewModels.Chat;
 
-namespace APPartment.Controllers
+namespace APPartment.Web.Controllers
 {
     public class HomeController : BaseController
     {

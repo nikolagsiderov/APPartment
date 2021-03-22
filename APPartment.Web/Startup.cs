@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using APPartment.UI.Services;
 
-namespace APPartment
+namespace APPartment.Web
 {
     public class Startup
     {

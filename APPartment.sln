@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment", "APPartment.csproj", "{45797B29-1226-4161-A990-A850858C7E7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.Web", "APPartment.Web\APPartment.Web.csproj", "{45797B29-1226-4161-A990-A850858C7E7B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.UI", "..\APPartment.UI\APPartment.UI.csproj", "{C0D7B9BD-DD7E-4A45-8C01-6C751ECB2057}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.UI", "APPartment.UI\APPartment.UI.csproj", "{C0D7B9BD-DD7E-4A45-8C01-6C751ECB2057}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.ORM.Framework", "..\APPartment.ORM.Framework\APPartment.ORM.Framework.csproj", "{19537801-69C1-4EE9-BD70-2D8AD0B2233C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.ORM.Framework", "APPartment.ORM.Framework\APPartment.ORM.Framework.csproj", "{19537801-69C1-4EE9-BD70-2D8AD0B2233C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.Tests", "..\APPartment.Tests\APPartment.Tests.csproj", "{7116535D-D111-45CC-8FE3-EA5E4CFAE35F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.Tests", "APPartment.Tests\APPartment.Tests.csproj", "{7116535D-D111-45CC-8FE3-EA5E4CFAE35F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.Data", "..\APPartment.Data\APPartment.Data.csproj", "{9BD2BB53-CFC5-4BDB-83F9-9D97F64AF849}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.Data", "APPartment.Data\APPartment.Data.csproj", "{9BD2BB53-CFC5-4BDB-83F9-9D97F64AF849}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -3,7 +3,7 @@ using APPartment.UI.ViewModels.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace APPartment.Controllers
+namespace APPartment.Web.Controllers
 {
     public class AccountController : BaseController
     {

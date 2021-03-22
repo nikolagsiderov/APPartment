@@ -9,7 +9,7 @@ using APPartment.UI.ViewModels;
 using APPartment.UI.ViewModels.Chore;
 using APPartment.UI.ViewModels.User;
 
-namespace APPartment.Controllers
+namespace APPartment.Web.Controllers
 {
     public class ChoresController : BaseCRUDController<ChoreDisplayViewModel, ChorePostViewModel>
     {

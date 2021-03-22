@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
 
-namespace APPartment.Controllers
+namespace APPartment.Web.Controllers
 {
     public class CalendarController : BaseAuthorizeController
     {
