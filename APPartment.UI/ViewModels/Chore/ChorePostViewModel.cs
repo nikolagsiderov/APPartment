@@ -15,6 +15,7 @@ namespace APPartment.UI.ViewModels.Chore
         [APPUIHint(Templates.Boolean)]
 
         [APPUIHint(Templates.Boolean)]
+        [Display(Name = "Done")]
         public bool IsDone { get; set; }
     }
 }
