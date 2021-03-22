@@ -1,0 +1,18 @@
+﻿@model DateTime
+
+<div class="form-group">
+    @Html.LabelFor(m => m, @ViewData.ModelMetadata.GetDisplayName())
+    <input type="text" class="form-control" id="@ViewData.ModelMetadata.PropertyName-datepicker" placeholder="dd/mm/yy" />
+</div>
+
+<script>
+    $('#@ViewData.ModelMetadata.PropertyName-datepicker').datepicker();
+
+    $('#@ViewData.ModelMetadata.PropertyName-datepicker').datepicker({
+      changeMonth: true,
+      changeYear: true
+    });
+
+    $('#@ViewData.ModelMetadata.PropertyName-datepicker').datepicker("option", "dateFormat", "dd/mm/yy");
+    $('#@ViewData.ModelMetadata.PropertyName-datepicker').datepicker("option", "showAnim", "slideDown");
+</script>

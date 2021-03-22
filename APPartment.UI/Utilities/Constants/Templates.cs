@@ -8,5 +8,6 @@
         public const string Password = "Password";
         public const string Boolean = "Boolean";
         public const string Integer = "Integer";
+        public const string Date = "Date";
     }
 }
