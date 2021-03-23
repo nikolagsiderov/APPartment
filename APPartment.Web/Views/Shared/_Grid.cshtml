@@ -100,9 +100,9 @@
                                         </div>
                                     }
 
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i></button></a>
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></button></a>
-                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#@modalDeleteId"><i class="fas fa-trash-alt"></i></button>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-outline-cyan btn-xs btn-icon"><i class="fas fa-info-circle"></i></button></a>
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-outline-blue btn-xs btn-icon"><i class="fas fa-edit"></i></button></a>
+                                    <button type="button" class="btn btn-outline-red btn-xs btn-icon" data-toggle="modal" data-target="#@modalDeleteId"><i class="fas fa-trash-alt"></i></button>
 
                                     <div class="modal fade" id="@modalDeleteId" tabindex="-1" role="dialog" aria-labelledby="deleteObjectModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
