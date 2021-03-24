@@ -100,24 +100,28 @@ namespace APPartment.Data.Core
         }
 
         public bool Any<T>()
+            where T : class, IBaseObject
         {
             var result = false;
             return dao.AnyBusinessObjects<T>(result);
         }
 
         public bool Any<T>(Expression<Func<T, bool>> filter)
+            where T : class, IBaseObject
         {
             var result = false;
             return dao.AnyBusinessObjects<T>(result, filter);
         }
 
         public int Count<T>()
+            where T : class, IBaseObject
         {
             var result = 0;
             return dao.CountBusinessObjects<T>(result);
         }
 
         public int Count<T>(Expression<Func<T, bool>> filter)
+            where T : class, IBaseObject
         {
             var result = 0;
             return dao.CountBusinessObjects<T>(result, filter);

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using APPartment.ORM.Framework.Helpers;
 using APPartment.ORM.Framework.Declarations;
 using APPartment.ORM.Framework.Attributes;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.ORM.Framework.Core
 {
@@ -22,7 +23,7 @@ namespace APPartment.ORM.Framework.Core
         public T SelectGetObject<T>(T result, long id)
             where T : class, IBaseObject, new()
         {
-            var table = typeof(T).Name;
+            var table = GetTableName<T>();
             var query = SqlQueryProvider.SelectBusinessObjectById(table, id.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
@@ -57,7 +58,7 @@ namespace APPartment.ORM.Framework.Core
         public T SelectFilterGetObject<T>(T result, Expression<Func<T, bool>> filter)
             where T : class, IBaseObject, new()
         {
-            var table = typeof(T).Name;
+            var table = GetTableName<T>();
             var sqlClause = expressionTranslator.Translate(filter);
             var query = SqlQueryProvider.SelectBusinessObjectByClause(table, sqlClause);
 
@@ -96,7 +97,7 @@ namespace APPartment.ORM.Framework.Core
         public List<T> SelectGetObjects<T>(List<T> result)
             where T : class, IBaseObject, new()
         {
-            var table = typeof(T).Name;
+            var table = GetTableName<T>();
             var query = SqlQueryProvider.SelectBusinessObjects(table);
             T obj = null;
             var propertiesCount = typeof(T)
@@ -144,7 +145,7 @@ namespace APPartment.ORM.Framework.Core
         public List<T> SelectGetObjects<T>(List<T> result, Expression<Func<T, bool>> filter)
             where T : class, IBaseObject, new()
         {
-            var table = typeof(T).Name;
+            var table = GetTableName<T>();
             var sqlClause = expressionTranslator.Translate(filter);
             var query = SqlQueryProvider.SelectBusinessObjectsByClause(table, sqlClause);
             T obj = null;
@@ -193,7 +194,7 @@ namespace APPartment.ORM.Framework.Core
         public T SelectGetLookupObject<T>(T result, long id)
             where T : class, ILookupObject, new()
         {
-            var table = typeof(T).Name;
+            var table = GetLookupTableName<T>();
             var query = SqlQueryProvider.SelectLookupObjectById(table, id.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
@@ -228,7 +229,7 @@ namespace APPartment.ORM.Framework.Core
         public T SelectGetLookupObject<T>(T result, Expression<Func<T, bool>> filter)
             where T : class, ILookupObject, new()
         {
-            var table = typeof(T).Name;
+            var table = GetLookupTableName<T>();
             var sqlClause = expressionTranslator.Translate(filter);
             var query = SqlQueryProvider.SelectLookupObjectByClause(table, sqlClause);
 
@@ -264,7 +265,7 @@ namespace APPartment.ORM.Framework.Core
         public List<T> SelectGetLookupObjects<T>(List<T> result)
             where T : class, ILookupObject, new()
         {
-            var table = typeof(T).Name;
+            var table = GetLookupTableName<T>();
             var query = SqlQueryProvider.SelectLookupObjects(table);
             T obj = null;
             var propertiesCount = typeof(T)
@@ -309,7 +310,7 @@ namespace APPartment.ORM.Framework.Core
         public List<T> SelectGetLookupObjects<T>(List<T> result, Expression<Func<T, bool>> filter)
             where T : class, ILookupObject, new()
         {
-            var table = typeof(T).Name;
+            var table = GetLookupTableName<T>();
             var sqlClause = expressionTranslator.Translate(filter);
             var query = SqlQueryProvider.SelectLookupObjectsByClause(table, sqlClause);
             T obj = null;
@@ -391,7 +392,7 @@ namespace APPartment.ORM.Framework.Core
         public void SaveCreateBusinessObject<T>(T businessObject, long objectId)
             where T : class, IBaseObject
         {
-            var table = businessObject.GetType().Name;
+            var table = GetTableName<T>();
             var properties = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute)));
             var propertyColumnNames = SqlQueryProvider.GetPropertyNamesForDBColumns(properties) + ", [ObjectId]";
@@ -445,7 +446,7 @@ namespace APPartment.ORM.Framework.Core
         public void SaveUpdateBusinessObject<T>(T businessObject)
             where T : class, IBaseObject
         {
-            var table = businessObject.GetType().Name;
+            var table = GetTableName<T>();
             var properties = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute)));
             var propertyNamesAndValues = SqlQueryProvider.GetPropertyNamesForDBColumnsAndValuesForUpdate<T>(properties, businessObject);
@@ -463,7 +464,7 @@ namespace APPartment.ORM.Framework.Core
         public void DeleteBusinessAndBaseObject<T>(T businessObject)
             where T : class, IBaseObject
         {
-            var table = businessObject.GetType().Name;
+            var table = GetTableName<T>();
             string deleteBusinessObjectSqlQuery = SqlQueryProvider.DeleteBusinessObject(table, businessObject.ObjectId.ToString());
             string deleteBaseObjectSqlQuery = SqlQueryProvider.DeleteBaseObject(businessObject.ObjectId.ToString());
 
@@ -485,8 +486,9 @@ namespace APPartment.ORM.Framework.Core
         }
 
         public bool AnyBusinessObjects<T>(bool result)
+            where T : class, IBaseObject
         {
-            var table = typeof(T).Name;
+            var table = GetTableName<T>();
             var query = SqlQueryProvider.AnyCountBusinessObjects(table);
             object count = null;
 
@@ -513,8 +515,9 @@ namespace APPartment.ORM.Framework.Core
         }
 
         public bool AnyBusinessObjects<T>(bool result, Expression<Func<T, bool>> filter)
+            where T : class, IBaseObject
         {
-            var table = typeof(T).Name;
+            var table = GetTableName<T>();
             var sqlClause = expressionTranslator.Translate(filter);
             var query = SqlQueryProvider.AnyCountBusinessObjects(table, sqlClause);
             object count = null;
@@ -542,8 +545,9 @@ namespace APPartment.ORM.Framework.Core
         }
 
         public int CountBusinessObjects<T>(int result)
+            where T : class, IBaseObject
         {
-            var table = typeof(T).Name;
+            var table = GetTableName<T>();
             var query = SqlQueryProvider.AnyCountBusinessObjects(table);
             object count = null;
 
@@ -570,8 +574,9 @@ namespace APPartment.ORM.Framework.Core
         }
 
         public int CountBusinessObjects<T>(int result, Expression<Func<T, bool>> filter)
+            where T : class, IBaseObject
         {
-            var table = typeof(T).Name;
+            var table = GetTableName<T>();
             var sqlClause = expressionTranslator.Translate(filter);
             var query = SqlQueryProvider.AnyCountBusinessObjects(table, sqlClause);
             object count = null;
@@ -594,6 +599,36 @@ namespace APPartment.ORM.Framework.Core
                 else
                     return result;
             }
+
+            return result;
+        }
+
+        private string GetTableName<T>()
+            where T : class, IBaseObject
+        {
+            var result = typeof(T)
+                .GetCustomAttributesData()
+                .Where(x => x.AttributeType.Equals(typeof(TableAttribute)))
+                .FirstOrDefault()
+                .ConstructorArguments
+                .FirstOrDefault()
+                .Value
+                .ToString();
+
+            return result;
+        }
+
+        private string GetLookupTableName<T>()
+            where T : class, ILookupObject
+        {
+            var result = typeof(T)
+                .GetCustomAttributesData()
+                .Where(x => x.AttributeType.Equals(typeof(TableAttribute)))
+                .FirstOrDefault()
+                .ConstructorArguments
+                .FirstOrDefault()
+                .Value
+                .ToString();
 
             return result;
         }
