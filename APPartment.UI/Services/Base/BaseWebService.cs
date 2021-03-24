@@ -135,7 +135,7 @@ namespace APPartment.UI.Services.Base
             return result;
         }
 
-        public void Save<T>(T model)
+        public T Save<T>(T model)
             where T : class, IBaseObject, new()
         {
             var serverModelType = GetServerModelType<T>();
@@ -156,8 +156,18 @@ namespace APPartment.UI.Services.Base
 
                 var serverModel = toServerModelFunc.Invoke(this, new object[] { model });
 
-                updateFunc
+                serverModel = updateFunc
                     .Invoke(BaseFacade, new object[] { serverModel, CurrentUserId });
+
+                var toViewModelFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(MapperService.GetViewModel)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+                var result = (T)toViewModelFunc.Invoke(this, new object[] { serverModel });
+
+                return result;
             }
             else
             {
@@ -175,8 +185,18 @@ namespace APPartment.UI.Services.Base
 
                 var serverModel = toServerModelFunc.Invoke(this, new object[] { model });
 
-                createFunc
+                serverModel = createFunc
                     .Invoke(BaseFacade, new object[] { serverModel, CurrentUserId });
+
+                var toViewModelFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(MapperService.GetViewModel)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+                var result = (T)toViewModelFunc.Invoke(this, new object[] { serverModel });
+
+                return result;
             }
         }
 

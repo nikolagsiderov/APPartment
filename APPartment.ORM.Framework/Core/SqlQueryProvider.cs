@@ -13,6 +13,11 @@ namespace APPartment.ORM.Framework.Core
             return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectId] = [dbo].[Object].[ObjectId] WHERE [Id] = {1}", table, id);
         }
 
+        public static string SelectBusinessObjectByObjectId(string table, string objectId)
+        {
+            return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectId] = [dbo].[Object].[ObjectId] WHERE [dbo].[{0}].[ObjectId] = {1}", table, objectId);
+        }
+
         public static string SelectBusinessObjectByClause(string table, string sqlClause)
         {
             return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectId] = [dbo].[Object].[ObjectId] WHERE {1}", table, sqlClause);

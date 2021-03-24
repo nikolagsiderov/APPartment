@@ -27,7 +27,7 @@ namespace APPartment.Data.Core
             where T : class, IBaseObject, new()
         {
             var result = new T();
-            result = dao.SelectFilterGetObject<T>(result, filter);
+            result = dao.SelectGetObject<T>(result, filter);
             return result;
         }
 
@@ -79,18 +79,18 @@ namespace APPartment.Data.Core
             return result;
         }
 
-        public void Create<T>(T businessObject, long userId)
+        public T Create<T>(T businessObject, long userId)
             where T : class, IBaseObject
         {
             var objectId = dao.SaveCreateBaseObject(businessObject, userId);
-            dao.SaveCreateBusinessObject(businessObject, objectId);
+            return dao.SaveCreateBusinessObject(businessObject, objectId);
         }
 
-        public void Update<T>(T businessObject, long userId)
+        public T Update<T>(T businessObject, long userId)
             where T : class, IBaseObject
         {
             dao.SaveUpdateBaseObject(businessObject, userId);
-            dao.SaveUpdateBusinessObject(businessObject);
+            return dao.SaveUpdateBusinessObject(businessObject);
         }
 
         public void Delete<T>(T businessObject)

@@ -55,7 +55,7 @@ namespace APPartment.ORM.Framework.Core
             return result;
         }
 
-        public T SelectFilterGetObject<T>(T result, Expression<Func<T, bool>> filter)
+        public T SelectGetObject<T>(T result, Expression<Func<T, bool>> filter)
             where T : class, IBaseObject, new()
         {
             var table = GetTableName<T>();
@@ -389,7 +389,7 @@ namespace APPartment.ORM.Framework.Core
                 return 0;
         }
 
-        public void SaveCreateBusinessObject<T>(T businessObject, long objectId)
+        public T SaveCreateBusinessObject<T>(T businessObject, long objectId)
             where T : class, IBaseObject
         {
             var table = GetTableName<T>();
@@ -406,6 +406,8 @@ namespace APPartment.ORM.Framework.Core
                 cmd.ExecuteNonQuery();
                 conn.Close();
             }
+
+            return SelectGetBusinessObjectAfterSave<T>(businessObject, table, objectId);
         }
 
         public void SaveUpdateBaseObject<T>(T businessObject, long userId)
@@ -443,7 +445,7 @@ namespace APPartment.ORM.Framework.Core
             }
         }
 
-        public void SaveUpdateBusinessObject<T>(T businessObject)
+        public T SaveUpdateBusinessObject<T>(T businessObject)
             where T : class, IBaseObject
         {
             var table = GetTableName<T>();
@@ -459,6 +461,42 @@ namespace APPartment.ORM.Framework.Core
                 cmd.ExecuteNonQuery();
                 conn.Close();
             }
+
+            return SelectGetBusinessObjectAfterSave<T>(businessObject, table, businessObject.ObjectId);
+        }
+
+        private T SelectGetBusinessObjectAfterSave<T>(T businessObject, string table, long objectId)
+            where T : class, IBaseObject
+        {
+            var selectQuery = SqlQueryProvider.SelectBusinessObjectByObjectId(table, objectId.ToString());
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
+            {
+                conn.Open();
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        PropertyInfo property = businessObject.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
+                        if (null != property && property.CanWrite)
+                        {
+                            var value = reader.GetValue(i);
+
+                            if (value == DBNull.Value)
+                                continue;
+
+                            property.SetValue(businessObject, value, null);
+                        }
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return businessObject;
         }
 
         public void DeleteBusinessAndBaseObject<T>(T businessObject)
