@@ -9,6 +9,7 @@ namespace APPartment.UI.ViewModels.Chore
     {
         public long? AssignedToUserId { get; set; }
 
+        [GridFieldDisplay]
         public bool IsDone { get; set; }
     }
 }

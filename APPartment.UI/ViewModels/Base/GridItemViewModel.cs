@@ -1,4 +1,5 @@
 ﻿using APPartment.ORM.Framework.Declarations;
+using APPartment.UI.Attributes;
 using APPartment.UI.ViewModels.Clingons.Image;
 using System;
 using System.Collections.Generic;
@@ -7,13 +8,16 @@ namespace APPartment.UI.ViewModels.Base
 {
     public abstract class GridItemViewModel : IBaseObject
     {
+        [GridFieldDisplay]
+        public long Id { get; set; }
+
+        [GridFieldDisplay]
         public virtual string Name { get; set; }
 
+        [GridFieldDisplay]
         public string Details { get; set; }
 
         #region Hidden properties
-        public long Id { get; set; }
-
         public long ObjectId { get; set; }
 
         public long ObjectTypeId { get; set; }

@@ -1,5 +1,8 @@
 ﻿@model IEnumerable<APPartment.UI.ViewModels.Base.GridItemViewModel>
 
+@using APPartment.UI.Attributes
+@using System.ComponentModel.DataAnnotations
+
 @{
     var canManage = bool.Parse(ViewData["Manage"].ToString());
 }
@@ -19,112 +22,123 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Details</th>
-                        <th>Actions</th>
+                        @if (Model.Any())
+                        {
+                            var properties = Model.First().GetType().GetProperties()
+                                .Where(p => p.IsDefined(typeof(GridFieldDisplayAttribute), true))
+                                .Select(p => new
+                                {
+                                    DisplayName = p.GetCustomAttributes(typeof(DisplayAttribute), true).Any() ? p.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>().Single().Name : p.Name
+                                });
+
+                            @foreach (var property in properties)
+                            {
+                                <th>
+                                    @property.DisplayName
+                                </th>
+                            }
+                            <th>
+                                Actions
+                            </th>
+                        }
+                        else
+                        {
+                            var properties = typeof(GridItemViewModel).GetProperties()
+                                .Where(p => p.IsDefined(typeof(GridFieldDisplayAttribute), true))
+                                .Select(p => new
+                                {
+                                    DisplayName = p.GetCustomAttributes(typeof(DisplayAttribute), true).Any() ? p.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>().Single().Name : p.Name
+                                });
+
+                            @foreach (var property in properties)
+                            {
+                                <th>
+                                    @property.DisplayName
+                                </th>
+                            }
+                        }
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model)
+                    @if (Model.Any())
                     {
-                        <tr>
-                            <td><p>@item.ObjectId</p></td>
-                            <td>
-                                @if (item.Name.Length <= 20)
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                @foreach (var property in item.GetType().GetProperties().Where(p => p.IsDefined(typeof(GridFieldDisplayAttribute), true)))
                                 {
-                                    <p>@item.Name</p>
+                                    var value = @property.GetValue(item);
+                                    <td>@value</td>
                                 }
-                                else
-                                {
-                                    var itemNameResult = item.Name.Substring(0, 20) + "...";
-
-                                    <p>@itemNameResult</p>
-                                }
-                            </td>
-                            <td>
-                                @if (!string.IsNullOrEmpty(item.Details))
-                                {
-                                    if (item.Details.Length <= 50)
-                                    {
-                                        <p>@item.Details</p>
+                                <td>
+                                    @{
+                                        var modalAssignId = "assignModal-" + item.Id.ToString();
+                                        var modalDeleteId = "deleteModal-" + item.Id.ToString();
                                     }
-                                    else
+
+                                    @if (canManage)
                                     {
-                                        var itemDetailsResult = item.Details.Substring(0, 50) + "...";
+                                        @if (item.GetType().Name == "Chore")
+                                        {
+                                            <button type="button" title="Assign" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalAssignId"><i class="fas fa-tag"></i></button>
 
-                                        <p>@itemDetailsResult</p>
-                                    }
-                                }
-                            </td>
-                            <td>
-                                @{
-                                    var modalAssignId = "assignModal-" + item.Id.ToString();
-                                    var modalDeleteId = "deleteModal-" + item.Id.ToString();
-                                }
+                                            <div class="modal fade" id="@modalAssignId" tabindex="-1" role="dialog" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Assign</h5>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <form asp-action="Assign" enctype="multipart/form-data">
+                                                            <div class="modal-body">
+                                                                <div class="form-group">
+                                                                    <input name="username" placeholder="Type username to assign..." class="form-control" />
+                                                                    <input name="choreId" type="hidden" value="@item.Id" />
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <input type="submit" value="Assign" class="btn btn-primary" />
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
 
-                                @if (canManage)
-                                {
-                                    @if (item.GetType().Name == "Chore")
-                                    {
-                                        <button type="button" title="Assign" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#@modalAssignId"><i class="fas fa-tag"></i></button>
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-outline-cyan btn-xs btn-icon"><i class="fas fa-info-circle"></i></button></a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-outline-blue btn-xs btn-icon"><i class="fas fa-edit"></i></button></a>
+                                        <button type="button" class="btn btn-outline-red btn-xs btn-icon" data-toggle="modal" data-target="#@modalDeleteId"><i class="fas fa-trash-alt"></i></button>
 
-                                        <div class="modal fade" id="@modalAssignId" tabindex="-1" role="dialog" aria-hidden="true">
+                                        <div class="modal fade" id="@modalDeleteId" tabindex="-1" role="dialog" aria-labelledby="deleteObjectModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Assign</h5>
+                                                        <h5 class="modal-title" id="deleteObjectModalLabel">Confirm Deletion</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <form asp-action="Assign" enctype="multipart/form-data">
-                                                        <div class="modal-body">
-                                                            <div class="form-group">
-                                                                <input name="username" placeholder="Type username to assign..." class="form-control" />
-                                                                <input name="choreId" type="hidden" value="@item.Id" />
-                                                            </div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                            <input type="submit" value="Assign" class="btn btn-primary" />
-                                                        </div>
-                                                    </form>
+                                                    <div class="modal-body">
+                                                        Are you sure you want to delete this item?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                        <a asp-action="Delete" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-danger">Delete</button></a>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     }
-
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-outline-cyan btn-xs btn-icon"><i class="fas fa-info-circle"></i></button></a>
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-outline-blue btn-xs btn-icon"><i class="fas fa-edit"></i></button></a>
-                                    <button type="button" class="btn btn-outline-red btn-xs btn-icon" data-toggle="modal" data-target="#@modalDeleteId"><i class="fas fa-trash-alt"></i></button>
-
-                                    <div class="modal fade" id="@modalDeleteId" tabindex="-1" role="dialog" aria-labelledby="deleteObjectModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="deleteObjectModalLabel">Confirm Deletion</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    Are you sure you want to delete this item?
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                    <a asp-action="Delete" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-danger">Delete</button></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <a asp-action="Details" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i> &nbsp; Details</button></a>
-                                }
-                            </td>
-                        </tr>
+                                    else
+                                    {
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="no-underline"><button type="button" class="btn btn-info btn-sm"><i class="fas fa-info-circle"></i> &nbsp; Details</button></a>
+                                    }
+                                </td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>

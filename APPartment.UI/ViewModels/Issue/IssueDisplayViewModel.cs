@@ -7,6 +7,7 @@ namespace APPartment.UI.ViewModels.Issue
     [IMapFrom(typeof(APPIssue))]
     public class IssueDisplayViewModel : GridItemViewModelWithHome
     {
+        [GridFieldDisplay]
         public bool IsClose { get; set; }
     }
 }

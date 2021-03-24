@@ -9,6 +9,7 @@ namespace APPartment.UI.ViewModels.Survey
     public class SurveyDisplayViewModel : GridItemViewModelWithHome
     {
         [Display(Name = "Completed")]
+        [GridFieldDisplay]
         public bool IsCompleted { get; set; }
     }
 }
