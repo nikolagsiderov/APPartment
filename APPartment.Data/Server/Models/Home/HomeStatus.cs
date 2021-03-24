@@ -11,6 +11,6 @@ namespace APPartment.Data.Server.Models.Home
         public int Status { get; set; }
 
         [FieldMappingForMainTable]
-        public long UserId { get; set; }
+        public long UserID { get; set; }
     }
 }

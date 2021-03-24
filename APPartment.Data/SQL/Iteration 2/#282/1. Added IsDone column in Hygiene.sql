@@ -1,4 +1,4 @@
-USE APPartment
+USE [APPartment]
 
-ALTER TABLE Hygiene
-ADD IsDone BIT NOT NULL DEFAULT(0)
+ALTER TABLE [dbo].[Hygiene]
+ADD [IsDone] BIT NOT NULL DEFAULT(0)

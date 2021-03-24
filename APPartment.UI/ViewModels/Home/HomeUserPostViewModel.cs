@@ -9,6 +9,6 @@ namespace APPartment.UI.ViewModels.Home
     public class HomeUserPostViewModel : PostViewModelWithHome
     {
         [APPUIHint(Templates.Hidden)]
-        public long UserId { get; set; }
+        public long UserID { get; set; }
     }
 }

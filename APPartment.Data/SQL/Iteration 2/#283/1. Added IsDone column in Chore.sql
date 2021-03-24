@@ -1,4 +1,4 @@
-USE APPartment
+USE [APPartment]
 
-ALTER TABLE Chore
-ADD IsDone BIT NOT NULL DEFAULT(0)
+ALTER TABLE [dbo].[Chore]
+ADD [IsDone] BIT NOT NULL DEFAULT(0)

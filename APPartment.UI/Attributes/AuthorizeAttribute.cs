@@ -11,10 +11,10 @@ namespace APPartment.UI.Attributes
         {
             base.OnActionExecuting(filterContext);
 
-            var currentUserId = filterContext.HttpContext.Session.GetString("UserId");
-            var currentHomeId = filterContext.HttpContext.Session.GetString("HomeId");
+            var currentUserID = filterContext.HttpContext.Session.GetString("UserID");
+            var currentHomeID = filterContext.HttpContext.Session.GetString("HomeID");
 
-            if (string.IsNullOrEmpty(currentUserId))
+            if (string.IsNullOrEmpty(currentUserID))
             {
                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
                 {
@@ -22,7 +22,7 @@ namespace APPartment.UI.Attributes
                     action = "Login"
                 }));
             }
-            else if (string.IsNullOrEmpty(currentHomeId))
+            else if (string.IsNullOrEmpty(currentHomeID))
             {
                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
                 {

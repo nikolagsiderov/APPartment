@@ -7,8 +7,8 @@ namespace APPartment.UI.Controllers.Base
     public abstract class BaseController : Controller
     {
         protected BaseWebService BaseWebService;
-        protected long? CurrentUserId { get; set; }
-        protected long? CurrentHomeId { get; set; }
+        protected long? CurrentUserID { get; set; }
+        protected long? CurrentHomeID { get; set; }
         protected string CurrentHomeName { get; set; }
         protected string CurrentUserName { get; set; }
         protected string CurrentControllerName { get; set; }
@@ -18,10 +18,10 @@ namespace APPartment.UI.Controllers.Base
         {
             if (contextAccessor.HttpContext != null && contextAccessor.HttpContext.Session != null)
             {
-                if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("UserId")))
+                if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("UserID")))
                 {
-                    CurrentUserId = long.Parse(contextAccessor.HttpContext.Session.GetString("UserId"));
-                    BaseWebService = new BaseWebService(CurrentUserId);
+                    CurrentUserID = long.Parse(contextAccessor.HttpContext.Session.GetString("UserID"));
+                    BaseWebService = new BaseWebService(CurrentUserID);
                 }
                 else
                 {
@@ -33,9 +33,9 @@ namespace APPartment.UI.Controllers.Base
                     CurrentUserName = contextAccessor.HttpContext.Session.GetString("Username");
                 }
 
-                if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("HomeId")))
+                if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("HomeID")))
                 {
-                    CurrentHomeId = long.Parse(contextAccessor.HttpContext.Session.GetString("HomeId"));
+                    CurrentHomeID = long.Parse(contextAccessor.HttpContext.Session.GetString("HomeID"));
                 }
 
                 if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("HomeName")))

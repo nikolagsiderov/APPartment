@@ -15,11 +15,11 @@ namespace APPartment.Data.Core
             dao = new DaoContext();
         }
 
-        public T GetObject<T>(long id)
+        public T GetObject<T>(long ID)
             where T : class, IBaseObject, new()
         {
             var result = new T();
-            result = dao.SelectGetObject<T>(result, id);
+            result = dao.SelectGetObject<T>(result, ID);
             return result;
         }
 
@@ -47,11 +47,11 @@ namespace APPartment.Data.Core
             return result;
         }
 
-        public T GetLookupObject<T>(long id)
+        public T GetLookupObject<T>(long ID)
             where T : class, ILookupObject, new()
         {
             var result = new T();
-            result = dao.SelectGetLookupObject<T>(result, id);
+            result = dao.SelectGetLookupObject<T>(result, ID);
             return result;
         }
 
@@ -79,17 +79,17 @@ namespace APPartment.Data.Core
             return result;
         }
 
-        public T Create<T>(T businessObject, long userId)
+        public T Create<T>(T businessObject, long userID)
             where T : class, IBaseObject
         {
-            var objectId = dao.SaveCreateBaseObject(businessObject, userId);
-            return dao.SaveCreateBusinessObject(businessObject, objectId);
+            var objectID = dao.SaveCreateBaseObject(businessObject, userID);
+            return dao.SaveCreateBusinessObject(businessObject, objectID);
         }
 
-        public T Update<T>(T businessObject, long userId)
+        public T Update<T>(T businessObject, long userID)
             where T : class, IBaseObject
         {
-            dao.SaveUpdateBaseObject(businessObject, userId);
+            dao.SaveUpdateBaseObject(businessObject, userID);
             return dao.SaveUpdateBusinessObject(businessObject);
         }
 

@@ -33,7 +33,7 @@ namespace APPartment.Web.Controllers
             {
                 events.Add(new EventViewModel()
                 {
-                    Id = i,
+                    ID = i,
                     Title = "Event " + i,
                     Start = start.ToString(),
                     End = end.ToString(),

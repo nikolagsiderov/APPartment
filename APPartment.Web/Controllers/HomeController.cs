@@ -28,17 +28,17 @@ namespace APPartment.Web.Controllers
 
         public HomeController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            htmlRenderHelper = new HtmlRenderHelper(CurrentUserId);
+            htmlRenderHelper = new HtmlRenderHelper(CurrentUserID);
             timeConverter = new TimeConverter();
         }
 
         [DefaultBreadcrumb(HomeBreadcrumbs.Default_Breadcrumb)]
         public IActionResult Index()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HomeID")))
                 return RedirectToAction("Login", "Account");
 
-            var currentUser = BaseWebService.GetEntity<UserPostViewModel>((long)CurrentUserId);
+            var currentUser = BaseWebService.GetEntity<UserPostViewModel>((long)CurrentUserID);
 
             ViewData["Username"] = currentUser.Name;
 
@@ -50,10 +50,10 @@ namespace APPartment.Web.Controllers
                 ViewModels = displayObjects
             };
 
-            if (BaseWebService.Any<HomeStatusPostViewModel>(x => x.HomeId == (long)CurrentHomeId))
-                homePageDisplayModel.HomeStatus = BaseWebService.GetEntity<HomeStatusPostViewModel>(x => x.HomeId == (long)CurrentHomeId);
+            if (BaseWebService.Any<HomeStatusPostViewModel>(x => x.HomeID == (long)CurrentHomeID))
+                homePageDisplayModel.HomeStatus = BaseWebService.GetEntity<HomeStatusPostViewModel>(x => x.HomeID == (long)CurrentHomeID);
 
-            if (BaseWebService.Any<HomeSettingPostViewModel>(x => x.HomeId == (long)CurrentHomeId))
+            if (BaseWebService.Any<HomeSettingPostViewModel>(x => x.HomeID == (long)CurrentHomeID))
                 homePageDisplayModel.RentDueDate = GetRentDueDate();
 
             return View(homePageDisplayModel);
@@ -61,7 +61,7 @@ namespace APPartment.Web.Controllers
 
         public IActionResult EnterCreateHomeOptions()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeID")))
                 return RedirectToAction("Index", "Home");
 
             return View();
@@ -69,7 +69,7 @@ namespace APPartment.Web.Controllers
 
         public IActionResult Register()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeID")))
                 return RedirectToAction("Index", "Home");
 
             return View();
@@ -93,10 +93,10 @@ namespace APPartment.Web.Controllers
 
                 ModelState.Clear();
 
-                HttpContext.Session.SetString("HomeId", home.Id.ToString());
+                HttpContext.Session.SetString("HomeID", home.ID.ToString());
                 HttpContext.Session.SetString("HomeName", home.Name.ToString());
 
-                SetUserToCurrentHome(home.Id);
+                SetUserToCurrentHome(home.ID);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -106,7 +106,7 @@ namespace APPartment.Web.Controllers
 
         public IActionResult Login()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeID")))
                 return RedirectToAction("Index", "Home");
 
             return View();
@@ -119,10 +119,10 @@ namespace APPartment.Web.Controllers
 
             if (existingHome != null)
             {
-                HttpContext.Session.SetString("HomeId", existingHome.Id.ToString());
+                HttpContext.Session.SetString("HomeID", existingHome.ID.ToString());
                 HttpContext.Session.SetString("HomeName", existingHome.Name.ToString());
 
-                SetUserToCurrentHome(existingHome.Id);
+                SetUserToCurrentHome(existingHome.ID);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -136,14 +136,14 @@ namespace APPartment.Web.Controllers
         [Breadcrumb(HomeBreadcrumbs.Settings_Breadcrumb)]
         public IActionResult Settings()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HomeID")))
                 return RedirectToAction("Login", "Home");
 
-            var existingHomeSettings = BaseWebService.GetEntity<HomeSettingPostViewModel>(x => x.HomeId == (long)CurrentHomeId);
+            var existingHomeSettings = BaseWebService.GetEntity<HomeSettingPostViewModel>(x => x.HomeID == (long)CurrentHomeID);
 
             if (existingHomeSettings != null)
             {
-                var homeModel = BaseWebService.GetEntity<HomePostViewModel>((long)CurrentHomeId);
+                var homeModel = BaseWebService.GetEntity<HomePostViewModel>((long)CurrentHomeID);
                 existingHomeSettings.HomeName = homeModel.Name;
             }
 
@@ -158,8 +158,8 @@ namespace APPartment.Web.Controllers
         [HttpPost]
         public IActionResult Settings(HomeSettingPostViewModel settings)
         {
-            var home = BaseWebService.GetEntity<HomePostViewModel>((long)CurrentHomeId);
-            settings.HomeId = (long)CurrentHomeId;
+            var home = BaseWebService.GetEntity<HomePostViewModel>((long)CurrentHomeID);
+            settings.HomeID = (long)CurrentHomeID;
 
             if (!string.IsNullOrEmpty(settings.HomeName) || settings.HomeName != home.Name)
             {
@@ -169,9 +169,9 @@ namespace APPartment.Web.Controllers
                 HttpContext.Session.SetString("HomeName", home.Name.ToString());
             }
 
-            if (settings.Id == 0)
+            if (settings.ID == 0)
             {
-                settings.HomeId = (long)CurrentHomeId;
+                settings.HomeID = (long)CurrentHomeID;
                 BaseWebService.Save(settings);
             }
             else
@@ -184,7 +184,7 @@ namespace APPartment.Web.Controllers
         [Breadcrumb(HomeBreadcrumbs.About_Breadcrumb)]
         public IActionResult About()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HomeID")))
                 return RedirectToAction("Login", "Account");
 
             return View();
@@ -194,7 +194,7 @@ namespace APPartment.Web.Controllers
         public ActionResult CreateMessage(string username, string messageText)
         {
             var adjustedMessage = string.Join(" <br /> ", messageText.Split('\n').ToList());
-            var message = new MessageDisplayViewModel() { Details = adjustedMessage, CreatedById = (long)CurrentUserId, HomeId = (long)CurrentHomeId, CreatedDate = DateTime.Now };
+            var message = new MessageDisplayViewModel() { Details = adjustedMessage, CreatedByID = (long)CurrentUserID, HomeID = (long)CurrentHomeID, CreatedDate = DateTime.Now };
 
             BaseWebService.Save(message);
 
@@ -203,12 +203,12 @@ namespace APPartment.Web.Controllers
 
         public JsonResult GetHomeStatus()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeID")))
             {
-                if (BaseWebService.Any<HomeStatusPostViewModel>(x => x.HomeId == (long)CurrentHomeId))
+                if (BaseWebService.Any<HomeStatusPostViewModel>(x => x.HomeID == (long)CurrentHomeID))
                 {
-                    var currentHomeStatus = BaseWebService.GetEntity<HomeStatusPostViewModel>(x => x.HomeId == (long)CurrentHomeId);
-                    var user = BaseWebService.GetEntity<UserPostViewModel>(currentHomeStatus.UserId);
+                    var currentHomeStatus = BaseWebService.GetEntity<HomeStatusPostViewModel>(x => x.HomeID == (long)CurrentHomeID);
+                    var user = BaseWebService.GetEntity<UserPostViewModel>(currentHomeStatus.UserID);
 
                     var result = $"{currentHomeStatus.Status};{user.Name};{currentHomeStatus.Details}";
 
@@ -223,20 +223,20 @@ namespace APPartment.Web.Controllers
 
         public ActionResult SetHomeStatus(string homeStatusString, string homeStatusDetailsString)
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeId")))
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("HomeID")))
             {
                 var homeStatusDetails = string.Empty;
 
                 if (!string.IsNullOrEmpty(homeStatusDetailsString))
                     homeStatusDetails = homeStatusDetailsString;
 
-                if (BaseWebService.Any<HomeStatusPostViewModel>(x => x.HomeId == (long)CurrentHomeId))
+                if (BaseWebService.Any<HomeStatusPostViewModel>(x => x.HomeID == (long)CurrentHomeID))
                 {
-                    var currentHomeStatus = BaseWebService.GetEntity<HomeStatusPostViewModel>(x => x.HomeId == (long)CurrentHomeId);
+                    var currentHomeStatus = BaseWebService.GetEntity<HomeStatusPostViewModel>(x => x.HomeID == (long)CurrentHomeID);
 
                     currentHomeStatus.Status = int.Parse(homeStatusString);
                     currentHomeStatus.Details = homeStatusDetails;
-                    currentHomeStatus.UserId = (long)CurrentUserId;
+                    currentHomeStatus.UserID = (long)CurrentUserID;
 
                     BaseWebService.Save(currentHomeStatus);
                 }
@@ -246,8 +246,8 @@ namespace APPartment.Web.Controllers
                     {
                         Status = int.Parse(homeStatusString),
                         Details = homeStatusDetails,
-                        UserId = (long)CurrentUserId,
-                        HomeId = (long)CurrentHomeId
+                        UserID = (long)CurrentUserID,
+                        HomeID = (long)CurrentHomeID
                     };
 
                     BaseWebService.Save(homeStatus);
@@ -260,7 +260,7 @@ namespace APPartment.Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel { RequestID = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         #region Getters
@@ -271,34 +271,34 @@ namespace APPartment.Web.Controllers
             var lastHygieneModel = new HygienePostViewModel();
             var lastIssueModel = new IssuePostViewModel();
 
-            var inventoryObject = BaseWebService.GetEntity<InventoryPostViewModel>(x => x.HomeId == (long)CurrentHomeId);
+            var inventoryObject = BaseWebService.GetEntity<InventoryPostViewModel>(x => x.HomeID == (long)CurrentHomeID);
 
             if (inventoryObject != null)
             {
                 inventoryObject.LastUpdated = inventoryObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime((DateTime)inventoryObject.ModifiedDate);
-                //var searchedUser = new User() { Id = (long)inventoryObject.ModifiedById };
-                //inventoryObject.LastUpdatedBy = dao.GetObject(searchedUser, x => x.Id == (long)inventoryObject.ModifiedById).Name;
-                //lastInventoryModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastInventoryModel.ObjectId);
+                //var searchedUser = new User() { ID = (long)inventoryObject.ModifiedByID };
+                //inventoryObject.LastUpdatedBy = dao.GetObject(searchedUser, x => x.ID == (long)inventoryObject.ModifiedByID).Name;
+                //lastInventoryModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastInventoryModel.ObjectID);
             }
 
-            var hygieneObjects = BaseWebService.GetEntity<HygienePostViewModel>(x => x.HomeId == (long)CurrentHomeId);
+            var hygieneObjects = BaseWebService.GetEntity<HygienePostViewModel>(x => x.HomeID == (long)CurrentHomeID);
 
             if (hygieneObjects != null)
             {
                 lastHygieneModel.LastUpdated = hygieneObjects.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime((DateTime)hygieneObjects.ModifiedDate);
-                //var searchedUser = new User() { Id = (long)hygieneObjects.ModifiedById };
-                //lastHygieneModel.LastUpdatedBy = dao.GetObject(searchedUser, x => x.Id == (long)hygieneObjects.ModifiedById).Name;
-                //lastHygieneModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastHygieneModel.ObjectId);
+                //var searchedUser = new User() { ID = (long)hygieneObjects.ModifiedByID };
+                //lastHygieneModel.LastUpdatedBy = dao.GetObject(searchedUser, x => x.ID == (long)hygieneObjects.ModifiedByID).Name;
+                //lastHygieneModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastHygieneModel.ObjectID);
             }
 
-            var issueObjects = BaseWebService.GetEntity<IssuePostViewModel>(x => x.HomeId == (long)CurrentHomeId);
+            var issueObjects = BaseWebService.GetEntity<IssuePostViewModel>(x => x.HomeID == (long)CurrentHomeID);
 
             if (issueObjects != null)
             {
                 lastIssueModel.LastUpdated = issueObjects.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime((DateTime)issueObjects.ModifiedDate);
-                //var searchedUser = new User() { Id = (long)issueObjects.ModifiedById };
-                //lastIssueModel.LastUpdatedBy = dao.GetObject(searchedUser, x => x.Id == (long)issueObjects.ModifiedById).Name;
-                //lastIssueModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastIssueModel.ObjectId); 
+                //var searchedUser = new User() { ID = (long)issueObjects.ModifiedByID };
+                //lastIssueModel.LastUpdatedBy = dao.GetObject(searchedUser, x => x.ID == (long)issueObjects.ModifiedByID).Name;
+                //lastIssueModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastIssueModel.ObjectID); 
             }
 
             displayObjects.Add(lastInventoryModel);
@@ -313,7 +313,7 @@ namespace APPartment.Web.Controllers
             var nextMonth = DateTime.Now.AddMonths(1).Month.ToString();
             var thisMonth = DateTime.Now.Month.ToString();
             var rentDueDate = string.Empty;
-            var rentDueDateDay = BaseWebService.GetEntity<HomeSettingPostViewModel>(x => x.HomeId == (long)CurrentHomeId).RentDueDateDay;
+            var rentDueDateDay = BaseWebService.GetEntity<HomeSettingPostViewModel>(x => x.HomeID == (long)CurrentHomeID).RentDueDateDay;
 
             if (rentDueDateDay.ToString() != "0")
             {
@@ -332,23 +332,23 @@ namespace APPartment.Web.Controllers
 
         private List<string> GetMessages()
         {
-            // TODO: x.CreatedById != 0 should be handled as case when user is deleted
-            var messages = BaseWebService.GetCollection<MessageDisplayViewModel>(x => x.HomeId == (long)CurrentHomeId && x.CreatedById != 0);
-            var messagesResult = htmlRenderHelper.BuildMessagesForChat(messages, (long)CurrentHomeId);
+            // TODO: x.CreatedByID != 0 should be handled as case when user is deleted
+            var messages = BaseWebService.GetCollection<MessageDisplayViewModel>(x => x.HomeID == (long)CurrentHomeID && x.CreatedByID != 0);
+            var messagesResult = htmlRenderHelper.BuildMessagesForChat(messages);
 
             return messagesResult;
         }
         #endregion
 
-        public void SetUserToCurrentHome(long homeId)
+        public void SetUserToCurrentHome(long homeID)
         {
             var homeUser = new HomeUserPostViewModel()
             {
-                HomeId = homeId,
-                UserId = (long)CurrentUserId
+                HomeID = homeID,
+                UserID = (long)CurrentUserID
             };
 
-            var userIsAlreadyApartOfCurrentHome = BaseWebService.Any<HomeUserPostViewModel>(x => x.UserId == homeUser.UserId && x.HomeId == homeUser.HomeId);
+            var userIsAlreadyApartOfCurrentHome = BaseWebService.Any<HomeUserPostViewModel>(x => x.UserID == homeUser.UserID && x.HomeID == homeUser.HomeID);
 
             if (!userIsAlreadyApartOfCurrentHome)
                 BaseWebService.Save(homeUser);

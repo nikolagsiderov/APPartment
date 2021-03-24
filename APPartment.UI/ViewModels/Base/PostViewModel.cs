@@ -19,22 +19,22 @@ namespace APPartment.UI.ViewModels.Base
 
         #region Hidden properties
         [APPUIHint(Templates.Hidden)]
-        public long Id { get; set; }
+        public long ID { get; set; }
 
         [APPUIHint(Templates.Hidden)]
-        public long ObjectId { get; set; }
+        public long ObjectID { get; set; }
 
         [APPUIHint(Templates.Hidden)]
-        public long ObjectTypeId { get; set; }
+        public long ObjectTypeID { get; set; }
 
         [APPUIHint(Templates.Hidden)]
-        public long CreatedById { get; set; }
+        public long CreatedByID { get; set; }
 
         [APPUIHint(Templates.Hidden)]
         public DateTime CreatedDate { get; set; }
 
         [APPUIHint(Templates.Hidden)]
-        public long? ModifiedById { get; set; }
+        public long? ModifiedByID { get; set; }
 
         [APPUIHint(Templates.Hidden)]
         public DateTime? ModifiedDate { get; set; }

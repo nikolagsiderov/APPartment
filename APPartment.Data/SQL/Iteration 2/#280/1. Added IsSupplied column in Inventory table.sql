@@ -1,4 +1,4 @@
-USE APPartment
+USE [APPartment]
 
-ALTER TABLE Inventory
-ADD IsSupplied BIT NOT NULL DEFAULT(0);
+ALTER TABLE [dbo].[Inventory]
+ADD [IsSupplied] BIT NOT NULL DEFAULT(0);

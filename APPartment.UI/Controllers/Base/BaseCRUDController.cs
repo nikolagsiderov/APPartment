@@ -27,8 +27,8 @@ namespace APPartment.UI.Controllers.Base
 
         public BaseCRUDController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            htmlRenderHelper = new HtmlRenderHelper(CurrentUserId);
-            fileUploadService = new FileUploadService(CurrentUserId);
+            htmlRenderHelper = new HtmlRenderHelper(CurrentUserID);
+            fileUploadService = new FileUploadService(CurrentUserID);
         }
 
         public abstract Expression<Func<T, bool>> FilterExpression { get; }
@@ -41,12 +41,12 @@ namespace APPartment.UI.Controllers.Base
         }
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Details_Breadcrumb)]
-        public IActionResult Details(long? id)
+        public IActionResult Details(long? ID)
         {
-            if (id == null)
+            if (ID == null)
                 return new Error404NotFoundViewResult();
 
-            var model = BaseWebService.GetEntity<U>((long)id);
+            var model = BaseWebService.GetEntity<U>((long)ID);
 
             if (model == null)
                 return new Error404NotFoundViewResult();
@@ -71,7 +71,7 @@ namespace APPartment.UI.Controllers.Base
         {
             if (ModelState.IsValid)
             {
-                model.HomeId = (long)CurrentHomeId;
+                model.HomeID = (long)CurrentHomeID;
                 BaseWebService.Save(model);
 
                 return RedirectToAction(nameof(Index));
@@ -81,12 +81,12 @@ namespace APPartment.UI.Controllers.Base
         }
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
-        public IActionResult Edit(long? id)
+        public IActionResult Edit(long? ID)
         {
-            if (id == null)
+            if (ID == null)
                 return new Error404NotFoundViewResult();
 
-            var model = BaseWebService.GetEntity<U>((long)id);
+            var model = BaseWebService.GetEntity<U>((long)ID);
 
             if (model == null)
                 return new Error404NotFoundViewResult();
@@ -99,9 +99,9 @@ namespace APPartment.UI.Controllers.Base
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(long id, U model)
+        public IActionResult Edit(long ID, U model)
         {
-            if (id != model.Id)
+            if (ID != model.ID)
                 return new Error404NotFoundViewResult();
 
             if (ModelState.IsValid)
@@ -113,12 +113,12 @@ namespace APPartment.UI.Controllers.Base
             return View("_Edit", model);
         }
 
-        public IActionResult Delete(long? id)
+        public IActionResult Delete(long? ID)
         {
-            if (id == null)
+            if (ID == null)
                 return new Error404NotFoundViewResult();
 
-            var model = BaseWebService.GetEntity<U>((long)id);
+            var model = BaseWebService.GetEntity<U>((long)ID);
 
             if (model == null)
                 return new Error404NotFoundViewResult();
@@ -131,29 +131,29 @@ namespace APPartment.UI.Controllers.Base
         #region Clingons
         protected U GetClingons(U model)
         {
-            model.Comments = GetComments(model.ObjectId);
-            model.Images = GetImages(model.ObjectId);
+            model.Comments = GetComments(model.ObjectID);
+            model.Images = GetImages(model.ObjectID);
 
             return model;
         }
 
         #region Comments
-        private List<string> GetComments(long targetObjectId)
+        private List<string> GetComments(long targetObjectID)
         {
             // TODO: x.CreatedById != 0 should be handled as case when user is deleted
-            var comment = BaseWebService.GetCollection<CommentPostViewModel>(x => x.TargetObjectId == targetObjectId && x.CreatedById != 0);
-            var commentsResult = htmlRenderHelper.BuildComments(comment, targetObjectId);
+            var comment = BaseWebService.GetCollection<CommentPostViewModel>(x => x.TargetObjectID == targetObjectID && x.CreatedByID != 0);
+            var commentsResult = htmlRenderHelper.BuildComments(comment);
 
             return commentsResult;
         }
 
         [HttpPost]
-        public IActionResult PostComment(long targetId, string commentText)
+        public IActionResult PostComment(long targetID, string commentText)
         {
             var comment = new CommentPostViewModel()
             {
                 Details = commentText,
-                TargetObjectId = targetId,
+                TargetObjectID = targetID,
             };
 
             BaseWebService.Save(comment);
@@ -165,9 +165,9 @@ namespace APPartment.UI.Controllers.Base
 
         #region Images
         [HttpPost]
-        public ActionResult UploadImages(string targetObjectIdString)
+        public ActionResult UploadImages(string targetObjectIDString)
         {
-            var targetObjectId = long.Parse(targetObjectIdString);
+            var targetObjectID = long.Parse(targetObjectIDString);
 
             bool isSavedSuccessfully = true;
             string fName = "";
@@ -179,7 +179,7 @@ namespace APPartment.UI.Controllers.Base
 
                     fName = file.FileName;
                     if (file != null && file.Length > 0)
-                        fileUploadService.UploadImage(file, targetObjectId, (long)CurrentUserId);
+                        fileUploadService.UploadImage(file, targetObjectID, (long)CurrentUserID);
                 }
             }
             catch (Exception ex)
@@ -193,9 +193,9 @@ namespace APPartment.UI.Controllers.Base
                 return Json(new { Message = "Error in saving file" });
         }
 
-        public ActionResult DeleteImage(long id)
+        public ActionResult DeleteImage(long ID)
         {
-            var image = BaseWebService.GetEntity<ImagePostViewModel>(id);
+            var image = BaseWebService.GetEntity<ImagePostViewModel>(ID);
 
             if (image == null)
                 return Json(new { success = false, message = "404: Image does not exist." });
@@ -222,9 +222,9 @@ namespace APPartment.UI.Controllers.Base
             }
         }
 
-        private List<ImagePostViewModel> GetImages(long targetObjectId)
+        private List<ImagePostViewModel> GetImages(long targetObjectID)
         {
-            var images = BaseWebService.GetCollection<ImagePostViewModel>(x => x.TargetObjectId == targetObjectId);
+            var images = BaseWebService.GetCollection<ImagePostViewModel>(x => x.TargetObjectID == targetObjectID);
             return images;
         }
         #endregion Images

@@ -8,7 +8,7 @@ namespace APPartment.Data.Server.Models.Chore
     public class Chore : HomeBaseObject
     {
         [FieldMappingForMainTable]
-        public long? AssignedToUserId { get; set; }
+        public long? AssignedToUserID { get; set; }
 
         [FieldMappingForMainTable]
         public bool IsDone { get; set; }

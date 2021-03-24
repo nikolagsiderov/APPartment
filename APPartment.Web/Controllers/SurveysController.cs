@@ -19,7 +19,7 @@ namespace APPartment.Web.Controllers
         {
             get
             {
-                return x => x.HomeId == CurrentHomeId;
+                return x => x.HomeID == CurrentHomeID;
             }
         }
 
@@ -55,7 +55,7 @@ namespace APPartment.Web.Controllers
 
         public JsonResult GetPendingSurveysCount()
         {
-            var pendingSurveysCount = BaseWebService.Count<SurveyPostViewModel>(x => x.HomeId == (long)CurrentHomeId);
+            var pendingSurveysCount = BaseWebService.Count<SurveyPostViewModel>(x => x.HomeID == (long)CurrentHomeID);
             return Json(pendingSurveysCount);
         }
 

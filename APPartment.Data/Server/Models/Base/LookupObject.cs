@@ -6,7 +6,7 @@ namespace APPartment.Data.Server.Models.Base
     public abstract class LookupObject : ILookupObject
     {
         [FieldMappingForLookupTable]
-        public long Id { get; set; }
+        public long ID { get; set; }
 
         [FieldMappingForLookupTable]
         public string Name { get; set; }

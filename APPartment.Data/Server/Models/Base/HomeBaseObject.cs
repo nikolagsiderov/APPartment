@@ -6,6 +6,6 @@ namespace APPartment.Data.Server.Models.Base
     public class HomeBaseObject : BaseObject, IHomeBaseObject
     {
         [FieldMappingForMainTable]
-        public long HomeId { get; set; }
+        public long HomeID { get; set; }
     }
 }

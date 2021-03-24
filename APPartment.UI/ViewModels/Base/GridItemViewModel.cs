@@ -9,7 +9,7 @@ namespace APPartment.UI.ViewModels.Base
     public abstract class GridItemViewModel : IBaseObject
     {
         [GridFieldDisplay]
-        public long Id { get; set; }
+        public long ID { get; set; }
 
         [GridFieldDisplay]
         public virtual string Name { get; set; }
@@ -18,15 +18,15 @@ namespace APPartment.UI.ViewModels.Base
         public string Details { get; set; }
 
         #region Hidden properties
-        public long ObjectId { get; set; }
+        public long ObjectID { get; set; }
 
-        public long ObjectTypeId { get; set; }
+        public long ObjectTypeID { get; set; }
 
-        public long CreatedById { get; set; }
+        public long CreatedByID { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
-        public long? ModifiedById { get; set; }
+        public long? ModifiedByID { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
 

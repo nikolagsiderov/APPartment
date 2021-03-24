@@ -11,27 +11,27 @@ namespace APPartment.UI.Services.Base
     public class BaseWebService : MapperService
     {
         BaseFacade BaseFacade;
-        long? CurrentUserId;
+        long? CurrentUserID;
 
-        public BaseWebService(long? currentUserId)
+        public BaseWebService(long? currentUserID)
         {
             BaseFacade = new BaseFacade();
-            CurrentUserId = currentUserId;
+            CurrentUserID = currentUserID;
         }
 
-        public T GetEntity<T>(long id)
+        public T GetEntity<T>(long ID)
             where T : class, IBaseObject, new()
         {
             var serverModelType = GetServerModelType<T>();
 
-            var getObjectByIdFunc = typeof(BaseFacade)
+            var getObjectByIDFunc = typeof(BaseFacade)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.Name.Equals(nameof(BaseFacade.GetObject)))
                 .FirstOrDefault()
                 .MakeGenericMethod(serverModelType);
 
-            var serverModel = getObjectByIdFunc
-                .Invoke(BaseFacade, new object[] { id });
+            var serverModel = getObjectByIDFunc
+                .Invoke(BaseFacade, new object[] { ID });
 
             var toViewModelFunc = typeof(MapperService)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
@@ -140,7 +140,7 @@ namespace APPartment.UI.Services.Base
         {
             var serverModelType = GetServerModelType<T>();
 
-            if (model.Id > 0)
+            if (model.ID > 0)
             {
                 var updateFunc = typeof(BaseFacade)
                     .GetMethods(BindingFlags.Public | BindingFlags.Instance)
@@ -157,7 +157,7 @@ namespace APPartment.UI.Services.Base
                 var serverModel = toServerModelFunc.Invoke(this, new object[] { model });
 
                 serverModel = updateFunc
-                    .Invoke(BaseFacade, new object[] { serverModel, CurrentUserId });
+                    .Invoke(BaseFacade, new object[] { serverModel, CurrentUserID });
 
                 var toViewModelFunc = typeof(MapperService)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
@@ -186,7 +186,7 @@ namespace APPartment.UI.Services.Base
                 var serverModel = toServerModelFunc.Invoke(this, new object[] { model });
 
                 serverModel = createFunc
-                    .Invoke(BaseFacade, new object[] { serverModel, CurrentUserId });
+                    .Invoke(BaseFacade, new object[] { serverModel, CurrentUserID });
 
                 var toViewModelFunc = typeof(MapperService)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
@@ -224,19 +224,19 @@ namespace APPartment.UI.Services.Base
         }
 
         // TODO: Complete function
-        public T GetLookupEntity<T>(long id)
+        public T GetLookupEntity<T>(long ID)
             where T : class, ILookupObject, new()
         {
             // TODO: Implement mapping from server to view model
 
-            var getLookupObjectByIdFunc = typeof(BaseFacade)
+            var getLookupObjectByIDFunc = typeof(BaseFacade)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.Name.Equals(nameof(BaseFacade.GetLookupObject)))
                 .FirstOrDefault()
                 .MakeGenericMethod(GetLookupServerModelType<T>());
 
-            return (T)getLookupObjectByIdFunc
-                .Invoke(BaseFacade, new object[] { id });
+            return (T)getLookupObjectByIDFunc
+                .Invoke(BaseFacade, new object[] { ID });
         }
 
         // TODO: Complete function

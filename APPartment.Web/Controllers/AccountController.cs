@@ -13,7 +13,7 @@ namespace APPartment.Web.Controllers
 
         public IActionResult Register()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserId")))
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
                 return RedirectToAction("EnterCreateHomeOptions", "Home");
 
             return View();
@@ -37,7 +37,7 @@ namespace APPartment.Web.Controllers
 
                 ModelState.Clear();
 
-                HttpContext.Session.SetString("UserId", user.Id.ToString());
+                HttpContext.Session.SetString("UserID", user.ID.ToString());
                 HttpContext.Session.SetString("Username", user.Name.ToString());
 
                 return RedirectToAction("EnterCreateHomeOptions", "Home");
@@ -48,7 +48,7 @@ namespace APPartment.Web.Controllers
 
         public IActionResult Login()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserId")))
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
                 return RedirectToAction("EnterCreateHomeOptions", "Home");
 
             return View();
@@ -61,7 +61,7 @@ namespace APPartment.Web.Controllers
             
             if (userWithPassedCredsExists != null)
             {
-                HttpContext.Session.SetString("UserId", userWithPassedCredsExists.Id.ToString());
+                HttpContext.Session.SetString("UserID", userWithPassedCredsExists.ID.ToString());
                 HttpContext.Session.SetString("Username", userWithPassedCredsExists.Name.ToString());
 
                 return RedirectToAction("EnterCreateHomeOptions", "Home");
@@ -76,8 +76,8 @@ namespace APPartment.Web.Controllers
 
         public IActionResult Logout()
         {
-            HttpContext.Session.SetString("UserId", string.Empty);
-            HttpContext.Session.SetString("HomeId", string.Empty);
+            HttpContext.Session.SetString("UserID", string.Empty);
+            HttpContext.Session.SetString("HomeID", string.Empty);
 
             return RedirectToAction("Index", "Home");
         }

@@ -11,6 +11,6 @@ namespace APPartment.Data.Server.Models.Clingons
         public string FileSize { get; set; }
 
         [FieldMappingForMainTable]
-        public long TargetObjectId { get; set; }
+        public long TargetObjectID { get; set; }
     }
 }

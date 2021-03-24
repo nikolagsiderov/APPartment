@@ -1,7 +1,7 @@
 ﻿@model APPartment.UI.ViewModels.Base.PostViewModel
 
 @{
-    var header = string.Format("ID: {0}, Name: {1}", Model.ObjectId, Model.Name);
+    var header = string.Format("Object ID: {0}, Name: {1}", Model.ObjectID, Model.Name);
 }
 
 <div class="card">
@@ -10,7 +10,7 @@
     </div>
     <div class="card-body">
         <div>
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary btn-sm" style="font-size:small;"><i class="fas fa-edit"></i>&nbsp; Edit</a>
+            <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary btn-sm" style="font-size:small;"><i class="fas fa-edit"></i>&nbsp; Edit</a>
         </div>
 
         <br />

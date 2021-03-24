@@ -7,13 +7,13 @@ namespace APPartment.Data.Server.Models.Base
     public abstract class BaseObject : IBaseObject
     {
         [FieldMappingForMainTablePrimaryKey]
-        public long Id { get; set; }
+        public long ID { get; set; }
 
         [FieldMappingForObjectTablePrimaryKey]
-        public long ObjectId { get; set; }
+        public long ObjectID { get; set; }
 
         [FieldMappingForObjectTable]
-        public long ObjectTypeId { get; set; }
+        public long ObjectTypeID { get; set; }
 
         [FieldMappingForObjectTable]
         public string Name { get; set; }
@@ -22,13 +22,13 @@ namespace APPartment.Data.Server.Models.Base
         public string Details { get; set; }
 
         [FieldMappingForObjectTable]
-        public long CreatedById { get; set; }
+        public long CreatedByID { get; set; }
 
         [FieldMappingForObjectTable]
         public DateTime CreatedDate { get; set; }
 
         [FieldMappingForObjectTable]
-        public long? ModifiedById { get; set; }
+        public long? ModifiedByID { get; set; }
 
         [FieldMappingForObjectTable]
         public DateTime? ModifiedDate { get; set; }

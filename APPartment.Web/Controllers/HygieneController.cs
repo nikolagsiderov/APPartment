@@ -19,7 +19,7 @@ namespace APPartment.Web.Controllers
         {
             get
             {
-                return x => x.HomeId == CurrentHomeId;
+                return x => x.HomeID == CurrentHomeID;
             }
         }
 
@@ -55,7 +55,7 @@ namespace APPartment.Web.Controllers
 
         public JsonResult GetHygieneCriticalCount()
         {
-            var hygieneCriticalCount = BaseWebService.Count<HygienePostViewModel>(x => x.HomeId == (long)CurrentUserId);
+            var hygieneCriticalCount = BaseWebService.Count<HygienePostViewModel>(x => x.HomeID == (long)CurrentUserID);
             return Json(hygieneCriticalCount);
         }
 

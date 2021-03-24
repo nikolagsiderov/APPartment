@@ -20,11 +20,11 @@ namespace APPartment.ORM.Framework.Core
             expressionTranslator = new ExpressionToSqlHelper();
         }
 
-        public T SelectGetObject<T>(T result, long id)
+        public T SelectGetObject<T>(T result, long ID)
             where T : class, IBaseObject, new()
         {
             var table = GetTableName<T>();
-            var query = SqlQueryProvider.SelectBusinessObjectById(table, id.ToString());
+            var query = SqlQueryProvider.SelectBusinessObjectByID(table, ID.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -88,7 +88,7 @@ namespace APPartment.ORM.Framework.Core
                 conn.Close();
             }
 
-            if (result.ObjectId == 0)
+            if (result.ObjectID == 0)
                 result = null;
 
             return result;
@@ -191,11 +191,11 @@ namespace APPartment.ORM.Framework.Core
             return result;
         }
 
-        public T SelectGetLookupObject<T>(T result, long id)
+        public T SelectGetLookupObject<T>(T result, long ID)
             where T : class, ILookupObject, new()
         {
             var table = GetLookupTableName<T>();
-            var query = SqlQueryProvider.SelectLookupObjectById(table, id.ToString());
+            var query = SqlQueryProvider.SelectLookupObjectByID(table, ID.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -353,14 +353,14 @@ namespace APPartment.ORM.Framework.Core
             return result;
         }
 
-        public long SaveCreateBaseObject<T>(T businessObject, long userId)
+        public long SaveCreateBaseObject<T>(T businessObject, long userID)
             where T : class, IBaseObject
         {
-            object objectId = 0;
-            businessObject.ObjectTypeId = ObjectTypeDeterminator.GetObjectTypeId(businessObject.GetType().Name);
-            businessObject.CreatedById = userId;
+            object objectID = 0;
+            businessObject.ObjectTypeID = ObjectTypeDeterminator.GetObjectTypeID(businessObject.GetType().Name);
+            businessObject.CreatedByID = userID;
             businessObject.CreatedDate = DateTime.Now;
-            businessObject.ModifiedById = userId;
+            businessObject.ModifiedByID = userID;
             businessObject.ModifiedDate = DateTime.Now;
 
             if (string.IsNullOrEmpty(businessObject.Name))
@@ -379,24 +379,24 @@ namespace APPartment.ORM.Framework.Core
             using (SqlCommand cmd = new SqlCommand(query, conn))
             {
                 conn.Open();
-                objectId = cmd.ExecuteScalar();
+                objectID = cmd.ExecuteScalar();
                 conn.Close();
             }
 
-            if (objectId != null)
-                return (int)(decimal)objectId;
+            if (objectID != null)
+                return (int)(decimal)objectID;
             else
                 return 0;
         }
 
-        public T SaveCreateBusinessObject<T>(T businessObject, long objectId)
+        public T SaveCreateBusinessObject<T>(T businessObject, long objectID)
             where T : class, IBaseObject
         {
             var table = GetTableName<T>();
             var properties = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute)));
-            var propertyColumnNames = SqlQueryProvider.GetPropertyNamesForDBColumns(properties) + ", [ObjectId]";
-            var propertyValues = SqlQueryProvider.GetPropertyValues<T>(properties, businessObject) + $", {objectId}";
+            var propertyColumnNames = SqlQueryProvider.GetPropertyNamesForDBColumns(properties) + ", [ObjectID]";
+            var propertyValues = SqlQueryProvider.GetPropertyValues<T>(properties, businessObject) + $", {objectID}";
             var query = SqlQueryProvider.InsertBusinessObject(table, propertyColumnNames, propertyValues);
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
@@ -407,17 +407,17 @@ namespace APPartment.ORM.Framework.Core
                 conn.Close();
             }
 
-            return SelectGetBusinessObjectAfterSave<T>(businessObject, table, objectId);
+            return SelectGetBusinessObjectAfterSave<T>(businessObject, table, objectID);
         }
 
-        public void SaveUpdateBaseObject<T>(T businessObject, long userId)
+        public void SaveUpdateBaseObject<T>(T businessObject, long userID)
             where T : class, IBaseObject
         {
-            businessObject.ModifiedById = userId;
+            businessObject.ModifiedByID = userID;
             businessObject.ModifiedDate = DateTime.Now;
 
-            if (businessObject.ObjectTypeId == null || businessObject.ObjectTypeId == 0)
-                businessObject.ObjectTypeId = ObjectTypeDeterminator.GetObjectTypeId(businessObject.GetType().Name);
+            if (businessObject.ObjectTypeID == null || businessObject.ObjectTypeID == 0)
+                businessObject.ObjectTypeID = ObjectTypeDeterminator.GetObjectTypeID(businessObject.GetType().Name);
 
             if (string.IsNullOrEmpty(businessObject.Name))
                 businessObject.Name = "none";
@@ -425,8 +425,8 @@ namespace APPartment.ORM.Framework.Core
             if (string.IsNullOrEmpty(businessObject.Details))
                 businessObject.Details = "none";
 
-            if (businessObject.CreatedById == null || businessObject.CreatedById == 0)
-                businessObject.CreatedById = userId;
+            if (businessObject.CreatedByID == null || businessObject.CreatedByID == 0)
+                businessObject.CreatedByID = userID;
 
             if (businessObject.CreatedDate == null)
                 businessObject.CreatedDate = DateTime.Now;
@@ -434,7 +434,7 @@ namespace APPartment.ORM.Framework.Core
             var properties = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute)));
             var propertyNamesAndValues = SqlQueryProvider.GetPropertyNamesForDBColumnsAndValuesForUpdate<T>(properties, businessObject);
-            string query = SqlQueryProvider.UpdateBaseObject(propertyNamesAndValues, businessObject.ObjectId.ToString());
+            string query = SqlQueryProvider.UpdateBaseObject(propertyNamesAndValues, businessObject.ObjectID.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -452,7 +452,7 @@ namespace APPartment.ORM.Framework.Core
             var properties = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute)));
             var propertyNamesAndValues = SqlQueryProvider.GetPropertyNamesForDBColumnsAndValuesForUpdate<T>(properties, businessObject);
-            string query = SqlQueryProvider.UpdateBusinessObject(table, propertyNamesAndValues, businessObject.ObjectId.ToString());
+            string query = SqlQueryProvider.UpdateBusinessObject(table, propertyNamesAndValues, businessObject.ObjectID.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -462,13 +462,13 @@ namespace APPartment.ORM.Framework.Core
                 conn.Close();
             }
 
-            return SelectGetBusinessObjectAfterSave<T>(businessObject, table, businessObject.ObjectId);
+            return SelectGetBusinessObjectAfterSave<T>(businessObject, table, businessObject.ObjectID);
         }
 
-        private T SelectGetBusinessObjectAfterSave<T>(T businessObject, string table, long objectId)
+        private T SelectGetBusinessObjectAfterSave<T>(T businessObject, string table, long objectID)
             where T : class, IBaseObject
         {
-            var selectQuery = SqlQueryProvider.SelectBusinessObjectByObjectId(table, objectId.ToString());
+            var selectQuery = SqlQueryProvider.SelectBusinessObjectByObjectID(table, objectID.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(selectQuery, conn))
@@ -503,8 +503,8 @@ namespace APPartment.ORM.Framework.Core
             where T : class, IBaseObject
         {
             var table = GetTableName<T>();
-            string deleteBusinessObjectSqlQuery = SqlQueryProvider.DeleteBusinessObject(table, businessObject.ObjectId.ToString());
-            string deleteBaseObjectSqlQuery = SqlQueryProvider.DeleteBaseObject(businessObject.ObjectId.ToString());
+            string deleteBusinessObjectSqlQuery = SqlQueryProvider.DeleteBusinessObject(table, businessObject.ObjectID.ToString());
+            string deleteBaseObjectSqlQuery = SqlQueryProvider.DeleteBaseObject(businessObject.ObjectID.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(deleteBusinessObjectSqlQuery, conn))

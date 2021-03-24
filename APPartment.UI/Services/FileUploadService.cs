@@ -12,15 +12,15 @@ namespace APPartment.UI.Services
         private BaseWebService BaseWebService;
         private HumanSizeConverter humanSizeConverter;
 
-        public FileUploadService(long? currentUserId)
+        public FileUploadService(long? currentUserID)
         {
-            this.BaseWebService = new BaseWebService(currentUserId);
+            this.BaseWebService = new BaseWebService(currentUserID);
             this.humanSizeConverter = new HumanSizeConverter();
         }
 
-        public void UploadImage(IFormFile file, long targetObjectId, long currentUserId)
+        public void UploadImage(IFormFile file, long targetObjectID, long currentUserID)
         {
-            var imageName = SaveImageToDB(file, targetObjectId, currentUserId);
+            var imageName = SaveImageToDB(file, targetObjectID, currentUserID);
             string pathString = "wwwroot\\BaseObject_Images";
             bool isExists = System.IO.Directory.Exists(pathString);
 
@@ -35,20 +35,20 @@ namespace APPartment.UI.Services
             }
         }
 
-        private string SaveImageToDB(IFormFile file, long targetObjectId, long currentUserId)
+        private string SaveImageToDB(IFormFile file, long targetObjectID, long currentUserID)
         {
             var image = new ImagePostViewModel()
             {
                 Name = file.FileName,
                 FileSize = humanSizeConverter.ConvertFileLength(file),
                 CreatedDate = DateTime.Now,
-                TargetObjectId = targetObjectId,
+                TargetObjectID = targetObjectID,
             };
 
             // We save the image once
             // Then we save again with modified Name property to add its ID
             BaseWebService.Save(image);
-            image.Name = $"{image.Id}_{targetObjectId}_{file.FileName}";
+            image.Name = $"{image.ID}_{targetObjectID}_{file.FileName}";
             BaseWebService.Save(image);
 
             return image.Name;

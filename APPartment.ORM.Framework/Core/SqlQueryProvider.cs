@@ -8,34 +8,34 @@ namespace APPartment.ORM.Framework.Core
 {
     public static class SqlQueryProvider
     {
-        public static string SelectBusinessObjectById(string table, string id)
+        public static string SelectBusinessObjectByID(string table, string ID)
         {
-            return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectId] = [dbo].[Object].[ObjectId] WHERE [Id] = {1}", table, id);
+            return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectID] = [dbo].[Object].[ObjectID] WHERE [ID] = {1}", table, ID);
         }
 
-        public static string SelectBusinessObjectByObjectId(string table, string objectId)
+        public static string SelectBusinessObjectByObjectID(string table, string objectID)
         {
-            return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectId] = [dbo].[Object].[ObjectId] WHERE [dbo].[{0}].[ObjectId] = {1}", table, objectId);
+            return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectID] = [dbo].[Object].[ObjectID] WHERE [dbo].[{0}].[ObjectID] = {1}", table, objectID);
         }
 
         public static string SelectBusinessObjectByClause(string table, string sqlClause)
         {
-            return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectId] = [dbo].[Object].[ObjectId] WHERE {1}", table, sqlClause);
+            return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectID] = [dbo].[Object].[ObjectID] WHERE {1}", table, sqlClause);
         }
 
         public static string SelectBusinessObjects(string table)
         {
-            return string.Format("SELECT * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectId] = [dbo].[Object].[ObjectId]", table);
+            return string.Format("SELECT * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectID] = [dbo].[Object].[ObjectID]", table);
         }
 
         public static string SelectBusinessObjectsByClause(string table, string sqlClause)
         {
-            return string.Format("SELECT * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectId] = [dbo].[Object].[ObjectId] WHERE {1}", table, sqlClause);
+            return string.Format("SELECT * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectID] = [dbo].[Object].[ObjectID] WHERE {1}", table, sqlClause);
         }
 
-        public static string SelectLookupObjectById(string table, string id)
+        public static string SelectLookupObjectByID(string table, string ID)
         {
-            return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] WHERE [Id] = {1}", table, id);
+            return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] WHERE [ID] = {1}", table, ID);
         }
 
         public static string SelectLookupObjectByClause(string table, string sqlClause)
@@ -63,24 +63,24 @@ namespace APPartment.ORM.Framework.Core
             return string.Format("INSERT INTO [dbo].[{0}] ({1}) VALUES ({2})", table, propertyNames, propertyValues);
         }
 
-        public static string UpdateBaseObject(string properties, string objectId)
+        public static string UpdateBaseObject(string properties, string objectID)
         {
-            return string.Format("UPDATE [dbo].[Object] SET {0} WHERE ObjectId = {1}", properties, objectId);
+            return string.Format("UPDATE [dbo].[Object] SET {0} WHERE ObjectID = {1}", properties, objectID);
         }
 
-        public static string UpdateBusinessObject(string table, string properties, string objectId)
+        public static string UpdateBusinessObject(string table, string properties, string objectID)
         {
-            return string.Format("UPDATE [dbo].[{0}] SET {1} WHERE ObjectId = {2}", table, properties, objectId);
+            return string.Format("UPDATE [dbo].[{0}] SET {1} WHERE ObjectID = {2}", table, properties, objectID);
         }
 
-        public static string DeleteBusinessObject(string table, string objectId)
+        public static string DeleteBusinessObject(string table, string objectID)
         {
-            return string.Format("DELETE FROM [dbo].[{0}] WHERE ObjectId = {1}", table, objectId);
+            return string.Format("DELETE FROM [dbo].[{0}] WHERE ObjectID = {1}", table, objectID);
         }
 
-        public static string DeleteBaseObject(string objectId)
+        public static string DeleteBaseObject(string objectID)
         {
-            return string.Format("DELETE FROM [dbo].[Object] WHERE ObjectId = {0}", objectId);
+            return string.Format("DELETE FROM [dbo].[Object] WHERE ObjectID = {0}", objectID);
         }
 
         public static string AnyCountBusinessObjects(string table)
@@ -90,7 +90,7 @@ namespace APPartment.ORM.Framework.Core
 
         public static string AnyCountBusinessObjects(string table, string sqlClause)
         {
-            return string.Format("SELECT COUNT(*) FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectId] = [dbo].[Object].[ObjectId] WHERE {1}", table, sqlClause);
+            return string.Format("SELECT COUNT(*) FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectID] = [dbo].[Object].[ObjectID] WHERE {1}", table, sqlClause);
         }
 
         public static string GetPropertyNamesForDBColumns(IEnumerable<PropertyInfo> properties)

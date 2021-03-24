@@ -1,14 +1,14 @@
-USE APPartment
+USE [APPartment]
 
 CREATE TABLE [dbo].[Comment] (
-    Id bigint IDENTITY(1, 1) NOT NULL,
-	ObjectId bigint NOT NULL,
-	TargetObjectId bigint NOT NULL,
-	CONSTRAINT PK_Comment PRIMARY KEY (Id),
-	CONSTRAINT FK_ObjectComment FOREIGN KEY (ObjectId)
-    REFERENCES dbo.Object(ObjectId)
+    [ID] bigint IDENTITY(1, 1) NOT NULL,
+	[ObjectID] bigint NOT NULL,
+	[TargetObjectID] bigint NOT NULL,
+	CONSTRAINT PK_Comment PRIMARY KEY ([ID]),
+	CONSTRAINT FK_ObjectComment FOREIGN KEY ([ObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
 );
 
 ALTER TABLE [dbo].[Comment]
-ADD CONSTRAINT FK_TargetObjectComment FOREIGN KEY (TargetObjectId)
-    REFERENCES dbo.[Object](ObjectId)
+ADD CONSTRAINT FK_TargetObjectComment FOREIGN KEY ([TargetObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])

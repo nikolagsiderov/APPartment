@@ -12,6 +12,6 @@ namespace APPartment.UI.ViewModels.Clingons.Image
         public string FileSize { get; set; }
 
         [APPUIHint(Templates.Hidden)]
-        public long TargetObjectId { get; set; }
+        public long TargetObjectID { get; set; }
     }
 }

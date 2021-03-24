@@ -19,7 +19,7 @@ namespace APPartment.Web.Controllers
         {
             get
             {
-                return x => x.HomeId == (long)CurrentHomeId;
+                return x => x.HomeID == (long)CurrentHomeID;
             }
         }
 
@@ -55,7 +55,7 @@ namespace APPartment.Web.Controllers
 
         public JsonResult GetInventoryCriticalCount()
         {
-            var inventoryCriticalCount = BaseWebService.Count<InventoryPostViewModel>(x => x.HomeId == (long)CurrentHomeId);
+            var inventoryCriticalCount = BaseWebService.Count<InventoryPostViewModel>(x => x.HomeID == (long)CurrentHomeID);
             return Json(inventoryCriticalCount);
         }
 

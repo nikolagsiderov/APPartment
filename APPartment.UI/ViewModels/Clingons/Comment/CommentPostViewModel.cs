@@ -9,6 +9,6 @@ namespace APPartment.UI.ViewModels.Clingons.Comment
     public class CommentPostViewModel : PostViewModel
     {
         [APPUIHint(Templates.Hidden)]
-        public long TargetObjectId { get; set; }
+        public long TargetObjectID { get; set; }
     }
 }

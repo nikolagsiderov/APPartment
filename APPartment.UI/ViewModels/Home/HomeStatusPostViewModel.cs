@@ -12,6 +12,6 @@ namespace APPartment.UI.ViewModels.Home
         public int Status { get; set; }
 
         [APPUIHint(Templates.Hidden)]
-        public long UserId { get; set; }
+        public long UserID { get; set; }
     }
 }

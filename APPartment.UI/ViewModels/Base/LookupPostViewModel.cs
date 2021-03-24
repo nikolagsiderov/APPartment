@@ -7,7 +7,7 @@ namespace APPartment.UI.ViewModels.Base
     public abstract class LookupPostViewModel : ILookupObject
     {
         [APPUIHint(Templates.Hidden)]
-        public long Id { get; set; }
+        public long ID { get; set; }
 
         [APPUIHint(Templates.Input)]
         public string Name { get; set; }

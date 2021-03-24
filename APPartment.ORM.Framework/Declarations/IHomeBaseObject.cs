@@ -2,6 +2,6 @@
 {
     public interface IHomeBaseObject : IBaseObject
     {
-        public long HomeId { get; set; }
+        public long HomeID { get; set; }
     }
 }

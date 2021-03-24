@@ -8,6 +8,6 @@ namespace APPartment.UI.ViewModels.Issue
     public class IssueDisplayViewModel : GridItemViewModelWithHome
     {
         [GridFieldDisplay]
-        public bool IsClose { get; set; }
+        public bool IsClosed { get; set; }
     }
 }

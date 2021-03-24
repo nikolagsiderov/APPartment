@@ -7,7 +7,7 @@ namespace APPartment.UI.ViewModels.Base
     {
         #region Hidden properties
         [APPUIHint(Templates.Hidden)]
-        public long HomeId { get; set; }
+        public long HomeID { get; set; }
         #endregion
     }
 }

@@ -46,7 +46,7 @@ $("#commentButton").click(function () {
         $.ajax({
             type: "POST",
             url: "@Url.Action("PostComment", controllerName)",
-            data: { targetId: @Model.ObjectId, commentText: comment },
+            data: { targetId: @Model.ObjectID, commentText: comment },
             success: function (data) {
                 $("#no-comments-added-message").attr('style', 'display:none;');
 

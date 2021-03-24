@@ -21,7 +21,7 @@ namespace APPartment.Web.Controllers
         {
             get
             {
-                return x => x.HomeId == CurrentHomeId;
+                return x => x.HomeID == CurrentHomeID;
             }
         }
 
@@ -55,15 +55,15 @@ namespace APPartment.Web.Controllers
             return base.Index();
         }
 
-        public IActionResult Assign(string username, long choreId)
+        public IActionResult Assign(string username, long choreID)
         {
-            var model = BaseWebService.GetEntity<ChorePostViewModel>(choreId);
+            var model = BaseWebService.GetEntity<ChorePostViewModel>(choreID);
 
             if (model == null)
                 return new Error404NotFoundViewResult();
 
             var userToAssign = BaseWebService.GetEntity<UserPostViewModel>(x => x.Name == username);
-            model.AssignedToUserId = userToAssign.Id;
+            model.AssignedToUserID = userToAssign.ID;
 
             BaseWebService.Save(model);
 
@@ -72,7 +72,7 @@ namespace APPartment.Web.Controllers
 
         public JsonResult GetMyChoresCount()
         {
-            var myChoresCount = BaseWebService.Count<ChorePostViewModel>(x => x.HomeId == (long)CurrentHomeId && x.AssignedToUserId == (long)CurrentUserId);
+            var myChoresCount = BaseWebService.Count<ChorePostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.AssignedToUserID == (long)CurrentUserID);
             return Json(myChoresCount);
         }
 

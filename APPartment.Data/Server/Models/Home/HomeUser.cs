@@ -8,6 +8,6 @@ namespace APPartment.Data.Server.Models.Home
     public class HomeUser : HomeBaseObject
     {
         [FieldMappingForMainTable]
-        public long UserId { get; set; }
+        public long UserID { get; set; }
     }
 }

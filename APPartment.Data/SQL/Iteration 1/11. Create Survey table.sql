@@ -1,15 +1,15 @@
-USE APPartment
+USE [APPartment]
 
 CREATE TABLE [dbo].[Survey] (
-    Id bigint IDENTITY(1, 1) NOT NULL,
-	ObjectId bigint NOT NULL,
+    [ID] bigint IDENTITY(1, 1) NOT NULL,
+	[ObjectID] bigint NOT NULL,
 	IsCompleted bit NOT NULL,
-	HomeId bigint NOT NULL,
-	CONSTRAINT PK_Survey PRIMARY KEY (Id),
-	CONSTRAINT FK_ObjectSurvey FOREIGN KEY (ObjectId)
-    REFERENCES dbo.Object(ObjectId)
+	[HomeID] bigint NOT NULL,
+	CONSTRAINT PK_Survey PRIMARY KEY ([ID]),
+	CONSTRAINT FK_ObjectSurvey FOREIGN KEY ([ObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
 );
 
 ALTER TABLE [dbo].[Survey]
-ADD CONSTRAINT FK_HomeSurvey FOREIGN KEY (HomeId)
-    REFERENCES dbo.Home(Id)
+ADD CONSTRAINT FK_HomeSurvey FOREIGN KEY ([HomeID])
+    REFERENCES [dbo].[Home]([ID])

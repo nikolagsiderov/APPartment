@@ -9,8 +9,8 @@
             <div class="card-body">
                 <form asp-action="Settings" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="Id" />
-                    <input type="hidden" asp-for="ObjectId" />
+                    <input type="hidden" asp-for="ID" />
+                    <input type="hidden" asp-for="ObjectID" />
 
                     @Html.EditorFor(s => s.HomeName)
 
