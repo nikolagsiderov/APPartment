@@ -9,9 +9,9 @@ using APPartment.UI.ViewModels.Inventory;
 
 namespace APPartment.Web.Controllers
 {
-    public class InventoryController : BaseCRUDController<InventoryDisplayViewModel, InventoryPostViewModel>
+    public class NotSuppliedInventoryController : BaseCRUDController<InventoryDisplayViewModel, InventoryPostViewModel>
     {
-        public InventoryController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        public NotSuppliedInventoryController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
@@ -19,24 +19,24 @@ namespace APPartment.Web.Controllers
         {
             get
             {
-                return x => x.HomeID == (long)CurrentHomeID;
+                return x => x.HomeID == (long)CurrentHomeID && x.IsSupplied == false;
             }
         }
 
-        [Breadcrumb(InventoryBreadcrumbs.All_Breadcrumb)]
+        [Breadcrumb(InventoryBreadcrumbs.Not_Supplied_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["GridTitle"] = "Inventory - All";
+            ViewData["GridTitle"] = "Inventory - Not Supplied";
             ViewData["Module"] = "Inventory";
-            ViewData["Manage"] = true;
+            ViewData["Manage"] = false;
 
             return base.Index();
         }
 
         public JsonResult GetCount()
         {
-            var inventoryCount = BaseWebService.Count<InventoryPostViewModel>(x => x.HomeID == (long)CurrentHomeID);
-            return Json(inventoryCount);
+            var notSuppliedInventoryCount = BaseWebService.Count<InventoryPostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.IsSupplied == false);
+            return Json(notSuppliedInventoryCount);
         }
 
         protected override void PopulateViewData()

@@ -29,7 +29,7 @@
     });
 
     $.ajax({
-        url: "/Inventory/GetInventoryCriticalCount",
+        url: "/Inventory/GetCount",
         success: function (data) {
             if (data === 0) {
                 $("#inventoryBadge").attr("style", "display:none");
@@ -43,7 +43,35 @@
     });
 
     $.ajax({
-        url: "/Hygiene/GetHygieneCriticalCount",
+        url: "/SuppliedInventory/GetCount",
+        success: function (data) {
+            if (data === 0) {
+                $("#suppliedInventoryBadge").attr("style", "display:none");
+            } else {
+                $("#suppliedInventoryBadge").attr("style", "").html(data);
+            }
+        },
+        error: function (req, status, error) {
+            alert(error);
+        }
+    });
+
+    $.ajax({
+        url: "/NotSuppliedInventory/GetCount",
+        success: function (data) {
+            if (data === 0) {
+                $("#notSuppliedInventoryBadge").attr("style", "display:none");
+            } else {
+                $("#notSuppliedInventoryBadge").attr("style", "").html(data);
+            }
+        },
+        error: function (req, status, error) {
+            alert(error);
+        }
+    });
+
+    $.ajax({
+        url: "/Hygiene/GetCount",
         success: function (data) {
             if (data === 0) {
                 $("#hygieneBadge").attr("style", "display:none");
@@ -57,7 +85,35 @@
     });
 
     $.ajax({
-        url: "/Issues/GetIssuesCriticalCount",
+        url: "/DoneHygiene/GetCount",
+        success: function (data) {
+            if (data === 0) {
+                $("#doneHygieneBadge").attr("style", "display:none");
+            } else {
+                $("#doneHygieneBadge").attr("style", "").html(data);
+            }
+        },
+        error: function (req, status, error) {
+            alert(error);
+        }
+    });
+
+    $.ajax({
+        url: "/NotDoneHygiene/GetCount",
+        success: function (data) {
+            if (data === 0) {
+                $("#notDoneHygieneBadge").attr("style", "display:none");
+            } else {
+                $("#notDoneHygieneBadge").attr("style", "").html(data);
+            }
+        },
+        error: function (req, status, error) {
+            alert(error);
+        }
+    });
+
+    $.ajax({
+        url: "/Issues/GetCount",
         success: function (data) {
             if (data === 0) {
                 $("#issuesBadge").attr("style", "display:none");
@@ -71,7 +127,35 @@
     });
 
     $.ajax({
-        url: "/Surveys/GetPendingSurveysCount",
+        url: "/ClosedIssues/GetCount",
+        success: function (data) {
+            if (data === 0) {
+                $("#closedIssuesBadge").attr("style", "display:none");
+            } else {
+                $("#closedIssuesBadge").attr("style", "").html(data);
+            }
+        },
+        error: function (req, status, error) {
+            alert(error);
+        }
+    });
+
+    $.ajax({
+        url: "/NotClosedIssues/GetCount",
+        success: function (data) {
+            if (data === 0) {
+                $("#notClosedIssuesBadge").attr("style", "display:none");
+            } else {
+                $("#notClosedIssuesBadge").attr("style", "").html(data);
+            }
+        },
+        error: function (req, status, error) {
+            alert(error);
+        }
+    });
+
+    $.ajax({
+        url: "/Surveys/GetCount",
         success: function (data) {
             if (data === 0) {
                 $("#surveysBadge").attr("style", "display:none");
@@ -85,12 +169,68 @@
     });
 
     $.ajax({
-        url: "/Chores/GetMyChoresCount",
+        url: "/CompletedSurveys/GetCount",
+        success: function (data) {
+            if (data === 0) {
+                $("#completedSurveysBadge").attr("style", "display:none");
+            } else {
+                $("#completedSurveysBadge").attr("style", "").html(data);
+            }
+        },
+        error: function (req, status, error) {
+            alert(error);
+        }
+    });
+
+    $.ajax({
+        url: "/NotCompletedSurveys/GetCount",
+        success: function (data) {
+            if (data === 0) {
+                $("#notCompletedSurveysBadge").attr("style", "display:none");
+            } else {
+                $("#notCompletedSurveysBadge").attr("style", "").html(data);
+            }
+        },
+        error: function (req, status, error) {
+            alert(error);
+        }
+    });
+
+    $.ajax({
+        url: "/Chores/GetCount",
         success: function (data) {
             if (data === 0) {
                 $("#choresBadge").attr("style", "display:none");
             } else {
                 $("#choresBadge").attr("style", "").html(data);
+            }
+        },
+        error: function (req, status, error) {
+            alert(error);
+        }
+    });
+
+    $.ajax({
+        url: "/DoneChores/GetCount",
+        success: function (data) {
+            if (data === 0) {
+                $("#doneChoresBadge").attr("style", "display:none");
+            } else {
+                $("#doneChoresBadge").attr("style", "").html(data);
+            }
+        },
+        error: function (req, status, error) {
+            alert(error);
+        }
+    });
+
+    $.ajax({
+        url: "/NotDoneChores/GetCount",
+        success: function (data) {
+            if (data === 0) {
+                $("#notDoneChoresBadge").attr("style", "display:none");
+            } else {
+                $("#notDoneChoresBadge").attr("style", "").html(data);
             }
         },
         error: function (req, status, error) {

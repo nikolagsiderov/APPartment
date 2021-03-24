@@ -8,12 +8,13 @@ using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels;
 using APPartment.UI.ViewModels.Chore;
 using APPartment.UI.ViewModels.User;
+using System.Security.Cryptography.X509Certificates;
 
 namespace APPartment.Web.Controllers
 {
-    public class ChoresController : BaseCRUDController<ChoreDisplayViewModel, ChorePostViewModel>
+    public class NotDoneChoresController : BaseCRUDController<ChoreDisplayViewModel, ChorePostViewModel>
     {
-        public ChoresController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        public NotDoneChoresController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
@@ -21,24 +22,24 @@ namespace APPartment.Web.Controllers
         {
             get
             {
-                return x => x.HomeID == CurrentHomeID;
+                return x => x.HomeID == CurrentHomeID && x.IsDone == false;
             }
         }
 
-        [Breadcrumb(ChoresBreadcrumbs.All_Breadcrumb)]
+        [Breadcrumb(ChoresBreadcrumbs.Others_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["GridTitle"] = "Chores - All";
+            ViewData["GridTitle"] = "Chores - Not Done";
             ViewData["Module"] = "Chores";
-            ViewData["Manage"] = true;
+            ViewData["Manage"] = false;
 
             return base.Index();
         }
 
         public JsonResult GetCount()
         {
-            var myChoresCount = BaseWebService.Count<ChorePostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.AssignedToUserID == (long)CurrentUserID);
-            return Json(myChoresCount);
+            var notDoneChoresCount = BaseWebService.Count<ChorePostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.AssignedToUserID == (long)CurrentUserID && x.IsDone == false);
+            return Json(notDoneChoresCount);
         }
 
         protected override void PopulateViewData()

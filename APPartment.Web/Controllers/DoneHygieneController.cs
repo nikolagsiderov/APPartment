@@ -9,9 +9,9 @@ using APPartment.UI.ViewModels.Hygiene;
 
 namespace APPartment.Web.Controllers
 {
-    public class HygieneController : BaseCRUDController<HygieneDisplayViewModel, HygienePostViewModel>
+    public class DoneHygieneController : BaseCRUDController<HygieneDisplayViewModel, HygienePostViewModel>
     {
-        public HygieneController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        public DoneHygieneController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
@@ -19,24 +19,24 @@ namespace APPartment.Web.Controllers
         {
             get
             {
-                return x => x.HomeID == CurrentHomeID;
+                return x => x.HomeID == CurrentHomeID && x.IsDone == true; ;
             }
         }
 
-        [Breadcrumb(HygieneBreadcrumbs.All_Breadcrumb)]
+        [Breadcrumb(HygieneBreadcrumbs.Cleaned_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["GridTitle"] = "Hygiene - All";
+            ViewData["GridTitle"] = "Hygiene - Done";
             ViewData["Module"] = "Hygiene";
-            ViewData["Manage"] = true;
+            ViewData["Manage"] = false;
 
             return base.Index();
         }
 
         public JsonResult GetCount()
         {
-            var hygieneCount = BaseWebService.Count<HygienePostViewModel>(x => x.HomeID == (long)CurrentUserID);
-            return Json(hygieneCount);
+            var doneHygieneCount = BaseWebService.Count<HygienePostViewModel>(x => x.HomeID == (long)CurrentUserID && x.IsDone == true);
+            return Json(doneHygieneCount);
         }
 
         protected override void PopulateViewData()

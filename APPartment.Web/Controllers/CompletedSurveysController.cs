@@ -9,9 +9,9 @@ using APPartment.UI.ViewModels.Survey;
 
 namespace APPartment.Web.Controllers
 {
-    public class SurveysController : BaseCRUDController<SurveyDisplayViewModel, SurveyPostViewModel>
+    public class CompletedSurveysController : BaseCRUDController<SurveyDisplayViewModel, SurveyPostViewModel>
     {
-        public SurveysController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        public CompletedSurveysController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
@@ -19,24 +19,24 @@ namespace APPartment.Web.Controllers
         {
             get
             {
-                return x => x.HomeID == CurrentHomeID;
+                return x => x.HomeID == CurrentHomeID && x.IsCompleted == true; ;
             }
         }
 
-        [Breadcrumb(SurveysBreadcrumbs.All_Breadcrumb)]
+        [Breadcrumb(SurveysBreadcrumbs.Completed_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["GridTitle"] = "Surveys - All";
+            ViewData["GridTitle"] = "Surveys - Completed";
             ViewData["Module"] = "Surveys";
-            ViewData["Manage"] = true;
+            ViewData["Manage"] = false;
 
             return base.Index();
         }
 
         public JsonResult GetCount()
         {
-            var surveysCount = BaseWebService.Count<SurveyPostViewModel>(x => x.HomeID == (long)CurrentHomeID);
-            return Json(surveysCount);
+            var completedSurveysCount = BaseWebService.Count<SurveyPostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.IsCompleted == true);
+            return Json(completedSurveysCount);
         }
 
         protected override void PopulateViewData()

@@ -9,9 +9,9 @@ using APPartment.UI.ViewModels.Issue;
 
 namespace APPartment.Web.Controllers
 {
-    public class IssuesController : BaseCRUDController<IssueDisplayViewModel, IssuePostViewModel>
+    public class NotClosedIssuesController : BaseCRUDController<IssueDisplayViewModel, IssuePostViewModel>
     {
-        public IssuesController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        public NotClosedIssuesController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
@@ -19,24 +19,24 @@ namespace APPartment.Web.Controllers
         {
             get
             {
-                return x => x.HomeID == CurrentHomeID;
+                return x => x.HomeID == CurrentHomeID && x.IsClosed == false;
             }
         }
 
-        [Breadcrumb(IssuesBreadcrumbs.All_Breadcrumb)]
+        [Breadcrumb(IssuesBreadcrumbs.Open_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["GridTitle"] = "Issues - All";
+            ViewData["GridTitle"] = "Issues - Not Closed";
             ViewData["Module"] = "Issues";
-            ViewData["Manage"] = true;
+            ViewData["Manage"] = false;
 
             return base.Index();
         }
-    
+
         public JsonResult GetCount()
         {
-            var issuesCount = BaseWebService.Count<IssuePostViewModel>(x => x.HomeID == (long)CurrentHomeID);
-            return Json(issuesCount);
+            var notClosedIssuesCount = BaseWebService.Count<IssuePostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.IsClosed == false);
+            return Json(notClosedIssuesCount);
         }
 
         protected override void PopulateViewData()
