@@ -6,9 +6,11 @@ using System.Linq.Expressions;
 using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Survey;
+using APPAreas = APPartment.UI.Utilities.Constants.Areas;
 
-namespace APPartment.Web.Controllers
+namespace APPartment.Web.Areas.Surveys.Controllers
 {
+    [Area(APPAreas.Surveys)]
     public class SurveysController : BaseCRUDController<SurveyDisplayViewModel, SurveyPostViewModel>
     {
         public SurveysController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
@@ -23,11 +25,10 @@ namespace APPartment.Web.Controllers
             }
         }
 
-        [Breadcrumb(SurveysBreadcrumbs.All_Breadcrumb)]
+        [Breadcrumb(SurveysBreadcrumbs.Manage_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["GridTitle"] = "Surveys - All";
-            ViewData["Module"] = "Surveys";
+            ViewData["Module"] = APPAreas.Surveys;
             ViewData["Manage"] = true;
 
             return base.Index();
@@ -35,8 +36,8 @@ namespace APPartment.Web.Controllers
 
         public JsonResult GetCount()
         {
-            var surveysCount = BaseWebService.Count<SurveyPostViewModel>(x => x.HomeID == (long)CurrentHomeID);
-            return Json(surveysCount);
+            var count = BaseWebService.Count<SurveyPostViewModel>(x => x.HomeID == (long)CurrentHomeID);
+            return Json(count);
         }
 
         protected override void PopulateViewData()

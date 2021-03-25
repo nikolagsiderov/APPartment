@@ -8,15 +8,14 @@
 }
 
 <div class="card shadow mb-4">
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">@ViewData["GridTitle"]</h6>
-        <div style="margin-left: auto;">
-            @if (canManage)
-            {
+    @if (canManage)
+    {
+        <div class="card-header py-3">
+            <div>
                 <a asp-action="Create" class="no-underline btn btn-success btn-sm" style="font-size: small;"><i class="fas fa-plus"></i>&nbsp; Add</a>
-            }
+            </div>
         </div>
-    </div>
+    }
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

@@ -5,12 +5,12 @@ using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http;
 using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
-using APPartment.UI.ViewModels;
 using APPartment.UI.ViewModels.Chore;
-using APPartment.UI.ViewModels.User;
+using APPAreas = APPartment.UI.Utilities.Constants.Areas;
 
-namespace APPartment.Web.Controllers
+namespace APPartment.Web.Areas.Chores.Controllers
 {
+    [Area(APPAreas.Chores)]
     public class ChoresController : BaseCRUDController<ChoreDisplayViewModel, ChorePostViewModel>
     {
         public ChoresController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
@@ -25,11 +25,10 @@ namespace APPartment.Web.Controllers
             }
         }
 
-        [Breadcrumb(ChoresBreadcrumbs.All_Breadcrumb)]
+        [Breadcrumb(ChoresBreadcrumbs.Manage_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["GridTitle"] = "Chores - All";
-            ViewData["Module"] = "Chores";
+            ViewData["Module"] = APPAreas.Chores;
             ViewData["Manage"] = true;
 
             return base.Index();
@@ -37,8 +36,8 @@ namespace APPartment.Web.Controllers
 
         public JsonResult GetCount()
         {
-            var myChoresCount = BaseWebService.Count<ChorePostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.AssignedToUserID == (long)CurrentUserID);
-            return Json(myChoresCount);
+            var count = BaseWebService.Count<ChorePostViewModel>(x => x.HomeID == (long)CurrentHomeID);
+            return Json(count);
         }
 
         protected override void PopulateViewData()

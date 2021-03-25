@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Http;
 using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Hygiene;
+using APPAreas = APPartment.UI.Utilities.Constants.Areas;
 
-namespace APPartment.Web.Controllers
+namespace APPartment.Web.Areas.Hygiene.Controllers
 {
-    public class NotDoneHygieneController : BaseCRUDController<HygieneDisplayViewModel, HygienePostViewModel>
+    [Area("Hygiene")]
+    public class InProgressController : BaseCRUDController<HygieneDisplayViewModel, HygienePostViewModel>
     {
-        public NotDoneHygieneController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        public InProgressController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
@@ -19,15 +21,14 @@ namespace APPartment.Web.Controllers
         {
             get
             {
-                return x => x.HomeID == CurrentHomeID && x.IsDone == false; ;
+                return x => x.HomeID == CurrentHomeID && x.IsDone == false;
             }
         }
 
-        [Breadcrumb(HygieneBreadcrumbs.Due_Cleaning_Breadcrumb)]
+        [Breadcrumb(HygieneBreadcrumbs.InProgress_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["GridTitle"] = "Hygiene - Not Done";
-            ViewData["Module"] = "Hygiene";
+            ViewData["Module"] = APPAreas.Hygiene;
             ViewData["Manage"] = false;
 
             return base.Index();
@@ -35,8 +36,8 @@ namespace APPartment.Web.Controllers
 
         public JsonResult GetCount()
         {
-            var notDoneHygieneCount = BaseWebService.Count<HygienePostViewModel>(x => x.HomeID == (long)CurrentUserID && x.IsDone == false);
-            return Json(notDoneHygieneCount);
+            var count = BaseWebService.Count<HygienePostViewModel>(x => x.HomeID == (long)CurrentUserID && x.IsDone == false);
+            return Json(count);
         }
 
         protected override void PopulateViewData()

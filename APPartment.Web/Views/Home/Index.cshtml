@@ -8,8 +8,8 @@
     <div class="col-md-4">
         <div class="card shadow mb-4 text-center">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary"><a asp-controller="Inventory" asp-action="Index" class="no-underline"><i class='fas fa-tasks'></i> Inventory - latest updates</a></h6>
-                <div style="margin-left: auto;"><a asp-controller="Inventory" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
+                <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Inventory" asp-controller="Inventory" asp-action="Index" class="no-underline"><i class='fas fa-tasks'></i> Inventory - latest updates</a></h6>
+                <div style="margin-left: auto;"><a asp-area="Inventory" asp-controller="Inventory" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
             </div>
             <div class="card-body">
                 @if (widgetObjects[0].Name != null)
@@ -38,8 +38,8 @@
     <div class="col-md-4">
         <div class="card shadow mb-4 text-center">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary"><a asp-controller="Hygiene" asp-action="Index" class="no-underline"><i class='fas fa-recycle'></i> Hygiene - latest updates</a></h6>
-                <div style="margin-left: auto;"><a asp-controller="Hygiene" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
+                <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Hygiene" asp-controller="Hygiene" asp-action="Index" class="no-underline"><i class='fas fa-recycle'></i> Hygiene - latest updates</a></h6>
+                <div style="margin-left: auto;"><a asp-area="Hygiene" asp-controller="Hygiene" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
             </div>
             <div class="card-body">
                 @if (widgetObjects[1].Name != null)
@@ -68,8 +68,8 @@
     <div class="col-md-4">
         <div class="card shadow mb-4 text-center">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary"><a asp-controller="Issues" asp-action="Index" class="no-underline"><i class='fas fa-exclamation-circle'></i> Issues - latest updates</a></h6>
-                <div style="margin-left: auto;"><a asp-controller="Issues" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
+                <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Issues" asp-controller="Issues" asp-action="Index" class="no-underline"><i class='fas fa-exclamation-circle'></i> Issues - latest updates</a></h6>
+                <div style="margin-left: auto;"><a asp-area="Issues" asp-controller="Issues" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
             </div>
             <div class="card-body">
                 @if (widgetObjects[2].Name != null)

@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Http;
 using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Inventory;
+using APPAreas = APPartment.UI.Utilities.Constants.Areas;
 
-namespace APPartment.Web.Controllers
+namespace APPartment.Web.Areas.Inventory.Controllers
 {
-    public class SuppliedInventoryController : BaseCRUDController<InventoryDisplayViewModel, InventoryPostViewModel>
+    [Area(APPAreas.Inventory)]
+    public class SuppliedController : BaseCRUDController<InventoryDisplayViewModel, InventoryPostViewModel>
     {
-        public SuppliedInventoryController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        public SuppliedController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
@@ -26,8 +28,7 @@ namespace APPartment.Web.Controllers
         [Breadcrumb(InventoryBreadcrumbs.Supplied_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["GridTitle"] = "Inventory - Supplied";
-            ViewData["Module"] = "Inventory";
+            ViewData["Module"] = APPAreas.Inventory;
             ViewData["Manage"] = false;
 
             return base.Index();
@@ -35,8 +36,8 @@ namespace APPartment.Web.Controllers
 
         public JsonResult GetCount()
         {
-            var suppliedInventoryCount = BaseWebService.Count<InventoryPostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.IsSupplied == true);
-            return Json(suppliedInventoryCount);
+            var count = BaseWebService.Count<InventoryPostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.IsSupplied == true);
+            return Json(count);
         }
 
         protected override void PopulateViewData()

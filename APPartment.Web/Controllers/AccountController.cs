@@ -57,6 +57,12 @@ namespace APPartment.Web.Controllers
         [HttpPost]
         public IActionResult Login(UserPostViewModel user)
         {
+            if (string.IsNullOrEmpty(user.Name) || string.IsNullOrEmpty(user.Password))
+            {
+                ModelState.AddModelError("", "Username or password cannot be empty.");
+                return View();
+            }
+
             var userWithPassedCredsExists = BaseWebService.GetEntity<UserPostViewModel>(x => x.Name == user.Name && x.Password == user.Password);
             
             if (userWithPassedCredsExists != null)

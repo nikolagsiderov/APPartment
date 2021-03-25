@@ -1,6 +1,14 @@
 ﻿@{
-    var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
-    var actionName = this.ViewContext.RouteData.Values["action"].ToString();
+    var area = this.ViewContext.RouteData.Values["area"];
+    var controller = this.ViewContext.RouteData.Values["controller"].ToString();
+    var action = this.ViewContext.RouteData.Values["action"].ToString();
+
+    var areaName = string.Empty;
+
+    if (area != null)
+    {
+        areaName = area.ToString();
+    }
 
     string homeLink = string.Empty;
     string calendarLink = string.Empty;
@@ -11,77 +19,35 @@
     string choresLink = string.Empty;
     string settingsLink = string.Empty;
 
-    if (string.IsNullOrEmpty(controllerName)
-        || (controllerName == "Home" && string.IsNullOrEmpty(actionName))
-        || (controllerName == "Home" && actionName == "Index"))
+    if ((string.IsNullOrEmpty(areaName) || areaName.Equals("default")) && controller.Equals("Home") && action.Equals("Index"))
     {
         homeLink = "active";
     }
-    else if (controllerName == "Calendar")
+    else if (!string.IsNullOrEmpty(areaName) && (areaName.Equals("default") && controller.Equals("Calendar") && action.Equals("Index")))
     {
         calendarLink = "active";
     }
-    else if (controllerName == "Inventory")
+    else if (areaName.Equals("Inventory"))
     {
         inventoryLink = "active";
     }
-    else if (controllerName == "SuppliedInventory")
-    {
-        inventoryLink = "active";
-    }
-    else if (controllerName == "NotSuppliedInventory")
-    {
-        inventoryLink = "active";
-    }
-    else if (controllerName == "Hygiene")
+    else if (areaName.Equals("Hygiene"))
     {
         hygieneLink = "active";
     }
-    else if (controllerName == "DoneHygiene")
-    {
-        inventoryLink = "active";
-    }
-    else if (controllerName == "NotDoneHygiene")
-    {
-        inventoryLink = "active";
-    }
-    else if (controllerName == "Issues")
+    else if (areaName.Equals("Issues"))
     {
         issuesLink = "active";
     }
-    else if (controllerName == "ClosedIssues")
-    {
-        issuesLink = "active";
-    }
-    else if (controllerName == "NotClosedIssues")
-    {
-        issuesLink = "active";
-    }
-    else if (controllerName == "Surveys")
+    else if (areaName.Equals("Surveys"))
     {
         surveysLink = "active";
     }
-    else if (controllerName == "CompletedSurveys")
-    {
-        surveysLink = "active";
-    }
-    else if (controllerName == "NotCompletedSurveys")
-    {
-        surveysLink = "active";
-    }
-    else if (controllerName == "Chores")
+    else if (areaName.Equals("Chores"))
     {
         choresLink = "active";
     }
-    else if (controllerName == "DoneChores")
-    {
-        choresLink = "active";
-    }
-    else if (controllerName == "NotDoneChores")
-    {
-        choresLink = "active";
-    }
-    else if (controllerName == "Home" && actionName == "Settings")
+    else if (!string.IsNullOrEmpty(areaName) && (areaName.Equals("default") && controller.Equals("Home") && action.Equals("Settings")))
     {
         settingsLink = "active";
     }
@@ -92,11 +58,11 @@
         <div class="sidenav-menu">
             <div class="nav accordion" id="accordionSidenav">
                 <div class="sidenav-menu-heading"></div>
-                <a class="nav-link @homeLink" asp-controller="Home" asp-action="Index">
+                <a class="nav-link @homeLink" asp-area="default" asp-controller="Home" asp-action="Index">
                     <div class="nav-link-icon"><i class="fas fa-home"></i></div>
                     Home
                 </a>
-                <a class="nav-link @calendarLink" asp-controller="Calendar" asp-action="Index">
+                <a class="nav-link @calendarLink" asp-area="default" asp-controller="Calendar" asp-action="Index">
                     <div class="nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
                     General Calendar
                 </a>
@@ -108,9 +74,9 @@
                 </a>
                 <div class="collapse" id="collapseInventory" data-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" asp-controller="NotSuppliedInventory" asp-action="Index"><i class="fas fa-exclamation-triangle"></i> &nbsp; Not Supplied &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="notSuppliedInventoryBadge"></span></a>
-                        <a class="nav-link" asp-controller="SuppliedInventory" asp-action="Index"><i class="fas fa-check"></i> &nbsp; Supplied &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="suppliedInventoryBadge"></span></a>
-                        <a class="nav-link" asp-controller="Inventory" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
+                        <a class="nav-link" asp-area="Inventory" asp-controller="Unsupplied" asp-action="Index"><i class="fas fa-exclamation-triangle"></i> &nbsp; Unsupplied &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="unsuppliedInventoryBadge"></span></a>
+                        <a class="nav-link" asp-area="Inventory" asp-controller="Supplied" asp-action="Index"><i class="fas fa-check"></i> &nbsp; Supplied &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="suppliedInventoryBadge"></span></a>
+                        <a class="nav-link" asp-area="Inventory" asp-controller="Inventory" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed @hygieneLink" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseHygiene" aria-expanded="false" aria-controls="collapseHygiene">
@@ -120,9 +86,9 @@
                 </a>
                 <div class="collapse" id="collapseHygiene" data-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" asp-controller="NotDoneHygiene" asp-action="Index"><i class="fas fa-exclamation-triangle"></i> &nbsp; Due Cleaning  &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="notDoneHygieneBadge"></span></a>
-                        <a class="nav-link" asp-controller="DoneHygiene" asp-action="Index"><i class="fas fa-check"></i> &nbsp; Cleaned &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="doneHygieneBadge"></span></a>
-                        <a class="nav-link" asp-controller="Hygiene" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
+                        <a class="nav-link" asp-area="Hygiene" asp-controller="InProgress" asp-action="Index"><i class="fas fa-exclamation-triangle"></i> &nbsp; In Progress  &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="inprogressHygieneBadge"></span></a>
+                        <a class="nav-link" asp-area="Hygiene" asp-controller="Done" asp-action="Index"><i class="fas fa-check"></i> &nbsp; Done &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="doneHygieneBadge"></span></a>
+                        <a class="nav-link" asp-area="Hygiene" asp-controller="Hygiene" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed @issuesLink" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseIssues" aria-expanded="false" aria-controls="collapseIssues">
@@ -132,9 +98,9 @@
                 </a>
                 <div class="collapse" id="collapseIssues" data-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" asp-controller="Issues" asp-action="Index"><i class="fas fa-exclamation-triangle"></i> &nbsp; Open &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="notClosedIssuesBadge"></span></a>
-                        <a class="nav-link" asp-controller="Issues" asp-action="Index"><i class="fas fa-check"></i> &nbsp; Closed   &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="closedIssuesBadge"></span></a>
-                        <a class="nav-link" asp-controller="Issues" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
+                        <a class="nav-link" asp-area="Issues" asp-controller="Open" asp-action="Index"><i class="fas fa-exclamation-triangle"></i> &nbsp; Open &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="openIssuesBadge"></span></a>
+                        <a class="nav-link" asp-area="Issues" asp-controller="Closed" asp-action="Index"><i class="fas fa-check"></i> &nbsp; Closed   &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="closedIssuesBadge"></span></a>
+                        <a class="nav-link" asp-area="Issues" asp-controller="Issues" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed @choresLink" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseChores" aria-expanded="false" aria-controls="collapseChores">
@@ -144,9 +110,9 @@
                 </a>
                 <div class="collapse" id="collapseChores" data-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" asp-controller="Chores" asp-action="Index"><i class='fas fa-user-tag'></i> &nbsp; Mine &nbsp; Open &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="notDoneChoresBadge"></span></a>
-                        <a class="nav-link" asp-controller="Chores" asp-action="Index"><i class='fas fa-user-friends'></i> &nbsp; Others &nbsp; Open &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="doneChoresBadge"></span></a>
-                        <a class="nav-link" asp-controller="Chores" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
+                        <a class="nav-link" asp-area="Chores" asp-controller="Mine" asp-action="Index"><i class='fas fa-user-tag'></i> &nbsp; Mine &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="mineChoresBadge"></span></a>
+                        <a class="nav-link" asp-area="Chores" asp-controller="Others" asp-action="Index"><i class='fas fa-user-friends'></i> &nbsp; Others &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="othersChoresBadge"></span></a>
+                        <a class="nav-link" asp-area="Chores" asp-controller="Chores" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
                     </nav>
                 </div>
                 <div class="sidenav-menu-heading">More</div>
@@ -157,12 +123,12 @@
                 </a>
                 <div class="collapse" id="collapseSurveys" data-parent="#accordionSidenav">
                     <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" asp-controller="Surveys" asp-action="Index"><i class="fas fa-exclamation-triangle"></i> &nbsp; Pending  &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="notCompletedSurveysBadge"></span></a>
-                        <a class="nav-link" asp-controller="Surveys" asp-action="Index"><i class="fas fa-check"></i> &nbsp; Completed &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="completedSurveysBadge"></span></a>
-                        <a class="nav-link" asp-controller="Surveys" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
+                        <a class="nav-link" asp-area="Surveys" asp-controller="Pending" asp-action="Index"><i class="fas fa-exclamation-triangle"></i> &nbsp; Pending  &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="pendingSurveysBadge"></span></a>
+                        <a class="nav-link" asp-area="Surveys" asp-controller="Completed" asp-action="Index"><i class="fas fa-check"></i> &nbsp; Completed &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="completedSurveysBadge"></span></a>
+                        <a class="nav-link" asp-area="Surveys" asp-controller="Surveys" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
                     </nav>
                 </div>
-                <a class="nav-link @settingsLink" asp-controller="Home" asp-action="Settings">
+                <a class="nav-link @settingsLink" asp-area="default" asp-controller="Home" asp-action="Settings">
                     <div class="nav-link-icon"><i class="fas fa-cog"></i></div>
                     Settings
                 </a>

@@ -7,6 +7,7 @@ using SmartBreadcrumbs.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using APPartment.UI.Services;
+using Microsoft.AspNetCore.Mvc.Razor;
 
 namespace APPartment.Web
 {
@@ -26,6 +27,15 @@ namespace APPartment.Web
         .AddSessionStateTempDataProvider();
             services.AddSignalR();
             services.AddSession();
+
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.AreaViewLocationFormats.Clear();
+                options.AreaViewLocationFormats.Add("/MyAreas/{2}/Views/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/MyAreas/{2}/Views/Shared/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+            });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
@@ -71,8 +81,13 @@ namespace APPartment.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "MyArea",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
                 endpoints.MapRazorPages();
                 endpoints.MapHub<ChatHub>("/Home/Index");
             });

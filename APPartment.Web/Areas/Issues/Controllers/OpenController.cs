@@ -6,12 +6,14 @@ using System.Linq.Expressions;
 using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Issue;
+using APPAreas = APPartment.UI.Utilities.Constants.Areas;
 
-namespace APPartment.Web.Controllers
+namespace APPartment.Web.Areas.Issues.Controllers
 {
-    public class NotClosedIssuesController : BaseCRUDController<IssueDisplayViewModel, IssuePostViewModel>
+    [Area(APPAreas.Issues)]
+    public class OpenController : BaseCRUDController<IssueDisplayViewModel, IssuePostViewModel>
     {
-        public NotClosedIssuesController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        public OpenController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
@@ -26,8 +28,7 @@ namespace APPartment.Web.Controllers
         [Breadcrumb(IssuesBreadcrumbs.Open_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["GridTitle"] = "Issues - Not Closed";
-            ViewData["Module"] = "Issues";
+            ViewData["Module"] = APPAreas.Issues;
             ViewData["Manage"] = false;
 
             return base.Index();
@@ -35,8 +36,8 @@ namespace APPartment.Web.Controllers
 
         public JsonResult GetCount()
         {
-            var notClosedIssuesCount = BaseWebService.Count<IssuePostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.IsClosed == false);
-            return Json(notClosedIssuesCount);
+            var count = BaseWebService.Count<IssuePostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.IsClosed == false);
+            return Json(count);
         }
 
         protected override void PopulateViewData()

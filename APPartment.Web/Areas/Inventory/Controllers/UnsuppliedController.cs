@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Http;
 using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Inventory;
+using APPAreas = APPartment.UI.Utilities.Constants.Areas;
 
-namespace APPartment.Web.Controllers
+namespace APPartment.Web.Areas.Inventory.Controllers
 {
-    public class NotSuppliedInventoryController : BaseCRUDController<InventoryDisplayViewModel, InventoryPostViewModel>
+    [Area(APPAreas.Inventory)]
+    public class UnsuppliedController : BaseCRUDController<InventoryDisplayViewModel, InventoryPostViewModel>
     {
-        public NotSuppliedInventoryController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        public UnsuppliedController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
@@ -23,11 +25,10 @@ namespace APPartment.Web.Controllers
             }
         }
 
-        [Breadcrumb(InventoryBreadcrumbs.Not_Supplied_Breadcrumb)]
+        [Breadcrumb(InventoryBreadcrumbs.Unsupplied_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["GridTitle"] = "Inventory - Not Supplied";
-            ViewData["Module"] = "Inventory";
+            ViewData["Module"] = APPAreas.Inventory;
             ViewData["Manage"] = false;
 
             return base.Index();

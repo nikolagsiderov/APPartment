@@ -6,12 +6,14 @@ using System.Linq.Expressions;
 using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Survey;
+using APPAreas = APPartment.UI.Utilities.Constants.Areas;
 
-namespace APPartment.Web.Controllers
+namespace APPartment.Web.Areas.Surveys.Controllers
 {
-    public class NotCompletedSurveysController : BaseCRUDController<SurveyDisplayViewModel, SurveyPostViewModel>
+    [Area(APPAreas.Surveys)]
+    public class PendingController : BaseCRUDController<SurveyDisplayViewModel, SurveyPostViewModel>
     {
-        public NotCompletedSurveysController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        public PendingController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
@@ -19,15 +21,14 @@ namespace APPartment.Web.Controllers
         {
             get
             {
-                return x => x.HomeID == CurrentHomeID && x.IsCompleted == false; ;
+                return x => x.HomeID == CurrentHomeID && x.IsCompleted == false;
             }
         }
 
         [Breadcrumb(SurveysBreadcrumbs.Pending_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["GridTitle"] = "Surveys - Not Completed";
-            ViewData["Module"] = "Surveys";
+            ViewData["Module"] = APPAreas.Surveys;
             ViewData["Manage"] = false;
 
             return base.Index();
@@ -35,8 +36,8 @@ namespace APPartment.Web.Controllers
 
         public JsonResult GetCount()
         {
-            var notCompletedSurveysCount = BaseWebService.Count<SurveyPostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.IsCompleted == false);
-            return Json(notCompletedSurveysCount);
+            var count = BaseWebService.Count<SurveyPostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.IsCompleted == false);
+            return Json(count);
         }
 
         protected override void PopulateViewData()

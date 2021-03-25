@@ -18,6 +18,7 @@ namespace APPartment.UI.Attributes
             {
                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
                 {
+                    area = "default",
                     controller = "Account",
                     action = "Login"
                 }));
@@ -26,6 +27,7 @@ namespace APPartment.UI.Attributes
             {
                 filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
                 {
+                    area = "default",
                     controller = "Home",
                     action = "Login"
                 }));

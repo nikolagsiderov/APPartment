@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Http;
 using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Hygiene;
+using APPAreas = APPartment.UI.Utilities.Constants.Areas;
 
-namespace APPartment.Web.Controllers
+namespace APPartment.Web.Areas.Hygiene.Controllers
 {
+    [Area(APPAreas.Hygiene)]
     public class HygieneController : BaseCRUDController<HygieneDisplayViewModel, HygienePostViewModel>
     {
         public HygieneController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
@@ -23,11 +25,10 @@ namespace APPartment.Web.Controllers
             }
         }
 
-        [Breadcrumb(HygieneBreadcrumbs.All_Breadcrumb)]
+        [Breadcrumb(HygieneBreadcrumbs.Manage_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["GridTitle"] = "Hygiene - All";
-            ViewData["Module"] = "Hygiene";
+            ViewData["Module"] = APPAreas.Hygiene;
             ViewData["Manage"] = true;
 
             return base.Index();
@@ -35,8 +36,8 @@ namespace APPartment.Web.Controllers
 
         public JsonResult GetCount()
         {
-            var hygieneCount = BaseWebService.Count<HygienePostViewModel>(x => x.HomeID == (long)CurrentUserID);
-            return Json(hygieneCount);
+            var count = BaseWebService.Count<HygienePostViewModel>(x => x.HomeID == (long)CurrentUserID);
+            return Json(count);
         }
 
         protected override void PopulateViewData()
