@@ -2,7 +2,18 @@
 
 @{
     var header = string.Format("ID: {0}, Name: {1}", Model.ID, Model.Name);
-    var canManage = bool.Parse(ViewData["CanManage"].ToString());
+    var canManage = false;
+    var isReadonly = false;
+
+    if (ViewData["ReadOnly"] != null)
+    {
+        isReadonly = bool.Parse(ViewData["ReadOnly"].ToString());
+    }
+
+    if (ViewData["CanManage"] != null)
+    {
+        canManage = bool.Parse(ViewData["CanManage"].ToString());
+    }
 }
 
 <div class="card">
@@ -30,8 +41,11 @@
 
 <br />
 
-<div class="card">
-    <div class="card-body">
-        @await Html.PartialAsync("_ObjectMetadataTab", Model)
+@if (!isReadonly)
+{
+    <div class="card">
+        <div class="card-body">
+            @await Html.PartialAsync("_ObjectMetadataTab", Model)
+        </div>
     </div>
-</div>
+}
