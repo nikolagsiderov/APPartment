@@ -17,20 +17,13 @@ namespace APPartment.Web.Areas.Issues.Controllers
         {
         }
 
-        public override Expression<Func<IssueDisplayViewModel, bool>> FilterExpression
-        {
-            get
-            {
-                return x => x.HomeID == CurrentHomeID;
-            }
-        }
+        public override Expression<Func<IssueDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentHomeID;
+
+        public override bool CanManage => true;
 
         [Breadcrumb(IssuesBreadcrumbs.Manage_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["Module"] = APPAreas.Issues;
-            ViewData["Manage"] = true;
-
             return base.Index();
         }
     

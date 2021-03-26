@@ -17,20 +17,13 @@ namespace APPartment.Web.Areas.Hygiene.Controllers
         {
         }
 
-        public override Expression<Func<HygieneDisplayViewModel, bool>> FilterExpression
-        {
-            get
-            {
-                return x => x.HomeID == CurrentHomeID;
-            }
-        }
+        public override Expression<Func<HygieneDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentHomeID;
+
+        public override bool CanManage => true;
 
         [Breadcrumb(HygieneBreadcrumbs.Manage_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["Module"] = APPAreas.Hygiene;
-            ViewData["Manage"] = true;
-
             return base.Index();
         }
 

@@ -17,20 +17,13 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         {
         }
 
-        public override Expression<Func<SurveyDisplayViewModel, bool>> FilterExpression
-        {
-            get
-            {
-                return x => x.HomeID == CurrentHomeID;
-            }
-        }
+        public override Expression<Func<SurveyDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentHomeID;
+
+        public override bool CanManage => false;
 
         [Breadcrumb(SurveysBreadcrumbs.Manage_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["Module"] = APPAreas.Surveys;
-            ViewData["Manage"] = true;
-
             return base.Index();
         }
 

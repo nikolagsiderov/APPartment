@@ -17,20 +17,13 @@ namespace APPartment.Web.Areas.Chores.Controllers
         {
         }
 
-        public override Expression<Func<ChoreDisplayViewModel, bool>> FilterExpression
-        {
-            get
-            {
-                return x => x.HomeID == CurrentHomeID && x.AssignedToUserID != (long)CurrentUserID;
-            }
-        }
+        public override Expression<Func<ChoreDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentHomeID && x.AssignedToUserID != (long)CurrentUserID;
+
+        public override bool CanManage => false;
 
         [Breadcrumb(ChoresBreadcrumbs.Others_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["Module"] = APPAreas.Chores;
-            ViewData["Manage"] = false;
-
             return base.Index();
         }
 

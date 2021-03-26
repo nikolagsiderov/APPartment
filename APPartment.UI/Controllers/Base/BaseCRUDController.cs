@@ -33,10 +33,13 @@ namespace APPartment.UI.Controllers.Base
 
         public abstract Expression<Func<T, bool>> FilterExpression { get; }
 
+        public abstract bool CanManage { get; }
+
         [Breadcrumb("Base")]
         public virtual IActionResult Index()
         {
             var models = BaseWebService.GetCollection<T>(FilterExpression);
+            ViewData["CanManage"] = CanManage;
             return View("_Grid", models);
         }
 
@@ -52,6 +55,7 @@ namespace APPartment.UI.Controllers.Base
                 return new Error404NotFoundViewResult();
 
             model = GetClingons(model);
+            ViewData["CanManage"] = CanManage;
 
             return View("_Details", model);
         }

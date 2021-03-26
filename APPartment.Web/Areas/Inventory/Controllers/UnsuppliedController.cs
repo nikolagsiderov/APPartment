@@ -17,20 +17,13 @@ namespace APPartment.Web.Areas.Inventory.Controllers
         {
         }
 
-        public override Expression<Func<InventoryDisplayViewModel, bool>> FilterExpression
-        {
-            get
-            {
-                return x => x.HomeID == (long)CurrentHomeID && x.IsSupplied == false;
-            }
-        }
+        public override Expression<Func<InventoryDisplayViewModel, bool>> FilterExpression => x => x.HomeID == (long)CurrentHomeID && x.IsSupplied == false;
+
+        public override bool CanManage => false;
 
         [Breadcrumb(InventoryBreadcrumbs.Unsupplied_Breadcrumb)]
         public override IActionResult Index()
         {
-            ViewData["Module"] = APPAreas.Inventory;
-            ViewData["Manage"] = false;
-
             return base.Index();
         }
 
