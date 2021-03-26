@@ -16,28 +16,28 @@
         cursor: pointer;
     }
 
-    .slider .toggle-label::before {
-        content: '';
-        display: block;
-        width: 50%;
-        height: 100%;
-        background: #ffffff;
-        border-radius: 50%;
-        box-shadow: 0 0 0 1px #d1d1d1;
-        position: absolute;
-        left: 0;
-        top: 0;
-        transition: transform 0.2s ease-in-out;
-    }
+        .slider .toggle-label::before {
+            content: '';
+            display: block;
+            width: 50%;
+            height: 100%;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 0 1px #d1d1d1;
+            position: absolute;
+            left: 0;
+            top: 0;
+            transition: transform 0.2s ease-in-out;
+        }
 
     .slider [type="checkbox"]:checked ~ .toggle-label {
         background: #93ed49;
     }
 
-    .slider [type="checkbox"]:checked ~ .toggle-label::before {
-        -webkit-transform: translateX(100%);
-        transform: translateX(100%);
-    }
+        .slider [type="checkbox"]:checked ~ .toggle-label::before {
+            -webkit-transform: translateX(100%);
+            transform: translateX(100%);
+        }
 </style>
 
 <span>@ViewData.ModelMetadata.GetDisplayName()</span>
@@ -45,7 +45,7 @@
     @Html.CheckBoxFor(m => m, new { @class = "toggle-pill" })
     @Html.LabelFor(m => m, new { @class = "toggle-label" })
 </div>
-<span asp-validation-for="@ViewData.ModelMetadata.PropertyName" class="text-danger"></span>
+@Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
 
 <script>
     $('.toggle-label').html('');
