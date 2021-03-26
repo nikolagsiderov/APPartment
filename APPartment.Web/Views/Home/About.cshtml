@@ -1,73 +1,83 @@
-﻿<div class="row">
+﻿<style>
+    ul.timeline {
+        list-style-type: none;
+        position: relative;
+        padding-left: 1.5rem;
+    }
+
+    /* Timeline vertical line */
+    ul.timeline:before {
+        content: ' ';
+        background: #fff;
+        display: inline-block;
+        position: absolute;
+        left: 16px;
+        width: 4px;
+        height: 100%;
+        z-index: 400;
+        border-radius: 1rem;
+    }
+
+    li.timeline-item {
+        margin: 20px 0;
+    }
+
+    /* Timeline item arrow */
+    .timeline-arrow {
+        border-top: 0.5rem solid transparent;
+        border-right: 0.5rem solid #fff;
+        border-bottom: 0.5rem solid transparent;
+        display: block;
+        position: absolute;
+        left: 2rem;
+    }
+
+    /* Timeline item circle marker */
+    li.timeline-item::before {
+        content: ' ';
+        background: #ddd;
+        display: inline-block;
+        position: absolute;
+        border-radius: 50%;
+        border: 3px solid #fff;
+        left: 11px;
+        width: 14px;
+        height: 14px;
+        z-index: 400;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+<div class="row">
     <div class="col-md-6">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">APPartment - the platform</h6>
-            </div>
-            <div class="card-body">
-                <p>
-                    APPartment is an ASP.NET Core MVC project for sharing with your homemate/s and keeping track of everything at the apartment,
-                    simplifying the whole process of living with people under a common roof.
-
-                    <hr />
-
-                    <a asp-controller="Home" asp-action="Index">Home</a> - a place where every homemate can keep track of the most important updates. There is a chat room
-                    for exchanging some form of information with other homemates. Also, a rent due date card to always be up-to-date when it should be payed.
-
-                    <br />
-
-                    <a asp-controller="Inventory" asp-action="Index">Inventory</a> - for storing items with importance, with statuses for availability.
-
-                    <br />
-
-                    <a asp-controller="Hygiene" asp-action="Index">Hygiene</a> - for storing information on what item, place, or segment of the apartment/home in what status is
-                    in connection to awaiting to be cleaned or already cleaned.
-
-                    <br />
-
-                    <a asp-controller="Issues" asp-action="Index">Issues</a> - for alarming other homemates about new issues needing resolution.
-
-                    <br />
-
-                    <a asp-controller="Surveys" asp-action="Index">Surveys</a> - for bringing up questions, polls and votes to other homemates.
-
-                    <br />
-
-                    <a asp-controller="Home" asp-action="Settings">Settings</a> - here you can manage everything connected to your home, like name, password, status or rent due date.
-                </p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">About the developers</h6>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-2 text-center">
-                        <img src="~/images/dev.jpg" alt="Nikola Siderov" style="max-width: 100%; height:auto; border-radius: 50%" />
-                    </div>
-                    <div class="col-md-10">
-                        <p>
-                            Software developer with one year professional experience, and two more non-professional.
-                            Interested in .NET technologies mainly.
-                        </p>
-                    </div>
-                </div>
-                <br />
-                <div class="row">
-                    <div class="col-md-2 text-center">
-                        <img src="~/images/dev2.jpg" alt="Kristiyan Budov" style="max-width: 100%; height:auto; border-radius: 50%" />
-                    </div>
-                    <div class="col-md-10">
-                        <p>
-                            Young and enthusiastic future software developer with vast non-professional experience in the IT sector and beyond.
-                            Interested in front-end technologies mainly.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <ul class="timeline">
+            <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
+                <div class="timeline-arrow"></div>
+                <h2 class="h5 mb-0">APPartment v2.0-beta</h2><span class="small text-gray" style="font-size: small;"><i class="fa fa-clock-o mr-1"></i>25 March, 2021</span>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Usage of base properties <code>CreatedByID</code> and <code>ModifiedByID</code></p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> ORM framework enhancements</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Introduction of web service layer (<code>BaseWebService.cs</code>) with view models using AutoMapper and display and editor templates. Implementation of custom UIHint, called <code>APPUIHint.cs</code> and mapping service - <code>MapperService.cs</code></p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> <code>APPartment.csproj</code> is now renamed to <code>APPartment.Web.csproj</code>. <code>APPartment.sln</code> is moved</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> <code>_Grid.cshtml</code>, <code>_Details.cshtml</code> and <code>_Edit.cshtml</code> pages now 'know' about all view models properties and their attributes</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Areas are implemented and used with new controllers for different filtering cases across all modules</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> <code>APPartment.Web.Services.csproj</code> has been dropped</p>
+            </li>
+            <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
+                <div class="timeline-arrow"></div>
+                <h2 class="h5 mb-0">APPartment v1.0-beta</h2><span class="small text-gray" style="font-size: small;"><i class="fa fa-clock-o mr-1"></i>13 March, 2021</span>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Introduction of custom object relational mapping framework</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Separations of layers</p>
+            </li>
+            <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
+                <div class="timeline-arrow"></div>
+                <h2 class="h5 mb-0">APPartment v1.0-alpha</h2><span class="small text-gray" style="font-size: small;"><i class="fa fa-clock-o mr-1"></i>04 March, 2021</span>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Double authentication process - authentication for user, then authentication for home</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Home presence status, with ability to modify and set custom messages, informing other housemates</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Chat</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Storage and traceability of inventory, hygiene tasks, chores and issues</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Metadata for all objects. Commenting image storing functionalities and history tracing</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Home settings</p>
+            </li>
+        </ul>
     </div>
 </div>
