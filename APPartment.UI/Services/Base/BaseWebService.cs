@@ -56,8 +56,8 @@ namespace APPartment.UI.Services.Base
                 .MakeGenericMethod(serverModelType);
 
             var convertFilterFunc = typeof(MapperService)
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(MapperService.ConvertExpression)))
+                .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(ConvertExpression)))
                 .FirstOrDefault()
                 .MakeGenericMethod(typeof(T), serverModelType);
 
@@ -114,8 +114,8 @@ namespace APPartment.UI.Services.Base
                 .MakeGenericMethod(serverModelType);
 
             var convertFilterFunc = typeof(MapperService)
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(MapperService.ConvertExpression)))
+                .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(ConvertExpression)))
                 .FirstOrDefault()
                 .MakeGenericMethod(typeof(T), serverModelType);
 
@@ -312,8 +312,8 @@ namespace APPartment.UI.Services.Base
                 .MakeGenericMethod(serverModelType);
 
             var convertFilterFunc = typeof(MapperService)
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(MapperService.ConvertExpression)))
+                .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(ConvertExpression)))
                 .FirstOrDefault()
                 .MakeGenericMethod(typeof(T), serverModelType);
 
@@ -348,8 +348,8 @@ namespace APPartment.UI.Services.Base
                 .MakeGenericMethod(serverModelType);
 
             var convertFilterFunc = typeof(MapperService)
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(MapperService.ConvertExpression)))
+                .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(ConvertExpression)))
                 .FirstOrDefault()
                 .MakeGenericMethod(typeof(T), serverModelType);
 

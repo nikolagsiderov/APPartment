@@ -15,6 +15,8 @@
         Image = 10,
         Survey = 11,
         Chore = 12,
-        HomeUser = 13
+        HomeUser = 13,
+        Notification = 14,
+        NotificationParticipant = 15
     }
 }

@@ -105,7 +105,7 @@ namespace APPartment.UI.Services.Base
             }
         }
 
-        public Expression<Func<U, bool>> ConvertExpression<T, U>(Expression<Func<T, bool>> source)
+        protected Expression<Func<U, bool>> ConvertExpression<T, U>(Expression<Func<T, bool>> source)
             where T : IBaseObject
             where U : IBaseObject
         {
