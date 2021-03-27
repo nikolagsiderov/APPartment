@@ -19,7 +19,7 @@ namespace APPartment.Web.Areas.Surveys.Controllers
 
         public override Expression<Func<SurveyDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentHomeID;
 
-        public override bool CanManage => false;
+        public override bool CanManage => true;
 
         [Breadcrumb(SurveysBreadcrumbs.Manage_Breadcrumb)]
         public override IActionResult Index()

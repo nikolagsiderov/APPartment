@@ -33,13 +33,31 @@ namespace APPartment.UI.Controllers.Base
 
         public abstract Expression<Func<T, bool>> FilterExpression { get; }
 
+        public virtual void SetGridItemActions(T model)
+        {
+            model.ActionsHtml.Add(GridItemActionBuilder.BuildDetailsAction(CurrentAreaName, CurrentControllerName, model.ID));
+
+            if (CanManage)
+            {
+                model.ActionsHtml.Add(GridItemActionBuilder.BuildEditAction(CurrentAreaName, CurrentControllerName, model.ID));
+                model.ActionsHtml.Add(GridItemActionBuilder.BuildDeleteAction(CurrentAreaName, CurrentControllerName, model.ID));
+            }
+        }
+
         public abstract bool CanManage { get; }
 
         [Breadcrumb("Base")]
         public virtual IActionResult Index()
         {
             var models = BaseWebService.GetCollection<T>(FilterExpression);
+
             ViewData["CanManage"] = CanManage;
+
+            foreach (var model in models)
+            {
+                SetGridItemActions(model);
+            }
+
             return View("_Grid", models);
         }
 

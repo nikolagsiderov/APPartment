@@ -1,6 +1,7 @@
 ﻿using APPartment.UI.Services.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace APPartment.UI.Controllers.Base
 {
@@ -12,6 +13,7 @@ namespace APPartment.UI.Controllers.Base
         protected long? CurrentHomeID { get; set; }
         protected string CurrentHomeName { get; set; }
         protected string CurrentUserName { get; set; }
+        protected string CurrentAreaName { get; set; }
         protected string CurrentControllerName { get; set; }
         protected string ImagesPath { get; } = @"wwwroot\BaseObject_Images\";
 
@@ -43,10 +45,28 @@ namespace APPartment.UI.Controllers.Base
                     CurrentHomeName = contextAccessor.HttpContext.Session.GetString("HomeName").ToString();
                 }
 
-                if (ControllerContext.RouteData != null)
+                CurrentControllerName = this.GetType().Name.Replace("Controller", "");
+
+                var currentControllerCustomAttributes = this.GetType().GetCustomAttributesData();
+
+                if (currentControllerCustomAttributes.Any())
                 {
-                    CurrentControllerName = this.ControllerContext.RouteData.Values["controller"].ToString();
+                    var currentControllerAreaAttributes = currentControllerCustomAttributes.Where(x => x.AttributeType.Equals(typeof(AreaAttribute)));
+
+                    if (currentControllerAreaAttributes.Any())
+                    {
+                        CurrentAreaName = currentControllerAreaAttributes
+                            .FirstOrDefault()
+                            .ConstructorArguments
+                            .FirstOrDefault()
+                            .Value
+                            .ToString();
+                    }
+                    else
+                        CurrentAreaName = "default";
                 }
+                else
+                    CurrentAreaName = "default";
             }
         }
     }

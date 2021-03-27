@@ -34,6 +34,8 @@ namespace APPartment.UI.ViewModels.Base
 
         public List<ImagePostViewModel> Images { get; set; }
 
+        public List<string> ActionsHtml { get; set; } = new List<string>();
+
         public string LastUpdated { get; set; }
 
         public string LastUpdatedBy { get; set; }
