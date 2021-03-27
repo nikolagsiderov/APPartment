@@ -46,6 +46,19 @@ namespace APPartment.UI.Utilities
             var contents = new List<string>();
             var result = headerTitle;
 
+            if (!notifications.Any())
+            {
+                var content = @$"<a class='dropdown-item dropdown-notifications-item' href='#!' id='no-notification'>
+                    <div class='dropdown-notifications-item-icon bg-info'><i class='fas fa-info' style='color: white;'></i></div>
+                    <div class='dropdown-notifications-item-content'>
+                        <div class='dropdown-notifications-item-content-details' id='no-notificationTitle'>No notifications!</div>
+                        <div class='dropdown-notifications-item-content-text' id='no-notificationDetails'>No notifications yet!</div>
+                    </div>
+                </a>";
+
+                contents.Add(content);
+            }
+
             foreach (var notification in notifications)
             {
                 var content = @$"<a class='dropdown-item dropdown-notifications-item' href='#!' id='notification-{notification.ID}'>

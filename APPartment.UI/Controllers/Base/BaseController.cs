@@ -7,6 +7,7 @@ namespace APPartment.UI.Controllers.Base
     public abstract class BaseController : Controller
     {
         protected BaseWebService BaseWebService;
+        protected NotificationService NotificationService;
         protected long? CurrentUserID { get; set; }
         protected long? CurrentHomeID { get; set; }
         protected string CurrentHomeName { get; set; }
@@ -24,9 +25,7 @@ namespace APPartment.UI.Controllers.Base
                     BaseWebService = new BaseWebService(CurrentUserID);
                 }
                 else
-                {
                     BaseWebService = new BaseWebService(0);
-                }
 
                 if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("Username")))
                 {
@@ -36,6 +35,7 @@ namespace APPartment.UI.Controllers.Base
                 if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("HomeID")))
                 {
                     CurrentHomeID = long.Parse(contextAccessor.HttpContext.Session.GetString("HomeID"));
+                    NotificationService = new NotificationService(CurrentUserID, CurrentHomeID);
                 }
 
                 if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("HomeName")))

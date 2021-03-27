@@ -10,8 +10,8 @@ namespace APPartment.UI.Services.Base
 {
     public class BaseWebService : MapperService
     {
-        BaseFacade BaseFacade;
-        long? CurrentUserID;
+        private BaseFacade BaseFacade;
+        private long? CurrentUserID;
 
         public BaseWebService(long? currentUserID)
         {

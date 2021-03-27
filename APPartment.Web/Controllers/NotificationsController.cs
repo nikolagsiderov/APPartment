@@ -3,7 +3,6 @@ using APPartment.UI.Utilities;
 using APPartment.UI.ViewModels.Notification;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 
 namespace APPartment.Web.Controllers
 {
@@ -18,15 +17,7 @@ namespace APPartment.Web.Controllers
 
         public JsonResult GetContents()
         {
-            var currentUserNotificationParticipation = BaseWebService.GetCollection<NotificationParticipantPostViewModel>(x => x.UserID == (long)CurrentUserID);
-            var notifications = new List<NotificationPostViewModel>();
-
-            foreach (var participation in currentUserNotificationParticipation)
-            {
-                var notification = BaseWebService.GetEntity<NotificationPostViewModel>(participation.NotificationID);
-                notifications.Add(notification);
-            }
-
+            var notifications = NotificationService.GetNotifications();
             var result = htmlRenderHelper.BuildNotificationsContent(notifications);
             return Json(result);
         }
