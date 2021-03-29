@@ -1,8 +1,12 @@
 ﻿using APPartment.ORM.Framework.Declarations;
 using APPartment.UI.Attributes;
+using APPartment.UI.Utilities;
 using APPartment.UI.ViewModels.Clingons.Image;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Reflection;
 
 namespace APPartment.UI.ViewModels.Base
 {
@@ -17,7 +21,6 @@ namespace APPartment.UI.ViewModels.Base
         [GridFieldDisplay]
         public string Details { get; set; }
 
-        #region Hidden properties
         public long ObjectID { get; set; }
 
         public long ObjectTypeID { get; set; }
@@ -36,11 +39,22 @@ namespace APPartment.UI.ViewModels.Base
 
         public List<string> ActionsHtml { get; set; } = new List<string>();
 
-        public string LastUpdated { get; set; }
+        public IEnumerable<PropertyUIInfo> Properties
+        {
+            get
+            {
+                var properties = this
+                    .GetType()
+                    .GetProperties()
+                    .Where(p => p.IsDefined(typeof(GridFieldDisplayAttribute), true))
+                    .Select(p => new PropertyUIInfo()
+                    {
+                        Property = p,
+                        DisplayName = p.GetCustomAttributes(typeof(DisplayAttribute), true).Any() ? p.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>().Single().Name : p.Name
+                    });
 
-        public string LastUpdatedBy { get; set; }
-
-        public string LastUpdate { get; set; }
-        #endregion
+                return properties;
+            }
+        }
     }
 }

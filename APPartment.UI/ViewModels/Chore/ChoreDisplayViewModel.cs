@@ -8,7 +8,6 @@ namespace APPartment.UI.ViewModels.Chore
     [IMapFrom(typeof(APPChore))]
     public class ChoreDisplayViewModel : GridItemViewModelWithHome
     {
-        [GridFieldDisplay]
         [Display(Name = "Assigned to")]
         public long? AssignedToUserID { get; set; }
 

@@ -12,7 +12,6 @@ namespace APPartment.UI.ViewModels.Chore
         [APPUIHint(Templates.Hidden)]
         [Display(Name = "Assigned to")]
         public long? AssignedToUserID { get; set; }
-        [APPUIHint(Templates.Boolean)]
 
         [APPUIHint(Templates.Boolean)]
         [Display(Name = "Done")]

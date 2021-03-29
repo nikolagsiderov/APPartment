@@ -30,10 +30,17 @@
             <br />
         }
 
-        @foreach (var property in ViewData.ModelMetadata.Properties)
+        @foreach (var row in Model.Properties.Select(x => x.Row).Distinct())
         {
-            <div class="editor-field">
-                @Html.Display(property.PropertyName)
+            <div class="row">
+                @foreach (var property in Model.Properties.Where(x => x.Row == row))
+                {
+                    <div class="col-md-@property.Col">
+                        <div class="display-field">
+                            @Html.Display(property.Property.Name)
+                        </div>
+                    </div>
+                }
             </div>
         }
     </div>

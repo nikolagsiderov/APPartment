@@ -13,11 +13,23 @@
                 <input type="submit" value="Save" class="btn btn-success btn-sm" style="font-size: small;" />
             </div>
 
-            @foreach (var property in ViewData.ModelMetadata.Properties)
+            @foreach (var row in Model.Properties.Select(x => x.Row).Distinct())
             {
-                <div class="editor-field">
-                    @Html.Editor(property.PropertyName)
+                <div class="row">
+                    @foreach (var property in Model.Properties.Where(x => x.Row == row))
+                    {
+                        <div class="col-md-@property.Col">
+                            <div class="display-field">
+                                @Html.Editor(ViewData.ModelMetadata.Properties.Where(x => x.PropertyName == property.Property.Name).FirstOrDefault().PropertyName)
+                            </div>
+                        </div>
+                    }
                 </div>
+            }
+
+            @foreach (var hiddenProperty in Model.HiddenProperties)
+            {
+                @Html.Hidden(ViewData.ModelMetadata.Properties.Where(x => x.PropertyName == hiddenProperty.Name).FirstOrDefault().PropertyName)
             }
         </form>
     </div>

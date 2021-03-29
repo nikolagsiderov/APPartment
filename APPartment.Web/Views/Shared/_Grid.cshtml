@@ -23,14 +23,7 @@
                     <tr>
                         @if (Model.Any())
                         {
-                            var properties = Model.First().GetType().GetProperties()
-                                .Where(p => p.IsDefined(typeof(GridFieldDisplayAttribute), true))
-                                .Select(p => new
-                                {
-                                    DisplayName = p.GetCustomAttributes(typeof(DisplayAttribute), true).Any() ? p.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>().Single().Name : p.Name
-                                });
-
-                            @foreach (var property in properties)
+                            @foreach (var property in Model.FirstOrDefault().Properties)
                             {
                                 <th>
                                     @property.DisplayName
@@ -64,9 +57,9 @@
                         @foreach (var item in Model)
                         {
                             <tr>
-                                @foreach (var property in item.GetType().GetProperties().Where(p => p.IsDefined(typeof(GridFieldDisplayAttribute), true)))
+                                @foreach (var property in item.Properties)
                                 {
-                                    var value = @property.GetValue(item);
+                                    var value = @property.Property.GetValue(item);
                                     <td>@value</td>
                                 }
                                 <td>
