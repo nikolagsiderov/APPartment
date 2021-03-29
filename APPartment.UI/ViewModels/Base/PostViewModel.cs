@@ -14,7 +14,7 @@ namespace APPartment.UI.ViewModels.Base
     public abstract class PostViewModel : IBaseObject
     {
         [Required]
-        [APPUIHint(Templates.Input, Row = 1, Col = 6)]
+        [APPUIHint(Templates.Input, Row = 1, Col = 6, Order = 1)]
         public virtual string Name { get; set; }
 
         [APPUIHint(Templates.TextArea, Row = 2, Col = 10)]
@@ -81,12 +81,12 @@ namespace APPartment.UI.ViewModels.Base
                     .Where(x => x.Attribute.Col != 0)
                     .OrderBy(x => x.Attribute.Row)
                     .ThenBy(x => x.Attribute.Col)
+                    .ThenBy(x => x.Attribute.Order)
                     .Select(x => new PropertyUIInfo()
                     {
                         Property = x.Property,
                         Row = x.Attribute.Row,
-                        Col = x.Attribute.Col,
-                        ColDiv = x.Attribute.ColDiv
+                        Col = x.Attribute.Col
                     })
                     .ToList();
 

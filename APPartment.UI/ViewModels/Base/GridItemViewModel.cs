@@ -6,19 +6,18 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection;
 
 namespace APPartment.UI.ViewModels.Base
 {
     public abstract class GridItemViewModel : IBaseObject
     {
-        [GridFieldDisplay]
+        [GridFieldDisplay(Order = 1)]
         public long ID { get; set; }
 
-        [GridFieldDisplay]
+        [GridFieldDisplay(Order = 2)]
         public virtual string Name { get; set; }
 
-        [GridFieldDisplay]
+        [GridFieldDisplay(Order = 3)]
         public string Details { get; set; }
 
         public long ObjectID { get; set; }
@@ -47,10 +46,16 @@ namespace APPartment.UI.ViewModels.Base
                     .GetType()
                     .GetProperties()
                     .Where(p => p.IsDefined(typeof(GridFieldDisplayAttribute), true))
+                    .Select(x => new
+                    {
+                        Property = x,
+                        Attribute = (GridFieldDisplayAttribute)Attribute.GetCustomAttribute(x, typeof(GridFieldDisplayAttribute), true)
+                    })
+                    .OrderBy(x => x.Attribute.Order)
                     .Select(p => new PropertyUIInfo()
                     {
-                        Property = p,
-                        DisplayName = p.GetCustomAttributes(typeof(DisplayAttribute), true).Any() ? p.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>().Single().Name : p.Name
+                        Property = p.Property,
+                        DisplayName = p.Property.GetCustomAttributes(typeof(DisplayAttribute), true).Any() ? p.Property.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>().Single().Name : p.Property.Name
                     });
 
                 return properties;
