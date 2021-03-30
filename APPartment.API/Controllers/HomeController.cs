@@ -66,18 +66,60 @@ namespace APPartment.API.Controllers
         }
 
         [HttpPost]
-        public void Post(string value)
+        [Route("register")]
+        public ActionResult Register([FromBody] HomePostViewModel home)
         {
+            try
+            {
+                var currentUserID = 0l;
+                var re = Request;
+                var headers = re.Headers;
+
+                if (headers.ContainsKey("CurrentUserID"))
+                {
+                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
+                }
+
+                var homeNameAlreadyExists = new BaseWebService(0).Any<HomePostViewModel>(x => x.Name == home.Name);
+
+                if (homeNameAlreadyExists)
+                    return StatusCode(StatusCodes.Status403Forbidden, "This home name is already taken.");
+
+                home = new BaseWebService(currentUserID).Save(home);
+                return Ok(home);
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
         }
 
-        [HttpPut("{id}")]
-        public void Put(int id, string value)
+        [HttpPost]
+        [Route("login")]
+        public ActionResult Login([FromBody] HomePostViewModel home)
         {
-        }
+            try
+            {
+                var currentUserID = 0l;
+                var re = Request;
+                var headers = re.Headers;
 
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+                if (headers.ContainsKey("CurrentUserID"))
+                {
+                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
+                }
+
+                home = new BaseWebService(currentUserID).GetEntity<HomePostViewModel>(x => x.Name == home.Name && x.Password == home.Password);
+
+                if (home != null)
+                    return Ok(home);
+                else
+                    return NotFound();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
         }
     }
 }

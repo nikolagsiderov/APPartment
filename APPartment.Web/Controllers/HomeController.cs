@@ -16,6 +16,10 @@ using APPartment.UI.ViewModels.Issue;
 using APPartment.UI.ViewModels.Base;
 using APPartment.UI.ViewModels.User;
 using APPartment.UI.ViewModels.Chat;
+using System.Threading.Tasks;
+using System.Net.Http;
+using APPartment.ORM.Framework;
+using Newtonsoft.Json;
 
 namespace APPartment.Web.Controllers
 {
@@ -76,20 +80,27 @@ namespace APPartment.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(HomePostViewModel home)
+        public async Task<IActionResult> Register(HomePostViewModel home)
         {
             if (ModelState.IsValid)
             {
-                var homeExists = BaseWebService.Any<HomePostViewModel>(x => x.Name == home.Name);
-
-                if (homeExists)
+                using (var httpClient = new HttpClient())
                 {
-                    ModelState.AddModelError("Name", "This home name is already taken.");
-                    return View(home);
-                }
+                    var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/{nameof(Register)}";
 
-                BaseWebService.Save(home);
-                home = BaseWebService.GetEntity<HomePostViewModel>(x => x.Name == home.Name);
+                    using (var response = await httpClient.PostAsJsonAsync(requestUri, home))
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+
+                        if (response.IsSuccessStatusCode)
+                            home = JsonConvert.DeserializeObject<HomePostViewModel>(content);
+                        else
+                        {
+                            ModelState.AddModelError("Name", "This home name is already taken.");
+                            return View(home);
+                        }
+                    }
+                }
 
                 ModelState.Clear();
 
@@ -113,21 +124,50 @@ namespace APPartment.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(HomePostViewModel home)
+        public async Task<IActionResult> Login(HomePostViewModel home)
         {
-            var existingHome = BaseWebService.GetEntity<HomePostViewModel>(x => x.Name == home.Name && x.Password == home.Password);
+            home.ConfirmPassword = home.Password;
+            ModelState.Clear();
 
-            if (existingHome != null)
-            {
-                HttpContext.Session.SetString("HomeID", existingHome.ID.ToString());
-                HttpContext.Session.SetString("HomeName", existingHome.Name.ToString());
-
-                SetUserToCurrentHome(existingHome.ID);
-
-                return RedirectToAction("Index", "Home");
-            }
+            if (string.IsNullOrEmpty(home.Name))
+                ModelState.AddModelError("Name", "Home name field is required.");
+            else if (string.IsNullOrEmpty(home.Password))
+                ModelState.AddModelError("Password", "Password field is required.");
             else
-                ModelState.AddModelError("", "Home name or password is wrong.");
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/{nameof(Login)}";
+
+                    using (var response = await httpClient.PostAsJsonAsync(requestUri, home))
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            home = JsonConvert.DeserializeObject<HomePostViewModel>(content);
+
+                            if (home != null)
+                            {
+                                HttpContext.Session.SetString("HomeID", home.ID.ToString());
+                                HttpContext.Session.SetString("HomeName", home.Name.ToString());
+
+                                SetUserToCurrentHome(home.ID);
+
+                                return RedirectToAction("Index", "Home");
+                            }
+                            else
+                            {
+                                ModelState.AddModelError("", "Home name or password is wrong.");
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "Home name or password is wrong.");
+                        }
+                    }
+                }
+            }
 
             return View();
         }
