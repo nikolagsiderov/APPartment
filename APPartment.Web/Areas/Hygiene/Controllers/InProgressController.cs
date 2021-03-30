@@ -7,10 +7,11 @@ using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Hygiene;
 using APPAreas = APPartment.UI.Utilities.Constants.Areas;
+using System.Threading.Tasks;
 
 namespace APPartment.Web.Areas.Hygiene.Controllers
 {
-    [Area("Hygiene")]
+    [Area(APPAreas.Hygiene)]
     public class InProgressController : BaseCRUDController<HygieneDisplayViewModel, HygienePostViewModel>
     {
         public InProgressController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
@@ -22,15 +23,9 @@ namespace APPartment.Web.Areas.Hygiene.Controllers
         public override bool CanManage => false;
 
         [Breadcrumb(HygieneBreadcrumbs.InProgress_Breadcrumb)]
-        public override IActionResult Index()
+        public override async Task<IActionResult> Index()
         {
-            return base.Index();
-        }
-
-        public JsonResult GetCount()
-        {
-            var count = BaseWebService.Count<HygienePostViewModel>(x => x.HomeID == (long)CurrentUserID && x.IsDone == false);
-            return Json(count);
+            return await base.Index();
         }
 
         protected override void PopulateViewData()

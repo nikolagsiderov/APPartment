@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace APPartment.UI.ViewModels.Base
 {
@@ -53,6 +54,7 @@ namespace APPartment.UI.ViewModels.Base
 
         public string LastUpdate { get; set; }
 
+        [JsonIgnore]
         public List<PropertyUIInfo> Properties
         {
             get
@@ -82,9 +84,8 @@ namespace APPartment.UI.ViewModels.Base
                     .OrderBy(x => x.Attribute.Row)
                     .ThenBy(x => x.Attribute.Col)
                     .ThenBy(x => x.Attribute.Order)
-                    .Select(x => new PropertyUIInfo()
+                    .Select(x => new PropertyUIInfo(x.Property)
                     {
-                        Property = x.Property,
                         Row = x.Attribute.Row,
                         Col = x.Attribute.Col
                     })
@@ -94,6 +95,7 @@ namespace APPartment.UI.ViewModels.Base
             }
         }
 
+        [JsonIgnore]
         public IEnumerable<PropertyInfo> HiddenProperties
         {
             get

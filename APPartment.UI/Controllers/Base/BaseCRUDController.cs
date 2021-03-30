@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
+using System.Threading.Tasks;
 using APPartment.UI.Services;
 using APPartment.UI.Utilities;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
@@ -12,6 +14,7 @@ using APPartment.UI.ViewModels.Clingons.Comment;
 using APPartment.UI.ViewModels.Clingons.Image;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SmartBreadcrumbs.Attributes;
 
 namespace APPartment.UI.Controllers.Base
@@ -47,9 +50,22 @@ namespace APPartment.UI.Controllers.Base
         public abstract bool CanManage { get; }
 
         [Breadcrumb("Base")]
-        public virtual IActionResult Index()
+        public virtual async Task<IActionResult> Index()
         {
-            var models = BaseWebService.GetCollection<T>(FilterExpression);
+            List<T> models = new List<T>();
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
+
+                using (var response = await httpClient.GetAsync($"https://localhost:44310/api/home/{CurrentHomeID}/{CurrentAreaName}/{CurrentControllerName}"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+
+                    if (!apiResponse.Contains("\"title\":\"Not Found\",\"status\":404"))
+                        models = JsonConvert.DeserializeObject<List<T>>(apiResponse);
+                }
+            }
 
             ViewData["CanManage"] = CanManage;
 
@@ -62,20 +78,33 @@ namespace APPartment.UI.Controllers.Base
         }
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Details_Breadcrumb)]
-        public IActionResult Details(long? ID)
+        public async Task<IActionResult> Details(long? ID)
         {
             if (ID == null)
                 return new Error404NotFoundViewResult();
 
-            var model = BaseWebService.GetEntity<U>((long)ID);
+            var model = new U();
 
-            if (model == null)
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync($"https://localhost:44310/api/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+
+                    if (!apiResponse.Contains("\"title\":\"Not Found\",\"status\":404"))
+                        model = JsonConvert.DeserializeObject<U>(apiResponse);
+                }
+            }
+
+            if (model.ID > 0)
+            {
+                model = GetClingons(model);
+                ViewData["CanManage"] = CanManage;
+
+                return View("_Details", model);
+            }
+            else
                 return new Error404NotFoundViewResult();
-
-            model = GetClingons(model);
-            ViewData["CanManage"] = CanManage;
-
-            return View("_Details", model);
         }
 
 
@@ -103,19 +132,31 @@ namespace APPartment.UI.Controllers.Base
         }
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
-        public IActionResult Edit(long? ID)
+        public async Task<IActionResult> Edit(long? ID)
         {
             if (ID == null)
                 return new Error404NotFoundViewResult();
 
-            var model = BaseWebService.GetEntity<U>((long)ID);
+            var model = new U();
 
-            if (model == null)
+            using (var httpClient = new HttpClient())
+            {
+                using (var response = await httpClient.GetAsync($"https://localhost:44310/api/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+
+                    if (!apiResponse.Contains("\"title\":\"Not Found\",\"status\":404"))
+                        model = JsonConvert.DeserializeObject<U>(apiResponse);
+                }
+            }
+
+            if (model.ID > 0)
+            {
+                model = GetClingons(model);
+                return View("_Edit", model);
+            }
+            else
                 return new Error404NotFoundViewResult();
-
-            model = GetClingons(model);
-
-            return View("_Edit", model);
         }
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
@@ -148,6 +189,26 @@ namespace APPartment.UI.Controllers.Base
             BaseWebService.Delete(model);
 
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<JsonResult> GetCount()
+        {
+            int count = 0;
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
+
+                using (var response = await httpClient.GetAsync($"https://localhost:44310/api/home/{CurrentHomeID}/{CurrentAreaName}/{CurrentControllerName}/count"))
+                {
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+
+                    if (!apiResponse.Contains("\"title\":\"Not Found\",\"status\":404"))
+                        count = JsonConvert.DeserializeObject<int>(apiResponse);
+                }
+            }
+
+            return Json(count);
         }
 
         #region Clingons

@@ -2,34 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <UserSecretsId>aspnet-APPartment-34E657CB-677A-464A-8FD8-AFCED3C6B442</UserSecretsId>
   </PropertyGroup>
 
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.Abstractions" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Runtime" Version="2.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
-    <PackageReference Include="SmartBreadcrumbs" Version="2.1.0" />
-    <PackageReference Include="System.Net.Http.Formatting.Extension" Version="5.2.3" />
   </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Views\Surveys\" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <ProjectReference Include="..\APPartment.UI\APPartment.UI.csproj" />

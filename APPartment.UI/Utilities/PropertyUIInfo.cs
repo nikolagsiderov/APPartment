@@ -4,6 +4,11 @@ namespace APPartment.UI.Utilities
 {
     public class PropertyUIInfo
     {
+        public PropertyUIInfo(PropertyInfo property)
+        {
+            Property = property;
+        }
+
         public PropertyInfo Property { get; set; }
 
         public string DisplayName { get; set; }

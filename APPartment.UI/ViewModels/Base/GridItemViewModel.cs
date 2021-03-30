@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace APPartment.UI.ViewModels.Base
 {
@@ -38,6 +39,7 @@ namespace APPartment.UI.ViewModels.Base
 
         public List<string> ActionsHtml { get; set; } = new List<string>();
 
+        [JsonIgnore]
         public IEnumerable<PropertyUIInfo> Properties
         {
             get
@@ -52,9 +54,8 @@ namespace APPartment.UI.ViewModels.Base
                         Attribute = (GridFieldDisplayAttribute)Attribute.GetCustomAttribute(x, typeof(GridFieldDisplayAttribute), true)
                     })
                     .OrderBy(x => x.Attribute.Order)
-                    .Select(p => new PropertyUIInfo()
+                    .Select(p => new PropertyUIInfo(p.Property)
                     {
-                        Property = p.Property,
                         DisplayName = p.Property.GetCustomAttributes(typeof(DisplayAttribute), true).Any() ? p.Property.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>().Single().Name : p.Property.Name
                     });
 

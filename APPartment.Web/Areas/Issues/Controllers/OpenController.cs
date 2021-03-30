@@ -7,6 +7,7 @@ using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Issue;
 using APPAreas = APPartment.UI.Utilities.Constants.Areas;
+using System.Threading.Tasks;
 
 namespace APPartment.Web.Areas.Issues.Controllers
 {
@@ -22,15 +23,9 @@ namespace APPartment.Web.Areas.Issues.Controllers
         public override bool CanManage => false;
 
         [Breadcrumb(IssuesBreadcrumbs.Open_Breadcrumb)]
-        public override IActionResult Index()
+        public override async Task<IActionResult> Index()
         {
-            return base.Index();
-        }
-
-        public JsonResult GetCount()
-        {
-            var count = BaseWebService.Count<IssuePostViewModel>(x => x.HomeID == (long)CurrentHomeID && x.IsClosed == false);
-            return Json(count);
+            return await base.Index();
         }
 
         protected override void PopulateViewData()

@@ -7,6 +7,7 @@ using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Chore;
 using APPAreas = APPartment.UI.Utilities.Constants.Areas;
+using System.Threading.Tasks;
 
 namespace APPartment.Web.Areas.Chores.Controllers
 {
@@ -22,15 +23,9 @@ namespace APPartment.Web.Areas.Chores.Controllers
         public override bool CanManage => true;
 
         [Breadcrumb(ChoresBreadcrumbs.Manage_Breadcrumb)]
-        public override IActionResult Index()
+        public override async Task<IActionResult> Index()
         {
-            return base.Index();
-        }
-
-        public JsonResult GetCount()
-        {
-            var count = BaseWebService.Count<ChorePostViewModel>(x => x.HomeID == (long)CurrentHomeID);
-            return Json(count);
+            return await base.Index();
         }
 
         protected override void PopulateViewData()

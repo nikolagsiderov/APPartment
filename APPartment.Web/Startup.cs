@@ -24,7 +24,7 @@ namespace APPartment.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc()
-        .AddSessionStateTempDataProvider();
+                .AddSessionStateTempDataProvider();
             services.AddSignalR();
             services.AddSession();
 
