@@ -16,5 +16,7 @@ namespace APPartment.UI.ViewModels.Home
         [APPUIHint(Templates.Input)]
         [Display(Name = "Home name")]
         public string HomeName { get; set; }
+
+        public bool ChangeHttpSession { get; set; }
     }
 }

@@ -1,9 +1,5 @@
 ﻿@model APPartment.UI.ViewModels.Home.HomePageDisplayModel
 
-@{
-    var widgetObjects = Model.ViewModels;
-}
-
 <div class="row">
     <div class="col-md-4">
         <div class="card shadow mb-4 text-center">
@@ -12,24 +8,10 @@
                 <div style="margin-left: auto;"><a asp-area="Inventory" asp-controller="Inventory" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
             </div>
             <div class="card-body">
-                @if (widgetObjects[0].Name != null)
-                {
-                    <p class="card-text">
-                    </p>
-                }
-                else
-                {
-                    <p class="card-text">No items present.</p>
-                }
+                <p class="card-text">No items present.</p>
             </div>
             <div class="card-footer text-muted">
-                @if (widgetObjects[0].Name != null)
-                {
-                }
-                else
-                {
-                    <p>No updates...</p>
-                }
+                <p>No updates...</p>
             </div>
         </div>
     </div>
@@ -40,24 +22,10 @@
                 <div style="margin-left: auto;"><a asp-area="Hygiene" asp-controller="Hygiene" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
             </div>
             <div class="card-body">
-                @if (widgetObjects[1].Name != null)
-                {
-                    <p class="card-text">
-                    </p>
-                }
-                else
-                {
-            <p class="card-text">No items present.</p>
-                }
+                <p class="card-text">No items present.</p>
             </div>
             <div class="card-footer text-muted">
-                @if (widgetObjects[1].Name != null)
-                {
-                }
-                else
-                {
-                    <p>No updates...</p>
-                }
+                <p>No updates...</p>
             </div>
         </div>
     </div>
@@ -68,24 +36,10 @@
                 <div style="margin-left: auto;"><a asp-area="Issues" asp-controller="Issues" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
             </div>
             <div class="card-body">
-                @if (widgetObjects[2].Name != null)
-                {
-                    <p class="card-text">
-                    </p>
-                }
-                else
-                {
-                    <p class="card-text">No issues present.</p>
-                }
+                <p class="card-text">No issues present.</p>
             </div>
             <div class="card-footer text-muted">
-                @if (widgetObjects[2].Name != null)
-                {
-                }
-                else
-                {
-                    <p>No updates...</p>
-                }
+                <p>No updates...</p>
             </div>
         </div>
     </div>
