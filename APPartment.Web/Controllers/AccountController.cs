@@ -2,10 +2,6 @@
 using APPartment.UI.ViewModels.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace APPartment.Web.Controllers
 {
@@ -24,37 +20,30 @@ namespace APPartment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(UserPostViewModel user)
+        public IActionResult Register(UserPostViewModel user)
         {
-            using (var httpClient = new HttpClient())
+            if (ModelState.IsValid)
             {
-                using (var response = await httpClient.GetAsync($"https://localhost:44310/api/{CurrentControllerName}/{nameof(this.Register)}"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
+                var userExists = BaseWebService.Any<UserPostViewModel>(x => x.Name == user.Name);
 
-                    if (apiResponse.Contains("\"status\":400"))
-                    {
-                        if (apiResponse.Contains("This username is already taken."))
-                        {
-                            ModelState.AddModelError("Name", "This username is already taken.");
-                            return View(user);
-                        }
-                        else
-                            return View();
-                    }
-                    else
-                    {
-                        user = JsonConvert.DeserializeObject<UserPostViewModel>(apiResponse);
-                    }
+                if (userExists)
+                {
+                    ModelState.AddModelError("Name", "This username is already taken.");
+                    return View(user);
                 }
+
+                BaseWebService.Save(user);
+                user = BaseWebService.GetEntity<UserPostViewModel>(x => x.Name == user.Name);
+
+                ModelState.Clear();
+
+                HttpContext.Session.SetString("UserID", user.ID.ToString());
+                HttpContext.Session.SetString("Username", user.Name.ToString());
+
+                return RedirectToAction("EnterCreateHomeOptions", "Home");
             }
 
-            ModelState.Clear();
-
-            HttpContext.Session.SetString("UserID", user.ID.ToString());
-            HttpContext.Session.SetString("Username", user.Name.ToString());
-
-            return RedirectToAction("EnterCreateHomeOptions", "Home");
+            return View();
         }
 
         public IActionResult Login()
@@ -66,38 +55,20 @@ namespace APPartment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(UserPostViewModel user)
+        public IActionResult Login(UserPostViewModel user)
         {
             if (string.IsNullOrEmpty(user.Name) || string.IsNullOrEmpty(user.Password))
             {
                 ModelState.AddModelError("", "Username or password cannot be empty.");
+                return View();
             }
-            else
-            {
-                using (var httpClient = new HttpClient())
-                {
-                    using (var response = await httpClient.GetAsync($"https://localhost:44310/api/{CurrentControllerName}/{nameof(Login)}?username={user.Name}&password={user.Password}"))
-                    {
-                        string apiResponse = await response.Content.ReadAsStringAsync();
 
-                        try
-                        {
-                            user = JsonConvert.DeserializeObject<UserPostViewModel>(apiResponse);
-                        }
-                        catch (System.Exception ex)
-                        {
-                            ModelState.AddModelError("", "Username or password is wrong.");
-                            return View();
-                        }
-                    }
-                }
-            }
-            
+            var userWithPassedCredsExists = BaseWebService.GetEntity<UserPostViewModel>(x => x.Name == user.Name && x.Password == user.Password);
 
-            if (user != null && user.ID > 0)
+            if (userWithPassedCredsExists != null)
             {
-                HttpContext.Session.SetString("UserID", user.ID.ToString());
-                HttpContext.Session.SetString("Username", user.Name.ToString());
+                HttpContext.Session.SetString("UserID", userWithPassedCredsExists.ID.ToString());
+                HttpContext.Session.SetString("Username", userWithPassedCredsExists.Name.ToString());
 
                 return RedirectToAction("EnterCreateHomeOptions", "Home");
             }

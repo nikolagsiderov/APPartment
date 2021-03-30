@@ -1,18 +1,22 @@
 ﻿@model APPartment.UI.ViewModels.Base.PostViewModel
 
+@{ 
+    var action = "Create";
+
+    if (Model.ID > 0)
+    {
+        action = "Edit";
+    }
+} 
+
 <div class="card">
-    <div class="card-header">
-        @{
-            var header = string.Format("ID: {0}, Name: {1}", Model.ID, Model.Name);
-        }
-        @header
-    </div>
-    <div class="card-body">
-        <form asp-action="Edit" enctype="multipart/form-data">
+    <form asp-action="@action" enctype="multipart/form-data">
+        <div class="card-header">
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-success btn-sm" style="font-size: small;" />
             </div>
-
+        </div>
+        <div class="card-body">
             @foreach (var row in Model.Properties.Select(x => x.Row).Distinct())
             {
                 <div class="row">
@@ -31,17 +35,21 @@
             {
                 @Html.Hidden(ViewData.ModelMetadata.Properties.Where(x => x.PropertyName == hiddenProperty.Name).FirstOrDefault().PropertyName)
             }
-        </form>
-    </div>
+
+        </div>
+    </form>
 </div>
 
 <br />
 
-<div class="card">
-    <div class="card-body">
-        @await Html.PartialAsync("_ObjectMetadataTab", Model)
+@if (Model.ID > 0)
+{
+    <div class="card">
+        <div class="card-body">
+            @await Html.PartialAsync("_ObjectMetadataTab", Model)
+        </div>
     </div>
-</div>
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

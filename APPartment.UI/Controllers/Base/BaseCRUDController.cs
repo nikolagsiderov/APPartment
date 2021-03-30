@@ -5,6 +5,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Threading.Tasks;
+using APPartment.ORM.Framework;
 using APPartment.UI.Services;
 using APPartment.UI.Utilities;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
@@ -58,7 +59,7 @@ namespace APPartment.UI.Controllers.Base
             {
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
 
-                using (var response = await httpClient.GetAsync($"https://localhost:44310/api/home/{CurrentHomeID}/{CurrentAreaName}/{CurrentControllerName}"))
+                using (var response = await httpClient.GetAsync($"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{CurrentControllerName}"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
 
@@ -87,7 +88,7 @@ namespace APPartment.UI.Controllers.Base
 
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync($"https://localhost:44310/api/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}"))
+                using (var response = await httpClient.GetAsync($"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
 
@@ -112,7 +113,7 @@ namespace APPartment.UI.Controllers.Base
         public IActionResult Create()
         {
             var newModel = new U();
-            return View("_Create", newModel);
+            return View("_Edit", newModel);
         }
 
         [Breadcrumb("<i class='fas fa-plus'></i> Create")]
@@ -128,7 +129,7 @@ namespace APPartment.UI.Controllers.Base
                 return RedirectToAction(nameof(Index));
             }
 
-            return View("_Create", model);
+            return View("_Edit", model);
         }
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
@@ -141,7 +142,7 @@ namespace APPartment.UI.Controllers.Base
 
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync($"https://localhost:44310/api/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}"))
+                using (var response = await httpClient.GetAsync($"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
 
@@ -199,7 +200,7 @@ namespace APPartment.UI.Controllers.Base
             {
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
 
-                using (var response = await httpClient.GetAsync($"https://localhost:44310/api/home/{CurrentHomeID}/{CurrentAreaName}/{CurrentControllerName}/count"))
+                using (var response = await httpClient.GetAsync($"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{CurrentControllerName}/count"))
                 {
                     string apiResponse = await response.Content.ReadAsStringAsync();
 
