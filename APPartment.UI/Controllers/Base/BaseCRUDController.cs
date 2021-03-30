@@ -57,14 +57,15 @@ namespace APPartment.UI.Controllers.Base
 
             using (var httpClient = new HttpClient())
             {
+                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{CurrentControllerName}";
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
 
-                using (var response = await httpClient.GetAsync($"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{CurrentControllerName}"))
+                using (var response = await httpClient.GetAsync(requestUri))
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    var content = await response.Content.ReadAsStringAsync();
 
-                    if (!apiResponse.Contains("\"title\":\"Not Found\",\"status\":404"))
-                        models = JsonConvert.DeserializeObject<List<T>>(apiResponse);
+                    if (response.IsSuccessStatusCode)
+                        models = JsonConvert.DeserializeObject<List<T>>(content);
                 }
             }
 
@@ -88,12 +89,15 @@ namespace APPartment.UI.Controllers.Base
 
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync($"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
+                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}";
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
 
-                    if (!apiResponse.Contains("\"title\":\"Not Found\",\"status\":404"))
-                        model = JsonConvert.DeserializeObject<U>(apiResponse);
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        model = JsonConvert.DeserializeObject<U>(content);
                 }
             }
 
@@ -142,12 +146,15 @@ namespace APPartment.UI.Controllers.Base
 
             using (var httpClient = new HttpClient())
             {
-                using (var response = await httpClient.GetAsync($"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}"))
-                {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
+                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}";
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
 
-                    if (!apiResponse.Contains("\"title\":\"Not Found\",\"status\":404"))
-                        model = JsonConvert.DeserializeObject<U>(apiResponse);
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        model = JsonConvert.DeserializeObject<U>(content);
                 }
             }
 
@@ -198,14 +205,15 @@ namespace APPartment.UI.Controllers.Base
 
             using (var httpClient = new HttpClient())
             {
+                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{CurrentControllerName}/count";
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
 
-                using (var response = await httpClient.GetAsync($"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{CurrentControllerName}/count"))
+                using (var response = await httpClient.GetAsync(requestUri))
                 {
-                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    string content = await response.Content.ReadAsStringAsync();
 
-                    if (!apiResponse.Contains("\"title\":\"Not Found\",\"status\":404"))
-                        count = JsonConvert.DeserializeObject<int>(apiResponse);
+                    if (response.IsSuccessStatusCode)
+                        count = JsonConvert.DeserializeObject<int>(content);
                 }
             }
 

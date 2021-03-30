@@ -272,7 +272,7 @@ namespace APPartment.Web.Controllers
 
             if (inventoryObject != null)
             {
-                inventoryObject.LastUpdated = inventoryObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime((DateTime)inventoryObject.ModifiedDate);
+                //inventoryObject.LastUpdated = inventoryObject.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime((DateTime)inventoryObject.ModifiedDate);
                 //var searchedUser = new User() { ID = (long)inventoryObject.ModifiedByID };
                 //inventoryObject.LastUpdatedBy = dao.GetObject(searchedUser, x => x.ID == (long)inventoryObject.ModifiedByID).Name;
                 //lastInventoryModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastInventoryModel.ObjectID);
@@ -282,7 +282,7 @@ namespace APPartment.Web.Controllers
 
             if (hygieneObjects != null)
             {
-                lastHygieneModel.LastUpdated = hygieneObjects.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime((DateTime)hygieneObjects.ModifiedDate);
+                //lastHygieneModel.LastUpdated = hygieneObjects.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime((DateTime)hygieneObjects.ModifiedDate);
                 //var searchedUser = new User() { ID = (long)hygieneObjects.ModifiedByID };
                 //lastHygieneModel.LastUpdatedBy = dao.GetObject(searchedUser, x => x.ID == (long)hygieneObjects.ModifiedByID).Name;
                 //lastHygieneModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastHygieneModel.ObjectID);
@@ -292,7 +292,7 @@ namespace APPartment.Web.Controllers
 
             if (issueObjects != null)
             {
-                lastIssueModel.LastUpdated = issueObjects.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime((DateTime)issueObjects.ModifiedDate);
+                //lastIssueModel.LastUpdated = issueObjects.ModifiedDate == null ? string.Empty : timeConverter.CalculateRelativeTime((DateTime)issueObjects.ModifiedDate);
                 //var searchedUser = new User() { ID = (long)issueObjects.ModifiedByID };
                 //lastIssueModel.LastUpdatedBy = dao.GetObject(searchedUser, x => x.ID == (long)issueObjects.ModifiedByID).Name;
                 //lastIssueModel.LastUpdate = historyHtmlBuilder.BuildLastUpdateBaseObjectHistoryForWidget(lastIssueModel.ObjectID); 

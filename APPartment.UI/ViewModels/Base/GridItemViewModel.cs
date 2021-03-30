@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
 namespace APPartment.UI.ViewModels.Base
@@ -33,13 +34,10 @@ namespace APPartment.UI.ViewModels.Base
 
         public DateTime? ModifiedDate { get; set; }
 
-        public List<string> Comments { get; set; }
-
-        public List<ImagePostViewModel> Images { get; set; }
-
         public List<string> ActionsHtml { get; set; } = new List<string>();
 
         [JsonIgnore]
+        [IgnoreDataMember]
         public IEnumerable<PropertyUIInfo> Properties
         {
             get

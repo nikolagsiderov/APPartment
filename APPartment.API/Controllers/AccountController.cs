@@ -15,10 +15,10 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var userExists = new BaseWebService(0).Any<UserPostViewModel>(x => x.Name == user.Name);
+                var userAlreadyExists = new BaseWebService(0).Any<UserPostViewModel>(x => x.Name == user.Name);
 
-                if (userExists)
-                    return StatusCode(StatusCodes.Status400BadRequest, "This username is already taken.");
+                if (userAlreadyExists)
+                    return StatusCode(StatusCodes.Status403Forbidden, "This username is already taken.");
 
                 user = new BaseWebService(0).Save(user);
                 return Ok(user);
@@ -29,13 +29,13 @@ namespace APPartment.API.Controllers
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("login")]
-        public ActionResult Login(string username, string password)
+        public ActionResult Login([FromBody] UserPostViewModel user)
         {
             try
             {
-                var user = new BaseWebService(0).GetEntity<UserPostViewModel>(x => x.Name == username && x.Password == password);
+                user = new BaseWebService(0).GetEntity<UserPostViewModel>(x => x.Name == user.Name && x.Password == user.Password);
 
                 if (user != null)
                     return Ok(user);

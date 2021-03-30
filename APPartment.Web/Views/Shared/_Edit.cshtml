@@ -1,20 +1,18 @@
 ﻿@model APPartment.UI.ViewModels.Base.PostViewModel
 
-@{ 
+@{
     var action = "Create";
 
     if (Model.ID > 0)
     {
         action = "Edit";
     }
-} 
+}
 
 <div class="card">
     <form asp-action="@action" enctype="multipart/form-data">
         <div class="card-header">
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-success btn-sm" style="font-size: small;" />
-            </div>
+            <input type="submit" value="Save" class="btn btn-success btn-sm" style="font-size: small;" />
         </div>
         <div class="card-body">
             @foreach (var row in Model.Properties.Select(x => x.Row).Distinct())

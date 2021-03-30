@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 
 namespace APPartment.UI.ViewModels.Base
@@ -48,13 +49,8 @@ namespace APPartment.UI.ViewModels.Base
 
         public List<ImagePostViewModel> Images { get; set; }
 
-        public string LastUpdated { get; set; }
-
-        public string LastUpdatedBy { get; set; }
-
-        public string LastUpdate { get; set; }
-
         [JsonIgnore]
+        [IgnoreDataMember]
         public List<PropertyUIInfo> Properties
         {
             get
@@ -96,6 +92,7 @@ namespace APPartment.UI.ViewModels.Base
         }
 
         [JsonIgnore]
+        [IgnoreDataMember]
         public IEnumerable<PropertyInfo> HiddenProperties
         {
             get
