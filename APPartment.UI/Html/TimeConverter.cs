@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace APPartment.UI.Utilities
+namespace APPartment.UI.Html
 {
     public class TimeConverter
     {

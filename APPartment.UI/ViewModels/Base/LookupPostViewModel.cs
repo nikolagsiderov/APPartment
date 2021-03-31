@@ -1,6 +1,6 @@
 ﻿using APPartment.ORM.Framework.Declarations;
 using APPartment.UI.Attributes;
-using APPartment.UI.Utilities.Constants;
+using APPartment.UI.Constants;
 
 namespace APPartment.UI.ViewModels.Base
 {

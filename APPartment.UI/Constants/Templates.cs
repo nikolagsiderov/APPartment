@@ -1,4 +1,4 @@
-﻿namespace APPartment.UI.Utilities.Constants
+﻿namespace APPartment.UI.Constants
 {
     public static class Templates
     {

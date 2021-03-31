@@ -1,4 +1,4 @@
-﻿namespace APPartment.UI.Utilities.Constants.Breadcrumbs
+﻿namespace APPartment.UI.Constants.Breadcrumbs
 {
     public class IssuesBreadcrumbs
     {

@@ -3,9 +3,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace APPartment.ORM.Framework.Helpers
+namespace APPartment.ORM.Framework.Tools
 {
-    public class ExpressionToSqlHelper : ExpressionVisitor
+    public class ExpressionToSql : ExpressionVisitor
     {
         private StringBuilder sb;
         private string _orderBy = string.Empty;
@@ -45,7 +45,7 @@ namespace APPartment.ORM.Framework.Helpers
             }
         }
 
-        public ExpressionToSqlHelper()
+        public ExpressionToSql()
         {
         }
 

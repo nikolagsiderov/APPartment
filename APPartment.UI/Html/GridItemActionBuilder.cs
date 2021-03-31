@@ -1,4 +1,4 @@
-﻿namespace APPartment.UI.Utilities
+﻿namespace APPartment.UI.Html
 {
     public static class GridItemActionBuilder
     {

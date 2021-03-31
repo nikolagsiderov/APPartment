@@ -1,5 +1,5 @@
 ﻿using APPartment.UI.Attributes;
-using APPartment.UI.Utilities.Constants;
+using APPartment.UI.Constants;
 using APPartment.UI.ViewModels.Base;
 using APPUser = APPartment.Data.Server.Models.User.User;
 using System.ComponentModel.DataAnnotations;

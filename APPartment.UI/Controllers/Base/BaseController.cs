@@ -22,7 +22,6 @@ namespace APPartment.UI.Controllers.Base
                 {
                     CurrentUserID = long.Parse(contextAccessor.HttpContext.Session.GetString("UserID"));
                 }
-                else
 
                 if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("Username")))
                 {

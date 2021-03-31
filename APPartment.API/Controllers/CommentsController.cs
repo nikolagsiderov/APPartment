@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using APPartment.UI.Services.Base;
-using APPartment.UI.Utilities;
+using APPartment.UI.Html;
 using APPartment.UI.ViewModels.Clingons.Comment;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +29,7 @@ namespace APPartment.API.Controllers
 
                 // TODO: x.CreatedById != 0 should be handled as case when user is deleted
                 var comment = new BaseWebService(currentUserID).GetCollection<CommentPostViewModel>(x => x.TargetObjectID == targetObjectID && x.CreatedByID != 0);
-                var result = new HtmlRenderHelper(currentUserID).BuildComments(comment);
+                var result = new CommentsRenderer(currentUserID).BuildComments(comment);
 
                 return Ok(result);
             }
@@ -57,7 +57,7 @@ namespace APPartment.API.Controllers
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
                 comment = new BaseWebService(currentUserID).Save(comment);
-                var result = new HtmlRenderHelper(currentUserID).BuildPostComment(comment);
+                var result = new CommentsRenderer(currentUserID).BuildPostComment(comment);
 
                 return Ok(result);
             }

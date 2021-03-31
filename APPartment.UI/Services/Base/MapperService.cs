@@ -1,6 +1,6 @@
-﻿using APPartment.ORM.Framework.Declarations;
+﻿using APPartment.Common.Tools;
+using APPartment.ORM.Framework.Declarations;
 using APPartment.UI.Attributes;
-using APPartment.UI.Utilities;
 using AutoMapper;
 using System;
 using System.Collections.Generic;

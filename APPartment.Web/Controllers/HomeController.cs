@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Http;
 using APPartment.UI.Controllers.Base;
-using APPartment.UI.Utilities.Constants.Breadcrumbs;
+using APPartment.UI.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Home;
 using APPartment.UI.ViewModels;
 using APPartment.UI.ViewModels.User;
@@ -23,8 +23,11 @@ namespace APPartment.Web.Controllers
         [DefaultBreadcrumb(HomeBreadcrumbs.Default_Breadcrumb)]
         public async Task<IActionResult> Index()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HomeID")))
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
                 return RedirectToAction("Login", "Account");
+
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString("HomeID")))
+                return RedirectToAction("Login");
 
             var model = new HomePageDisplayModel();
             var status = new HomeStatusPostViewModel();

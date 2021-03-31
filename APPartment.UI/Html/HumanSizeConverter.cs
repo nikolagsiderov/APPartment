@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 
-namespace APPartment.UI.Utilities
+namespace APPartment.UI.Html
 {
-    public class HumanSizeConverter
+    public static class HumanSizeConverter
     {
-        public string ConvertFileLength(IFormFile file)
+        public static string ConvertFileLength(IFormFile file)
         {
             string[] sizes = { "bytes", "kB", "MB", "GB", "TB" };
             double len = file.Length;

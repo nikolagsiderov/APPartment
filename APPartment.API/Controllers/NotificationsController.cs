@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using APPartment.UI.Services.Base;
-using APPartment.UI.Utilities;
+using APPartment.UI.Html;
 using APPartment.UI.ViewModels.Notification;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +29,7 @@ namespace APPartment.API.Controllers
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
                 var notifications = new NotificationService(currentUserID, currentHomeID).GetNotifications();
-                var result = new HtmlRenderHelper(currentUserID).BuildNotificationsContent(notifications);
+                var result = NotificationsRenderer.BuildNotificationsContent(notifications);
                 return Ok(result);
             }
             catch (System.Exception ex)

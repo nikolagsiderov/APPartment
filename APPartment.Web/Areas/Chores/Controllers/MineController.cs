@@ -4,9 +4,9 @@ using System;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http;
 using APPartment.UI.Controllers.Base;
-using APPartment.UI.Utilities.Constants.Breadcrumbs;
+using APPartment.UI.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Chore;
-using APPAreas = APPartment.UI.Utilities.Constants.Areas;
+using APPAreas = APPartment.UI.Constants.Areas;
 using System.Threading.Tasks;
 
 namespace APPartment.Web.Areas.Chores.Controllers

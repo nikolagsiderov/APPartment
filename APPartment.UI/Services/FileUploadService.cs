@@ -1,5 +1,5 @@
-﻿using APPartment.UI.Services.Base;
-using APPartment.UI.Utilities;
+﻿using APPartment.UI.Html;
+using APPartment.UI.Services.Base;
 using APPartment.UI.ViewModels.Clingons.Image;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -10,12 +10,10 @@ namespace APPartment.UI.Services
     public class FileUploadService
     {
         private BaseWebService BaseWebService;
-        private HumanSizeConverter humanSizeConverter;
 
         public FileUploadService(long? currentUserID)
         {
             this.BaseWebService = new BaseWebService(currentUserID);
-            this.humanSizeConverter = new HumanSizeConverter();
         }
 
         public void UploadImage(IFormFile file, long targetObjectID, long currentUserID)
@@ -40,7 +38,7 @@ namespace APPartment.UI.Services
             var image = new ImagePostViewModel()
             {
                 Name = file.FileName,
-                FileSize = humanSizeConverter.ConvertFileLength(file),
+                FileSize = HumanSizeConverter.ConvertFileLength(file),
                 CreatedDate = DateTime.Now,
                 TargetObjectID = targetObjectID,
             };

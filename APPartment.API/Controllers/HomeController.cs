@@ -1,5 +1,5 @@
 ﻿using APPartment.UI.Services.Base;
-using APPartment.UI.Utilities;
+using APPartment.UI.Html;
 using APPartment.UI.ViewModels.Chat;
 using APPartment.UI.ViewModels.Home;
 using Microsoft.AspNetCore.Http;
@@ -143,7 +143,7 @@ namespace APPartment.API.Controllers
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
                 var messages = new BaseWebService(currentUserID).GetCollection<MessageDisplayViewModel>(x => x.HomeID == currentHomeID && x.CreatedByID != 0);
-                var messagesResult = new HtmlRenderHelper(currentUserID).BuildMessagesForChat(messages);
+                var messagesResult = new ChatRenderer(currentUserID).BuildMessagesForChat(messages);
 
                 var result = new HomePageDisplayModel()
                 {

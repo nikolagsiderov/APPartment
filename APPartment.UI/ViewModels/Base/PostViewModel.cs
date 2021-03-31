@@ -1,7 +1,7 @@
 ﻿using APPartment.ORM.Framework.Declarations;
 using APPartment.UI.Attributes;
 using APPartment.UI.Utilities;
-using APPartment.UI.Utilities.Constants;
+using APPartment.UI.Constants;
 using APPartment.UI.ViewModels.Clingons.Image;
 using System;
 using System.Collections.Generic;

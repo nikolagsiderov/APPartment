@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using APPartment.Common;
 using APPartment.UI.Controllers.Base;
-using APPartment.UI.Utilities.Constants.Breadcrumbs;
+using APPartment.UI.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.GeneralCalendar;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

@@ -4,21 +4,22 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Data.SqlClient;
 using System.Collections.Generic;
-using APPartment.ORM.Framework.Helpers;
+using APPartment.ORM.Framework.Tools;
 using APPartment.ORM.Framework.Declarations;
 using APPartment.ORM.Framework.Attributes;
 using System.ComponentModel.DataAnnotations.Schema;
 using APPartment.Common;
+using APPartment.ORM.Framework.Enums;
 
 namespace APPartment.ORM.Framework.Core
 {
     public class DaoContext
     {
-        private ExpressionToSqlHelper expressionTranslator;
+        private ExpressionToSql expressionToSql;
 
         public DaoContext()
         {
-            expressionTranslator = new ExpressionToSqlHelper();
+            expressionToSql = new ExpressionToSql();
         }
 
         public T SelectGetObject<T>(T result, long ID)
@@ -60,7 +61,7 @@ namespace APPartment.ORM.Framework.Core
             where T : class, IBaseObject, new()
         {
             var table = GetTableName<T>();
-            var sqlClause = expressionTranslator.Translate(filter);
+            var sqlClause = expressionToSql.Translate(filter);
             var query = SqlQueryProvider.SelectBusinessObjectByClause(table, sqlClause);
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
@@ -147,7 +148,7 @@ namespace APPartment.ORM.Framework.Core
             where T : class, IBaseObject, new()
         {
             var table = GetTableName<T>();
-            var sqlClause = expressionTranslator.Translate(filter);
+            var sqlClause = expressionToSql.Translate(filter);
             var query = SqlQueryProvider.SelectBusinessObjectsByClause(table, sqlClause);
             T obj = null;
             var propertiesCount = typeof(T)
@@ -231,7 +232,7 @@ namespace APPartment.ORM.Framework.Core
             where T : class, ILookupObject, new()
         {
             var table = GetLookupTableName<T>();
-            var sqlClause = expressionTranslator.Translate(filter);
+            var sqlClause = expressionToSql.Translate(filter);
             var query = SqlQueryProvider.SelectLookupObjectByClause(table, sqlClause);
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
@@ -312,7 +313,7 @@ namespace APPartment.ORM.Framework.Core
             where T : class, ILookupObject, new()
         {
             var table = GetLookupTableName<T>();
-            var sqlClause = expressionTranslator.Translate(filter);
+            var sqlClause = expressionToSql.Translate(filter);
             var query = SqlQueryProvider.SelectLookupObjectsByClause(table, sqlClause);
             T obj = null;
             var propertiesCount = typeof(T)
@@ -358,7 +359,7 @@ namespace APPartment.ORM.Framework.Core
             where T : class, IBaseObject
         {
             object objectID = 0;
-            businessObject.ObjectTypeID = ObjectTypeDeterminator.GetObjectTypeID(businessObject.GetType().Name);
+            businessObject.ObjectTypeID = GetObjectTypeID(businessObject.GetType().Name);
             businessObject.CreatedByID = userID;
             businessObject.CreatedDate = DateTime.Now;
             businessObject.ModifiedByID = userID;
@@ -418,7 +419,7 @@ namespace APPartment.ORM.Framework.Core
             businessObject.ModifiedDate = DateTime.Now;
 
             if (businessObject.ObjectTypeID == null || businessObject.ObjectTypeID == 0)
-                businessObject.ObjectTypeID = ObjectTypeDeterminator.GetObjectTypeID(businessObject.GetType().Name);
+                businessObject.ObjectTypeID = GetObjectTypeID(businessObject.GetType().Name);
 
             if (string.IsNullOrEmpty(businessObject.Name))
                 businessObject.Name = "none";
@@ -557,7 +558,7 @@ namespace APPartment.ORM.Framework.Core
             where T : class, IBaseObject
         {
             var table = GetTableName<T>();
-            var sqlClause = expressionTranslator.Translate(filter);
+            var sqlClause = expressionToSql.Translate(filter);
             var query = SqlQueryProvider.AnyCountBusinessObjects(table, sqlClause);
             object count = null;
 
@@ -616,7 +617,7 @@ namespace APPartment.ORM.Framework.Core
             where T : class, IBaseObject
         {
             var table = GetTableName<T>();
-            var sqlClause = expressionTranslator.Translate(filter);
+            var sqlClause = expressionToSql.Translate(filter);
             var query = SqlQueryProvider.AnyCountBusinessObjects(table, sqlClause);
             object count = null;
 
@@ -670,6 +671,12 @@ namespace APPartment.ORM.Framework.Core
                 .ToString();
 
             return result;
+        }
+
+        public long GetObjectTypeID(string objectTypeName)
+        {
+            var objectType = (ObjectTypes)Enum.Parse(typeof(ObjectTypes), objectTypeName);
+            return (long)objectType;
         }
     }
 }
