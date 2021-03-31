@@ -8,6 +8,7 @@ using APPartment.ORM.Framework.Helpers;
 using APPartment.ORM.Framework.Declarations;
 using APPartment.ORM.Framework.Attributes;
 using System.ComponentModel.DataAnnotations.Schema;
+using APPartment.Common;
 
 namespace APPartment.ORM.Framework.Core
 {

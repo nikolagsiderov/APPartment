@@ -9,8 +9,8 @@ using APPartment.UI.ViewModels;
 using APPartment.UI.ViewModels.User;
 using System.Threading.Tasks;
 using System.Net.Http;
-using APPartment.ORM.Framework;
 using Newtonsoft.Json;
+using APPartment.Common;
 
 namespace APPartment.Web.Controllers
 {
