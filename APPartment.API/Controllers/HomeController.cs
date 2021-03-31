@@ -2,9 +2,6 @@
 using APPartment.UI.Utilities;
 using APPartment.UI.ViewModels.Chat;
 using APPartment.UI.ViewModels.Home;
-using APPartment.UI.ViewModels.Hygiene;
-using APPartment.UI.ViewModels.Inventory;
-using APPartment.UI.ViewModels.Issue;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;

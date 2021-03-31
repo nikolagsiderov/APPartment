@@ -126,6 +126,59 @@ namespace APPartment.API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("createedit")]
+        public ActionResult CreateEdit([FromBody] ChorePostViewModel model)
+        {
+            try
+            {
+                var currentUserID = 0l;
+                var currentHomeID = 0l;
+                var re = Request;
+                var headers = re.Headers;
+
+                if (headers.ContainsKey("CurrentUserID"))
+                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
+
+                if (headers.ContainsKey("CurrentHomeID"))
+                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
+
+                model.HomeID = currentHomeID;
+                var result = new BaseWebService(currentUserID).Save(model);
+
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
+        [HttpGet("delete/{choreID:long}")]
+        public ActionResult Delete(long choreID)
+        {
+            try
+            {
+                var currentUserID = 0l;
+                var re = Request;
+                var headers = re.Headers;
+
+                if (headers.ContainsKey("CurrentUserID"))
+                {
+                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
+                }
+
+                var model = new BaseWebService(currentUserID).GetEntity<ChorePostViewModel>(choreID);
+                new BaseWebService(currentUserID).Delete(model);
+
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
         [HttpGet]
         [Route("chores/count")]
         public ActionResult<List<ChoreDisplayViewModel>> GetAllCount(long homeID)

@@ -127,6 +127,59 @@ namespace APPartment.API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("createedit")]
+        public ActionResult CreateEdit([FromBody] SurveyPostViewModel model)
+        {
+            try
+            {
+                var currentUserID = 0l;
+                var currentHomeID = 0l;
+                var re = Request;
+                var headers = re.Headers;
+
+                if (headers.ContainsKey("CurrentUserID"))
+                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
+
+                if (headers.ContainsKey("CurrentHomeID"))
+                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
+
+                model.HomeID = currentHomeID;
+                var result = new BaseWebService(currentUserID).Save(model);
+
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
+        [HttpGet("delete/{surveyID:long}")]
+        public ActionResult Delete(long surveyID)
+        {
+            try
+            {
+                var currentUserID = 0l;
+                var re = Request;
+                var headers = re.Headers;
+
+                if (headers.ContainsKey("CurrentUserID"))
+                {
+                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
+                }
+
+                var model = new BaseWebService(currentUserID).GetEntity<SurveyPostViewModel>(surveyID);
+                new BaseWebService(currentUserID).Delete(model);
+
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
         [HttpGet]
         [Route("surveys/count")]
         public ActionResult<List<SurveyDisplayViewModel>> GetAllCount(long homeID)

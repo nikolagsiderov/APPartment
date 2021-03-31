@@ -51,6 +51,7 @@ namespace APPartment.UI.Controllers.Base
         public abstract bool CanManage { get; }
 
         [Breadcrumb("Base")]
+        [HttpGet]
         public virtual async Task<IActionResult> Index()
         {
             List<T> models = new List<T>();
@@ -80,6 +81,7 @@ namespace APPartment.UI.Controllers.Base
         }
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Details_Breadcrumb)]
+        [HttpGet]
         public async Task<IActionResult> Details(long? ID)
         {
             if (ID == null)
@@ -103,7 +105,7 @@ namespace APPartment.UI.Controllers.Base
 
             if (model.ID > 0)
             {
-                model = GetClingons(model);
+                model = await GetClingons(model);
                 ViewData["CanManage"] = CanManage;
 
                 return View("_Details", model);
@@ -114,6 +116,7 @@ namespace APPartment.UI.Controllers.Base
 
 
         [Breadcrumb("<i class='fas fa-plus'></i> Create")]
+        [HttpGet]
         public IActionResult Create()
         {
             var newModel = new U();
@@ -123,20 +126,33 @@ namespace APPartment.UI.Controllers.Base
         [Breadcrumb("<i class='fas fa-plus'></i> Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(U model)
+        public async Task<IActionResult> Create(U model)
         {
             if (ModelState.IsValid)
             {
-                model.HomeID = (long)CurrentHomeID;
-                BaseWebService.Save(model);
+                using (var httpClient = new HttpClient())
+                {
+                    var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/createedit";
+                    httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                    httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 
-                return RedirectToAction(nameof(Index));
+                    using (var response = await httpClient.PostAsJsonAsync(requestUri, model))
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+
+                        if (response.IsSuccessStatusCode)
+                            return RedirectToAction(nameof(Index));
+                        else
+                            return View("_Edit", model);
+                    }
+                }
             }
 
             return View("_Edit", model);
         }
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
+        [HttpGet]
         public async Task<IActionResult> Edit(long? ID)
         {
             if (ID == null)
@@ -160,7 +176,7 @@ namespace APPartment.UI.Controllers.Base
 
             if (model.ID > 0)
             {
-                model = GetClingons(model);
+                model = await GetClingons(model);
                 return View("_Edit", model);
             }
             else
@@ -170,33 +186,75 @@ namespace APPartment.UI.Controllers.Base
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(long ID, U model)
+        public async Task<IActionResult> Edit(long ID, U model)
         {
             if (ID != model.ID)
                 return new Error404NotFoundViewResult();
 
             if (ModelState.IsValid)
             {
-                BaseWebService.Save(model);
-                return RedirectToAction(nameof(Index));
+                using (var httpClient = new HttpClient())
+                {
+                    var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/createedit";
+                    httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                    httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                    using (var response = await httpClient.PostAsJsonAsync(requestUri, model))
+                    {
+                        var content = await response.Content.ReadAsStringAsync();
+
+                        if (response.IsSuccessStatusCode)
+                            return RedirectToAction(nameof(Index));
+                        else
+                            return View("_Edit", model);
+                    }
+                }
             }
 
             return View("_Edit", model);
         }
 
-        public IActionResult Delete(long? ID)
+        public async Task<IActionResult> Delete(long? ID)
         {
             if (ID == null)
                 return new Error404NotFoundViewResult();
 
-            var model = BaseWebService.GetEntity<U>((long)ID);
+            var model = new U();
 
-            if (model == null)
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}";
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        model = JsonConvert.DeserializeObject<U>(content);
+                }
+            }
+
+            if (model.ID > 0)
+            {
+                using (var httpClient = new HttpClient())
+                {
+                    var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/delete/{(long)ID}";
+                    httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
+
+                    using (var response = await httpClient.GetAsync(requestUri))
+                    {
+                        string content = await response.Content.ReadAsStringAsync();
+
+                        if (response.IsSuccessStatusCode)
+                            return RedirectToAction(nameof(Index));
+                        else
+                            return new Error404NotFoundViewResult();
+                    }
+                }
+            }
+            else
                 return new Error404NotFoundViewResult();
-
-            BaseWebService.Delete(model);
-
-            return RedirectToAction(nameof(Index));
         }
 
         public async Task<JsonResult> GetCount()
@@ -221,36 +279,65 @@ namespace APPartment.UI.Controllers.Base
         }
 
         #region Clingons
-        protected U GetClingons(U model)
+        protected async Task<U> GetClingons(U model)
         {
-            model.Comments = GetComments(model.ObjectID);
-            model.Images = GetImages(model.ObjectID);
+            model.Comments = await GetComments(model.ObjectID);
+            model.Images = await GetImages(model.ObjectID);
 
             return model;
         }
 
         #region Comments
-        private List<string> GetComments(long targetObjectID)
+        private async Task<List<string>> GetComments(long targetObjectID)
         {
-            // TODO: x.CreatedById != 0 should be handled as case when user is deleted
-            var comment = BaseWebService.GetCollection<CommentPostViewModel>(x => x.TargetObjectID == targetObjectID && x.CreatedByID != 0);
-            var commentsResult = htmlRenderHelper.BuildComments(comment);
+            var result = new List<string>();
 
-            return commentsResult;
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/comments/{targetObjectID}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        result = JsonConvert.DeserializeObject<List<string>>(content);
+                }
+            }
+
+            return result;
         }
 
         [HttpPost]
-        public IActionResult PostComment(long targetID, string commentText)
+        public async Task<IActionResult> PostComment(long targetID, string commentText)
         {
+            var result = string.Empty;
             var comment = new CommentPostViewModel()
             {
+                Name = "none",
                 Details = commentText,
-                TargetObjectID = targetID,
+                TargetObjectID = targetID
             };
 
-            BaseWebService.Save(comment);
+            ModelState.Clear();
 
-            var result = htmlRenderHelper.BuildPostComment(comment);
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/comments/post";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.PostAsJsonAsync(requestUri, comment))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        result = content;
+                }
+            }
+
             return Json(result);
         }
         #endregion Comments
@@ -285,9 +372,24 @@ namespace APPartment.UI.Controllers.Base
                 return Json(new { Message = "Error in saving file" });
         }
 
-        public ActionResult DeleteImage(long ID)
+        public async Task<ActionResult> DeleteImage(long ID)
         {
-            var image = BaseWebService.GetEntity<ImagePostViewModel>(ID);
+            var image = new ImagePostViewModel();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/images/image/{ID}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        image = JsonConvert.DeserializeObject<ImagePostViewModel>(content);
+                }
+            }
 
             if (image == null)
                 return Json(new { success = false, message = "404: Image does not exist." });
@@ -314,10 +416,26 @@ namespace APPartment.UI.Controllers.Base
             }
         }
 
-        private List<ImagePostViewModel> GetImages(long targetObjectID)
+        private async Task<List<ImagePostViewModel>> GetImages(long targetObjectID)
         {
-            var images = BaseWebService.GetCollection<ImagePostViewModel>(x => x.TargetObjectID == targetObjectID);
-            return images;
+            var result = new List<ImagePostViewModel>();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/images/{targetObjectID}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        result = JsonConvert.DeserializeObject<List<ImagePostViewModel>>(content);
+                }
+            }
+
+            return result;
         }
         #endregion Images
         #endregion Clingons

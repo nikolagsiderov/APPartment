@@ -16,7 +16,7 @@ namespace APPartment.API.Controllers
         }
 
         [HttpGet("{inventoryID:long}")]
-        public ActionResult<InventoryPostViewModel> Get(long inventoryID)
+        public ActionResult Get(long inventoryID)
         {
             try
             {
@@ -119,6 +119,59 @@ namespace APPartment.API.Controllers
                     return Ok(result);
                 else
                     return NotFound();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
+        [HttpPost]
+        [Route("createedit")]
+        public ActionResult CreateEdit([FromBody] InventoryPostViewModel model)
+        {
+            try
+            {
+                var currentUserID = 0l;
+                var currentHomeID = 0l;
+                var re = Request;
+                var headers = re.Headers;
+
+                if (headers.ContainsKey("CurrentUserID"))
+                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
+
+                if (headers.ContainsKey("CurrentHomeID"))
+                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
+
+                model.HomeID = currentHomeID;
+                var result = new BaseWebService(currentUserID).Save(model);
+
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
+        [HttpGet("delete/{inventoryID:long}")]
+        public ActionResult Delete(long inventoryID)
+        {
+            try
+            {
+                var currentUserID = 0l;
+                var re = Request;
+                var headers = re.Headers;
+
+                if (headers.ContainsKey("CurrentUserID"))
+                {
+                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
+                }
+
+                var model = new BaseWebService(currentUserID).GetEntity<InventoryPostViewModel>(inventoryID);
+                new BaseWebService(currentUserID).Delete(model);
+
+                return Ok();
             }
             catch (System.Exception ex)
             {
