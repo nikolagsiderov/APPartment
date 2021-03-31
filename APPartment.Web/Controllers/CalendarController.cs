@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
+using APPartment.Common;
 using APPartment.UI.Controllers.Base;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.GeneralCalendar;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SmartBreadcrumbs.Attributes;
 
 namespace APPartment.Web.Controllers
@@ -22,30 +26,26 @@ namespace APPartment.Web.Controllers
             return View(new EventViewModel());
         }
 
-        public JsonResult GetEvents(DateTime start, DateTime end)
+        public async Task<JsonResult> GetEvents(DateTime start, DateTime end)
         {
-            var viewModel = new EventViewModel();
-            var events = new List<EventViewModel>();
-            start = DateTime.Today.AddDays(-14);
-            end = DateTime.Today.AddDays(-11);
+            var result = new List<EventViewModel>();
 
-            for (var i = 1; i <= 5; i++)
+            using (var httpClient = new HttpClient())
             {
-                events.Add(new EventViewModel()
-                {
-                    ID = i,
-                    Title = "Event " + i,
-                    Start = start.ToString(),
-                    End = end.ToString(),
-                    AllDay = false
-                });
+                var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/events";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 
-                start = start.AddDays(7);
-                end = end.AddDays(7);
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        result = JsonConvert.DeserializeObject<List<EventViewModel>>(content);
+                }
             }
 
-
-            return Json(events.ToArray());
+            return Json(result.ToArray());
         }
     }
 }
