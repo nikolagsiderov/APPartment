@@ -14,6 +14,7 @@ Later on, the purpose changed to an entirely educational one. Throughout the pro
 * Building my own custom **ORM Framework**
 * Incorporating **Facade Design Pattern**
 * Working with **AutoMapper**
+* Working with **Web API**
 
 # Further description
 
@@ -26,7 +27,10 @@ Later on, the purpose changed to an entirely educational one. Throughout the pro
 # Code base
 
 * `APPartment.Web.csproj` - controllers, views, startup, etc.
+* `APPartment.API.csproj` - all APIs
+* `APPartment.Common.csproj` - configuration
 * `APPartment.UI.csproj` - base controllers (check out `BaseCRUDController.cs`), authorization, web services (check out `BaseWebService.cs` and `MapperService.cs`), view models (DTOs), utilites, etc.
-* `APPartment.Data.csproj` - facade, server models, sql scripts, etc.
+* `APPartment.Data.csproj` - facade, server models, etc.
 * `APPartment.ORM.Framework.csproj` - `DaoContext.cs`, sql query provider, lambda expression to sql clause translator, declarations, attributes, etc.
 * `APPartment.Tests.csproj` - xUnit tests
+* `SQL` folder - all scripts in order to build the database
