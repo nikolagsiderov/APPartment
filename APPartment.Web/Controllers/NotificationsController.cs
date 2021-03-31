@@ -1,31 +1,60 @@
-﻿using APPartment.UI.Controllers.Base;
-using APPartment.UI.Utilities;
-using APPartment.UI.ViewModels.Notification;
+﻿using APPartment.Common;
+using APPartment.UI.Controllers.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace APPartment.Web.Controllers
 {
     public class NotificationsController : BaseController
     {
-        private HtmlRenderHelper htmlRenderHelper;
-
         public NotificationsController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            htmlRenderHelper = new HtmlRenderHelper(CurrentUserID);
         }
 
-        public JsonResult GetContents()
+        public async Task<JsonResult> GetContents()
         {
-            var notifications = NotificationService.GetNotifications();
-            var result = htmlRenderHelper.BuildNotificationsContent(notifications);
+            var result = string.Empty;
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/contents";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        result = content;
+                }
+            }
+
             return Json(result);
         }
 
-        public JsonResult GetCount()
+        public async Task<JsonResult> GetCount()
         {
-            var count = BaseWebService.Count<NotificationParticipantPostViewModel>(x => x.UserID == (long)CurrentUserID);
-            return Json(count);
+            var result = 0;
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/count";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        result = int.Parse(content);
+                }
+            }
+
+            return Json(result);
         }
     }
 }
