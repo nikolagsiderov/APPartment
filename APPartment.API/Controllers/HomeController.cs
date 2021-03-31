@@ -333,17 +333,24 @@ namespace APPartment.API.Controllers
 
                 var settingsExists = new BaseWebService(currentUserID).GetEntity<HomeSettingPostViewModel>(x => x.HomeID == currentHomeID);
 
-                if (settingsExists.ID > 0)
-                    settings = settingsExists;
-                else
-                    settings.HomeID = currentHomeID;
+                if (settingsExists != null)
+                    settings.ID = settingsExists.ID;
+
+                settings.HomeID = currentHomeID;
 
                 var home = new BaseWebService(currentUserID).GetEntity<HomePostViewModel>(currentHomeID);
-                home.Name = settings.HomeName;
-                new BaseWebService(currentUserID).Save(home);
+                var currentHomeName = home.Name;
 
-                settings.ChangeHttpSession = true;
+                if (!string.IsNullOrEmpty(settings.HomeName) && !home.Name.Equals(settings.HomeName))
+                {
+                    home.Name = settings.HomeName;
+                    new BaseWebService(currentUserID).Save(home);
+                }
+
                 settings = new BaseWebService(currentUserID).Save(settings);
+
+                if (!string.IsNullOrEmpty(settings.HomeName) && !currentHomeName.Equals(settings.HomeName))
+                    settings.ChangeHttpSession = true;
 
                 if (settings != null)
                     return Ok(settings);

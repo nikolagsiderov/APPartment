@@ -229,9 +229,7 @@ namespace APPartment.Web.Controllers
                         settings = JsonConvert.DeserializeObject<HomeSettingPostViewModel>(content);
 
                         if (settings.ChangeHttpSession)
-                        {
                             HttpContext.Session.SetString("HomeName", settings.HomeName);
-                        }
                     }
                 }
             }
