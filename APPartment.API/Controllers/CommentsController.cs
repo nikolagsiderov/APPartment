@@ -11,6 +11,7 @@ namespace APPartment.API.Controllers
     [ApiController]
     public class CommentsController : ControllerBase
     {
+        // api/comments/82
         [HttpGet("{targetObjectID:long}")]
         public ActionResult Get(long targetObjectID)
         {
@@ -39,6 +40,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/comments/post
         [HttpPost]
         [Route("post")]
         public ActionResult Post([FromBody] CommentPostViewModel comment)

@@ -11,6 +11,7 @@ namespace APPartment.API.Controllers
     [ApiController]
     public class NotificationsController : ControllerBase
     {
+        // api/notifications/contents
         [HttpGet]
         [Route("contents")]
         public ActionResult GetContents()
@@ -38,6 +39,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/notifications/count
         [HttpGet]
         [Route("count")]
         public ActionResult GetCount()

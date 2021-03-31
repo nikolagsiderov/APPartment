@@ -11,6 +11,7 @@ namespace APPartment.API.Controllers
     [ApiController]
     public class CalendarController : ControllerBase
     {
+        // api/calendar/events
         [HttpGet]
         [Route("events")]
         public ActionResult GetEvents()

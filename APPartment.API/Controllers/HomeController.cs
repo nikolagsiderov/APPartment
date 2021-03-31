@@ -14,6 +14,7 @@ namespace APPartment.API.Controllers
     [ApiController]
     public class HomeController : ControllerBase
     {
+        // api/home/5
         [HttpGet("{homeID:long}")]
         public ActionResult<HomePostViewModel> Get(long homeID)
         {
@@ -41,6 +42,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home
         [HttpGet]
         public ActionResult<List<HomePostViewModel>> Get()
         {
@@ -68,6 +70,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/register
         [HttpPost]
         [Route("register")]
         public ActionResult Register([FromBody] HomePostViewModel home)
@@ -97,6 +100,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/login
         [HttpPost]
         [Route("login")]
         public ActionResult Login([FromBody] HomePostViewModel home)
@@ -125,6 +129,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/page
         [HttpGet]
         [Route("page")]
         public ActionResult GetHomePage()
@@ -181,6 +186,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/status
         [HttpGet]
         [Route("status")]
         public ActionResult GetHomeStatus()
@@ -214,6 +220,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/status?homeStatusString=something&homeStatusDetailsString=somethingelse
         [HttpPost]
         [Route("status")]
         public ActionResult PostHomeStatus(string homeStatusString, string homeStatusDetailsString)
@@ -275,6 +282,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/settings
         [HttpGet]
         [Route("settings")]
         public ActionResult GetHomeSettings()
@@ -311,6 +319,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/settings
         [HttpPost]
         [Route("settings")]
         public ActionResult PostHomeSettings([FromBody] HomeSettingPostViewModel settings)
@@ -360,6 +369,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/chat?username=something&messageText=somethingelse
         [HttpPost]
         [Route("chat")]
         public ActionResult PostChatMessage(string username, string messageText)
@@ -390,6 +400,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/homeuser
         [HttpPost]
         [Route("homeuser")]
         public ActionResult SetUserToCurrentHome()

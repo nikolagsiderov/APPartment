@@ -15,6 +15,7 @@ namespace APPartment.API.Controllers
         {
         }
 
+        // api/home/7/issues/42
         [HttpGet("{issueID:long}")]
         public ActionResult<IssuePostViewModel> Get(long issueID)
         {
@@ -43,6 +44,7 @@ namespace APPartment.API.Controllers
             
         }
 
+        // api/home/7/issues/issues
         [HttpGet]
         [Route("issues")]
         public ActionResult<List<IssueDisplayViewModel>> GetAll(long homeID)
@@ -71,6 +73,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/7/issues/opem
         [HttpGet]
         [Route("open")]
         public ActionResult<List<IssueDisplayViewModel>> GetOpen(long homeID)
@@ -99,6 +102,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/7/issues/closed
         [HttpGet]
         [Route("closed")]
         public ActionResult<List<IssueDisplayViewModel>> GetClosed(long homeID)
@@ -127,6 +131,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/7/issues/createedit
         [HttpPost]
         [Route("createedit")]
         public ActionResult CreateEdit([FromBody] IssuePostViewModel model)
@@ -155,6 +160,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/7/issues/delete/56
         [HttpGet("delete/{issueID:long}")]
         public ActionResult Delete(long issueID)
         {
@@ -180,6 +186,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/7/issues/issues/count
         [HttpGet]
         [Route("issues/count")]
         public ActionResult<List<IssueDisplayViewModel>> GetAllCount(long homeID)
@@ -204,6 +211,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/7/issues/open/count
         [HttpGet]
         [Route("open/count")]
         public ActionResult<List<IssueDisplayViewModel>> GetOpenCount(long homeID)
@@ -228,6 +236,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/7/issues/closed/count
         [HttpGet]
         [Route("closed/count")]
         public ActionResult<List<IssueDisplayViewModel>> GetClosedCount(long homeID)

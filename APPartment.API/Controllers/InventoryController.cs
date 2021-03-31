@@ -15,6 +15,7 @@ namespace APPartment.API.Controllers
         {
         }
 
+        // api/home/3/inventory/67
         [HttpGet("{inventoryID:long}")]
         public ActionResult Get(long inventoryID)
         {
@@ -42,6 +43,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/3/inventory/inventory
         [HttpGet]
         [Route("inventory")]
         public ActionResult<List<InventoryDisplayViewModel>> GetAll(long homeID)
@@ -70,6 +72,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/3/inventory/supplied
         [HttpGet]
         [Route("supplied")]
         public ActionResult<List<InventoryDisplayViewModel>> GetSupplied(long homeID)
@@ -98,6 +101,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/3/inventory/unsupplied
         [HttpGet]
         [Route("unsupplied")]
         public ActionResult<List<InventoryDisplayViewModel>> GetUnsupplied(long homeID)
@@ -126,6 +130,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/3/inventory/createedit
         [HttpPost]
         [Route("createedit")]
         public ActionResult CreateEdit([FromBody] InventoryPostViewModel model)
@@ -154,6 +159,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/3/inventory/delete/33
         [HttpGet("delete/{inventoryID:long}")]
         public ActionResult Delete(long inventoryID)
         {
@@ -179,6 +185,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/3/inventory/inventory/count
         [HttpGet]
         [Route("inventory/count")]
         public ActionResult<List<InventoryDisplayViewModel>> GetAllCount(long homeID)
@@ -203,6 +210,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/3/inventory/supplied/count
         [HttpGet]
         [Route("supplied/count")]
         public ActionResult<List<InventoryDisplayViewModel>> GetSuppliedCount(long homeID)
@@ -227,6 +235,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/3/inventory/unsupplied/count
         [HttpGet]
         [Route("unsupplied/count")]
         public ActionResult<List<InventoryDisplayViewModel>> GetUnsuppliedCount(long homeID)

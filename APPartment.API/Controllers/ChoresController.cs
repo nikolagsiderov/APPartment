@@ -15,6 +15,7 @@ namespace APPartment.API.Controllers
         {
         }
 
+        // api/home/4/chores/28
         [HttpGet("{choreID:long}")]
         public ActionResult<ChorePostViewModel> Get(long choreID)
         {
@@ -42,6 +43,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/chores/chores
         [HttpGet]
         [Route("chores")]
         public ActionResult<List<ChoreDisplayViewModel>> GetAll(long homeID)
@@ -70,6 +72,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/chores/mine
         [HttpGet]
         [Route("mine")]
         public ActionResult<List<ChoreDisplayViewModel>> GetMine(long homeID)
@@ -98,6 +101,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/chores/others
         [HttpGet]
         [Route("others")]
         public ActionResult<List<ChoreDisplayViewModel>> GetOthers(long homeID)
@@ -126,6 +130,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/chores/createedit
         [HttpPost]
         [Route("createedit")]
         public ActionResult CreateEdit([FromBody] ChorePostViewModel model)
@@ -154,6 +159,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/chores/delete/20
         [HttpGet("delete/{choreID:long}")]
         public ActionResult Delete(long choreID)
         {
@@ -179,6 +185,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/chores/chores/count
         [HttpGet]
         [Route("chores/count")]
         public ActionResult<List<ChoreDisplayViewModel>> GetAllCount(long homeID)
@@ -203,6 +210,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/chores/mine/count
         [HttpGet]
         [Route("mine/count")]
         public ActionResult<List<ChoreDisplayViewModel>> GetMineCount(long homeID)
@@ -227,6 +235,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/chores/others/count
         [HttpGet]
         [Route("others/count")]
         public ActionResult<List<ChoreDisplayViewModel>> GetOthersCount(long homeID)

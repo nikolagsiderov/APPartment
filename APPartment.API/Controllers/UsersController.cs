@@ -11,6 +11,7 @@ namespace APPartment.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        // api/users/4
         [HttpGet("{userID:long}")]
         public ActionResult<UserPostViewModel> Get(long userID)
         {
@@ -29,6 +30,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/users
         [HttpGet]
         public ActionResult<List<UserPostViewModel>> Get()
         {

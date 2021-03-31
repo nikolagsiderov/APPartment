@@ -9,6 +9,7 @@ namespace APPartment.API.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
+        // api/account/register
         [HttpPost]
         [Route("register")]
         public ActionResult Register([FromBody] UserPostViewModel user)
@@ -29,6 +30,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/account/login
         [HttpPost]
         [Route("login")]
         public ActionResult Login([FromBody] UserPostViewModel user)

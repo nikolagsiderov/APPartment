@@ -11,6 +11,7 @@ namespace APPartment.API.Controllers
     [ApiController]
     public class ImagesController : ControllerBase
     {
+        // api/images/image/43
         [HttpGet("image/{ID:long}")]
         public ActionResult GetImage(long ID)
         {
@@ -37,6 +38,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/images/76
         [HttpGet("{targetObjectID:long}")]
         public ActionResult Get(long targetObjectID)
         {

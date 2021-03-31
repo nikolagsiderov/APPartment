@@ -15,6 +15,7 @@ namespace APPartment.API.Controllers
         {
         }
 
+        // api/home/2/surveys/89
         [HttpGet("{surveyID:long}")]
         public ActionResult<SurveyPostViewModel> Get(long surveyID)
         {
@@ -43,6 +44,7 @@ namespace APPartment.API.Controllers
             
         }
 
+        // api/home/2/surveys/surveys
         [HttpGet]
         [Route("surveys")]
         public ActionResult<List<SurveyDisplayViewModel>> GetAll(long homeID)
@@ -71,6 +73,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/2/surveys/completed
         [HttpGet]
         [Route("completed")]
         public ActionResult<List<SurveyDisplayViewModel>> GetCompleted(long homeID)
@@ -99,6 +102,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/2/surveys/pending
         [HttpGet]
         [Route("pending")]
         public ActionResult<List<SurveyDisplayViewModel>> GetPending(long homeID)
@@ -127,6 +131,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/2/surveys/createdit
         [HttpPost]
         [Route("createedit")]
         public ActionResult CreateEdit([FromBody] SurveyPostViewModel model)
@@ -155,6 +160,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/2/surveys/delete/2
         [HttpGet("delete/{surveyID:long}")]
         public ActionResult Delete(long surveyID)
         {
@@ -180,6 +186,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/2/surveys/surveys/count
         [HttpGet]
         [Route("surveys/count")]
         public ActionResult<List<SurveyDisplayViewModel>> GetAllCount(long homeID)
@@ -204,6 +211,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/2/surveys/completed/count
         [HttpGet]
         [Route("completed/count")]
         public ActionResult<List<SurveyDisplayViewModel>> GetCompletedCount(long homeID)
@@ -228,6 +236,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/2/surveys/pending/count
         [HttpGet]
         [Route("pending/count")]
         public ActionResult<List<SurveyDisplayViewModel>> GetPendingCount(long homeID)

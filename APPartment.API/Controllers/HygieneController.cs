@@ -15,6 +15,7 @@ namespace APPartment.API.Controllers
         {
         }
 
+        // api/home/4/hygiene/21
         [HttpGet("{hygieneID:long}")]
         public ActionResult<HygienePostViewModel> Get(long hygieneID)
         {
@@ -43,6 +44,7 @@ namespace APPartment.API.Controllers
             
         }
 
+        // api/home/4/hygiene/hygiene
         [HttpGet]
         [Route("hygiene")]
         public ActionResult<List<HygieneDisplayViewModel>> GetAll(long homeID)
@@ -71,6 +73,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/hygiene/done
         [HttpGet]
         [Route("done")]
         public ActionResult<List<HygieneDisplayViewModel>> GetDone(long homeID)
@@ -99,6 +102,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/hygiene/inprogress
         [HttpGet]
         [Route("inprogress")]
         public ActionResult<List<HygieneDisplayViewModel>> GetInProgress(long homeID)
@@ -127,6 +131,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/hygiene/createedit
         [HttpPost]
         [Route("createedit")]
         public ActionResult CreateEdit([FromBody] HygienePostViewModel model)
@@ -155,6 +160,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/hygiene/delete/35
         [HttpGet("delete/{hygieneID:long}")]
         public ActionResult Delete(long hygieneID)
         {
@@ -180,6 +186,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/hygiene/hygiene/count
         [HttpGet]
         [Route("hygiene/count")]
         public ActionResult<List<HygieneDisplayViewModel>> GetAllCount(long homeID)
@@ -204,6 +211,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/hygiene/done/count
         [HttpGet]
         [Route("done/count")]
         public ActionResult<List<HygieneDisplayViewModel>> GetDoneCount(long homeID)
@@ -228,6 +236,7 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/4/hygiene/inprogress/count
         [HttpGet]
         [Route("inprogress/count")]
         public ActionResult<List<HygieneDisplayViewModel>> GetInProgressCount(long homeID)
