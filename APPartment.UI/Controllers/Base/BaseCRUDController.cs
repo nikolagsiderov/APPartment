@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Threading.Tasks;
 using APPartment.Common;
-using APPartment.UI.Services;
 using APPartment.UI.Utilities;
 using APPartment.UI.Utilities.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels;
@@ -24,15 +21,8 @@ namespace APPartment.UI.Controllers.Base
         where T : GridItemViewModelWithHome, new()
         where U : PostViewModelWithHome, new()
     {
-        #region Services and Utilities
-        private HtmlRenderHelper htmlRenderHelper;
-        private FileUploadService fileUploadService;
-        #endregion Services and Utilities
-
         public BaseCRUDController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-            htmlRenderHelper = new HtmlRenderHelper(CurrentUserID);
-            fileUploadService = new FileUploadService(CurrentUserID);
         }
 
         public abstract Expression<Func<T, bool>> FilterExpression { get; }
@@ -346,29 +336,31 @@ namespace APPartment.UI.Controllers.Base
         [HttpPost]
         public ActionResult UploadImages(string targetObjectIDString)
         {
-            var targetObjectID = long.Parse(targetObjectIDString);
+            // TODO: This here needs to send request to API
+            // Also, make sure we store images outside of wwwroot
+            //var targetObjectID = long.Parse(targetObjectIDString);
 
-            bool isSavedSuccessfully = true;
-            string fName = "";
-            try
-            {
-                foreach (string fileName in HttpContext.Request.Form.Files.Select(x => x.FileName))
-                {
-                    IFormFile file = HttpContext.Request.Form.Files.Where(x => x.FileName == fileName).FirstOrDefault();
+            //bool isSavedSuccessfully = true;
+            //string fName = "";
+            //try
+            //{
+            //    foreach (string fileName in HttpContext.Request.Form.Files.Select(x => x.FileName))
+            //    {
+            //        IFormFile file = HttpContext.Request.Form.Files.Where(x => x.FileName == fileName).FirstOrDefault();
 
-                    fName = file.FileName;
-                    if (file != null && file.Length > 0)
-                        fileUploadService.UploadImage(file, targetObjectID, (long)CurrentUserID);
-                }
-            }
-            catch (Exception ex)
-            {
-                isSavedSuccessfully = false;
-            }
+            //        fName = file.FileName;
+            //        if (file != null && file.Length > 0)
+            //            fileUploadService.UploadImage(file, targetObjectID, (long)CurrentUserID);
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    isSavedSuccessfully = false;
+            //}
 
-            if (isSavedSuccessfully)
-                return Json(new { Message = fName });
-            else
+            //if (isSavedSuccessfully)
+            //    return Json(new { Message = fName });
+            //else
                 return Json(new { Message = "Error in saving file" });
         }
 
@@ -395,24 +387,28 @@ namespace APPartment.UI.Controllers.Base
                 return Json(new { success = false, message = "404: Image does not exist." });
             else
             {
-                if (Directory.Exists(ImagesPath))
-                {
-                    var di = new DirectoryInfo(ImagesPath);
-                    foreach (var file in di.GetFiles())
-                    {
-                        if (file.Name == image.Name)
-                        {
-                            file.Delete();
-                            break;
-                        }
-                    }
+                return Json(new { success = false, message = "404: Image does not exist." });
 
-                    BaseWebService.Delete(image);
+                // TODO: This here needs to send request to API
+                // Also, make sure directory path is outside of wwwroot
+                //if (Directory.Exists(ImagesPath))
+                //{
+                //    var di = new DirectoryInfo(ImagesPath);
+                //    foreach (var file in di.GetFiles())
+                //    {
+                //        if (file.Name == image.Name)
+                //        {
+                //            file.Delete();
+                //            break;
+                //        }
+                //    }
 
-                    return Json(new { success = true, message = "Image deleted successfully." });
-                }
-                else
-                    return Json(new { success = false, message = "404: Images path does not exist." });
+                //    BaseWebService.Delete(image);
+
+                //    return Json(new { success = true, message = "Image deleted successfully." });
+                //}
+                //else
+                //    return Json(new { success = false, message = "404: Images path does not exist." });
             }
         }
 
