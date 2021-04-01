@@ -214,9 +214,6 @@ namespace APPartment.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Settings(HomeSettingPostViewModel settings)
         {
-            settings.Name = "none";
-            ModelState.Clear();
-
             using (var httpClient = new HttpClient())
             {
                 var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/settings";

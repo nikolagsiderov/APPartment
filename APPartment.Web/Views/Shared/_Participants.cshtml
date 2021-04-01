@@ -1,0 +1,17 @@
+﻿@model APPartment.UI.ViewModels.Base.PostViewModel
+
+<div class="row">
+    <div class="col-md-3" id="participants-data">
+        <div class="list-group">
+            @foreach (var participant in Model.Participants)
+            {
+                <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h5 class="mb-1">@participant.Username</h5>
+                    </div>
+                    <small class="text-muted">since @participant.CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")</small>
+                </a>
+            }
+        </div>
+    </div>
+</div>

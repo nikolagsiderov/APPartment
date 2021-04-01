@@ -59,6 +59,7 @@ namespace APPartment.API.Controllers
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
                 comment = new BaseWebService(currentUserID).Save(comment);
+                new BaseWebService(currentUserID).AddUserAsParticipantToObject(comment.TargetObjectID, currentUserID, comment.ObjectTypeID);
                 var result = new CommentsRenderer(currentUserID).BuildPostComment(comment);
 
                 return Ok(result);

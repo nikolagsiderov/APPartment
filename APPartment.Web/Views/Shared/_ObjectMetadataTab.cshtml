@@ -7,14 +7,21 @@
     <li class="nav-item">
         <a class="nav-link" id="images-tab" data-toggle="tab" href="#imagesTab" role="tab" aria-controls="imagesTab" aria-selected="false"><i class="far fa-images"></i> Images</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link" id="participants-tab" data-toggle="tab" href="#participantsTab" role="tab" aria-controls="participantsTab" aria-selected="false"><i class="fas fa-user-friends"></i> Participants</a>
+    </li>
 </ul>
 <div class="tab-content" id="myTabContent">
     <div class="tab-pane fade show active" id="commentsTab" role="tabpanel" aria-labelledby="comments-tab">
         <br />
-        @Html.Partial("_Comments", Model)
+        <partial name="_Comments", model="Model" />
     </div>
     <div class="tab-pane fade" id="imagesTab" role="tabpanel" aria-labelledby="images-tab">
         <br />
-        @Html.Partial("_Images", Model)
+        <partial name="_Images" , model="Model" />
+    </div>
+    <div class="tab-pane fade" id="participantsTab" role="tabpanel" aria-labelledby="participants-tab">
+        <br />
+        <partial name="_Participants" , model="Model" />
     </div>
 </div>

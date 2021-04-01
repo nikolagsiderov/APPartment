@@ -17,6 +17,7 @@
         Chore = 12,
         HomeUser = 13,
         Notification = 14,
-        NotificationParticipant = 15
+        NotificationParticipant = 15,
+        ObjectParticipant = 16
     }
 }

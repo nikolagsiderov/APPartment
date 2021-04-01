@@ -5,7 +5,6 @@ using APPartment.UI.Constants;
 using APPartment.UI.ViewModels.Clingons.Image;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -15,7 +14,6 @@ namespace APPartment.UI.ViewModels.Base
 {
     public abstract class PostViewModel : IBaseObject
     {
-        [Required]
         [APPUIHint(Templates.Input, Row = 1, Col = 6, Order = 1)]
         public virtual string Name { get; set; }
 
@@ -48,6 +46,8 @@ namespace APPartment.UI.ViewModels.Base
         public List<string> Comments { get; set; }
 
         public List<ImagePostViewModel> Images { get; set; }
+
+        public List<ObjectParticipantPostViewModel> Participants { get; set; }
 
         [JsonIgnore]
         [IgnoreDataMember]

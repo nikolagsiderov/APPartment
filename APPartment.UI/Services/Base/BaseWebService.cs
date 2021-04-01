@@ -1,5 +1,7 @@
 ﻿using APPartment.Data.Core;
 using APPartment.ORM.Framework.Declarations;
+using APPartment.ORM.Framework.Enums;
+using APPartment.UI.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -167,6 +169,8 @@ namespace APPartment.UI.Services.Base
 
                 var result = (T)toViewModelFunc.Invoke(this, new object[] { serverModel });
 
+                AddUserAsParticipantToObject(result.ObjectID, (long)result.ModifiedByID, result.ObjectTypeID);
+
                 return result;
             }
             else
@@ -195,6 +199,8 @@ namespace APPartment.UI.Services.Base
                 .MakeGenericMethod(typeof(T), serverModelType);
 
                 var result = (T)toViewModelFunc.Invoke(this, new object[] { serverModel });
+
+                AddUserAsParticipantToObject(result.ObjectID, (long)result.ModifiedByID, result.ObjectTypeID);
 
                 return result;
             }
@@ -357,6 +363,21 @@ namespace APPartment.UI.Services.Base
 
             return (int)countFilteredFunc
                 .Invoke(BaseFacade, new object[] { convertedFilter });
+        }
+
+        public void AddUserAsParticipantToObject(long targetObjectID, long userID, long objectTypeID)
+        {
+            if (userID != 0)
+            {
+                if (objectTypeID != (long)ObjectTypes.ObjectParticipant)
+                {
+                    if (!Any<ObjectParticipantPostViewModel>(x => x.TargetObjectID == targetObjectID && x.UserID == userID))
+                    {
+                        var participant = new ObjectParticipantPostViewModel() { TargetObjectID = targetObjectID, UserID = userID };
+                        Save(participant);
+                    }
+                }
+            }
         }
     }
 }

@@ -273,6 +273,7 @@ namespace APPartment.UI.Controllers.Base
         {
             model.Comments = await GetComments(model.ObjectID);
             model.Images = await GetImages(model.ObjectID);
+            model.Participants = await GetParticipants(model.ObjectID);
 
             return model;
         }
@@ -301,17 +302,14 @@ namespace APPartment.UI.Controllers.Base
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostComment(long targetID, string commentText)
+        public async Task<IActionResult> PostComment(long targetObjectID, string comment)
         {
             var result = string.Empty;
-            var comment = new CommentPostViewModel()
+            var theComment = new CommentPostViewModel()
             {
-                Name = "none",
-                Details = commentText,
-                TargetObjectID = targetID
+                Details = comment,
+                TargetObjectID = targetObjectID
             };
-
-            ModelState.Clear();
 
             using (var httpClient = new HttpClient())
             {
@@ -319,7 +317,7 @@ namespace APPartment.UI.Controllers.Base
                 httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                 httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 
-                using (var response = await httpClient.PostAsJsonAsync(requestUri, comment))
+                using (var response = await httpClient.PostAsJsonAsync(requestUri, theComment))
                 {
                     string content = await response.Content.ReadAsStringAsync();
 
@@ -434,6 +432,30 @@ namespace APPartment.UI.Controllers.Base
             return result;
         }
         #endregion Images
+
+        #region Participants
+        private async Task<List<ObjectParticipantPostViewModel>> GetParticipants(long targetObjectID)
+        {
+            var result = new List<ObjectParticipantPostViewModel>();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/participants/{targetObjectID}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        result = JsonConvert.DeserializeObject<List<ObjectParticipantPostViewModel>>(content);
+                }
+            }
+
+            return result;
+        }
+        #endregion
         #endregion Clingons
 
         protected virtual void PopulateViewData()
