@@ -83,7 +83,6 @@ namespace APPartment.UI.ViewModels.Base
                     .Where(x => x.Attribute.Row != 0)
                     .Where(x => x.Attribute.Col != 0)
                     .OrderBy(x => x.Attribute.Row)
-                    .ThenBy(x => x.Attribute.Col)
                     .ThenBy(x => x.Attribute.Order)
                     .Select(x => new PropertyUIInfo(x.Property)
                     {
