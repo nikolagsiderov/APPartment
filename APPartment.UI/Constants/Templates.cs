@@ -10,5 +10,6 @@
         public const string Integer = "Integer";
         public const string Date = "Date";
         public const string Dropdown = "Dropdown";
+        public const string Multiselect = "Multiselect";
     }
 }

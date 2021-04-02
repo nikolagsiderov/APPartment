@@ -1,0 +1,17 @@
+﻿@model List<SelectListItem>
+
+<div class="form-group">
+    <select multiple class="form-control" disabled="disabled" name="@ViewData.TemplateInfo.HtmlFieldPrefix">
+        @if (Model.Any(x => x.Selected))
+        {
+            foreach (var option in Model.Where(x => x.Selected))
+            {
+                <option selected="@option.Selected" value="@option.Value">@option.Text</option>
+            }
+        }
+        else
+        {
+            <option>None selected</option>
+        }
+    </select>
+</div>
