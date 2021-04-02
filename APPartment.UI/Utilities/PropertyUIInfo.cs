@@ -18,5 +18,7 @@ namespace APPartment.UI.Utilities
         public int Col { get; set; } = 0;
 
         public int Order { get; set; } = 99;
+
+        public string Section { get; set; }
     }
 }

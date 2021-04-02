@@ -1,7 +1,6 @@
 ﻿@model APPartment.UI.ViewModels.Base.PostViewModel
 
 @{
-    var header = string.Format("ID: {0}, Name: {1}", Model.ID, Model.Name);
     var canManage = false;
     var isReadonly = false;
 
@@ -18,30 +17,56 @@
 
 <div class="card">
     <div class="card-header">
-        @header
-    </div>
-    <div class="card-body">
         @if (canManage)
         {
-            <div>
                 <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary btn-sm" style="font-size:small;"><i class="fas fa-edit"></i>&nbsp; Edit</a>
-            </div>
-
-            <br />
+        }
+    </div>
+    <div class="card-body">
+        @{
+            var propertiesWithoutSection = Model.Properties.Where(x => x.Section == null);
         }
 
-        @foreach (var row in Model.Properties.Select(x => x.Row).Distinct())
+        @foreach (var row in propertiesWithoutSection.Select(x => x.Row).Distinct())
         {
             <div class="row">
-                @foreach (var property in Model.Properties.Where(x => x.Row == row))
+                @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
                 {
-                    <div class="col-md-@property.Col">
+                    <div class="col-md-@propUI.Col">
                         <div class="display-field">
-                            @Html.Display(property.Property.Name)
+                            @Html.Display(propUI.Property.Name)
                         </div>
                     </div>
                 }
             </div>
+        }
+
+        @if (Model.Sections.Any())
+        {
+            @foreach (var section in Model.Sections)
+            {
+                <div class="section">
+                    <h4 style="opacity: 0.8;">@Html.Raw(section)</h4>
+
+                    @{
+                        var propertiesOfCurrentSection = Model.Properties.Where(x => x.Section == section);
+                    }
+
+                    @foreach (var row in propertiesOfCurrentSection.Select(x => x.Row).Distinct())
+                    {
+                        <div class="row">
+                            @foreach (var propUI in propertiesOfCurrentSection.Where(x => x.Row == row))
+                            {
+                                <div class="col-md-@propUI.Col">
+                                    <div class="display-field">
+                                        @Html.Display(propUI.Property.Name)
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
         }
     </div>
 </div>

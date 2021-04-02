@@ -14,10 +14,14 @@ namespace APPartment.UI.ViewModels.Base
 {
     public abstract class PostViewModel : IBaseObject
     {
-        [APPUIHint(Templates.Input, Row = 1, Col = 6, Order = 1)]
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public virtual List<string> Sections { get; } = new List<string>() { "General Information" };
+
+        [APPUIHint(Templates.Input, Row = 1, Col = 6, Order = 1, Section = "General Information")]
         public virtual string Name { get; set; }
 
-        [APPUIHint(Templates.TextArea, Row = 2, Col = 10)]
+        [APPUIHint(Templates.TextArea, Row = 2, Col = 10, Section = "General Information")]
         public string Details { get; set; }
 
         #region Hidden properties
@@ -83,7 +87,8 @@ namespace APPartment.UI.ViewModels.Base
                     .Select(x => new PropertyUIInfo(x.Property)
                     {
                         Row = x.Attribute.Row,
-                        Col = x.Attribute.Col
+                        Col = x.Attribute.Col,
+                        Section = x.Attribute.Section
                     })
                     .ToList();
 

@@ -15,25 +15,56 @@
             <input type="submit" value="Save" class="btn btn-success btn-sm" style="font-size: small;" />
         </div>
         <div class="card-body">
-            @foreach (var row in Model.Properties.Select(x => x.Row).Distinct())
+            @{
+                var propertiesWithoutSection = Model.Properties.Where(x => x.Section == null);
+            }
+
+            @foreach (var row in propertiesWithoutSection.Select(x => x.Row).Distinct())
             {
                 <div class="row">
-                    @foreach (var property in Model.Properties.Where(x => x.Row == row))
+                    @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
                     {
-                        <div class="col-md-@property.Col">
-                            <div class="display-field">
-                                @Html.Editor(ViewData.ModelMetadata.Properties.Where(x => x.PropertyName == property.Property.Name).FirstOrDefault().PropertyName)
+                        <div class="col-md-@propUI.Col">
+                            <div class="editor-field">
+                                @Html.Editor(ViewData.ModelMetadata.Properties.Where(x => x.PropertyName == propUI.Property.Name).FirstOrDefault().PropertyName)
                             </div>
                         </div>
                     }
                 </div>
             }
 
+            @if (Model.Sections.Any())
+            {
+                @foreach (var section in Model.Sections)
+                {
+                    <div class="section">
+                        <h4 style="opacity: 0.8;">@Html.Raw(section)</h4>
+
+                        @{
+                            var propertiesOfCurrentSection = Model.Properties.Where(x => x.Section == section);
+                        }
+
+                        @foreach (var row in propertiesOfCurrentSection.Select(x => x.Row).Distinct())
+                        {
+                            <div class="row">
+                                @foreach (var propUI in propertiesOfCurrentSection.Where(x => x.Row == row))
+                                {
+                                    <div class="col-md-@propUI.Col">
+                                        <div class="editor-field">
+                                            @Html.Editor(ViewData.ModelMetadata.Properties.Where(x => x.PropertyName == propUI.Property.Name).FirstOrDefault().PropertyName)
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+            }
+
             @foreach (var hiddenProperty in Model.HiddenProperties)
             {
                 @Html.Hidden(ViewData.ModelMetadata.Properties.Where(x => x.PropertyName == hiddenProperty.Name).FirstOrDefault().PropertyName)
             }
-
         </div>
     </form>
 </div>
