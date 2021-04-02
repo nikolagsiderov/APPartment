@@ -8,10 +8,13 @@ using APPartment.UI.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Chore;
 using APPAreas = APPartment.UI.Constants.Areas;
 using System.Threading.Tasks;
-using APPartment.UI.Services.Base;
 using APPartment.UI.ViewModels.User;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Net.Http;
+using APPartment.Common;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace APPartment.Web.Areas.Chores.Controllers
 {
@@ -32,9 +35,23 @@ namespace APPartment.Web.Areas.Chores.Controllers
             return await base.Index();
         }
 
-        protected override void PopulateViewData(ChorePostViewModel model)
+        protected override async Task PopulateViewData(ChorePostViewModel model)
         {
-            var users = new BaseWebService(0).GetCollection<UserPostViewModel>();
+            var users = new List<UserPostViewModel>();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/users/home/{CurrentHomeID}";
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        users = JsonConvert.DeserializeObject<List<UserPostViewModel>>(content);
+                }
+            }
+
             var selectList = users.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
             selectList.Insert(0, new SelectListItem() { Text = "Please select a user...", Value = null });
 

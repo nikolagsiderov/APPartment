@@ -28,7 +28,7 @@ namespace APPartment.Web.Areas.Chores.Controllers
             return await base.Index();
         }
 
-        protected override void PopulateViewData(ChorePostViewModel model)
+        protected override async Task PopulateViewData(ChorePostViewModel model)
         {
         }
     }

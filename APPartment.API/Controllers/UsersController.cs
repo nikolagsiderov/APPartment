@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using APPartment.UI.Services.Base;
+using APPartment.UI.ViewModels.Home;
 using APPartment.UI.ViewModels.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,13 +31,20 @@ namespace APPartment.API.Controllers
             }
         }
 
-        // api/users
+        // api/users/home/3
         [HttpGet]
-        public ActionResult<List<UserPostViewModel>> Get()
+        [Route("home/{homeID}")]
+        public ActionResult<List<UserPostViewModel>> GetCurrentHomeUsers(long homeID)
         {
             try
             {
-                var result = new BaseWebService(0).GetCollection<UserPostViewModel>();
+                var homeUsers = new BaseWebService(0).GetCollection<HomeUserPostViewModel>(x => x.HomeID == homeID);
+                var result = new List<UserPostViewModel>();
+
+                foreach (var homeUser in homeUsers)
+                {
+                    result.Add(new BaseWebService(0).GetEntity<UserPostViewModel>(homeUser.UserID));
+                }
 
                 if (result.Any())
                     return Ok(result);

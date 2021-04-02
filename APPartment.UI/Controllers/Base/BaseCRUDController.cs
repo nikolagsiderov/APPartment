@@ -98,7 +98,7 @@ namespace APPartment.UI.Controllers.Base
                 model = await GetClingons(model);
 
                 ViewData["CanManage"] = CanManage;
-                PopulateViewData(model);
+                await PopulateViewData(model);
 
                 return View("_Details", model);
             }
@@ -109,11 +109,11 @@ namespace APPartment.UI.Controllers.Base
 
         [Breadcrumb("<i class='fas fa-plus'></i> Create")]
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             var newModel = new U();
 
-            PopulateViewData(newModel);
+            await PopulateViewData(newModel);
             return View("_Edit", newModel);
         }
 
@@ -172,7 +172,7 @@ namespace APPartment.UI.Controllers.Base
             {
                 model = await GetClingons(model);
 
-                PopulateViewData(model);
+                await PopulateViewData(model);
                 return View("_Edit", model);
             }
             else
@@ -464,7 +464,7 @@ namespace APPartment.UI.Controllers.Base
         #endregion
         #endregion Clingons
 
-        protected virtual void PopulateViewData(U model)
+        protected virtual async Task PopulateViewData(U model)
         { }
     }
 }

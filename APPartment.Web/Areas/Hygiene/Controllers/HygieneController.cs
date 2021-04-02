@@ -28,7 +28,7 @@ namespace APPartment.Web.Areas.Hygiene.Controllers
             return await base.Index();
         }
 
-        protected override void PopulateViewData(HygienePostViewModel model)
+        protected override async Task PopulateViewData(HygienePostViewModel model)
         {
         }
     }

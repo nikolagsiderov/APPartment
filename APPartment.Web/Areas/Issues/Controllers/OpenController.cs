@@ -28,7 +28,7 @@ namespace APPartment.Web.Areas.Issues.Controllers
             return await base.Index();
         }
 
-        protected override void PopulateViewData(IssuePostViewModel model)
+        protected override async Task PopulateViewData(IssuePostViewModel model)
         {
         }
     }
