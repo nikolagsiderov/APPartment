@@ -8,6 +8,10 @@ using APPartment.UI.Constants.Breadcrumbs;
 using APPartment.UI.ViewModels.Chore;
 using APPAreas = APPartment.UI.Constants.Areas;
 using System.Threading.Tasks;
+using APPartment.UI.Services.Base;
+using APPartment.UI.ViewModels.User;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace APPartment.Web.Areas.Chores.Controllers
 {
@@ -28,8 +32,24 @@ namespace APPartment.Web.Areas.Chores.Controllers
             return await base.Index();
         }
 
-        protected override void PopulateViewData()
+        protected override void PopulateViewData(ChorePostViewModel model)
         {
+            var users = new BaseWebService(0).GetCollection<UserPostViewModel>();
+            var selectList = users.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
+            selectList.Insert(0, new SelectListItem() { Text = "Please select a user...", Value = null });
+
+            if (model.ID > 0)
+            {
+                foreach (var item in selectList)
+                {
+                    if (item.Value == model.AssignedToUserID.ToString())
+                    {
+                        item.Selected = true;
+                    }
+                }
+            }
+
+            ViewData["AssignedToUserID"] = selectList;
         }
     }
 }

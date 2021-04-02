@@ -11,6 +11,8 @@ namespace APPartment.UI.Utilities
 
         public PropertyInfo Property { get; set; }
 
+        public string Template { get; set; }
+
         public string DisplayName { get; set; }
 
         public int Row { get; set; } = 0;
@@ -20,5 +22,7 @@ namespace APPartment.UI.Utilities
         public int Order { get; set; } = 99;
 
         public string Section { get; set; }
+
+        public string SelectList { get; set; }
     }
 }

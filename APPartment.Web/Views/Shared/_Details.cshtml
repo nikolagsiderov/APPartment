@@ -19,7 +19,7 @@
     <div class="card-header">
         @if (canManage)
         {
-                <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary btn-sm" style="font-size:small;"><i class="fas fa-edit"></i>&nbsp; Edit</a>
+            <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary btn-sm" style="font-size:small;"><i class="fas fa-edit"></i>&nbsp; Edit</a>
         }
     </div>
     <div class="card-body">
@@ -32,11 +32,23 @@
             <div class="row">
                 @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
                 {
-                    <div class="col-md-@propUI.Col">
-                        <div class="display-field">
-                            @Html.Display(propUI.Property.Name)
+                    if (string.IsNullOrEmpty(propUI.SelectList))
+                    {
+                        <div class="col-md-@propUI.Col">
+                            <div class="display-field">
+                                @Html.Display(propUI.Property.Name)
+                            </div>
                         </div>
-                    </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-@propUI.Col">
+                            <div class="display-field">
+                                @Html.LabelFor(m => m, propUI.DisplayName)
+                                @Html.Display(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
+                            </div>
+                        </div>
+                    }
                 }
             </div>
         }
@@ -57,11 +69,23 @@
                         <div class="row">
                             @foreach (var propUI in propertiesOfCurrentSection.Where(x => x.Row == row))
                             {
-                                <div class="col-md-@propUI.Col">
-                                    <div class="display-field">
-                                        @Html.Display(propUI.Property.Name)
+                                if (string.IsNullOrEmpty(propUI.SelectList))
+                                {
+                                    <div class="col-md-@propUI.Col">
+                                        <div class="display-field">
+                                            @Html.Display(propUI.Property.Name)
+                                        </div>
                                     </div>
-                                </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-@propUI.Col">
+                                        <div class="display-field">
+                                            @Html.LabelFor(m => m, propUI.DisplayName)
+                                            @Html.Display(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
+                                        </div>
+                                    </div>
+                                }
                             }
                         </div>
                     }

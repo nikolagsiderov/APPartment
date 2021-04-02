@@ -28,7 +28,7 @@ namespace APPartment.Web.Areas.Inventory.Controllers
             return await base.Index();
         }
 
-        protected override void PopulateViewData()
+        protected override void PopulateViewData(InventoryPostViewModel model)
         {
         }
     }

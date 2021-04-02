@@ -17,18 +17,31 @@
         <div class="card-body">
             @{
                 var propertiesWithoutSection = Model.Properties.Where(x => x.Section == null);
+                var rowsWithoutSections = propertiesWithoutSection.Select(x => x.Row).Distinct();
             }
 
-            @foreach (var row in propertiesWithoutSection.Select(x => x.Row).Distinct())
+            @foreach (var row in rowsWithoutSections)
             {
                 <div class="row">
                     @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
                     {
-                        <div class="col-md-@propUI.Col">
-                            <div class="editor-field">
-                                @Html.Editor(ViewData.ModelMetadata.Properties.Where(x => x.PropertyName == propUI.Property.Name).FirstOrDefault().PropertyName)
+                        if (string.IsNullOrEmpty(propUI.SelectList))
+                        {
+                            <div class="col-md-@propUI.Col">
+                                <div class="editor-field">
+                                    @Html.Editor(propUI.Property.Name)
+                                </div>
                             </div>
-                        </div>
+                        }
+                        else
+                        {
+                            <div class="col-md-@propUI.Col">
+                                <div class="editor-field">
+                                    @Html.LabelFor(m => m, propUI.DisplayName)
+                                    @Html.Editor(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
+                                </div>
+                            </div>
+                        }
                     }
                 </div>
             }
@@ -42,18 +55,31 @@
 
                         @{
                             var propertiesOfCurrentSection = Model.Properties.Where(x => x.Section == section);
+                            var rows = propertiesOfCurrentSection.Select(x => x.Row).Distinct();
                         }
 
-                        @foreach (var row in propertiesOfCurrentSection.Select(x => x.Row).Distinct())
+                        @foreach (var row in rows)
                         {
                             <div class="row">
                                 @foreach (var propUI in propertiesOfCurrentSection.Where(x => x.Row == row))
                                 {
-                                    <div class="col-md-@propUI.Col">
-                                        <div class="editor-field">
-                                            @Html.Editor(ViewData.ModelMetadata.Properties.Where(x => x.PropertyName == propUI.Property.Name).FirstOrDefault().PropertyName)
+                                    if (string.IsNullOrEmpty(propUI.SelectList))
+                                    {
+                                        <div class="col-md-@propUI.Col">
+                                            <div class="editor-field">
+                                                @Html.Editor(propUI.Property.Name)
+                                            </div>
                                         </div>
-                                    </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="col-md-@propUI.Col">
+                                            <div class="editor-field">
+                                                @Html.LabelFor(m => m, propUI.DisplayName)
+                                                @Html.Editor(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
+                                            </div>
+                                        </div>
+                                    }
                                 }
                             </div>
                         }
@@ -63,7 +89,7 @@
 
             @foreach (var hiddenProperty in Model.HiddenProperties)
             {
-                @Html.Hidden(ViewData.ModelMetadata.Properties.Where(x => x.PropertyName == hiddenProperty.Name).FirstOrDefault().PropertyName)
+                @Html.Hidden(hiddenProperty.Name)
             }
         </div>
     </form>

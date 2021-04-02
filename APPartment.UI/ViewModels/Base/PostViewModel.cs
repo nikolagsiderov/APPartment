@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace APPartment.UI.ViewModels.Base
 {
@@ -86,9 +87,12 @@ namespace APPartment.UI.ViewModels.Base
                     .ThenBy(x => x.Attribute.Order)
                     .Select(x => new PropertyUIInfo(x.Property)
                     {
+                        Template = x.Attribute.Template,
                         Row = x.Attribute.Row,
                         Col = x.Attribute.Col,
-                        Section = x.Attribute.Section
+                        DisplayName = x.Property.GetCustomAttributes(typeof(DisplayAttribute), true).Any() ? x.Property.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>().Single().Name : x.Property.Name,
+                        Section = x.Attribute.Section,
+                        SelectList = x.Attribute.SelectList
                     })
                     .ToList();
 

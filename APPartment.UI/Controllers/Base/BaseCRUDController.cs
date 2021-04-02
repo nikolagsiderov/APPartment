@@ -96,7 +96,9 @@ namespace APPartment.UI.Controllers.Base
             if (model.ID > 0)
             {
                 model = await GetClingons(model);
+
                 ViewData["CanManage"] = CanManage;
+                PopulateViewData(model);
 
                 return View("_Details", model);
             }
@@ -110,6 +112,8 @@ namespace APPartment.UI.Controllers.Base
         public IActionResult Create()
         {
             var newModel = new U();
+
+            PopulateViewData(newModel);
             return View("_Edit", newModel);
         }
 
@@ -167,6 +171,8 @@ namespace APPartment.UI.Controllers.Base
             if (model.ID > 0)
             {
                 model = await GetClingons(model);
+
+                PopulateViewData(model);
                 return View("_Edit", model);
             }
             else
@@ -458,7 +464,7 @@ namespace APPartment.UI.Controllers.Base
         #endregion
         #endregion Clingons
 
-        protected virtual void PopulateViewData()
+        protected virtual void PopulateViewData(U model)
         { }
     }
 }

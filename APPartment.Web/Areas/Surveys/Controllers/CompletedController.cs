@@ -28,7 +28,7 @@ namespace APPartment.Web.Areas.Surveys.Controllers
             return await base.Index();
         }
 
-        protected override void PopulateViewData()
+        protected override void PopulateViewData(SurveyPostViewModel model)
         {
         }
     }

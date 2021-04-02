@@ -9,7 +9,7 @@ namespace APPartment.UI.ViewModels.Chore
     [IMapFrom(typeof(APPChore))]
     public class ChorePostViewModel : PostViewModelWithHome
     {
-        [APPUIHint(Templates.Hidden)]
+        [APPUIHint(Templates.Dropdown, Row = 1, Col = 6, Order = 2, Section = "General Information", SelectList = "AssignedToUserID")]
         [Display(Name = "Assigned to")]
         public long? AssignedToUserID { get; set; }
 
