@@ -9,8 +9,8 @@ namespace APPartment.UI.ViewModels.Survey
     [IMapFrom(typeof(APPSurvey))]
     public class SurveyPostViewModel : PostViewModelWithHome
     {
+        [APPUIHint(Templates.Boolean, Row = 1, Col = 6, Order = 2, Section = "General Information")]
         [Display(Name = "Completed")]
-        [APPUIHint(Templates.Boolean)]
         public bool IsCompleted { get; set; } = false;
     }
 }

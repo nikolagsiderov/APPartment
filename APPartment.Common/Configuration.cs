@@ -12,7 +12,7 @@
         {
             get
             {
-                return KoletoConnectionString;
+                return JorkataConnectionString;
             }
         }
 
@@ -20,7 +20,7 @@
         {
             get
             {
-                return KoletoAPI;
+                return JorkataAPI;
             }
         }
     }

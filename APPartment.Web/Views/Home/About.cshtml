@@ -2,86 +2,98 @@
     Layout = null;
 }
 
-<style>
-    ul.timeline {
-        list-style-type: none;
-        position: relative;
-        padding-left: 1.5rem;
-    }
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>APPartment: About</title>
 
-        /* Timeline vertical line */
-        ul.timeline:before {
-            content: ' ';
-            background: #fff;
-            display: inline-block;
-            position: absolute;
-            left: 16px;
-            width: 4px;
-            height: 100%;
-            z-index: 400;
-            border-radius: 1rem;
+    <link rel="icon" href="~/images/test.png">
+    <link href="~/css/styles.css" rel="stylesheet" />
+
+    <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="~/js/feather.min.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <style>
+        ul.timeline {
+            list-style-type: none;
+            position: relative;
+            padding-left: 1.5rem;
         }
 
-    li.timeline-item {
-        margin: 20px 0;
-    }
+            /* Timeline vertical line */
+            ul.timeline:before {
+                content: ' ';
+                background: #fff;
+                display: inline-block;
+                position: absolute;
+                left: 16px;
+                width: 4px;
+                height: 100%;
+                z-index: 400;
+                border-radius: 1rem;
+            }
 
-    /* Timeline item arrow */
-    .timeline-arrow {
-        border-top: 0.5rem solid transparent;
-        border-right: 0.5rem solid #fff;
-        border-bottom: 0.5rem solid transparent;
-        display: block;
-        position: absolute;
-        left: 2rem;
-    }
+        li.timeline-item {
+            margin: 20px 0;
+        }
 
-    /* Timeline item circle marker */
-    li.timeline-item::before {
-        content: ' ';
-        background: #ddd;
-        display: inline-block;
-        position: absolute;
-        border-radius: 50%;
-        border: 3px solid #fff;
-        left: 11px;
-        width: 14px;
-        height: 14px;
-        z-index: 400;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-    }
-</style>
+        /* Timeline item arrow */
+        .timeline-arrow {
+            border-top: 0.5rem solid transparent;
+            border-right: 0.5rem solid #fff;
+            border-bottom: 0.5rem solid transparent;
+            display: block;
+            position: absolute;
+            left: 2rem;
+        }
 
-<div class="row">
-    <div class="col-md-6">
-        <ul class="timeline">
-            <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
-                <div class="timeline-arrow"></div>
-                <h2 class="h5 mb-0">APPartment v2.0-beta</h2><span class="small text-gray" style="font-size: small;"><i class="fa fa-clock-o mr-1"></i>25 March, 2021</span>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Usage of base properties <code>CreatedByID</code> and <code>ModifiedByID</code></p>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> ORM framework enhancements</p>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Introduction of web service layer (<code>BaseWebService.cs</code>) with view models using AutoMapper and display and editor templates. Implementation of custom UIHint, called <code>APPUIHint.cs</code> and mapping service - <code>MapperService.cs</code></p>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> <code>APPartment.csproj</code> is now renamed to <code>APPartment.Web.csproj</code>. <code>APPartment.sln</code> is moved</p>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> <code>_Grid.cshtml</code>, <code>_Details.cshtml</code> and <code>_Edit.cshtml</code> pages now 'know' about all view models properties and their attributes</p>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Areas are implemented and used with new controllers for different filtering cases across all modules</p>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> <code>APPartment.Web.Services.csproj</code> has been dropped</p>
-            </li>
-            <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
-                <div class="timeline-arrow"></div>
-                <h2 class="h5 mb-0">APPartment v1.0-beta</h2><span class="small text-gray" style="font-size: small;"><i class="fa fa-clock-o mr-1"></i>13 March, 2021</span>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Introduction of custom object relational mapping framework</p>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Separations of layers</p>
-            </li>
-            <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
-                <div class="timeline-arrow"></div>
-                <h2 class="h5 mb-0">APPartment v1.0-alpha</h2><span class="small text-gray" style="font-size: small;"><i class="fa fa-clock-o mr-1"></i>04 March, 2021</span>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Double authentication process - authentication for user, then authentication for home</p>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Home presence status, with ability to modify and set custom messages, informing other housemates</p>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Chat</p>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Storage and traceability of inventory, hygiene tasks, chores and issues</p>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Metadata for all objects. Commenting image storing functionalities and history tracing</p>
-                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Home settings</p>
-            </li>
-        </ul>
+        /* Timeline item circle marker */
+        li.timeline-item::before {
+            content: ' ';
+            background: #ddd;
+            display: inline-block;
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid #fff;
+            left: 11px;
+            width: 14px;
+            height: 14px;
+            z-index: 400;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
+    <div class="row">
+        <div class="col-md-6">
+            <ul class="timeline">
+                <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
+                    <div class="timeline-arrow"></div>
+                    <h2 class="h5 mb-0">APPartment v2.0-beta</h2><span class="small text-gray" style="font-size: small;"><i class="fa fa-clock-o mr-1"></i>25 March, 2021</span>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Usage of base properties <code>CreatedByID</code> and <code>ModifiedByID</code></p>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> ORM framework enhancements</p>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Introduction of web service layer (<code>BaseWebService.cs</code>) with view models using AutoMapper and display and editor templates. Implementation of custom UIHint, called <code>APPUIHint.cs</code> and mapping service - <code>MapperService.cs</code></p>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> <code>APPartment.csproj</code> is now renamed to <code>APPartment.Web.csproj</code>. <code>APPartment.sln</code> is moved</p>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> <code>_Grid.cshtml</code>, <code>_Details.cshtml</code> and <code>_Edit.cshtml</code> pages now 'know' about all view models properties and their attributes</p>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Areas are implemented and used with new controllers for different filtering cases across all modules</p>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> <code>APPartment.Web.Services.csproj</code> has been dropped</p>
+                </li>
+                <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
+                    <div class="timeline-arrow"></div>
+                    <h2 class="h5 mb-0">APPartment v1.0-beta</h2><span class="small text-gray" style="font-size: small;"><i class="fa fa-clock-o mr-1"></i>13 March, 2021</span>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Introduction of custom object relational mapping framework</p>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Separations of layers</p>
+                </li>
+                <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
+                    <div class="timeline-arrow"></div>
+                    <h2 class="h5 mb-0">APPartment v1.0-alpha</h2><span class="small text-gray" style="font-size: small;"><i class="fa fa-clock-o mr-1"></i>04 March, 2021</span>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Double authentication process - authentication for user, then authentication for home</p>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Home presence status, with ability to modify and set custom messages, informing other housemates</p>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Chat</p>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Storage and traceability of inventory, hygiene tasks, chores and issues</p>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Metadata for all objects. Commenting image storing functionalities and history tracing</p>
+                    <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Home settings</p>
+                </li>
+            </ul>
+        </div>
     </div>
-</div>
+</body>

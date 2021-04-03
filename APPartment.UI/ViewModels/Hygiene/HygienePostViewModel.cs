@@ -9,7 +9,7 @@ namespace APPartment.UI.ViewModels.Hygiene
     [IMapFrom(typeof(APPHygiene))]
     public class HygienePostViewModel : PostViewModelWithHome
     {
-        [APPUIHint(Templates.Boolean)]
+        [APPUIHint(Templates.Boolean, Row = 1, Col = 6, Order = 2, Section = "General Information")]
         [Display(Name = "Done")]
         public bool IsDone { get; set; }
     }
