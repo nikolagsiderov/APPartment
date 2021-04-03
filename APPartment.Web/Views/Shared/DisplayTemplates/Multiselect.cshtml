@@ -1,7 +1,7 @@
 ﻿@model List<SelectListItem>
 
 <div class="form-group">
-    <select multiple class="form-control" disabled="disabled" name="@ViewData.TemplateInfo.HtmlFieldPrefix">
+    <select multiple class="form-control form-control-solid" disabled="disabled" name="@ViewData.TemplateInfo.HtmlFieldPrefix">
         @if (Model.Any(x => x.Selected))
         {
             foreach (var option in Model.Where(x => x.Selected))

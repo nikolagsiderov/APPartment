@@ -1,7 +1,7 @@
 ﻿@model List<SelectListItem>
 
 <div class="form-group">
-    <select class="form-control" disabled="disabled" name="@ViewData.TemplateInfo.HtmlFieldPrefix">
+    <select class="form-control form-control-solid" disabled="disabled" name="@ViewData.TemplateInfo.HtmlFieldPrefix">
         @if (Model.Any(x => x.Selected))
         {
             <option selected="@Model.Where(x => x.Selected).FirstOrDefault().Selected" value="@Model.Where(x => x.Selected).FirstOrDefault().Value">@Model.Where(x => x.Selected).FirstOrDefault().Text</option>
