@@ -2,68 +2,30 @@
     Layout = null;
 }
 
+<!DOCTYPE html>
+<html>
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>APPartment: About</title>
 
     <link rel="icon" href="~/images/test.png">
     <link href="~/css/styles.css" rel="stylesheet" />
+    <link href="~/css/about.css" rel="stylesheet" />
 
     <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
     <script src="~/js/feather.min.js" crossorigin="anonymous"></script>
 </head>
-<body>
-    <style>
-        ul.timeline {
-            list-style-type: none;
-            position: relative;
-            padding-left: 1.5rem;
-        }
-
-            /* Timeline vertical line */
-            ul.timeline:before {
-                content: ' ';
-                background: #fff;
-                display: inline-block;
-                position: absolute;
-                left: 16px;
-                width: 4px;
-                height: 100%;
-                z-index: 400;
-                border-radius: 1rem;
-            }
-
-        li.timeline-item {
-            margin: 20px 0;
-        }
-
-        /* Timeline item arrow */
-        .timeline-arrow {
-            border-top: 0.5rem solid transparent;
-            border-right: 0.5rem solid #fff;
-            border-bottom: 0.5rem solid transparent;
-            display: block;
-            position: absolute;
-            left: 2rem;
-        }
-
-        /* Timeline item circle marker */
-        li.timeline-item::before {
-            content: ' ';
-            background: #ddd;
-            display: inline-block;
-            position: absolute;
-            border-radius: 50%;
-            border: 3px solid #fff;
-            left: 11px;
-            width: 14px;
-            height: 14px;
-            z-index: 400;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-        }
-    </style>
-
+<body class="bg-success-soft" style="padding: 40px;">
     <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <p>APPartment is a collection of projects (<strong>ASP.NET Core MVC</strong> with <strong>Web API</strong>) that work together with an original purpose to serve as a platform where housemates keep track of everything in their apartment/house. Later on, the purpose changed to an entirely educational one. Throughout the project's development, lots of modifications have been made, for example, at the beginning <strong>Entity Framework Core with code first</strong> approach was used, then I migrated it to <strong>database first</strong>, later <strong>EF Core</strong> was entirely removed and I developed my <strong>own custom object-relational mapping framework with a facade design pattern</strong>.</p>
+                    <br />
+                    <p><i class="fas fa-code"></i> Contributors: <strong><a href="https://github.com/nikolagsiderov" style="text-decoration: none;">nikolagsiderov</a></strong> and <strong><a href="https://github.com/fr0wBtW" style="text-decoration: none;">fr0wBtW</a></strong></p>
+                </div>
+            </div>
+        </div>
         <div class="col-md-6">
             <ul class="timeline">
                 <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
@@ -96,4 +58,11 @@
             </ul>
         </div>
     </div>
+
+    <partial name="_Footer" />
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/scripts.js"></script>
 </body>
+</html>
