@@ -15,93 +15,111 @@
     }
 }
 
-<div class="card">
-    <div class="card-header">
-        @if (canManage)
-        {
-            <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary btn-sm" style="font-size:small;"><i class="fas fa-edit"></i>&nbsp; Edit</a>
-        }
-    </div>
-    <div class="card-body">
-        @{
-            var propertiesWithoutSection = Model.Properties.Where(x => x.Section == null);
-        }
-
-        @foreach (var row in propertiesWithoutSection.Select(x => x.Row).Distinct())
-        {
-            <div class="row">
-                @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
+<div class="row">
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header">
+                @if (canManage)
                 {
-                    if (string.IsNullOrEmpty(propUI.SelectList))
-                    {
-                        <div class="col-md-@propUI.Col">
-                            <div class="display-field">
-                                @Html.Display(propUI.Property.Name)
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="col-md-@propUI.Col">
-                            <div class="display-field">
-                                @Html.LabelFor(m => m, propUI.DisplayName)
-                                @Html.Display(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
-                            </div>
-                        </div>
-                    }
+                    <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary btn-sm" style="font-size:small;"><i class="fas fa-edit"></i>&nbsp; Edit</a>
                 }
             </div>
-        }
+            <div class="card-body">
+                @{
+                    var propertiesWithoutSection = Model.Properties.Where(x => x.Section == null);
+                }
 
-        @if (Model.Sections.Any())
-        {
-            @foreach (var section in Model.Sections)
-            {
-                <div class="section">
-                    <h4 style="opacity: 0.8;">@Html.Raw(section)</h4>
-
-                    @{
-                        var propertiesOfCurrentSection = Model.Properties.Where(x => x.Section == section);
-                    }
-
-                    @foreach (var row in propertiesOfCurrentSection.Select(x => x.Row).Distinct())
-                    {
-                        <div class="row">
-                            @foreach (var propUI in propertiesOfCurrentSection.Where(x => x.Row == row))
+                @foreach (var row in propertiesWithoutSection.Select(x => x.Row).Distinct())
+                {
+                    <div class="row">
+                        @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
+                        {
+                            if (string.IsNullOrEmpty(propUI.SelectList))
                             {
-                                if (string.IsNullOrEmpty(propUI.SelectList))
-                                {
-                                    <div class="col-md-@propUI.Col">
-                                        <div class="display-field">
-                                            @Html.Display(propUI.Property.Name)
-                                        </div>
+                                <div class="col-md-@propUI.Col">
+                                    <div class="display-field">
+                                        @Html.Display(propUI.Property.Name)
                                     </div>
-                                }
-                                else
-                                {
-                                    <div class="col-md-@propUI.Col">
-                                        <div class="display-field">
-                                            @Html.LabelFor(m => m, propUI.DisplayName)
-                                            @Html.Display(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
-                                        </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-@propUI.Col">
+                                    <div class="display-field">
+                                        @Html.LabelFor(m => m, propUI.DisplayName)
+                                        @Html.Display(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
                                     </div>
-                                }
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+
+                @if (Model.Sections.Any())
+                {
+                    @foreach (var section in Model.Sections)
+                    {
+                        <div class="section">
+                            <h4 style="opacity: 0.8;">@Html.Raw(section)</h4>
+
+                            @{
+                                var propertiesOfCurrentSection = Model.Properties.Where(x => x.Section == section);
+                            }
+
+                            @foreach (var row in propertiesOfCurrentSection.Select(x => x.Row).Distinct())
+                            {
+                                <div class="row">
+                                    @foreach (var propUI in propertiesOfCurrentSection.Where(x => x.Row == row))
+                                    {
+                                        if (string.IsNullOrEmpty(propUI.SelectList))
+                                        {
+                                            <div class="col-md-@propUI.Col">
+                                                <div class="display-field">
+                                                    @Html.Display(propUI.Property.Name)
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-@propUI.Col">
+                                                <div class="display-field">
+                                                    @Html.LabelFor(m => m, propUI.DisplayName)
+                                                    @Html.Display(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
                             }
                         </div>
                     }
-                </div>
-            }
-        }
-    </div>
-</div>
+                }
 
-<br />
+                <br />
 
-@if (!isReadonly)
-{
-    <div class="card">
-        <div class="card-body">
-            @await Html.PartialAsync("_ObjectMetadataTab", Model)
+                @if (!isReadonly)
+                {
+                    @await Html.PartialAsync("_ObjectMetadataTab", Model)
+                }
+            </div>
         </div>
     </div>
-}
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                Console [ID: @Model.ID, Name: @Model.Name]
+            </div>
+            <div class="card-body">
+                <div style="font-family: monospace;">
+                    Created by ID: @Model.CreatedByID
+                    <br />
+                    Created date: @Model.CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")
+                    <br />
+                    Modified by ID: @Model.ModifiedByID
+                    <br />
+                    Modified date: @Model.ModifiedDate.Value.ToString("dd'/'MM'/'yyyy HH:mm:ss")
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

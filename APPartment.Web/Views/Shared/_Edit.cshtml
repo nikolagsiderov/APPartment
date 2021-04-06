@@ -2,109 +2,144 @@
 
 @{
     var action = "Create";
+    var consoleHeader = "Console [Create]";
 
     if (Model.ID > 0)
     {
         action = "Edit";
+        consoleHeader = $"Console [ID: {Model.ID}, Name: {Model.Name}]";
     }
 }
 
-<div class="card">
-    <form asp-action="@action" enctype="multipart/form-data">
-        <div class="card-header">
-            <input type="submit" value="Save" class="btn btn-success btn-sm" style="font-size: small;" />
-        </div>
-        <div class="card-body">
-            @{
-                var propertiesWithoutSection = Model.Properties.Where(x => x.Section == null);
-                var rowsWithoutSections = propertiesWithoutSection.Select(x => x.Row).Distinct();
-            }
-
-            @foreach (var row in rowsWithoutSections)
-            {
-                <div class="row">
-                    @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
-                    {
-                        if (string.IsNullOrEmpty(propUI.SelectList))
-                        {
-                            <div class="col-md-@propUI.Col">
-                                <div class="editor-field">
-                                    @Html.Editor(propUI.Property.Name)
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="col-md-@propUI.Col">
-                                <div class="editor-field">
-                                    @Html.LabelFor(m => m, propUI.DisplayName)
-                                    @Html.Editor(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
-                                </div>
-                            </div>
-                        }
-                    }
+<div class="row">
+    <div class="col-md-9">
+        <div class="card">
+            <form asp-action="@action" enctype="multipart/form-data">
+                <div class="card-header">
+                    <input type="submit" value="Save" class="btn btn-success btn-sm" style="font-size: small;" />
                 </div>
-            }
+                <div class="card-body">
+                    @{
+                        var propertiesWithoutSection = Model.Properties.Where(x => x.Section == null);
+                        var rowsWithoutSections = propertiesWithoutSection.Select(x => x.Row).Distinct();
+                    }
 
-            @if (Model.Sections.Any())
-            {
-                @foreach (var section in Model.Sections)
-                {
-                    <div class="section">
-                        <h4 style="opacity: 0.8;">@Html.Raw(section)</h4>
-
-                        @{
-                            var propertiesOfCurrentSection = Model.Properties.Where(x => x.Section == section);
-                            var rows = propertiesOfCurrentSection.Select(x => x.Row).Distinct();
-                        }
-
-                        @foreach (var row in rows)
-                        {
-                            <div class="row">
-                                @foreach (var propUI in propertiesOfCurrentSection.Where(x => x.Row == row))
+                    @foreach (var row in rowsWithoutSections)
+                    {
+                        <div class="row">
+                            @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
+                            {
+                                if (string.IsNullOrEmpty(propUI.SelectList))
                                 {
-                                    if (string.IsNullOrEmpty(propUI.SelectList))
-                                    {
-                                        <div class="col-md-@propUI.Col">
-                                            <div class="editor-field">
-                                                @Html.Editor(propUI.Property.Name)
-                                            </div>
+                                    <div class="col-md-@propUI.Col">
+                                        <div class="editor-field">
+                                            @Html.Editor(propUI.Property.Name)
                                         </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="col-md-@propUI.Col">
-                                            <div class="editor-field">
-                                                @Html.LabelFor(m => m, propUI.DisplayName)
-                                                @Html.Editor(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
-                                            </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-@propUI.Col">
+                                        <div class="editor-field">
+                                            @Html.LabelFor(m => m, propUI.DisplayName)
+                                            @Html.Editor(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
                                         </div>
-                                    }
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+
+                    @if (Model.Sections.Any())
+                    {
+                        @foreach (var section in Model.Sections)
+                        {
+                            <div class="section">
+                                <h4 style="opacity: 0.8;">@Html.Raw(section)</h4>
+
+                                @{
+                                    var propertiesOfCurrentSection = Model.Properties.Where(x => x.Section == section);
+                                    var rows = propertiesOfCurrentSection.Select(x => x.Row).Distinct();
+                                }
+
+                                @foreach (var row in rows)
+                                {
+                                    <div class="row">
+                                        @foreach (var propUI in propertiesOfCurrentSection.Where(x => x.Row == row))
+                                        {
+                                            if (string.IsNullOrEmpty(propUI.SelectList))
+                                            {
+                                                <div class="col-md-@propUI.Col">
+                                                    <div class="editor-field">
+                                                        @Html.Editor(propUI.Property.Name)
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-@propUI.Col">
+                                                    <div class="editor-field">
+                                                        @Html.LabelFor(m => m, propUI.DisplayName)
+                                                        @Html.Editor(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
                                 }
                             </div>
                         }
-                    </div>
-                }
-            }
+                    }
 
-            @foreach (var hiddenProperty in Model.HiddenProperties)
+                    @foreach (var hiddenProperty in Model.HiddenProperties)
+                    {
+                        @Html.Hidden(hiddenProperty.Name)
+                    }
+                </div>
+            </form>
+
+            <br />
+
+            @if (Model.ID > 0)
             {
-                @Html.Hidden(hiddenProperty.Name)
+                <div class="card">
+                    <div class="card-body">
+                        @await Html.PartialAsync("_ObjectMetadataTab", Model)
+                    </div>
+                </div>
             }
-        </div>
-    </form>
-</div>
-
-<br />
-
-@if (Model.ID > 0)
-{
-    <div class="card">
-        <div class="card-body">
-            @await Html.PartialAsync("_ObjectMetadataTab", Model)
         </div>
     </div>
-}
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                @consoleHeader
+            </div>
+            <div class="card-body">
+                @if (Model.ID > 0)
+                {
+                    <div style="font-family: monospace;">
+                        Created by ID: @Model.CreatedByID
+                        <br />
+                        Created date: @Model.CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")
+                        <br />
+                        Modified by ID: @Model.ModifiedByID
+                        <br />
+                        Modified date: @Model.ModifiedDate.Value.ToString("dd'/'MM'/'yyyy HH:mm:ss")
+                    </div>
+                }
+                else
+                {
+                    <div style="font-family: monospace;">
+                        Created by ID: Probably you
+                        <br />
+                        Created date: Probably now
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
