@@ -1,16 +1,12 @@
 ﻿using APPartment.Data.Server.Models.Notification;
-using APPartment.ORM.Framework.Core;
 using System.Collections.Generic;
 
 namespace APPartment.Data.Core
 {
     public class NotificationFacade : BaseFacade
     {
-        private readonly DaoContext dao;
-
         public NotificationFacade() : base()
         {
-            dao = new DaoContext();
         }
 
         public void Notify(string title, string content, List<long> userIDs, long currentHomeID, long currentUserID)

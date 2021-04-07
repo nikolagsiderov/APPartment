@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using APPartment.UI.ViewModels.GeneralCalendar;
+using APPartment.Infrastructure.UI.Common.ViewModels.GeneralCalendar;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,5 +1,5 @@
 ﻿using APPartment.Common;
-using APPartment.UI.Controllers.Base;
+using APPartment.Infrastructure.UI.Web.Controllers.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;

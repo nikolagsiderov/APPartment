@@ -1,7 +1,7 @@
 ﻿using System.Linq;
-using APPartment.UI.Services.Base;
-using APPartment.UI.ViewModels;
-using APPartment.UI.ViewModels.User;
+using APPartment.Infrastructure.Services.Base;
+using APPartment.Infrastructure.UI.Common.ViewModels;
+using APPartment.Infrastructure.UI.Common.ViewModels.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,11 +28,11 @@ namespace APPartment.API.Controllers
                 if (headers.ContainsKey("CurrentHomeID"))
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
-                var result = new BaseWebService(currentUserID).GetCollection<ObjectParticipantPostViewModel>(x => x.TargetObjectID == targetObjectID);
+                var result = new BaseCRUDService(currentUserID).GetCollection<ObjectParticipantPostViewModel>(x => x.TargetObjectID == targetObjectID);
 
                 foreach (var participant in result)
                 {
-                    participant.Username = new BaseWebService(currentUserID).GetEntity<UserPostViewModel>(participant.UserID).Name;
+                    participant.Username = new BaseCRUDService(currentUserID).GetEntity<UserPostViewModel>(participant.UserID).Name;
                 }
 
                 return Ok(result);

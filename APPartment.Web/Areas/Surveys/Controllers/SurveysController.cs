@@ -3,11 +3,11 @@ using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq.Expressions;
-using APPartment.UI.Controllers.Base;
-using APPartment.UI.Constants.Breadcrumbs;
-using APPartment.UI.ViewModels.Survey;
-using APPAreas = APPartment.UI.Constants.Areas;
+using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using System.Threading.Tasks;
+using APPartment.Infrastructure.UI.Web.Controllers.Base;
+using APPartment.Infrastructure.UI.Common.ViewModels.Survey;
+using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
 
 namespace APPartment.Web.Areas.Surveys.Controllers
 {

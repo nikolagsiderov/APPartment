@@ -6,8 +6,8 @@ using Microsoft.Extensions.Hosting;
 using SmartBreadcrumbs.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using APPartment.UI.Services;
 using Microsoft.AspNetCore.Mvc.Razor;
+using APPartment.Infrastructure.Services;
 
 namespace APPartment.Web
 {

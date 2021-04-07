@@ -1,5 +1,5 @@
-﻿using APPartment.UI.Services.Base;
-using APPartment.UI.ViewModels.Survey;
+﻿using APPartment.Infrastructure.Services.Base;
+using APPartment.Infrastructure.UI.Common.ViewModels.Survey;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).GetEntity<SurveyPostViewModel>(surveyID);
+                var result = new BaseCRUDService(currentUserID).GetEntity<SurveyPostViewModel>(surveyID);
 
                 if (result != null)
                     return Ok(result);
@@ -60,7 +60,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).GetCollection<SurveyDisplayViewModel>(x => x.HomeID == homeID);
+                var result = new BaseCRUDService(currentUserID).GetCollection<SurveyDisplayViewModel>(x => x.HomeID == homeID);
 
                 if (result.Any())
                     return Ok(result);
@@ -89,7 +89,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).GetCollection<SurveyDisplayViewModel>(x => x.HomeID == homeID && x.IsCompleted == true);
+                var result = new BaseCRUDService(currentUserID).GetCollection<SurveyDisplayViewModel>(x => x.HomeID == homeID && x.IsCompleted == true);
 
                 if (result.Any())
                     return Ok(result);
@@ -118,7 +118,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).GetCollection<SurveyDisplayViewModel>(x => x.HomeID == homeID && x.IsCompleted == false);
+                var result = new BaseCRUDService(currentUserID).GetCollection<SurveyDisplayViewModel>(x => x.HomeID == homeID && x.IsCompleted == false);
 
                 if (result.Any())
                     return Ok(result);
@@ -150,7 +150,7 @@ namespace APPartment.API.Controllers
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
                 model.HomeID = currentHomeID;
-                var result = new BaseWebService(currentUserID).Save(model);
+                var result = new BaseCRUDService(currentUserID).Save(model);
 
                 return Ok(result);
             }
@@ -175,8 +175,8 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var model = new BaseWebService(currentUserID).GetEntity<SurveyPostViewModel>(surveyID);
-                new BaseWebService(currentUserID).Delete(model);
+                var model = new BaseCRUDService(currentUserID).GetEntity<SurveyPostViewModel>(surveyID);
+                new BaseCRUDService(currentUserID).Delete(model);
 
                 return Ok();
             }
@@ -202,7 +202,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).Count<SurveyDisplayViewModel>(x => x.HomeID == homeID);
+                var result = new BaseCRUDService(currentUserID).Count<SurveyDisplayViewModel>(x => x.HomeID == homeID);
                 return Ok(result);
             }
             catch (System.Exception ex)
@@ -227,7 +227,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).Count<SurveyDisplayViewModel>(x => x.HomeID == homeID && x.IsCompleted == true);
+                var result = new BaseCRUDService(currentUserID).Count<SurveyDisplayViewModel>(x => x.HomeID == homeID && x.IsCompleted == true);
                 return Ok(result);
             }
             catch (System.Exception ex)
@@ -252,7 +252,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).Count<SurveyDisplayViewModel>(x => x.HomeID == homeID && x.IsCompleted == false);
+                var result = new BaseCRUDService(currentUserID).Count<SurveyDisplayViewModel>(x => x.HomeID == homeID && x.IsCompleted == false);
                 return Ok(result);
             }
             catch (System.Exception ex)

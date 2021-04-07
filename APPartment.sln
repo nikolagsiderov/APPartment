@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.Web", "APPartment.Web\APPartment.Web.csproj", "{45797B29-1226-4161-A990-A850858C7E7B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.UI", "APPartment.UI\APPartment.UI.csproj", "{C0D7B9BD-DD7E-4A45-8C01-6C751ECB2057}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.Infrastructure", "APPartment.Infrastructure\APPartment.Infrastructure.csproj", "{C0D7B9BD-DD7E-4A45-8C01-6C751ECB2057}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.ORM.Framework", "APPartment.ORM.Framework\APPartment.ORM.Framework.csproj", "{19537801-69C1-4EE9-BD70-2D8AD0B2233C}"
 EndProject
@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.API", "APPartmen
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{6D3D93B4-145E-4891-8E76-6E044BA4ADAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APPartment.Common", "APPartment.Common\APPartment.Common.csproj", "{40F75A8C-E121-477B-916F-93C4E91D3980}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.Common", "APPartment.Common\APPartment.Common.csproj", "{40F75A8C-E121-477B-916F-93C4E91D3980}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

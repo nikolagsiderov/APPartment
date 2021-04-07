@@ -1,5 +1,5 @@
-﻿using APPartment.UI.Services.Base;
-using APPartment.UI.ViewModels.User;
+﻿using APPartment.Infrastructure.Services.Base;
+using APPartment.Infrastructure.UI.Common.ViewModels.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,12 +16,12 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var userAlreadyExists = new BaseWebService(0).Any<UserPostViewModel>(x => x.Name == user.Name);
+                var userAlreadyExists = new BaseCRUDService(0).Any<UserPostViewModel>(x => x.Name == user.Name);
 
                 if (userAlreadyExists)
                     return StatusCode(StatusCodes.Status403Forbidden, "This username is already taken.");
 
-                user = new BaseWebService(0).Save(user);
+                user = new BaseCRUDService(0).Save(user);
                 return Ok(user);
             }
             catch (System.Exception ex)
@@ -37,7 +37,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                user = new BaseWebService(0).GetEntity<UserPostViewModel>(x => x.Name == user.Name && x.Password == user.Password);
+                user = new BaseCRUDService(0).GetEntity<UserPostViewModel>(x => x.Name == user.Name && x.Password == user.Password);
 
                 if (user != null)
                     return Ok(user);

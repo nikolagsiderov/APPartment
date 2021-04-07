@@ -1,5 +1,5 @@
-﻿using APPartment.UI.Services.Base;
-using APPartment.UI.ViewModels.Clingons.Image;
+﻿using APPartment.Infrastructure.Services.Base;
+using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Image;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -28,7 +28,7 @@ namespace APPartment.API.Controllers
                 if (headers.ContainsKey("CurrentHomeID"))
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
-                var result = new BaseWebService(currentUserID).GetEntity<ImagePostViewModel>(ID);
+                var result = new BaseCRUDService(currentUserID).GetEntity<ImagePostViewModel>(ID);
 
                 return Ok(result);
             }
@@ -55,7 +55,7 @@ namespace APPartment.API.Controllers
                 if (headers.ContainsKey("CurrentHomeID"))
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
-                var result = new BaseWebService(currentUserID).GetCollection<ImagePostViewModel>(x => x.TargetObjectID == targetObjectID);
+                var result = new BaseCRUDService(currentUserID).GetCollection<ImagePostViewModel>(x => x.TargetObjectID == targetObjectID);
 
                 return Ok(result);
             }

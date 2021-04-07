@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using APPartment.UI.Services.Base;
-using APPartment.UI.ViewModels.Home;
-using APPartment.UI.ViewModels.User;
+using APPartment.Infrastructure.Services.Base;
+using APPartment.Infrastructure.UI.Common.ViewModels.Home;
+using APPartment.Infrastructure.UI.Common.ViewModels.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,7 +18,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var result = new BaseWebService(0).GetEntity<UserPostViewModel>(userID);
+                var result = new BaseCRUDService(0).GetEntity<UserPostViewModel>(userID);
 
                 if (result != null)
                     return Ok(result);
@@ -38,12 +38,12 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var homeUsers = new BaseWebService(0).GetCollection<HomeUserPostViewModel>(x => x.HomeID == homeID);
+                var homeUsers = new BaseCRUDService(0).GetCollection<HomeUserPostViewModel>(x => x.HomeID == homeID);
                 var result = new List<UserPostViewModel>();
 
                 foreach (var homeUser in homeUsers)
                 {
-                    result.Add(new BaseWebService(0).GetEntity<UserPostViewModel>(homeUser.UserID));
+                    result.Add(new BaseCRUDService(0).GetEntity<UserPostViewModel>(homeUser.UserID));
                 }
 
                 if (result.Any())

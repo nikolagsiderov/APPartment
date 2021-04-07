@@ -1,5 +1,5 @@
-﻿using APPartment.UI.Services.Base;
-using APPartment.UI.ViewModels.Hygiene;
+﻿using APPartment.Infrastructure.Services.Base;
+using APPartment.Infrastructure.UI.Common.ViewModels.Hygiene;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).GetEntity<HygienePostViewModel>(hygieneID);
+                var result = new BaseCRUDService(currentUserID).GetEntity<HygienePostViewModel>(hygieneID);
 
                 if (result != null)
                     return Ok(result);
@@ -60,7 +60,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).GetCollection<HygieneDisplayViewModel>(x => x.HomeID == homeID);
+                var result = new BaseCRUDService(currentUserID).GetCollection<HygieneDisplayViewModel>(x => x.HomeID == homeID);
 
                 if (result.Any())
                     return Ok(result);
@@ -89,7 +89,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).GetCollection<HygieneDisplayViewModel>(x => x.HomeID == homeID && x.IsDone == true);
+                var result = new BaseCRUDService(currentUserID).GetCollection<HygieneDisplayViewModel>(x => x.HomeID == homeID && x.IsDone == true);
 
                 if (result.Any())
                     return Ok(result);
@@ -118,7 +118,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).GetCollection<HygieneDisplayViewModel>(x => x.HomeID == homeID && x.IsDone == false);
+                var result = new BaseCRUDService(currentUserID).GetCollection<HygieneDisplayViewModel>(x => x.HomeID == homeID && x.IsDone == false);
 
                 if (result.Any())
                     return Ok(result);
@@ -150,7 +150,7 @@ namespace APPartment.API.Controllers
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
                 model.HomeID = currentHomeID;
-                var result = new BaseWebService(currentUserID).Save(model);
+                var result = new BaseCRUDService(currentUserID).Save(model);
 
                 return Ok(result);
             }
@@ -175,8 +175,8 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var model = new BaseWebService(currentUserID).GetEntity<HygienePostViewModel>(hygieneID);
-                new BaseWebService(currentUserID).Delete(model);
+                var model = new BaseCRUDService(currentUserID).GetEntity<HygienePostViewModel>(hygieneID);
+                new BaseCRUDService(currentUserID).Delete(model);
 
                 return Ok();
             }
@@ -202,7 +202,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).Count<HygieneDisplayViewModel>(x => x.HomeID == homeID);
+                var result = new BaseCRUDService(currentUserID).Count<HygieneDisplayViewModel>(x => x.HomeID == homeID);
                 return Ok(result);
             }
             catch (System.Exception ex)
@@ -227,7 +227,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).Count<HygieneDisplayViewModel>(x => x.HomeID == homeID && x.IsDone == true);
+                var result = new BaseCRUDService(currentUserID).Count<HygieneDisplayViewModel>(x => x.HomeID == homeID && x.IsDone == true);
                 return Ok(result);
             }
             catch (System.Exception ex)
@@ -252,7 +252,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).Count<HygieneDisplayViewModel>(x => x.HomeID == homeID && x.IsDone == false);
+                var result = new BaseCRUDService(currentUserID).Count<HygieneDisplayViewModel>(x => x.HomeID == homeID && x.IsDone == false);
                 return Ok(result);
             }
             catch (System.Exception ex)

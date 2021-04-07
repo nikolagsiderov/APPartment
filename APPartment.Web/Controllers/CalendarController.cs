@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using APPartment.Common;
-using APPartment.UI.Controllers.Base;
-using APPartment.UI.Constants.Breadcrumbs;
-using APPartment.UI.ViewModels.GeneralCalendar;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using SmartBreadcrumbs.Attributes;
+using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
+using APPartment.Infrastructure.UI.Common.ViewModels.GeneralCalendar;
+using APPartment.Infrastructure.UI.Web.Controllers.Base;
 
 namespace APPartment.Web.Controllers
 {

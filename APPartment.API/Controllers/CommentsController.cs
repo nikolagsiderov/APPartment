@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using APPartment.UI.Services.Base;
-using APPartment.UI.Html;
-using APPartment.UI.ViewModels.Clingons.Comment;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Comment;
+using APPartment.Infrastructure.Services.Base;
+using APPartment.Infrastructure.UI.Web.Html;
 
 namespace APPartment.API.Controllers
 {
@@ -29,7 +29,7 @@ namespace APPartment.API.Controllers
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
                 // TODO: x.CreatedById != 0 should be handled as case when user is deleted
-                var comment = new BaseWebService(currentUserID).GetCollection<CommentPostViewModel>(x => x.TargetObjectID == targetObjectID && x.CreatedByID != 0);
+                var comment = new BaseCRUDService(currentUserID).GetCollection<CommentPostViewModel>(x => x.TargetObjectID == targetObjectID && x.CreatedByID != 0);
                 var result = new CommentsRenderer(currentUserID).BuildComments(comment);
 
                 return Ok(result);
@@ -58,8 +58,8 @@ namespace APPartment.API.Controllers
                 if (headers.ContainsKey("CurrentHomeID"))
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
-                comment = new BaseWebService(currentUserID).Save(comment);
-                new BaseWebService(currentUserID).AddUserAsParticipantToObject(comment.TargetObjectID, currentUserID, comment.ObjectTypeID);
+                comment = new BaseCRUDService(currentUserID).Save(comment);
+                new BaseCRUDService(currentUserID).AddUserAsParticipantToObject(comment.TargetObjectID, currentUserID, comment.ObjectTypeID);
                 var result = new CommentsRenderer(currentUserID).BuildPostComment(comment);
 
                 return Ok(result);

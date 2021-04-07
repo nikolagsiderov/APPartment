@@ -3,18 +3,18 @@ using SmartBreadcrumbs.Attributes;
 using System;
 using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http;
-using APPartment.UI.Controllers.Base;
-using APPartment.UI.Constants.Breadcrumbs;
-using APPartment.UI.ViewModels.Chore;
-using APPAreas = APPartment.UI.Constants.Areas;
+using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using System.Threading.Tasks;
-using APPartment.UI.ViewModels.User;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Net.Http;
 using APPartment.Common;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using APPartment.Infrastructure.UI.Web.Controllers.Base;
+using APPartment.Infrastructure.UI.Common.ViewModels.Chore;
+using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
+using APPartment.Infrastructure.UI.Common.ViewModels.User;
 
 namespace APPartment.Web.Areas.Chores.Controllers
 {

@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Linq.Expressions;
-using APPartment.UI.Controllers.Base;
-using APPartment.UI.Constants.Breadcrumbs;
-using APPartment.UI.ViewModels.Issue;
-using APPAreas = APPartment.UI.Constants.Areas;
+using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using System.Threading.Tasks;
+using APPartment.Infrastructure.UI.Web.Controllers.Base;
+using APPartment.Infrastructure.UI.Common.ViewModels.Issue;
+using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
 
 namespace APPartment.Web.Areas.Issues.Controllers
 {

@@ -1,5 +1,5 @@
-﻿using APPartment.UI.Services.Base;
-using APPartment.UI.ViewModels.Inventory;
+﻿using APPartment.Infrastructure.Services.Base;
+using APPartment.Infrastructure.UI.Common.ViewModels.Inventory;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).GetEntity<InventoryPostViewModel>(inventoryID);
+                var result = new BaseCRUDService(currentUserID).GetEntity<InventoryPostViewModel>(inventoryID);
 
                 if (result != null)
                     return Ok(result);
@@ -59,7 +59,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).GetCollection<InventoryDisplayViewModel>(x => x.HomeID == homeID);
+                var result = new BaseCRUDService(currentUserID).GetCollection<InventoryDisplayViewModel>(x => x.HomeID == homeID);
 
                 if (result.Any())
                     return Ok(result);
@@ -88,7 +88,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).GetCollection<InventoryDisplayViewModel>(x => x.HomeID == homeID && x.IsSupplied == true);
+                var result = new BaseCRUDService(currentUserID).GetCollection<InventoryDisplayViewModel>(x => x.HomeID == homeID && x.IsSupplied == true);
 
                 if (result.Any())
                     return Ok(result);
@@ -117,7 +117,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).GetCollection<InventoryDisplayViewModel>(x => x.HomeID == homeID && x.IsSupplied == false);
+                var result = new BaseCRUDService(currentUserID).GetCollection<InventoryDisplayViewModel>(x => x.HomeID == homeID && x.IsSupplied == false);
 
                 if (result.Any())
                     return Ok(result);
@@ -149,7 +149,7 @@ namespace APPartment.API.Controllers
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
                 model.HomeID = currentHomeID;
-                var result = new BaseWebService(currentUserID).Save(model);
+                var result = new BaseCRUDService(currentUserID).Save(model);
 
                 return Ok(result);
             }
@@ -174,8 +174,8 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var model = new BaseWebService(currentUserID).GetEntity<InventoryPostViewModel>(inventoryID);
-                new BaseWebService(currentUserID).Delete(model);
+                var model = new BaseCRUDService(currentUserID).GetEntity<InventoryPostViewModel>(inventoryID);
+                new BaseCRUDService(currentUserID).Delete(model);
 
                 return Ok();
             }
@@ -201,7 +201,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).Count<InventoryDisplayViewModel>(x => x.HomeID == homeID);
+                var result = new BaseCRUDService(currentUserID).Count<InventoryDisplayViewModel>(x => x.HomeID == homeID);
                 return Ok(result);
             }
             catch (System.Exception ex)
@@ -226,7 +226,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).Count<InventoryDisplayViewModel>(x => x.HomeID == homeID && x.IsSupplied == true);
+                var result = new BaseCRUDService(currentUserID).Count<InventoryDisplayViewModel>(x => x.HomeID == homeID && x.IsSupplied == true);
                 return Ok(result);
             }
             catch (System.Exception ex)
@@ -251,7 +251,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseWebService(currentUserID).Count<InventoryDisplayViewModel>(x => x.HomeID == homeID && x.IsSupplied == false);
+                var result = new BaseCRUDService(currentUserID).Count<InventoryDisplayViewModel>(x => x.HomeID == homeID && x.IsSupplied == false);
                 return Ok(result);
             }
             catch (System.Exception ex)

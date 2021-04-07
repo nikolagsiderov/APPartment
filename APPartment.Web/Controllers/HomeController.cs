@@ -2,15 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Http;
-using APPartment.UI.Controllers.Base;
-using APPartment.UI.Constants.Breadcrumbs;
-using APPartment.UI.ViewModels.Home;
-using APPartment.UI.ViewModels;
-using APPartment.UI.ViewModels.User;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json;
 using APPartment.Common;
+using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
+using APPartment.Infrastructure.UI.Web.Controllers.Base;
+using APPartment.Infrastructure.UI.Common.ViewModels.Home;
+using APPartment.Infrastructure.UI.Common.ViewModels.User;
+using APPartment.Infrastructure.UI.Common.ViewModels;
 
 namespace APPartment.Web.Controllers
 {

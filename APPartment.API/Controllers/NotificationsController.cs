@@ -1,7 +1,8 @@
 ﻿using System.Linq;
-using APPartment.UI.Services.Base;
-using APPartment.UI.Html;
-using APPartment.UI.ViewModels.Notification;
+using APPartment.Infrastructure.Services;
+using APPartment.Infrastructure.Services.Base;
+using APPartment.Infrastructure.UI.Common.ViewModels.Notification;
+using APPartment.Infrastructure.UI.Web.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -57,7 +58,7 @@ namespace APPartment.API.Controllers
                 if (headers.ContainsKey("CurrentHomeID"))
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
-                var result = new BaseWebService(currentUserID).Count<NotificationParticipantPostViewModel>(x => x.UserID == currentUserID);
+                var result = new BaseCRUDService(currentUserID).Count<NotificationParticipantPostViewModel>(x => x.UserID == currentUserID);
                 return Ok(result);
             }
             catch (System.Exception ex)
