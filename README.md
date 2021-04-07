@@ -27,9 +27,9 @@ Later on, the purpose changed to an entirely educational one. Throughout the pro
 # Code base
 
 * `APPartment.Web.csproj` - controllers, views, startup, etc.
-* `APPartment.API.csproj` - all APIs
+* `APPartment.API.csproj` - all API controllers
 * `APPartment.Common.csproj` - configuration
-* `APPartment.UI.csproj` - base controllers (check out `BaseCRUDController.cs`), authorization, web services (check out `BaseWebService.cs` and `MapperService.cs`), view models (DTOs), utilites, etc.
+* `APPartment.Infrastructure.csproj` - base controllers (check out `BaseCRUDController.cs`), services (check out `BaseCRUDService.cs` and `MapperService.cs`), view models (DTOs), custom UI hint attributes, etc.
 * `APPartment.Data.csproj` - facade, server models, etc.
 * `APPartment.ORM.Framework.csproj` - `DaoContext.cs`, sql query provider, lambda expression to sql clause translator, declarations, attributes, etc.
 * `APPartment.Tests.csproj` - xUnit tests
