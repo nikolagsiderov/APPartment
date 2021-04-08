@@ -110,7 +110,7 @@
                 Console [ID: @Model.ID, Name: @Model.Name]
             </div>
             <div class="card-body">
-                <div style="font-family: monospace;">
+                <div id="object-additional-info-for-@Model.ID" style="font-family: monospace;">
                     Created by ID: @Model.CreatedByID
                     <br />
                     Created date: @Model.CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")
@@ -118,6 +118,13 @@
                     Modified by ID: @Model.ModifiedByID
                     <br />
                     Modified date: @Model.ModifiedDate.Value.ToString("dd'/'MM'/'yyyy HH:mm:ss")
+                </div>
+                <hr />
+                <div id="object-actions-for-@Model.ID">
+                    @{
+                        var actionsHtml = string.Join(" &nbsp;", Model.ActionsHtml);
+                    }
+                    @Html.Raw(actionsHtml)
                 </div>
             </div>
         </div>

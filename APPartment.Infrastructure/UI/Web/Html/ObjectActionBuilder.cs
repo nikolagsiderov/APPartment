@@ -1,23 +1,23 @@
 ﻿namespace APPartment.Infrastructure.UI.Web.Html
 {
-    public static class GridItemActionBuilder
+    public class ObjectActionBuilder
     {
         public static string BuildDetailsAction(string currentArea, string currentController, long modelID)
         {
-            var button = $@"<a href='/{currentArea}/{currentController}/Details/{modelID}' class='no-underline btn btn-outline-cyan btn-xs btn-icon'><i class='fas fa-info-circle'></i></a>";
+            var button = $@"<a href='/{currentArea}/{currentController}/Details/{modelID}' class='no-underline btn btn-outline-cyan btn-xs'><i class='fas fa-info-circle'></i> Details</a>";
             return button;
         }
 
         public static string BuildEditAction(string currentArea, string currentController, long modelID)
         {
-            var button = $@"<a href='/{currentArea}/{currentController}/Edit/{modelID}' class='no-underline btn btn-outline-blue btn-xs btn-icon'><i class='fas fa-edit'></i></a>";
+            var button = $@"<a href='/{currentArea}/{currentController}/Edit/{modelID}' class='no-underline btn btn-outline-blue btn-xs'><i class='fas fa-edit'></i> Edit</a>";
             return button;
         }
 
         public static string BuildDeleteAction(string currentArea, string currentController, long modelID)
         {
             var modalID = $"deleteModal-{modelID}";
-            var button = $@"<button type='button' class='btn btn-outline-red btn-xs btn-icon' data-toggle='modal' data-target='#{modalID}'><i class='fas fa-trash-alt'></i></button>";
+            var button = $@"<button type='button' class='btn btn-outline-red btn-xs' data-toggle='modal' data-target='#{modalID}'><i class='fas fa-trash-alt'></i> Delete</button>";
             var modal = $@"<div class='modal fade' id='{modalID}' tabindex='-1' role='dialog' aria-labelledby='deleteObjectModalLabel' aria-hidden='true'>
                                             <div class='modal-dialog' role='document'>
                                                 <div class='modal-content'>
@@ -50,7 +50,7 @@
             else
                 href = $"href='/{currentController}/{action}/{modelID}?area='{currentArea}''";
 
-            var button = $@"<a {href} class='no-underline btn {buttonColorClass} btn-xs btn-icon'><i class='{faIconClass}'></i></a>";
+            var button = $@"<a {href} class='no-underline btn {buttonColorClass} btn-xs'><i class='{faIconClass}'></i> {action}</a>";
             return button;
         }
 
@@ -64,7 +64,7 @@
                 href = $"href='/{currentController}/{action}/{modelID}?area='{currentArea}''";
 
             var modalID = $"{action}-{modelID}";
-            var button = $@"<button type='button' class='btn {buttonColorClass} btn-xs btn-icon' data-toggle='modal' data-target='#{modalID}'><i class='{faIconClass}'></i></button>";
+            var button = $@"<button type='button' class='btn {buttonColorClass} btn-xs' data-toggle='modal' data-target='#{modalID}'><i class='{faIconClass}'></i></button>";
             var modal = $@"<div class='modal fade' id='{modalID}' tabindex='-1' role='dialog' aria-labelledby='label-{modalID}' aria-hidden='true'>
                                             <div class='modal-dialog' role='document'>
                                                 <div class='modal-content'>

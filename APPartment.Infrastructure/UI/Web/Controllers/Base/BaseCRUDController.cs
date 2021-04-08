@@ -38,6 +38,17 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             }
         }
 
+        public virtual void SetObjectActions(U model)
+        {
+            model.ActionsHtml.Add(ObjectActionBuilder.BuildDetailsAction(CurrentAreaName, CurrentControllerName, model.ID));
+
+            if (CanManage)
+            {
+                model.ActionsHtml.Add(ObjectActionBuilder.BuildEditAction(CurrentAreaName, CurrentControllerName, model.ID));
+                model.ActionsHtml.Add(ObjectActionBuilder.BuildDeleteAction(CurrentAreaName, CurrentControllerName, model.ID));
+            }
+        }
+
         public abstract bool CanManage { get; }
 
         [Breadcrumb("Base")]
@@ -95,9 +106,10 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 
             if (model.ID > 0)
             {
-                model = await GetClingons(model);
-
                 ViewData["CanManage"] = CanManage;
+
+                await GetClingons(model);
+                SetObjectActions(model);
                 await PopulateViewData(model);
 
                 return View("_Details", model);
@@ -169,9 +181,10 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 
             if (model.ID > 0)
             {
-                model = await GetClingons(model);
-
+                await GetClingons(model);
                 await PopulateViewData(model);
+                SetObjectActions(model);
+
                 return View("_Edit", model);
             }
             else
@@ -274,13 +287,11 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
         }
 
         #region Clingons
-        protected async Task<U> GetClingons(U model)
+        protected async Task GetClingons(U model)
         {
             model.Comments = await GetComments(model.ObjectID);
             model.Images = await GetImages(model.ObjectID);
             model.Participants = await GetParticipants(model.ObjectID);
-
-            return model;
         }
 
         #region Comments
