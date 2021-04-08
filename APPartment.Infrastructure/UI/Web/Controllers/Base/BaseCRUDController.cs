@@ -27,7 +27,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 
         public abstract Expression<Func<T, bool>> FilterExpression { get; }
 
-        public virtual void SetGridItemActions(T model)
+        public virtual async Task SetGridItemActions(T model)
         {
             model.ActionsHtml.Add(GridItemActionBuilder.BuildDetailsAction(CurrentAreaName, CurrentControllerName, model.ID));
 
@@ -38,7 +38,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             }
         }
 
-        public virtual void SetObjectActions(U model)
+        public virtual async Task SetObjectActions(U model)
         {
             model.ActionsHtml.Add(ObjectActionBuilder.BuildDetailsAction(CurrentAreaName, CurrentControllerName, model.ID));
 
@@ -75,7 +75,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 
             foreach (var model in models)
             {
-                SetGridItemActions(model);
+                await SetGridItemActions(model);
             }
 
             return View("_Grid", models);
@@ -109,7 +109,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
                 ViewData["CanManage"] = CanManage;
 
                 await GetClingons(model);
-                SetObjectActions(model);
+                await SetObjectActions(model);
                 await PopulateViewData(model);
 
                 return View("_Details", model);
@@ -183,7 +183,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             {
                 await GetClingons(model);
                 await PopulateViewData(model);
-                SetObjectActions(model);
+                await SetObjectActions(model);
 
                 return View("_Edit", model);
             }
