@@ -13,7 +13,6 @@
     string homeLink = string.Empty;
     string calendarLink = string.Empty;
     string inventoryLink = string.Empty;
-    string hygieneLink = string.Empty;
     string issuesLink = string.Empty;
     string surveysLink = string.Empty;
     string choresLink = string.Empty;
@@ -30,10 +29,6 @@
     else if (areaName.Equals("Inventory"))
     {
         inventoryLink = "active";
-    }
-    else if (areaName.Equals("Hygiene"))
-    {
-        hygieneLink = "active";
     }
     else if (areaName.Equals("Issues"))
     {
@@ -77,18 +72,6 @@
                         <a class="nav-link" asp-area="Inventory" asp-controller="Unsupplied" asp-action="Index"><i class="fas fa-exclamation-triangle"></i> &nbsp; Unsupplied &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="unsuppliedInventoryBadge"></span></a>
                         <a class="nav-link" asp-area="Inventory" asp-controller="Supplied" asp-action="Index"><i class="fas fa-check"></i> &nbsp; Supplied &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="suppliedInventoryBadge"></span></a>
                         <a class="nav-link" asp-area="Inventory" asp-controller="Inventory" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
-                    </nav>
-                </div>
-                <a class="nav-link collapsed @hygieneLink" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseHygiene" aria-expanded="false" aria-controls="collapseHygiene">
-                    <div class="nav-link-icon"><i class='fas fa-recycle'></i></div>
-                    Hygiene &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="hygieneBadge"></span>
-                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseHygiene" data-parent="#accordionSidenav">
-                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
-                        <a class="nav-link" asp-area="Hygiene" asp-controller="InProgress" asp-action="Index"><i class="fas fa-exclamation-triangle"></i> &nbsp; In Progress  &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="inprogressHygieneBadge"></span></a>
-                        <a class="nav-link" asp-area="Hygiene" asp-controller="Done" asp-action="Index"><i class="fas fa-check"></i> &nbsp; Done &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="doneHygieneBadge"></span></a>
-                        <a class="nav-link" asp-area="Hygiene" asp-controller="Hygiene" asp-action="Index"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
                     </nav>
                 </div>
                 <a class="nav-link collapsed @issuesLink" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseIssues" aria-expanded="false" aria-controls="collapseIssues">

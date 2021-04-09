@@ -3,7 +3,6 @@
     public static class Areas
     {
         public const string Default = "default";
-        public const string Hygiene = "Hygiene";
         public const string Inventory = "Inventory";
         public const string Chores = "Chores";
         public const string Surveys = "Surveys";

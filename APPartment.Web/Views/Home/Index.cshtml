@@ -1,7 +1,7 @@
 ﻿@model APPartment.Infrastructure.UI.Common.ViewModels.Home.HomePageDisplayModel
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="card shadow mb-4 text-center">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Inventory" asp-controller="Inventory" asp-action="Index" class="no-underline"><i class='fas fa-tasks'></i> Inventory - latest updates</a></h6>
@@ -15,21 +15,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4">
-        <div class="card shadow mb-4 text-center">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Hygiene" asp-controller="Hygiene" asp-action="Index" class="no-underline"><i class='fas fa-recycle'></i> Hygiene - latest updates</a></h6>
-                <div style="margin-left: auto;"><a asp-area="Hygiene" asp-controller="Hygiene" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
-            </div>
-            <div class="card-body">
-                <p class="card-text">No items present.</p>
-            </div>
-            <div class="card-footer text-muted">
-                <p>No updates...</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4">
+    <div class="col-md-6">
         <div class="card shadow mb-4 text-center">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Issues" asp-controller="Issues" asp-action="Index" class="no-underline"><i class='fas fa-exclamation-circle'></i> Issues - latest updates</a></h6>

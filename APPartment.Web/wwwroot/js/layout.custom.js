@@ -71,48 +71,6 @@
     });
 
     $.ajax({
-        url: baseApplicationPath + "Hygiene/Hygiene/GetCount",
-        success: function (data) {
-            if (data === 0) {
-                $("#hygieneBadge").attr("style", "display:none");
-            } else {
-                $("#hygieneBadge").attr("style", "").html(data);
-            }
-        },
-        error: function (req, status, error) {
-            alert(error);
-        }
-    });
-
-    $.ajax({
-        url: baseApplicationPath + "Hygiene/Done/GetCount",
-        success: function (data) {
-            if (data === 0) {
-                $("#doneHygieneBadge").attr("style", "display:none");
-            } else {
-                $("#doneHygieneBadge").attr("style", "").html(data);
-            }
-        },
-        error: function (req, status, error) {
-            alert(error);
-        }
-    });
-
-    $.ajax({
-        url: baseApplicationPath + "Hygiene/InProgress/GetCount",
-        success: function (data) {
-            if (data === 0) {
-                $("#inprogressHygieneBadge").attr("style", "display:none");
-            } else {
-                $("#inprogressHygieneBadge").attr("style", "").html(data);
-            }
-        },
-        error: function (req, status, error) {
-            alert(error);
-        }
-    });
-
-    $.ajax({
         url: baseApplicationPath + "Issues/Issues/GetCount",
         success: function (data) {
             if (data === 0) {

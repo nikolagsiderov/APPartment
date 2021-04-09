@@ -8,7 +8,6 @@
         HomeStatus = 3,
         HomeSetting = 4,
         Inventory = 5,
-        Hygiene = 6,
         Issue = 7,
         Message = 8,
         Comment = 9,
