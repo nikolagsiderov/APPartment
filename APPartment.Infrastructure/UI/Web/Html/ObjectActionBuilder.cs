@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
+﻿using APPartment.Infrastructure.UI.Common.Constants;
 
 namespace APPartment.Infrastructure.UI.Web.Html
 {
@@ -48,93 +47,13 @@ namespace APPartment.Infrastructure.UI.Web.Html
         {
             var href = string.Empty;
 
-            if (currentArea.Equals("default"))
+            if (!currentArea.Equals(Areas.Default))
                 href = $"href='/{currentArea}/{currentController}/{action}/{modelID}'";
             else
                 href = $"href='/{currentController}/{action}/{modelID}?area='{currentArea}''";
 
-            var button = $@"<a {href} class='no-underline btn {buttonColorClass} btn-xs' title='{action}'><i class='{faIconClass}'></i> {action}</a>";
+            var button = $@"<a {href} name='{action}' class='no-underline btn {buttonColorClass} btn-xs' title='{action}'><i class='{faIconClass}'></i> {action}</a>";
             return button;
-        }
-
-        public static string BuildCustomActionWithModal(string currentArea, string currentController, string action, long modelID, string buttonTitle, string modalTitle, string modalBody, string buttonColorClass, string faIconClass)
-        {
-            var href = string.Empty;
-
-            if (currentArea.Equals("default"))
-                href = $"href='/{currentArea}/{currentController}/{action}/{modelID}'";
-            else
-                href = $"href='/{currentController}/{action}/{modelID}?area='{currentArea}''";
-
-            var modalID = $"{action}-{modelID}";
-            var button = $@"<button type='button' title='{action}' class='btn {buttonColorClass} btn-xs' data-toggle='modal' data-target='#{modalID}'><i class='{faIconClass}'></i> {action}</button>";
-            var modal = $@"<div class='modal fade' id='{modalID}' tabindex='-1' role='dialog' aria-labelledby='label-{modalID}' aria-hidden='true'>
-                                            <div class='modal-dialog' role='document'>
-                                                <div class='modal-content'>
-                                                    <div class='modal-header'>
-                                                        <h5 class='modal-title' id='label-{modalID}'>{modalTitle}</h5>
-                                                        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
-                                                            <span aria-hidden='true'>&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class='modal-body'>
-                                                        {modalBody}
-                                                    </div>
-                                                    <div class='modal-footer'>
-                                                        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
-                                                        <a {href} class='no-underline btn btn-primary'>{buttonTitle}</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>";
-            var buttonWithModal = button + modal;
-            return buttonWithModal;
-        }
-
-        public static string BuildCustomActionWithDropdownWithModal(string currentArea, string currentController, string action, long modelID, string buttonTitle, string modalTitle, string buttonColorClass, string faIconClass, List<SelectListItem> options)
-        {
-            var href = string.Empty;
-
-            if (currentArea.Equals("default"))
-                href = $"href='/{currentArea}/{currentController}/{action}/{modelID}'";
-            else
-                href = $"href='/{currentController}/{action}/{modelID}?area='{currentArea}''";
-
-            var modalID = $"{action}-{modelID}";
-            var button = $@"<button type='button' title='{action}' class='btn {buttonColorClass} btn-xs' data-toggle='modal' data-target='#{modalID}'><i class='{faIconClass}'></i> {action}</button>";
-
-            var optionsHtml = string.Empty;
-
-            foreach (var option in options)
-            {
-                optionsHtml += $"<option selected='{option.Selected}' value='{option.Value}'>{option.Text}</option>";
-            }
-
-            var modal = $@"<div class='modal fade' id='{modalID}' tabindex='-1' role='dialog' aria-labelledby='label-{modalID}' aria-hidden='true'>
-                                            <div class='modal-dialog' role='document'>
-                                                <div class='modal-content'>
-                                                    <div class='modal-header'>
-                                                        <h5 class='modal-title' id='label-{modalID}'>{modalTitle}</h5>
-                                                        <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
-                                                            <span aria-hidden='true'>&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class='modal-body'>
-                                                        <div class'form-group'>
-                                                            <select class='form-control form-control-solid' name='{action}'>
-                                                                    {optionsHtml}
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class='modal-footer'>
-                                                        <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
-                                                        <button type='button' {href} class='no-underline btn btn-primary'>{buttonTitle}</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>";
-            var buttonWithModal = button + modal;
-            return buttonWithModal;
         }
     }
 }

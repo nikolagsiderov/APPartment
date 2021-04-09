@@ -5,6 +5,13 @@
     <UserSecretsId>aspnet-APPartment-34E657CB-677A-464A-8FD8-AFCED3C6B442</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Views\Surveys\**" />
+    <Content Remove="Views\Surveys\**" />
+    <EmbeddedResource Remove="Views\Surveys\**" />
+    <None Remove="Views\Surveys\**" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
@@ -23,11 +30,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="SmartBreadcrumbs" Version="2.1.0" />
     <PackageReference Include="System.Net.Http.Formatting.Extension" Version="5.2.3" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <Folder Include="Views\Surveys\" />
   </ItemGroup>
 
 

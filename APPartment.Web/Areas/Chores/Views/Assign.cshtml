@@ -1,0 +1,36 @@
+﻿@model APPartment.Infrastructure.UI.Common.ViewModels.Chore.ChorePostViewModel
+
+<h5>Assign to user</h5>
+
+<br />
+
+@Html.Label("AssignedToUserID")
+@Html.Editor("AssignedToUserID", "Dropdown", ViewData["AssignedToUserID"])
+
+<br />
+
+<div>
+    <button type='button' class='btn btn-secondary' id="cancel-postAssign" data-dismiss='modal'>Cancel</button>
+    <button type="button" id="postAssign" class='no-underline btn btn-primary'>Assign</button>
+</div>
+
+<script>
+$(document).ready(function () {
+    $('#postAssign').on("click", function () {
+        var assignedUserID = $('select[name="AssignedToUserID"]').find(':selected').val();
+        $(this).css("pointer-events", "none");
+        $('#cancel-postAssign').css("pointer-events", "none");
+
+        $.ajax({
+            type: 'POST',
+            url: baseApplicationPath + `Chores/Chores/Assign?ID=@Model.ID&assignedUserID=${assignedUserID}`,
+            success: function () {
+                window.location.reload();
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        });
+    });
+});
+</script>

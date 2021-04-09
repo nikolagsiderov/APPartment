@@ -31,8 +31,9 @@ namespace APPartment.Web
             services.Configure<RazorViewEngineOptions>(options =>
             {
                 options.AreaViewLocationFormats.Clear();
-                options.AreaViewLocationFormats.Add("/MyAreas/{2}/Views/{1}/{0}.cshtml");
-                options.AreaViewLocationFormats.Add("/MyAreas/{2}/Views/Shared/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Areas/{2}/Views/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Areas/{2}/Views/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Areas/{2}/Views/Shared/{0}.cshtml");
                 options.AreaViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
             });
 
@@ -81,7 +82,7 @@ namespace APPartment.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
-                    name: "MyArea",
+                    name: "Areas",
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapControllerRoute(

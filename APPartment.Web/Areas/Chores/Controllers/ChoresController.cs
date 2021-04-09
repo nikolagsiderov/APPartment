@@ -36,62 +36,74 @@ namespace APPartment.Web.Areas.Chores.Controllers
             return await base.Index();
         }
 
-        public async Task<IActionResult> Assign(long modelID, long userID)
+        [HttpGet]
+        public async Task<IActionResult> Assign(long id)
         {
-            return Ok();
-        }
-
-        public override async Task SetObjectActions(ChorePostViewModel model)
-        {
-            var users = new List<UserPostViewModel>();
+            var model = new ChorePostViewModel();
 
             using (var httpClient = new HttpClient())
             {
-                var requestUri = $"{Configuration.DefaultAPI}/users/home/{CurrentHomeID}";
+                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{id}";
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
 
                 using (var response = await httpClient.GetAsync(requestUri))
                 {
                     string content = await response.Content.ReadAsStringAsync();
 
                     if (response.IsSuccessStatusCode)
-                        users = JsonConvert.DeserializeObject<List<UserPostViewModel>>(content);
+                        model = JsonConvert.DeserializeObject<ChorePostViewModel>(content);
                 }
             }
 
-            var options = users.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
-            options.Insert(0, new SelectListItem() { Text = "Please select a user...", Value = null });
+            var users = await GetAssignedUsersSelectList(model);
+            ViewData["AssignedToUserID"] = users;
 
-            model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomActionWithDropdownWithModal(APPAreas.Chores, CurrentControllerName, nameof(Assign), model.ID, "Assign", "Assign to user", "btn-outline-warning", "fas fa-tag", options));
+            return View(model);
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> Assign(string ID, string assignedUserID)
+        {
+            var model = new ChorePostViewModel();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{long.Parse(ID)}";
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        model = JsonConvert.DeserializeObject<ChorePostViewModel>(content);
+                }
+            }
+
+            model.AssignedToUserID = long.Parse(assignedUserID);
+
+            return await base.Edit(model.ID, model);
+        }
+
+        public override async Task SetObjectActions(ChorePostViewModel model)
+        {
+            model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Chores, CurrentControllerName, nameof(Assign), model.ID, "btn-outline-warning", "fas fa-tag"));
             await base.SetObjectActions(model);
         }
 
         public override async Task SetGridItemActions(ChoreDisplayViewModel model)
         {
-            var users = new List<UserPostViewModel>();
-
-            using (var httpClient = new HttpClient())
-            {
-                var requestUri = $"{Configuration.DefaultAPI}/users/home/{CurrentHomeID}";
-
-                using (var response = await httpClient.GetAsync(requestUri))
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
-                        users = JsonConvert.DeserializeObject<List<UserPostViewModel>>(content);
-                }
-            }
-
-            var options = users.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
-            options.Insert(0, new SelectListItem() { Text = "Please select a user...", Value = null });
-
-            model.ActionsHtml.Add(GridItemActionBuilder.BuildCustomActionWithDropdownWithModal(APPAreas.Chores, CurrentControllerName, nameof(Assign), model.ID, "Assign", "Assign to user", "btn-outline-warning", "fas fa-tag", options));
-
+            model.ActionsHtml.Add(GridItemActionBuilder.BuildCustomAction(APPAreas.Chores, CurrentControllerName, nameof(Assign), model.ID, "btn-outline-warning", "fas fa-tag"));
             await base.SetGridItemActions(model);
         }
 
         protected override async Task PopulateViewData(ChorePostViewModel model)
+        {
+            var users = await GetAssignedUsersSelectList(model);
+            ViewData["AssignedToUserID"] = users;
+        }
+
+        private async Task<List<SelectListItem>> GetAssignedUsersSelectList(ChorePostViewModel model)
         {
             var users = new List<UserPostViewModel>();
 
@@ -122,7 +134,7 @@ namespace APPartment.Web.Areas.Chores.Controllers
                 }
             }
 
-            ViewData["AssignedToUserID"] = selectList;
+            return selectList;
         }
     }
 }
