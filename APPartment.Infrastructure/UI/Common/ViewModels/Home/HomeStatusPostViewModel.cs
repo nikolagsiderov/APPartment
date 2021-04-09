@@ -9,7 +9,7 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Home
     [IMapFrom(typeof(HomeStatus))]
     public class HomeStatusPostViewModel : PostViewModelWithHome
     {
-        [APPUIHint(Templates.Integer)]
+        [APPUIHint(Templates.Number)]
         public int Status { get; set; }
 
         [APPUIHint(Templates.Hidden)]

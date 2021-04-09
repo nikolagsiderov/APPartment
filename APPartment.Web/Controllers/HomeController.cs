@@ -11,6 +11,8 @@ using APPartment.Infrastructure.UI.Web.Controllers.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Home;
 using APPartment.Infrastructure.UI.Common.ViewModels.User;
 using APPartment.Infrastructure.UI.Common.ViewModels;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace APPartment.Web.Controllers
 {
@@ -206,14 +208,18 @@ namespace APPartment.Web.Controllers
             if (settings != null)
                 return View(settings);
 
-            ViewData["HomeName"] = CurrentHomeName;
-
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Settings(HomeSettingPostViewModel settings)
         {
+            if (settings.RentDueDateDay <= 0 || settings.RentDueDateDay >= 28)
+            {
+                ModelState.AddModelError("RentDueDateDay", "Rent due date day value can only be between 1 and 27, included.");
+                return View(settings);
+            }
+
             using (var httpClient = new HttpClient())
             {
                 var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/settings";

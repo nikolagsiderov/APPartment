@@ -7,7 +7,7 @@
         public const string TextArea = "TextArea";
         public const string Password = "Password";
         public const string Boolean = "Boolean";
-        public const string Integer = "Integer";
+        public const string Number = "Number";
         public const string Date = "Date";
         public const string Dropdown = "Dropdown";
         public const string Multiselect = "Multiselect";

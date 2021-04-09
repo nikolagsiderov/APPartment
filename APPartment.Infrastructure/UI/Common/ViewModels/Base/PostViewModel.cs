@@ -23,7 +23,7 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
         public virtual string Name { get; set; }
 
         [APPUIHint(Templates.TextArea, Row = 2, Col = 10, Section = "General Information")]
-        public string Details { get; set; }
+        public virtual string Details { get; set; }
 
         #region Hidden properties
         [APPUIHint(Templates.Hidden)]

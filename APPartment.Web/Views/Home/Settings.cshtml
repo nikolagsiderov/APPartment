@@ -1,40 +1,131 @@
 ﻿@model APPartment.Infrastructure.UI.Common.ViewModels.Home.HomeSettingPostViewModel
 
+@{
+    var action = "Settings";
+    var consoleHeader = "Console [Settings]";
+}
+
 <div class="row">
-    <div class="col-md-6">
-        <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Home settings</h6>
+    <div class="col-md-9">
+        <div class="card">
+            <form asp-action="@action" method="post" enctype="multipart/form-data">
+                <div class="card-header">
+                    <input type="submit" value="Save" class="btn btn-success btn-sm" style="font-size: small;" />
+                </div>
+                <div class="card-body">
+                    @{
+                        var propertiesWithoutSection = Model.Properties.Where(x => x.Section == null);
+                        var rowsWithoutSections = propertiesWithoutSection.Select(x => x.Row).Distinct();
+                    }
+
+                    @foreach (var row in rowsWithoutSections)
+                    {
+                        <div class="row">
+                            @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
+                            {
+                                if (string.IsNullOrEmpty(propUI.SelectList))
+                                {
+                                    <div class="col-md-@propUI.Col">
+                                        <div class="editor-field">
+                                            @Html.Editor(propUI.Property.Name)
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="col-md-@propUI.Col">
+                                        <div class="editor-field">
+                                            @Html.LabelFor(m => m, propUI.DisplayName)
+                                            @Html.Editor(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+
+                    @if (Model.Sections.Any())
+                    {
+                        @foreach (var section in Model.Sections)
+                        {
+                            <div class="section">
+                                <h4 style="opacity: 0.8;">@Html.Raw(section)</h4>
+
+                                @{
+                                    var propertiesOfCurrentSection = Model.Properties.Where(x => x.Section == section);
+                                    var rows = propertiesOfCurrentSection.Select(x => x.Row).Distinct();
+                                }
+
+                                @foreach (var row in rows)
+                                {
+                                    <div class="row">
+                                        @foreach (var propUI in propertiesOfCurrentSection.Where(x => x.Row == row))
+                                        {
+                                            if (string.IsNullOrEmpty(propUI.SelectList))
+                                            {
+                                                <div class="col-md-@propUI.Col">
+                                                    <div class="editor-field">
+                                                        @Html.Editor(propUI.Property.Name)
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-@propUI.Col">
+                                                    <div class="editor-field">
+                                                        @Html.LabelFor(m => m, propUI.DisplayName)
+                                                        @Html.Editor(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                    }
+
+                    @foreach (var hiddenProperty in Model.HiddenProperties)
+                    {
+                        @Html.Hidden(hiddenProperty.Name)
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                @consoleHeader
             </div>
             <div class="card-body">
-                <form asp-action="Settings" enctype="multipart/form-data">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                    <input type="hidden" asp-for="ID" />
-                    <input type="hidden" asp-for="ObjectID" />
-
-                    @Html.EditorFor(s => s.HomeName)
-
-                    <div class="form-group">
-                        <label asp-for="RentDueDateDay" class="control-label">Rent due in</label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="inputGroupSelect01">Day</label>
-                            </div>
-                            <select class="custom-select" asp-for="RentDueDateDay" id="inputGroupSelect01">
-                                <option selected value="0">Please select rent due date day of the month.</option>
-                                @for (int i = 1; i <= 30; i++)
-                                {
-                                    <option value="@i">@i</option>
-                                }
-                            </select>
-                        </div>
-                        <span asp-validation-for="RentDueDateDay" class="text-danger"></span>
+                @if (Model.ID > 0)
+                {
+                    <div id="object-additional-info-for-@Model.ID" style="font-family: monospace;">
+                        Created by ID: @Model.CreatedByID
+                        <br />
+                        Created date: @Model.CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")
+                        <br />
+                        Modified by ID: @Model.ModifiedByID
+                        <br />
+                        Modified date: @Model.ModifiedDate.Value.ToString("dd'/'MM'/'yyyy HH:mm:ss")
                     </div>
-
-                    <div class="form-group">
-                        <input type="submit" value="Save" class="btn btn-primary" />
+                    <hr />
+                    <div id="object-actions-for-@Model.ID">
+                        @{
+                            var actionsHtml = string.Join(" &nbsp;", Model.ActionsHtml);
+                        }
+                        @Html.Raw(actionsHtml)
                     </div>
-                </form>
+                }
+                else
+                {
+                    <div style="font-family: monospace;">
+                        Created by ID: Probably you
+                        <br />
+                        Created date: Probably now
+                    </div>
+                }
             </div>
         </div>
     </div>
