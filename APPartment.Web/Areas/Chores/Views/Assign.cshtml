@@ -1,5 +1,7 @@
 ﻿@model APPartment.Infrastructure.UI.Common.ViewModels.Chore.ChorePostViewModel
 
+@Html.Partial("_Loader")
+
 <h5>Assign to user</h5>
 
 <br />
@@ -17,6 +19,7 @@
 <script>
 $(document).ready(function () {
     $('#postAssign').on("click", function () {
+        $('#loading').fadeIn();
         var assignedUserID = $('select[name="AssignedToUserID"]').find(':selected').val();
         $(this).css("pointer-events", "none");
         $('#cancel-postAssign').css("pointer-events", "none");
@@ -25,6 +28,7 @@ $(document).ready(function () {
             type: 'POST',
             url: baseApplicationPath + `Chores/Chores/Assign?ID=@Model.ID&assignedUserID=${assignedUserID}`,
             success: function () {
+                $('#loading').fadeOut();
                 window.location.reload();
             },
             error: function (req, status, error) {
