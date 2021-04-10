@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -9,10 +10,12 @@ using APPartment.Infrastructure.UI.Common.ViewModels.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Comment;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Event;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Image;
+using APPartment.Infrastructure.UI.Common.ViewModels.User;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
 using APPartment.Infrastructure.UI.Web.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using SmartBreadcrumbs.Attributes;
 
@@ -107,7 +110,12 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 
             if (model.ID > 0)
             {
+                var users = await GetUsersInCurrentHome();
+                var usersSelectList = users.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
+                usersSelectList.Insert(0, new SelectListItem() { Text = "Please select a user...", Value = null });
+
                 ViewData["CanManage"] = CanManage;
+                ViewData["UsersSelectList"] = usersSelectList;
 
                 await GetClingons(model);
                 await SetObjectActions(model);
@@ -182,6 +190,12 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 
             if (model.ID > 0)
             {
+                var users = await GetUsersInCurrentHome();
+                var usersSelectList = users.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
+                usersSelectList.Insert(0, new SelectListItem() { Text = "Please select a user...", Value = null });
+
+                ViewData["UsersSelectList"] = usersSelectList;
+
                 await GetClingons(model);
                 await PopulateViewData(model);
                 await SetObjectActions(model);
@@ -475,8 +489,19 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostEvent(EventPostViewModel @event)
+        public async Task<IActionResult> PostEvent(string targetObjectID, string name, string description, string startdate, string enddate, string[] participants)
         {
+            var @event = new EventPostViewModel()
+            {
+                HomeID = (long)CurrentHomeID,
+                Name = name,
+                Details = description,
+                StartDate = DateTime.Parse(startdate),
+                EndDate = DateTime.Parse(enddate),
+                ParticipantUserIDs = participants,
+                TargetObjectID = long.Parse(targetObjectID)
+            };
+
             using (var httpClient = new HttpClient())
             {
                 var requestUri = $"{Configuration.DefaultAPI}/events/post";
@@ -492,7 +517,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
                 }
             }
 
-            return Json(@event);
+            return Json(new { name = @event.Name, description = @event.Details, startdate = @event.StartDate.ToString("dd'/'MM'/'yyyy"), enddate = @event.EndDate.ToString("dd'/'MM'/'yyyy") });
         }
         #endregion
 
@@ -523,5 +548,25 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 
         protected virtual async Task PopulateViewData(U model)
         { }
+
+        protected async Task<List<UserPostViewModel>> GetUsersInCurrentHome()
+        {
+            var users = new List<UserPostViewModel>();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/users/home/{CurrentHomeID}";
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        users = JsonConvert.DeserializeObject<List<UserPostViewModel>>(content);
+                }
+            }
+
+            return users;
+        }
     }
 }

@@ -4,14 +4,36 @@
     var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
 }
 
-@*<div class="row">
+<div class="row">
     <div class="col-10">
-        @{ 
-            // TODO: Add creation of event view here...
-        }
+        <div class="form-group">
+            <label>Event name</label>
+            <input id="create-event-name" class="form-control form-control-solid" placeholder="Event name" />
+        </div>
+        <div class="form-group">
+            <label>Event description</label>
+            <textarea id="create-event-description" class="form-control form-control-solid" rows="5" placeholder="Event description"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Event start date</label>
+            <input type="text" class="form-control form-control-solid datepicker" id="create-event-startdate" placeholder="dd/mm/yy" />
+        </div>
+        <div class="form-group">
+            <label>Event end date</label>
+            <input type="text" class="form-control form-control-solid datepicker" id="create-event-enddate" placeholder="dd/mm/yy" />
+        </div>
+        <div class="form-group">
+            <select multiple class="form-control form-control-solid" id="create-event-participants">
+                @foreach (var option in ViewData["UsersSelectList"] as List<SelectListItem>)
+                {
+                    <option selected="@option.Selected" value="@option.Value">@option.Text</option>
+                }
+            </select>
+        </div>
+        <button id="create-event-button" class="btn btn-primary btn-sm">Add</button>
     </div>
 </div>
-<br />*@
+<br />
 <div class="row">
     <div class="col-md-10" id="events-data">
         @if (Model.Events.Any())
@@ -30,3 +52,54 @@
         }
     </div>
 </div>
+
+<script>
+    $('.datepicker').datepicker();
+
+    $('.datepicker').datepicker({
+      changeMonth: true,
+      changeYear: true
+    });
+
+    $('.datepicker').datepicker("option", "dateFormat", "dd/mm/yy");
+    $('.datepicker').datepicker("option", "showAnim", "slideDown");
+
+    $("#create-event-button").click(function () {
+        $(this).css("pointer-events", "none");
+        var name = $('#create-event-name').val();
+        var description = $('#create-event-description').val();
+        var startdate = $('#create-event-startdate').val();
+        var enddate = $('#create-event-enddate').val();
+        var participants = [];
+        $("#create-event-participants").find(":selected").each(function(){
+           participants.push(this.value);
+        });
+
+        if ((name && name != "") && (startdate && startdate != "") && (enddate && enddate != "") && (participants && participants != "")) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("PostEvent", controllerName)",
+                data: { targetObjectID: @Model.ObjectID, name: name, description: description, startdate: startdate, enddate: enddate, participants: participants },
+                success: function (data) {
+                    $("#no-events-added-message").attr('style', 'display:none;');
+
+                    var appendValue = document.createElement('p');
+                    appendValue.innerHTML = "<hr />" + data.name;
+
+                    $("#events-data").prepend(appendValue);
+
+                    document.getElementById("create-event-name").value = "";
+                    document.getElementById("create-event-description").value = "";
+                    document.getElementById("create-event-startdate").value = "";
+                    document.getElementById("create-event-enddate").value = "";
+                    document.getElementById("create-event-participants").value = "";
+
+                    $(this).css("pointer-events", "auto");
+                },
+                error: function (req, status, error) {
+                    alert(error);
+                }
+            });
+        }
+    });
+</script>

@@ -55,10 +55,15 @@ namespace APPartment.API.Controllers
                 if (headers.ContainsKey("CurrentHomeID"))
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
+                var participants = @event.ParticipantUserIDs;
+
                 @event = new BaseCRUDService(currentUserID).Save(@event);
                 new BaseCRUDService(currentUserID).AddUserAsParticipantToObject(@event.TargetObjectID, currentUserID, @event.ObjectTypeID);
 
-                // TODO: Somewhere here to add event participants...
+                foreach (var userID in participants)
+                {
+                    var eventParticipant = new EventParticipantPostViewModel() { EventID = @event.ID, UserID = long.Parse(userID) };
+                }
 
                 return Ok(@event);
             }

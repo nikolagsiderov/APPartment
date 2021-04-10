@@ -5,6 +5,7 @@ CREATE TABLE [dbo].[Event] (
 	[ObjectID] bigint NOT NULL,
 	[StartDate] DATETIME2 NOT NULL,
 	[EndDate] DATETIME2 NOT NULL,
+	[HomeID] bigint NOT NULL,
 	[TargetObjectID] bigint NOT NULL,
 	CONSTRAINT PK_Event PRIMARY KEY ([ID]),
 	CONSTRAINT FK_ObjectEvent FOREIGN KEY ([ObjectID])
@@ -14,3 +15,7 @@ CREATE TABLE [dbo].[Event] (
 ALTER TABLE [dbo].[Event]
 ADD CONSTRAINT FK_TargetObjectEvent FOREIGN KEY ([TargetObjectID])
     REFERENCES [dbo].[Object]([ObjectID])
+
+ALTER TABLE [dbo].[Event]
+ADD CONSTRAINT FK_HomeEvent FOREIGN KEY ([HomeID])
+    REFERENCES [dbo].[Home]([ID])

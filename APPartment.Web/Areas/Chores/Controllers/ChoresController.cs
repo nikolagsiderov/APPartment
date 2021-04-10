@@ -105,27 +105,14 @@ namespace APPartment.Web.Areas.Chores.Controllers
 
         private async Task<List<SelectListItem>> GetAssignedUsersSelectList(ChorePostViewModel model)
         {
-            var users = new List<UserPostViewModel>();
+            var users = await GetUsersInCurrentHome();
 
-            using (var httpClient = new HttpClient())
-            {
-                var requestUri = $"{Configuration.DefaultAPI}/users/home/{CurrentHomeID}";
-
-                using (var response = await httpClient.GetAsync(requestUri))
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
-                        users = JsonConvert.DeserializeObject<List<UserPostViewModel>>(content);
-                }
-            }
-
-            var selectList = users.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
-            selectList.Insert(0, new SelectListItem() { Text = "Please select a user...", Value = null });
+            var usersSelectList = users.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
+            usersSelectList.Insert(0, new SelectListItem() { Text = "Please select a user...", Value = null });
 
             if (model.ID > 0)
             {
-                foreach (var item in selectList)
+                foreach (var item in usersSelectList)
                 {
                     if (item.Value == model.AssignedToUserID.ToString())
                     {
@@ -134,7 +121,7 @@ namespace APPartment.Web.Areas.Chores.Controllers
                 }
             }
 
-            return selectList;
+            return usersSelectList;
         }
     }
 }

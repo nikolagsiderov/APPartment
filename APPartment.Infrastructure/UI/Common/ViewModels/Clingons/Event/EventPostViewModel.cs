@@ -18,5 +18,7 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Event
 
         [APPUIHint(Templates.Hidden)]
         public long TargetObjectID { get; set; }
+
+        public string[] ParticipantUserIDs { get; set; }
     }
 }
