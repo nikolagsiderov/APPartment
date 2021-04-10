@@ -2,11 +2,7 @@
     $.ajax({
         url: baseApplicationPath + "Notifications/GetCount",
         success: function (data) {
-            if (data === 0) {
-                $("#notificationsCount").html(data);
-            } else {
-                $("#notificationsCount").html(data);
-            }
+            $("#notificationsCount").html(data);
         },
         error: function (req, status, error) {
             alert(error);
