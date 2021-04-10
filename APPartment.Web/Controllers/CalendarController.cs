@@ -26,7 +26,7 @@ namespace APPartment.Web.Controllers
             return View(new EventViewModel());
         }
 
-        public async Task<JsonResult> GetEvents(DateTime start, DateTime end)
+        public async Task<JsonResult> GetEvents()
         {
             var result = new List<EventViewModel>();
 

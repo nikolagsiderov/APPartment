@@ -1,5 +1,11 @@
 ﻿@model APPartment.Infrastructure.UI.Common.ViewModels.GeneralCalendar.EventViewModel
 
+<style>
+    .fc-title {
+        color: white;
+    }
+</style>
+
 <div class="row">
     <div class="col-md-12">
         <div class="card shadow mb-4">
@@ -17,16 +23,23 @@
 
 
 <script type="text/javascript">
-			$(document).ready(function () {
-				$('#calendar').fullCalendar({
-        			header: {
-            			left: 'prev,next today',
-            			center: 'title',
-            			right: 'month,agendaWeek,agendaDay'
-					},
-            		firstDay: 1, //The day that each week begins (Monday=1)
-            		slotMinutes: 60,
-            		events: '@Url.RouteUrl(new{ action="GetEvents", controller="Calendar" })'
-        		});
-    		});
+	$(document).ready(function () {
+		$('#calendar').fullCalendar({
+       		header: {
+          			left: 'prev,next today',
+          			center: 'title',
+          			right: 'month,agendaWeek,agendaDay'
+			},
+          	firstDay: 1, //The day that each week begins (Monday=1)
+          	slotMinutes: 60,
+            events: '@Url.RouteUrl(new{ action="GetEvents", controller="Calendar" })',
+            eventClick: function (event) {
+                bootbox.dialog({
+                    message: event.title,
+                    size: 'small',
+                    centerVertical: true
+                });
+            }
+        });
+    });
 </script>

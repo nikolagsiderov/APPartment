@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using APPartment.Infrastructure.Services.Base;
+using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Event;
 using APPartment.Infrastructure.UI.Common.ViewModels.GeneralCalendar;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,24 +31,20 @@ namespace APPartment.API.Controllers
                 if (headers.ContainsKey("CurrentHomeID"))
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
-                var viewModel = new EventViewModel();
-                var result = new List<EventViewModel>();
-                var start = DateTime.Today.AddDays(-14);
-                var end = DateTime.Today.AddDays(-11);
+                var events = new BaseCRUDService(currentUserID).GetCollection<EventPostViewModel>(x => x.HomeID == currentHomeID);
 
-                for (var i = 1; i <= 5; i++)
+                var result = new List<EventViewModel>();
+
+                foreach (var @event in events)
                 {
                     result.Add(new EventViewModel()
                     {
-                        ID = i,
-                        Title = "Event " + i,
-                        Start = start.ToString(),
-                        End = end.ToString(),
-                        AllDay = false
+                        ID = @event.ID,
+                        Title = @event.Name,
+                        Start = @event.StartDate.ToString(),
+                        End = @event.EndDate.ToString(),
+                        AllDay = true
                     });
-
-                    start = start.AddDays(7);
-                    end = end.AddDays(7);
                 }
 
                 return Ok(result);
