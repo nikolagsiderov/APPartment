@@ -7,6 +7,7 @@ using APPartment.Common;
 using APPartment.Infrastructure.UI.Common.ViewModels;
 using APPartment.Infrastructure.UI.Common.ViewModels.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Comment;
+using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Event;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Image;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
 using APPartment.Infrastructure.UI.Web.Html;
@@ -291,6 +292,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
         {
             model.Comments = await GetComments(model.ObjectID);
             model.Images = await GetImages(model.ObjectID);
+            model.Events = /*await GetEvents(model.ObjectID);*/ new List<EventPostViewModel>();
             model.Participants = await GetParticipants(model.ObjectID);
         }
 
@@ -448,6 +450,51 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             return result;
         }
         #endregion Images
+
+        #region Events
+        private async Task<List<EventPostViewModel>> GetEvents(long targetObjectID)
+        {
+            var result = new List<EventPostViewModel>();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/events/{targetObjectID}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        result = JsonConvert.DeserializeObject<List<EventPostViewModel>>(content);
+                }
+            }
+
+            return result;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostEvent(EventPostViewModel @event)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/events/post";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.PostAsJsonAsync(requestUri, @event))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        @event = JsonConvert.DeserializeObject<EventPostViewModel>(content);
+                }
+            }
+
+            return Json(@event);
+        }
+        #endregion
 
         #region Participants
         private async Task<List<ObjectParticipantPostViewModel>> GetParticipants(long targetObjectID)

@@ -17,6 +17,8 @@
         HomeUser = 13,
         Notification = 14,
         NotificationParticipant = 15,
-        ObjectParticipant = 16
+        ObjectParticipant = 16,
+        Event = 17,
+        EventParticipant = 18
     }
 }

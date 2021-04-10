@@ -1,0 +1,32 @@
+﻿@model APPartment.Infrastructure.UI.Common.ViewModels.Base.PostViewModel
+
+@{
+    var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+}
+
+@*<div class="row">
+    <div class="col-10">
+        @{ 
+            // TODO: Add creation of event view here...
+        }
+    </div>
+</div>
+<br />*@
+<div class="row">
+    <div class="col-md-10" id="events-data">
+        @if (Model.Events.Any())
+        {
+            foreach (var @event in Model.Events)
+            {
+                <hr style="opacity: 0.4;" />
+                <p>@Html.Raw(@event)</p>
+            }
+        }
+        else
+        {
+            <span id="no-events-added-message">
+                No events have been added to this object.
+            </span>
+        }
+    </div>
+</div>

@@ -10,6 +10,7 @@ using APPartment.Infrastructure.UI.Web.Attributes;
 using APPartment.Infrastructure.UI.Web.Constants;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Image;
 using APPartment.Infrastructure.UI.Web.Tools;
+using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Event;
 
 namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
 {
@@ -51,6 +52,8 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
         public List<string> Comments { get; set; } = new List<string>();
 
         public List<ImagePostViewModel> Images { get; set; } = new List<ImagePostViewModel>();
+
+        public List<EventPostViewModel> Events { get; set; } = new List<EventPostViewModel>();
 
         public List<ObjectParticipantPostViewModel> Participants { get; set; } = new List<ObjectParticipantPostViewModel>();
 
