@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Net.Http;
-using System.Threading.Tasks;
-using APPartment.Common;
+﻿using APPartment.Common;
 using APPartment.Infrastructure.UI.Common.ViewModels;
 using APPartment.Infrastructure.UI.Common.ViewModels.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Comment;
@@ -18,6 +12,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using SmartBreadcrumbs.Attributes;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 {
@@ -112,7 +112,6 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             {
                 var users = await GetUsersInCurrentHome();
                 var usersSelectList = users.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
-                usersSelectList.Insert(0, new SelectListItem() { Text = "Please select a user...", Value = null });
 
                 ViewData["CanManage"] = CanManage;
                 ViewData["UsersSelectList"] = usersSelectList;
@@ -192,7 +191,6 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             {
                 var users = await GetUsersInCurrentHome();
                 var usersSelectList = users.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
-                usersSelectList.Insert(0, new SelectListItem() { Text = "Please select a user...", Value = null });
 
                 ViewData["UsersSelectList"] = usersSelectList;
 
@@ -304,9 +302,9 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
         #region Clingons
         protected async Task GetClingons(U model)
         {
-            model.Comments = await GetComments(model.ObjectID);
+            model.CommentsHtml = await GetComments(model.ObjectID);
             model.Images = await GetImages(model.ObjectID);
-            model.Events = /*await GetEvents(model.ObjectID);*/ new List<EventPostViewModel>();
+            model.EventsHtml = await GetEvents(model.ObjectID);
             model.Participants = await GetParticipants(model.ObjectID);
         }
 
@@ -466,9 +464,9 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
         #endregion Images
 
         #region Events
-        private async Task<List<EventPostViewModel>> GetEvents(long targetObjectID)
+        private async Task<List<string>> GetEvents(long targetObjectID)
         {
-            var result = new List<EventPostViewModel>();
+            var events = new List<EventPostViewModel>();
 
             using (var httpClient = new HttpClient())
             {
@@ -481,9 +479,11 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
                     string content = await response.Content.ReadAsStringAsync();
 
                     if (response.IsSuccessStatusCode)
-                        result = JsonConvert.DeserializeObject<List<EventPostViewModel>>(content);
+                        events = JsonConvert.DeserializeObject<List<EventPostViewModel>>(content);
                 }
             }
+
+            var result = EventsRenderer.BuildEvents(events);
 
             return result;
         }
@@ -517,7 +517,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
                 }
             }
 
-            return Json(new { name = @event.Name, description = @event.Details, startdate = @event.StartDate.ToString("dd'/'MM'/'yyyy"), enddate = @event.EndDate.ToString("dd'/'MM'/'yyyy") });
+            return Json(EventsRenderer.BuildPostEvent(@event));
         }
         #endregion
 

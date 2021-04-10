@@ -18,9 +18,9 @@
 </div>
 <div class="row">
     <div class="col-md-10" id="comment-text-data">
-        @if (Model.Comments.Any())
+        @if (Model.CommentsHtml.Any())
         {
-            foreach (var comment in Model.Comments)
+            foreach (var comment in Model.CommentsHtml)
             {
                 <hr style="opacity: 0.4;" />
                 <p>@Html.Raw(comment)</p>

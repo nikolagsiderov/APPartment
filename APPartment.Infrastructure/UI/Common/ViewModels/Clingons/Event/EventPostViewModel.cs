@@ -20,5 +20,7 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Event
         public long TargetObjectID { get; set; }
 
         public string[] ParticipantUserIDs { get; set; }
+
+        public string EventParticipantNames { get; set; }
     }
 }

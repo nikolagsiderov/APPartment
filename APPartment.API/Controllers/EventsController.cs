@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using APPartment.Infrastructure.Services.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Event;
+using APPartment.Infrastructure.UI.Common.ViewModels.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,6 +30,20 @@ namespace APPartment.API.Controllers
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
                 var events = new BaseCRUDService(currentUserID).GetCollection<EventPostViewModel>(x => x.TargetObjectID == targetObjectID);
+
+                foreach (var @event in events)
+                {
+                    var participantUsernames = new List<string>();
+                    var eventParticipants = new BaseCRUDService(currentUserID).GetCollection<EventParticipantPostViewModel>(x => x.EventID == @event.ID);
+
+                    foreach (var participant in eventParticipants)
+                    {
+                        var participantUsername = new BaseCRUDService(currentUserID).GetEntity<UserPostViewModel>(x => x.ID == participant.UserID).Name;
+                        participantUsernames.Add(participantUsername);
+                    }
+
+                    @event.EventParticipantNames = string.Join(", ", participantUsernames);
+                }
 
                 return Ok(events);
             }
@@ -63,7 +79,19 @@ namespace APPartment.API.Controllers
                 foreach (var userID in participants)
                 {
                     var eventParticipant = new EventParticipantPostViewModel() { EventID = @event.ID, UserID = long.Parse(userID) };
+                    new BaseCRUDService(currentUserID).Save(eventParticipant);
                 }
+
+                var participantUsernames = new List<string>();
+                var eventParticipants = new BaseCRUDService(currentUserID).GetCollection<EventParticipantPostViewModel>(x => x.EventID == @event.ID);
+
+                foreach (var participant in eventParticipants)
+                {
+                    var participantUsername = new BaseCRUDService(currentUserID).GetEntity<UserPostViewModel>(x => x.ID == participant.UserID).Name;
+                    participantUsernames.Add(participantUsername);
+                }
+
+                @event.EventParticipantNames = string.Join(", ", participantUsernames);
 
                 return Ok(@event);
             }

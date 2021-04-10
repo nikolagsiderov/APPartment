@@ -49,11 +49,11 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
         public DateTime? ModifiedDate { get; set; }
         #endregion
 
-        public List<string> Comments { get; set; } = new List<string>();
+        public List<string> CommentsHtml { get; set; } = new List<string>();
 
         public List<ImagePostViewModel> Images { get; set; } = new List<ImagePostViewModel>();
 
-        public List<EventPostViewModel> Events { get; set; } = new List<EventPostViewModel>();
+        public List<string> EventsHtml { get; set; } = new List<string>();
 
         public List<ObjectParticipantPostViewModel> Participants { get; set; } = new List<ObjectParticipantPostViewModel>();
 
