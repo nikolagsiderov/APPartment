@@ -25,6 +25,8 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
 
         public long ObjectTypeID { get; set; }
 
+        public long? HomeID { get; set; }
+
         public long CreatedByID { get; set; }
 
         public DateTime CreatedDate { get; set; }

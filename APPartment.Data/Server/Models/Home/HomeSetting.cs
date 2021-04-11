@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace APPartment.Data.Server.Models.Home
 {
     [Table("HomeSetting", Schema = "dbo")]
-    public class HomeSetting : HomeBaseObject
+    public class HomeSetting : BaseObject
     {
         [FieldMappingForMainTable]
         public int RentDueDateDay { get; set; }

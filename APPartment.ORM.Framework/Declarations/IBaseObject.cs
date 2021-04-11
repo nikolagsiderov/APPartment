@@ -10,6 +10,8 @@ namespace APPartment.ORM.Framework.Declarations
 
         public long ObjectTypeID { get; set; }
 
+        public long? HomeID { get; set; }
+
         public string Name { get; set; }
 
         public string Details { get; set; }

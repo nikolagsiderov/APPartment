@@ -16,6 +16,9 @@ namespace APPartment.Data.Server.Models.Base
         public long ObjectTypeID { get; set; }
 
         [FieldMappingForObjectTable]
+        public long? HomeID { get; set; }
+
+        [FieldMappingForObjectTable]
         public string Name { get; set; }
 
         [FieldMappingForObjectTable]

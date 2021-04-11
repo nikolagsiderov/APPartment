@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace APPartment.Data.Server.Models.Issue
 {
     [Table("Issue", Schema = "dbo")]
-    public class Issue : HomeBaseObject
+    public class Issue : BaseObject
     {
         [FieldMappingForMainTable]
         public bool IsClosed { get; set; }

@@ -10,7 +10,7 @@ using System.ComponentModel.DataAnnotations;
 namespace APPartment.Infrastructure.UI.Common.ViewModels.Home
 {
     [IMapFrom(typeof(HomeSetting))]
-    public class HomeSettingPostViewModel : PostViewModelWithHome
+    public class HomeSettingPostViewModel : PostViewModel
     {
         public override List<string> Sections => new List<string>() { "General" };
 

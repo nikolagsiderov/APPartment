@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace APPartment.Data.Server.Models.Clingons
 {
     [Table("Event", Schema = "dbo")]
-    public class Event : HomeBaseObject
+    public class Event : BaseObject
     {
         [FieldMappingForMainTable]
         public DateTime StartDate { get; set; }

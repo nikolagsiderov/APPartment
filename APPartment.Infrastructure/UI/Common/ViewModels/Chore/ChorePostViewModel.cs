@@ -8,7 +8,7 @@ using APPChore = APPartment.Data.Server.Models.Chore.Chore;
 namespace APPartment.Infrastructure.UI.Common.ViewModels.Chore
 {
     [IMapFrom(typeof(APPChore))]
-    public class ChorePostViewModel : PostViewModelWithHome
+    public class ChorePostViewModel : PostViewModel
     {
         [APPUIHint(Templates.Boolean, Row = 1, Col = 6, Order = 2, Section = "General Information")]
         [Display(Name = "Done")]

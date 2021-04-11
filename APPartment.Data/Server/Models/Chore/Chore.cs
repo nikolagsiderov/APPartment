@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace APPartment.Data.Server.Models.Chore
 {
     [Table("Chore", Schema = "dbo")]
-    public class Chore : HomeBaseObject
+    public class Chore : BaseObject
     {
         [FieldMappingForMainTable]
         public long? AssignedToUserID { get; set; }

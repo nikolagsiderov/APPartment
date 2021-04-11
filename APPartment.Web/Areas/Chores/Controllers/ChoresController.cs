@@ -99,6 +99,8 @@ namespace APPartment.Web.Areas.Chores.Controllers
 
         protected override async Task PopulateViewData(ChorePostViewModel model)
         {
+            await base.PopulateViewData(model);
+
             var users = await GetAssignedUsersSelectList(model);
             ViewData["AssignedToUserID"] = users;
         }

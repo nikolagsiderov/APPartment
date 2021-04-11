@@ -8,7 +8,7 @@ using APPInventory = APPartment.Data.Server.Models.Inventory.Inventory;
 namespace APPartment.Infrastructure.UI.Common.ViewModels.Inventory
 {
     [IMapFrom(typeof(APPInventory))]
-    public class InventoryPostViewModel : PostViewModelWithHome
+    public class InventoryPostViewModel : PostViewModel
     {
         [APPUIHint(Templates.Boolean, Row = 1, Col = 6, Order = 2, Section = "General Information")]
         [Display(Name = "Supplied")]

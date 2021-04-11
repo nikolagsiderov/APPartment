@@ -7,7 +7,7 @@ using APPIssue = APPartment.Data.Server.Models.Issue.Issue;
 namespace APPartment.Infrastructure.UI.Common.ViewModels.Issue
 {
     [IMapFrom(typeof(APPIssue))]
-    public class IssueDisplayViewModel : GridItemViewModelWithHome
+    public class IssueDisplayViewModel : GridItemViewModel
     {
         [GridFieldDisplay]
         [Display(Name = "Closed")]

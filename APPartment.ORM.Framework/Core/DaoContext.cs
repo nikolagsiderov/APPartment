@@ -275,9 +275,7 @@ namespace APPartment.ORM.Framework.Core
                 .GetProperties()
                 .Where(prop =>
                 Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute))
-                || Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute))
-                || Attribute.IsDefined(prop, typeof(FieldMappingForObjectTablePrimaryKeyAttribute))
-                || Attribute.IsDefined(prop, typeof(FieldMappingForMainTablePrimaryKeyAttribute)))
+                || Attribute.IsDefined(prop, typeof(FieldMappingForObjectTablePrimaryKeyAttribute)))
                 .Count();
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
@@ -517,16 +515,34 @@ namespace APPartment.ORM.Framework.Core
             var table = GetTableName<T>();
             var properties = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute)));
-            var propertyColumnNames = SqlQueryProvider.GetPropertyNamesForDBColumns(properties) + ", [ObjectID]";
-            var propertyValues = SqlQueryProvider.GetPropertyValues<T>(properties, businessObject) + $", {objectID}";
-            var query = SqlQueryProvider.InsertBusinessObject(table, propertyColumnNames, propertyValues);
 
-            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            if (properties.Any())
             {
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
+                var propertyColumnNames = SqlQueryProvider.GetPropertyNamesForDBColumns(properties) + ", [ObjectID]";
+                var propertyValues = SqlQueryProvider.GetPropertyValues<T>(properties, businessObject) + $", {objectID}";
+                var query = SqlQueryProvider.InsertBusinessObject(table, propertyColumnNames, propertyValues);
+
+                using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
+            }
+            else
+            {
+                var propertyColumnNames = "[ObjectID]";
+                var propertyValues = $"{objectID}";
+                var query = SqlQueryProvider.InsertBusinessObject(table, propertyColumnNames, propertyValues);
+
+                using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
             }
 
             return SelectGetBusinessObjectAfterSave<T>(businessObject, table, objectID);
@@ -573,15 +589,19 @@ namespace APPartment.ORM.Framework.Core
             var table = GetTableName<T>();
             var properties = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute)));
-            var propertyNamesAndValues = SqlQueryProvider.GetPropertyNamesForDBColumnsAndValuesForUpdate<T>(properties, businessObject);
-            string query = SqlQueryProvider.UpdateBusinessObject(table, propertyNamesAndValues, businessObject.ObjectID.ToString());
 
-            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            if (properties.Any())
             {
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
+                var propertyNamesAndValues = SqlQueryProvider.GetPropertyNamesForDBColumnsAndValuesForUpdate<T>(properties, businessObject);
+                string query = SqlQueryProvider.UpdateBusinessObject(table, propertyNamesAndValues, businessObject.ObjectID.ToString());
+
+                using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
+                }
             }
 
             return SelectGetBusinessObjectAfterSave<T>(businessObject, table, businessObject.ObjectID);

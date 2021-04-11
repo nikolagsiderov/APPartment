@@ -23,8 +23,8 @@ using System.Threading.Tasks;
 namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 {
     public abstract class BaseCRUDController<T, U> : BaseAuthorizeController
-        where T : GridItemViewModelWithHome, new()
-        where U : PostViewModelWithHome, new()
+        where T : GridItemViewModel, new()
+        where U : PostViewModel, new()
     {
         public BaseCRUDController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
@@ -297,7 +297,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             model.CommentsHtml = await GetComments(model.ObjectID);
             model.Images = await GetImages(model.ObjectID);
             model.EventsHtml = await GetEvents(model.ObjectID);
-            model.ObjectLinksHtml = await GetLinks(model.ObjectID);
+            model.ObjectLinksHtml = /*await GetLinks(model.ObjectID);*/ new List<string>();
             model.Participants = await GetParticipants(model.ObjectID);
         }
 
@@ -607,7 +607,23 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             ViewData["ObjectLinkTypeSelectList"] = objectLinkTypesSelectList;
 
             var objects = new List<BusinessObjectDisplayViewModel>();
-            var objectsSelectList = new List<SelectListItem>();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/home/objects";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        objects = JsonConvert.DeserializeObject<List<BusinessObjectDisplayViewModel>>(content);
+                }
+            }
+
+            var objectsSelectList = objects.Select(x => new SelectListItem() { Text = x.Name, Value = x.ObjectID.ToString() }).ToList();
             ViewData["ObjectBIDSelectList"] = objectsSelectList;
         }
 

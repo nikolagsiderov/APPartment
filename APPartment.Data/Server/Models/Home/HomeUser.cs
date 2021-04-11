@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace APPartment.Data.Server.Models.Home
 {
     [Table("HomeUser", Schema = "dbo")]
-    public class HomeUser : HomeBaseObject
+    public class HomeUser : BaseObject
     {
         [FieldMappingForMainTable]
         public long UserID { get; set; }

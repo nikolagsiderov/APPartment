@@ -37,6 +37,9 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
         public long ObjectTypeID { get; set; }
 
         [APPUIHint(Templates.Hidden)]
+        public long? HomeID { get; set; }
+
+        [APPUIHint(Templates.Hidden)]
         public long CreatedByID { get; set; }
 
         [APPUIHint(Templates.Hidden)]

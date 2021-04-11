@@ -8,7 +8,7 @@ using System;
 namespace APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Event
 {
     [IMapFrom(typeof(APPEvent))]
-    public class EventPostViewModel : PostViewModelWithHome
+    public class EventPostViewModel : PostViewModel
     {
         [APPUIHint(Templates.Date)]
         public DateTime StartDate { get; set; }

@@ -436,5 +436,36 @@ namespace APPartment.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
         }
+
+        // api/home/objects
+        [HttpGet]
+        [Route("objects")]
+        public ActionResult GetObjects()
+        {
+            try
+            {
+                var currentUserID = 0l;
+                var currentHomeID = 0l;
+                var re = Request;
+                var headers = re.Headers;
+
+                if (headers.ContainsKey("CurrentUserID"))
+                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
+
+                if (headers.ContainsKey("CurrentHomeID"))
+                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
+
+                var result = new BaseCRUDService(currentUserID).GetCollection(x => x.HomeID == currentHomeID);
+
+                if (result.Any())
+                    return Ok(result);
+                else
+                    return NotFound();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
     }
 }

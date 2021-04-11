@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace APPartment.Data.Server.Models.Notification
 {
     [Table("Notification", Schema = "dbo")]
-    public class Notification : HomeBaseObject
+    public class Notification : BaseObject
     {
     }
 }

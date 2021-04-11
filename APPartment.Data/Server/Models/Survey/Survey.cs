@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace APPartment.Data.Server.Models.Survey
 {
     [Table("Survey", Schema = "dbo")]
-    public class Survey : HomeBaseObject
+    public class Survey : BaseObject
     {
         [FieldMappingForMainTable]
         public bool IsCompleted { get; set; } = false;

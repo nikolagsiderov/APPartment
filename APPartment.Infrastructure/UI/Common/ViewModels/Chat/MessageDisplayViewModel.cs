@@ -5,7 +5,7 @@ using APPartment.Infrastructure.UI.Common.ViewModels.Base;
 namespace APPartment.Infrastructure.UI.Common.ViewModels.Chat
 {
     [IMapFrom(typeof(Message))]
-    public class MessageDisplayViewModel : PostViewModelWithHome
+    public class MessageDisplayViewModel : PostViewModel
     {
     }
 }

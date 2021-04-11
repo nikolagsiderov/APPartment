@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace APPartment.Data.Server.Models.Chat
 {
     [Table("Message", Schema = "dbo")]
-    public class Message : HomeBaseObject
+    public class Message : BaseObject
     {
     }
 }

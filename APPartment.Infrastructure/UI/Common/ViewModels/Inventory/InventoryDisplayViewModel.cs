@@ -7,7 +7,7 @@ using APPInventory = APPartment.Data.Server.Models.Inventory.Inventory;
 namespace APPartment.Infrastructure.UI.Common.ViewModels.Inventory
 {
     [IMapFrom(typeof(APPInventory))]
-    public class InventoryDisplayViewModel : GridItemViewModelWithHome
+    public class InventoryDisplayViewModel : GridItemViewModel
     {
         [GridFieldDisplay]
         [Display(Name = "Supplied")]

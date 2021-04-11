@@ -143,9 +143,8 @@ namespace APPartment.Infrastructure.Services.Base
 
             var getObjectByIDFunc = typeof(BaseFacade)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(BaseFacade.GetObject)))
-                .FirstOrDefault()
-                .MakeGenericMethod(serverModelType);
+                .Where(x => x.Name.Equals(nameof(BaseFacade.GetBusinessObject)))
+                .FirstOrDefault();
 
             var serverModel = getObjectByIDFunc
                 .Invoke(BaseFacade, new object[] { objectID });
@@ -154,29 +153,27 @@ namespace APPartment.Infrastructure.Services.Base
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.Name.Equals(nameof(MapperService.GetViewModel)))
                 .FirstOrDefault()
-                .MakeGenericMethod(typeof(T), serverModelType);
+                .MakeGenericMethod(typeof(BusinessObjectDisplayViewModel), serverModelType);
 
-            var result = (T)toViewModelFunc.Invoke(this, new object[] { serverModel });
+            var result = (BusinessObjectDisplayViewModel)toViewModelFunc.Invoke(this, new object[] { serverModel });
 
             return result;
         }
 
-        public T GetEntity<T>(Expression<Func<T, bool>> filter)
-            where T : class, IBaseObject, new()
+        public BusinessObjectDisplayViewModel GetEntity(Expression<Func<BusinessObjectDisplayViewModel, bool>> filter)
         {
-            var serverModelType = GetServerModelType<T>();
+            var serverModelType = GetServerModelType<BusinessObjectDisplayViewModel>();
 
             var getObjectFilteredFunc = typeof(BaseFacade)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(BaseFacade.GetObject)))
-                .Last()
-                .MakeGenericMethod(serverModelType);
+                .Where(x => x.Name.Equals(nameof(BaseFacade.GetBusinessObject)))
+                .Last();
 
             var convertFilterFunc = typeof(MapperService)
                 .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
                 .Where(x => x.Name.Equals(nameof(ConvertExpression)))
                 .FirstOrDefault()
-                .MakeGenericMethod(typeof(T), serverModelType);
+                .MakeGenericMethod(typeof(BusinessObjectDisplayViewModel), serverModelType);
 
             var convertedFilter = convertFilterFunc.Invoke(this, new object[] { filter });
 
@@ -187,54 +184,27 @@ namespace APPartment.Infrastructure.Services.Base
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.Name.Equals(nameof(MapperService.GetViewModel)))
                 .FirstOrDefault()
-                .MakeGenericMethod(typeof(T), serverModelType);
+                .MakeGenericMethod(typeof(BusinessObjectDisplayViewModel), serverModelType);
 
-            var result = (T)toViewModelFunc.Invoke(this, new object[] { serverModel });
-
-            return result;
-        }
-
-        public List<T> GetCollection<T>()
-            where T : class, IBaseObject, new()
-        {
-            var serverModelType = GetServerModelType<T>();
-
-            var getObjectsFunc = typeof(BaseFacade)
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(BaseFacade.GetObjects)))
-                .FirstOrDefault()
-                .MakeGenericMethod(serverModelType);
-
-            var serverModels = getObjectsFunc
-                .Invoke(BaseFacade, null);
-
-            var toViewModelFunc = typeof(MapperService)
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(MapperService.GetViewModelCollection)))
-                .FirstOrDefault()
-                .MakeGenericMethod(typeof(T), serverModelType);
-
-            var result = toViewModelFunc.Invoke(this, new object[] { serverModels }) as List<T>;
+            var result = (BusinessObjectDisplayViewModel)toViewModelFunc.Invoke(this, new object[] { serverModel });
 
             return result;
         }
 
-        public List<T> GetCollection<T>(Expression<Func<T, bool>> filter)
-            where T : class, IBaseObject, new()
+        public List<BusinessObjectDisplayViewModel> GetCollection(Expression<Func<BusinessObjectDisplayViewModel, bool>> filter)
         {
-            var serverModelType = GetServerModelType<T>();
+            var serverModelType = GetServerModelType<BusinessObjectDisplayViewModel>();
 
             var getObjectsFilteredFunc = typeof(BaseFacade)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(BaseFacade.GetObjects)))
-                .Last()
-                .MakeGenericMethod(serverModelType);
+                .Where(x => x.Name.Equals(nameof(BaseFacade.GetBusinessObjects)))
+                .Last();
 
             var convertFilterFunc = typeof(MapperService)
                 .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
                 .Where(x => x.Name.Equals(nameof(ConvertExpression)))
                 .FirstOrDefault()
-                .MakeGenericMethod(typeof(T), serverModelType);
+                .MakeGenericMethod(typeof(BusinessObjectDisplayViewModel), serverModelType);
 
             var convertedFilter = convertFilterFunc.Invoke(this, new object[] { filter });
 
@@ -245,9 +215,9 @@ namespace APPartment.Infrastructure.Services.Base
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.Name.Equals(nameof(MapperService.GetViewModelCollection)))
                 .FirstOrDefault()
-                .MakeGenericMethod(typeof(T), serverModelType);
+                .MakeGenericMethod(typeof(BusinessObjectDisplayViewModel), serverModelType);
 
-            var result = toViewModelFunc.Invoke(this, new object[] { serverModels }) as List<T>;
+            var result = toViewModelFunc.Invoke(this, new object[] { serverModels }) as List<BusinessObjectDisplayViewModel>;
 
             return result;
         }
@@ -484,7 +454,7 @@ namespace APPartment.Infrastructure.Services.Base
         {
             if (userID != 0)
             {
-                if (objectTypeID != (long)ObjectTypes.ObjectParticipant)
+                if (objectTypeID != (long)ObjectTypes.ObjectParticipant && objectTypeID != (long)ObjectTypes.Message)
                 {
                     if (!Any<ObjectParticipantPostViewModel>(x => x.TargetObjectID == targetObjectID && x.UserID == userID))
                     {
