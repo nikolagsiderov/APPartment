@@ -13,6 +13,11 @@ namespace APPartment.ORM.Framework.Core
             return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectID] = [dbo].[Object].[ObjectID] WHERE [ID] = {1}", table, ID);
         }
 
+        public static string SelectBusinessObjectByID(string objectID)
+        {
+            return string.Format("SELECT TOP(1) * FROM [dbo].[Object] WHERE [ObjectID] = {0}", objectID);
+        }
+
         public static string SelectBusinessObjectByObjectID(string table, string objectID)
         {
             return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectID] = [dbo].[Object].[ObjectID] WHERE [dbo].[{0}].[ObjectID] = {1}", table, objectID);
@@ -23,6 +28,11 @@ namespace APPartment.ORM.Framework.Core
             return string.Format("SELECT TOP(1) * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectID] = [dbo].[Object].[ObjectID] WHERE {1}", table, sqlClause);
         }
 
+        public static string SelectBusinessObjectByClause(string sqlClause)
+        {
+            return string.Format("SELECT TOP(1) * FROM [dbo].[Object] WHERE {0}", sqlClause);
+        }
+
         public static string SelectBusinessObjects(string table)
         {
             return string.Format("SELECT * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectID] = [dbo].[Object].[ObjectID]", table);
@@ -31,6 +41,11 @@ namespace APPartment.ORM.Framework.Core
         public static string SelectBusinessObjectsByClause(string table, string sqlClause)
         {
             return string.Format("SELECT * FROM [dbo].[{0}] LEFT JOIN [dbo].[Object] ON [dbo].[{0}].[ObjectID] = [dbo].[Object].[ObjectID] WHERE {1}", table, sqlClause);
+        }
+
+        public static string SelectBusinessObjectsByClause(string sqlClause)
+        {
+            return string.Format("SELECT * FROM [dbo].[Object] WHERE {0}", sqlClause);
         }
 
         public static string SelectLookupObjectByID(string table, string ID)

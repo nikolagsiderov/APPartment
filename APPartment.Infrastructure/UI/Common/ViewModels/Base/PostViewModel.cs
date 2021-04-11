@@ -55,6 +55,8 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
 
         public List<string> EventsHtml { get; set; } = new List<string>();
 
+        public List<string> ObjectLinksHtml { get; set; } = new List<string>();
+
         public List<ObjectParticipantPostViewModel> Participants { get; set; } = new List<ObjectParticipantPostViewModel>();
 
         public List<string> ActionsHtml = new List<string>();

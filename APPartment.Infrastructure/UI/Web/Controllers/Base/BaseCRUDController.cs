@@ -4,6 +4,7 @@ using APPartment.Infrastructure.UI.Common.ViewModels.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Comment;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Event;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Image;
+using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Link;
 using APPartment.Infrastructure.UI.Common.ViewModels.User;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
 using APPartment.Infrastructure.UI.Web.Html;
@@ -110,11 +111,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 
             if (model.ID > 0)
             {
-                var users = await GetUsersInCurrentHome();
-                var usersSelectList = users.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
-
                 ViewData["CanManage"] = CanManage;
-                ViewData["UsersSelectList"] = usersSelectList;
 
                 await GetClingons(model);
                 await SetObjectActions(model);
@@ -189,11 +186,6 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 
             if (model.ID > 0)
             {
-                var users = await GetUsersInCurrentHome();
-                var usersSelectList = users.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
-
-                ViewData["UsersSelectList"] = usersSelectList;
-
                 await GetClingons(model);
                 await PopulateViewData(model);
                 await SetObjectActions(model);
@@ -305,6 +297,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             model.CommentsHtml = await GetComments(model.ObjectID);
             model.Images = await GetImages(model.ObjectID);
             model.EventsHtml = await GetEvents(model.ObjectID);
+            model.ObjectLinksHtml = await GetLinks(model.ObjectID);
             model.Participants = await GetParticipants(model.ObjectID);
         }
 
@@ -521,6 +514,60 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
         }
         #endregion
 
+        #region Links
+        private async Task<List<string>> GetLinks(long targetObjectID)
+        {
+            var links = new List<ObjectLinkPostViewModel>();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/objectlinks/{targetObjectID}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        links = JsonConvert.DeserializeObject<List<ObjectLinkPostViewModel>>(content);
+                }
+            }
+
+            var result = ObjectLinksRenderer.BuildLinks(links);
+
+            return result;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostLink(string targetObjectID, string[] objectBIDs, string[] objectLinkTypes)
+        {
+            var link = new ObjectLinkPostViewModel()
+            {
+                ObjectBID = long.Parse(objectBIDs[0]),
+                ObjectLinkType = objectLinkTypes[0],
+                TargetObjectID = long.Parse(targetObjectID)
+            };
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/objectlinks/post";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.PostAsJsonAsync(requestUri, link))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        link = JsonConvert.DeserializeObject<ObjectLinkPostViewModel>(content);
+                }
+            }
+
+            return Json(ObjectLinksRenderer.BuildPostLink(link));
+        }
+        #endregion
+
         #region Participants
         private async Task<List<ObjectParticipantPostViewModel>> GetParticipants(long targetObjectID)
         {
@@ -547,7 +594,22 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
         #endregion Clingons
 
         protected virtual async Task PopulateViewData(U model)
-        { }
+        {
+            var users = await GetUsersInCurrentHome();
+            var usersSelectList = users.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
+            ViewData["UsersSelectList"] = usersSelectList;
+
+            // TODO: Brainstorm on more object link types...
+            var objectLinkTypesSelectList = new List<SelectListItem>()
+            {
+                new SelectListItem() { Text = "relates to", Value = "relates to", Selected = true }
+            };
+            ViewData["ObjectLinkTypeSelectList"] = objectLinkTypesSelectList;
+
+            var objects = new List<BusinessObjectDisplayViewModel>();
+            var objectsSelectList = new List<SelectListItem>();
+            ViewData["ObjectBIDSelectList"] = objectsSelectList;
+        }
 
         protected async Task<List<UserPostViewModel>> GetUsersInCurrentHome()
         {

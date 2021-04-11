@@ -193,6 +193,126 @@ namespace APPartment.ORM.Framework.Core
             return result;
         }
 
+        public T SelectGetBusinessObject<T>(T result, long objectID)
+            where T : class, IBaseObject, new()
+        {
+            var query = SqlQueryProvider.SelectBusinessObjectByID(objectID.ToString());
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                conn.Open();
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        PropertyInfo property = result.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
+                        if (null != property && property.CanWrite)
+                        {
+                            var value = reader.GetValue(i);
+
+                            if (value == DBNull.Value)
+                                continue;
+
+                            property.SetValue(result, value, null);
+                        }
+                    }
+                }
+
+                conn.Close();
+            }
+
+            return result;
+        }
+
+        public T SelectGetBusinessObject<T>(T result, Expression<Func<T, bool>> filter)
+            where T : class, IBaseObject, new()
+        {
+            var sqlClause = expressionToSql.Translate(filter);
+            var query = SqlQueryProvider.SelectBusinessObjectByClause(sqlClause);
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                conn.Open();
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    for (int i = 0; i < reader.FieldCount; i++)
+                    {
+                        PropertyInfo property = result.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
+                        if (null != property && property.CanWrite)
+                        {
+                            var value = reader.GetValue(i);
+
+                            if (value == DBNull.Value)
+                                continue;
+
+                            property.SetValue(result, value, null);
+                        }
+                    }
+                }
+
+                conn.Close();
+            }
+
+            if (result.ObjectID == 0)
+                result = null;
+
+            return result;
+        }
+
+        public List<T> SelectGetBusinessObjects<T>(List<T> result, Expression<Func<T, bool>> filter)
+            where T : class, IBaseObject, new()
+        {
+            var sqlClause = expressionToSql.Translate(filter);
+            var query = SqlQueryProvider.SelectBusinessObjectsByClause(sqlClause);
+            T obj = null;
+            var propertiesCount = typeof(T)
+                .GetProperties()
+                .Where(prop =>
+                Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute))
+                || Attribute.IsDefined(prop, typeof(FieldMappingForMainTableAttribute))
+                || Attribute.IsDefined(prop, typeof(FieldMappingForObjectTablePrimaryKeyAttribute))
+                || Attribute.IsDefined(prop, typeof(FieldMappingForMainTablePrimaryKeyAttribute)))
+                .Count();
+
+            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                conn.Open();
+                var reader = cmd.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    obj = (T)Activator.CreateInstance(typeof(T));
+
+                    for (int i = 0; i < propertiesCount; i++)
+                    {
+                        PropertyInfo property = obj.GetType().GetProperty(reader.GetName(i), BindingFlags.Public | BindingFlags.Instance);
+                        if (null != property && property.CanWrite)
+                        {
+                            var value = reader.GetValue(i);
+
+                            if (value == DBNull.Value)
+                                continue;
+
+                            property.SetValue(obj, value, null);
+                        }
+                    }
+
+                    result.Add(obj);
+                }
+
+                conn.Close();
+            }
+
+            return result;
+        }
+
         public T SelectGetLookupObject<T>(T result, long ID)
             where T : class, ILookupObject, new()
         {

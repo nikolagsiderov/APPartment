@@ -1,4 +1,5 @@
-﻿using APPartment.ORM.Framework.Core;
+﻿using APPartment.Data.Server.Models;
+using APPartment.ORM.Framework.Core;
 using APPartment.ORM.Framework.Declarations;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,27 @@ namespace APPartment.Data.Core
         {
             var result = new List<T>();
             result = dao.SelectGetObjects<T>(result, filter);
+            return result;
+        }
+
+        public BusinessObject GetBusinessObject(long objectID)
+        {
+            var result = new BusinessObject();
+            result = dao.SelectGetBusinessObject<BusinessObject>(result, objectID);
+            return result;
+        }
+
+        public BusinessObject GetBusinessObject(Expression<Func<BusinessObject, bool>> filter)
+        {
+            var result = new BusinessObject();
+            result = dao.SelectGetBusinessObject<BusinessObject>(result, filter);
+            return result;
+        }
+
+        public List<BusinessObject> GetBusinessObjects(Expression<Func<BusinessObject, bool>> filter)
+        {
+            var result = new List<BusinessObject>();
+            result = dao.SelectGetBusinessObjects<BusinessObject>(result, filter);
             return result;
         }
 

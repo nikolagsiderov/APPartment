@@ -137,6 +137,121 @@ namespace APPartment.Infrastructure.Services.Base
             return result;
         }
 
+        public BusinessObjectDisplayViewModel GetEntity(long objectID)
+        {
+            var serverModelType = GetServerModelType<BusinessObjectDisplayViewModel>();
+
+            var getObjectByIDFunc = typeof(BaseFacade)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(BaseFacade.GetObject)))
+                .FirstOrDefault()
+                .MakeGenericMethod(serverModelType);
+
+            var serverModel = getObjectByIDFunc
+                .Invoke(BaseFacade, new object[] { objectID });
+
+            var toViewModelFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(MapperService.GetViewModel)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+            var result = (T)toViewModelFunc.Invoke(this, new object[] { serverModel });
+
+            return result;
+        }
+
+        public T GetEntity<T>(Expression<Func<T, bool>> filter)
+            where T : class, IBaseObject, new()
+        {
+            var serverModelType = GetServerModelType<T>();
+
+            var getObjectFilteredFunc = typeof(BaseFacade)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(BaseFacade.GetObject)))
+                .Last()
+                .MakeGenericMethod(serverModelType);
+
+            var convertFilterFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(ConvertExpression)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+            var convertedFilter = convertFilterFunc.Invoke(this, new object[] { filter });
+
+            var serverModel = getObjectFilteredFunc
+                .Invoke(BaseFacade, new object[] { convertedFilter });
+
+            var toViewModelFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(MapperService.GetViewModel)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+            var result = (T)toViewModelFunc.Invoke(this, new object[] { serverModel });
+
+            return result;
+        }
+
+        public List<T> GetCollection<T>()
+            where T : class, IBaseObject, new()
+        {
+            var serverModelType = GetServerModelType<T>();
+
+            var getObjectsFunc = typeof(BaseFacade)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(BaseFacade.GetObjects)))
+                .FirstOrDefault()
+                .MakeGenericMethod(serverModelType);
+
+            var serverModels = getObjectsFunc
+                .Invoke(BaseFacade, null);
+
+            var toViewModelFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(MapperService.GetViewModelCollection)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+            var result = toViewModelFunc.Invoke(this, new object[] { serverModels }) as List<T>;
+
+            return result;
+        }
+
+        public List<T> GetCollection<T>(Expression<Func<T, bool>> filter)
+            where T : class, IBaseObject, new()
+        {
+            var serverModelType = GetServerModelType<T>();
+
+            var getObjectsFilteredFunc = typeof(BaseFacade)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(BaseFacade.GetObjects)))
+                .Last()
+                .MakeGenericMethod(serverModelType);
+
+            var convertFilterFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(ConvertExpression)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+            var convertedFilter = convertFilterFunc.Invoke(this, new object[] { filter });
+
+            var serverModels = getObjectsFilteredFunc
+                .Invoke(BaseFacade, new object[] { convertedFilter });
+
+            var toViewModelFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(MapperService.GetViewModelCollection)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+            var result = toViewModelFunc.Invoke(this, new object[] { serverModels }) as List<T>;
+
+            return result;
+        }
+
         public T Save<T>(T model)
             where T : class, IBaseObject, new()
         {

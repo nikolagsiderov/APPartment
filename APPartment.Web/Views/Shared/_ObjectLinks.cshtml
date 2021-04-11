@@ -1,0 +1,109 @@
+﻿@model APPartment.Infrastructure.UI.Common.ViewModels.Base.PostViewModel
+
+@{
+    var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+}
+
+<div class="row">
+    <div class="col-10">
+        <div class="form-group">
+            <label>Object A*</label>
+            <span>This object</span>
+        </div>
+        <div class="form-group">
+            <label>Object link type*</label>
+            <select class="form-control form-control-solid" id="create-objectLink-objectLinkType">
+                @foreach (var option in ViewData["ObjectLinkTypeSelectList"] as List<SelectListItem>)
+                {
+                    <option selected="@option.Selected" value="@option.Value">@option.Text</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Object B*</label>
+            <select class="form-control form-control-solid" id="create-objectLink-objectBID">
+                @foreach (var option in ViewData["ObjectBIDSelectList"] as List<SelectListItem>)
+                {
+                    <option selected="@option.Selected" value="@option.Value">@option.Text</option>
+                }
+            </select>
+        </div>
+        <button id="create-objectLink-button" class="btn btn-primary btn-sm">Add</button>
+    </div>
+</div>
+<br />
+<div class="row">
+    @if (Model.ObjectLinksHtml.Any())
+    {
+        <div class="col-md-10">
+            <hr style="opacity: 0.4;" />
+
+            <div style="font-weight: bold;" class='row'>
+                <div class='col-md-3'>
+                    Object link type
+                </div>
+                <div class='col-md-2'>
+                    Object B
+                </div>
+            </div>
+        </div>
+    }
+    <div class="col-md-10" id="objectLinks-data">
+        @if (Model.ObjectLinksHtml.Any())
+        {
+            foreach (var link in Model.ObjectLinksHtml)
+            {
+                <hr style="opacity: 0.4;" />
+                @Html.Raw(link)
+            }
+        }
+        else
+        {
+            <span id="no-objectLinks-added-message">
+                No links have been added to this object.
+            </span>
+        }
+    </div>
+</div>
+
+<script>
+    $("#create-objectLink-button").click(function () {
+        $(this).css("pointer-events", "none");
+        var objectBIDs = [];
+        $("#create-objectLink-objectBID").find(":selected").each(function(){
+           objectBIDs.push(this.value);
+        });
+
+        var objectLinkTypes = [];
+        $("#create-objectLink-objectLinkType").find(":selected").each(function(){
+           objectLinkTypes.push(this.value);
+        });
+
+        if ((objectAIDs && objectAIDs != "") && (objectBIDs && objectBIDs != "") && (objectLinkTypes && objectLinkTypes != "")) {
+            $.ajax({
+                type: "POST",
+                url: "@Url.Action("PostLink", controllerName)",
+                data: { targetObjectID: @Model.ObjectID, objectBIDs: objectBIDs, objectLinkTypes: objectLinkTypes },
+                success: function (data) {
+                    $("#no-objectLinks-added-message").attr('style', 'display:none;');
+
+                    var appendValue = document.createElement('p');
+                    appendValue.innerHTML = "<hr />" + data;
+
+                    $("#objectLinks-data").prepend(appendValue);
+                    $('#create-objectLink-button').css("pointer-events", "auto");
+
+                    document.getElementById("create-objectLink-objectAID").value = "";
+                    document.getElementById("create-objectLink-objectBID").value = "";
+                    document.getElementById("create-objectLink-objectLinkType").value = "";
+                },
+                error: function (req, status, error) {
+                    alert(error);
+                }
+            });
+        } else {
+            bootbox.alert("Please fill in all required fields.");
+            $(this).css("pointer-events", "auto");
+        }
+    });
+</script>
