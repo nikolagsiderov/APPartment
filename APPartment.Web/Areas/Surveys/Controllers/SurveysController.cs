@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq.Expressions;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using System.Threading.Tasks;
 using APPartment.Infrastructure.UI.Web.Controllers.Base;
@@ -17,8 +15,6 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         public SurveysController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
-
-        public override Expression<Func<SurveyDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentHomeID;
 
         public override bool CanManage => true;
 

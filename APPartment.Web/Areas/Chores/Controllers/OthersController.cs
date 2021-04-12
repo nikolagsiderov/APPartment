@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
-using System;
-using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using System.Threading.Tasks;
@@ -17,8 +15,6 @@ namespace APPartment.Web.Areas.Chores.Controllers
         public OthersController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
-
-        public override Expression<Func<ChoreDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentHomeID && x.AssignedToUserID != (long)CurrentUserID;
 
         public override bool CanManage => false;
 

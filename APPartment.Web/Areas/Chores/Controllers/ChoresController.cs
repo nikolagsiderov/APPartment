@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;
-using System;
-using System.Linq.Expressions;
 using Microsoft.AspNetCore.Http;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using System.Threading.Tasks;
@@ -14,7 +12,6 @@ using System.Collections.Generic;
 using APPartment.Infrastructure.UI.Web.Controllers.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Chore;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
-using APPartment.Infrastructure.UI.Common.ViewModels.User;
 using APPartment.Infrastructure.UI.Web.Html;
 
 namespace APPartment.Web.Areas.Chores.Controllers
@@ -25,8 +22,6 @@ namespace APPartment.Web.Areas.Chores.Controllers
         public ChoresController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
-
-        public override Expression<Func<ChoreDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentHomeID;
 
         public override bool CanManage => true;
 

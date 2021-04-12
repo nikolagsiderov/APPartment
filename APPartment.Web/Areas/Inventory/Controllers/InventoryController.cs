@@ -1,7 +1,5 @@
 ﻿using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq.Expressions;
-using System;
 using Microsoft.AspNetCore.Http;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using System.Threading.Tasks;
@@ -17,8 +15,6 @@ namespace APPartment.Web.Areas.Inventory.Controllers
         public InventoryController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
-
-        public override Expression<Func<InventoryDisplayViewModel, bool>> FilterExpression => x => x.HomeID == (long)CurrentHomeID;
 
         public override bool CanManage => true;
 

@@ -1,8 +1,6 @@
 ﻿using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Linq.Expressions;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using System.Threading.Tasks;
 using APPartment.Infrastructure.UI.Web.Controllers.Base;
@@ -17,8 +15,6 @@ namespace APPartment.Web.Areas.Issues.Controllers
         public IssuesController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
-
-        public override Expression<Func<IssueDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentHomeID;
 
         public override bool CanManage => true;
 

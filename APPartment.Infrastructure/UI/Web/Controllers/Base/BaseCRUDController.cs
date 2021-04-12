@@ -16,7 +16,6 @@ using SmartBreadcrumbs.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -29,8 +28,6 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
         public BaseCRUDController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
-
-        public abstract Expression<Func<T, bool>> FilterExpression { get; }
 
         public virtual async Task SetGridItemActions(T model)
         {
