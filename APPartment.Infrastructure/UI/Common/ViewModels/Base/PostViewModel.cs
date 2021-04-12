@@ -10,7 +10,6 @@ using APPartment.Infrastructure.UI.Web.Attributes;
 using APPartment.Infrastructure.UI.Web.Constants;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Image;
 using APPartment.Infrastructure.UI.Web.Tools;
-using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Event;
 
 namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
 {
