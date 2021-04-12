@@ -32,4 +32,3 @@ namespace APPartment.API.Controllers
         }
     }
 }
-}
