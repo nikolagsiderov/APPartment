@@ -7,5 +7,6 @@
         public const string Chores = "Chores";
         public const string Surveys = "Surveys";
         public const string Issues = "Issues";
+        public const string Roommates = "Roommates";
     }
 }
