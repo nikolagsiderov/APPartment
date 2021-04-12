@@ -2,7 +2,6 @@
 using System.Linq;
 using APPartment.Infrastructure.Services.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Home;
-using APPartment.Infrastructure.UI.Common.ViewModels.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,22 +9,16 @@ namespace APPartment.API.Controllers
 {
     [Route("api/home/{homeID}/[controller]")]
     [ApiController]
-    public class RoommatesController : ControllerBase
+    public class NeighborsController : ControllerBase
     {
-        // api/home/4/roommates/roommates
+        // api/home/4/neighbors/neighbors
         [HttpGet]
-        [Route("roommates")]
-        public ActionResult<List<UserDisplayViewModel>> GetRoommates(long homeID)
+        [Route("neighbors")]
+        public ActionResult<List<HomeDisplayViewModel>> GetNeighbors(long homeID)
         {
             try
             {
-                var homeUsers = new BaseCRUDService(0).GetCollection<HomeUserPostViewModel>(x => x.HomeID == homeID);
-                var result = new List<UserDisplayViewModel>();
-
-                foreach (var homeUser in homeUsers)
-                {
-                    result.Add(new BaseCRUDService(0).GetEntity<UserDisplayViewModel>(homeUser.UserID));
-                }
+                var result = new BaseCRUDService(0).GetCollection<HomeDisplayViewModel>(x => x.HomeID != homeID);
 
                 if (result.Any())
                     return Ok(result);
@@ -38,4 +31,5 @@ namespace APPartment.API.Controllers
             }
         }
     }
+}
 }
