@@ -129,8 +129,10 @@ namespace APPartment.ORM.Framework.Core
                     if (value == null)
                         propertyValuesList.Add(nullValue);
                     else
-                        propertyValuesList.Add($"'{value.ToString()}'");
-
+                    {
+                        var valueSingleQuotesEscaped = value.ToString().Replace("'", "''");
+                        propertyValuesList.Add($"'{valueSingleQuotesEscaped}'");
+                    }
                 }
                 else if (prop.PropertyType == typeof(DateTime))
                 {
@@ -205,8 +207,10 @@ namespace APPartment.ORM.Framework.Core
                     if (value == null)
                         propertyNamesAndValuesList.Add($"[{prop.Name}] = " + nullValue);
                     else
-                        propertyNamesAndValuesList.Add($"[{prop.Name}] = '{value.ToString()}'");
-
+                    {
+                        var valueSingleQuotesEscaped = value.ToString().Replace("'", "''");
+                        propertyNamesAndValuesList.Add($"[{prop.Name}] = '{valueSingleQuotesEscaped}'");
+                    }
                 }
                 else if (prop.PropertyType == typeof(DateTime))
                 {
