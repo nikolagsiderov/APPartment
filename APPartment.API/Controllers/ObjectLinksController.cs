@@ -30,13 +30,21 @@ namespace APPartment.API.Controllers
                 if (headers.ContainsKey("CurrentHomeID"))
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
-                var links = new BaseCRUDService(currentUserID).GetCollection<ObjectLinkPostViewModel>(x => x.TargetObjectID == targetObjectID);
+                var forwardLinks = new BaseCRUDService(currentUserID).GetCollection<ObjectLinkPostViewModel>(x => x.TargetObjectID == targetObjectID);
+                var backwardLinks = new BaseCRUDService(currentUserID).GetCollection<ObjectLinkPostViewModel>(x => x.ObjectBID == targetObjectID);
 
-                foreach (var link in links)
+                foreach (var link in forwardLinks)
                 {
-                    //TODO: Fill in ObjectAName & ObjectBName
-                    // In order to do that, we need to call .GetEntity<BusinessObject>(ObjectAID)
+                    link.ObjectBName = new BaseCRUDService(currentUserID).GetEntity(link.ObjectBID).Name;
                 }
+
+                foreach (var link in backwardLinks)
+                {
+                    link.ObjectBName = new BaseCRUDService(currentUserID).GetEntity(link.TargetObjectID).Name;
+                }
+
+                var links = forwardLinks;
+                links.AddRange(backwardLinks);
 
                 return Ok(links);
             }
@@ -67,8 +75,7 @@ namespace APPartment.API.Controllers
                 link = new BaseCRUDService(currentUserID).Save(link);
                 new BaseCRUDService(currentUserID).AddUserAsParticipantToObject(link.TargetObjectID, currentUserID, link.ObjectTypeID);
 
-                //TODO: Fill in ObjectAName & ObjectBName
-                // In order to do that, we need to call .GetEntity<BusinessObject>(ObjectAID)
+                link.ObjectBName = new BaseCRUDService(currentUserID).GetEntity(link.ObjectBID).Name;
 
                 return Ok(link);
             }

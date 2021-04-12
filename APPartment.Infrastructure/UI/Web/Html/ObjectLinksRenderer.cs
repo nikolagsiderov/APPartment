@@ -11,13 +11,13 @@ namespace APPartment.Infrastructure.UI.Web.Html
             return links
                 .OrderByDescending(x => x.ID)
                 .Take(20)
-                .Select(e => $"<div class='row'><div class='col-md-2'>{e.ObjectAName}</div><div class='col-md-3'>{e.ObjectLinkType}</div><div class='col-md-2'>{e.ObjectBName}</div></div>")
+                .Select(e => $"<div class='row'><div class='col-md-2'><strong>This object</strong></div><div class='col-md-3'>{e.ObjectLinkType}</div><div class='col-md-2'>{e.ObjectBName}</div></div>")
                 .ToList();
         }
 
         public static string BuildPostLink(ObjectLinkPostViewModel link)
         {
-            return $"<div class='row'><div class='col-md-2'>{link.ObjectAName}</div><div class='col-md-3'>{link.ObjectLinkType}</div><div class='col-md-2'>{link.ObjectBName}</div></div>";
+            return $"<div class='row'><div class='col-md-2'><strong>This object</strong></div><div class='col-md-3'>{link.ObjectLinkType}</div><div class='col-md-2'>{link.ObjectBName}</div></div>";
         }
     }
 }

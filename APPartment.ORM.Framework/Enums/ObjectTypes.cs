@@ -19,6 +19,7 @@
         NotificationParticipant = 15,
         ObjectParticipant = 16,
         Event = 17,
-        EventParticipant = 18
+        EventParticipant = 18,
+        ObjectLink = 19
     }
 }

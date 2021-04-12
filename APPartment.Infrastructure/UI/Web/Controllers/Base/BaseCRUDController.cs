@@ -297,7 +297,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             model.CommentsHtml = await GetComments(model.ObjectID);
             model.Images = await GetImages(model.ObjectID);
             model.EventsHtml = await GetEvents(model.ObjectID);
-            model.ObjectLinksHtml = /*await GetLinks(model.ObjectID);*/ new List<string>();
+            model.ObjectLinksHtml = await GetLinks(model.ObjectID);
             model.Participants = await GetParticipants(model.ObjectID);
         }
 
@@ -610,7 +610,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 
             using (var httpClient = new HttpClient())
             {
-                var requestUri = $"{Configuration.DefaultAPI}/home/objects";
+                var requestUri = $"{Configuration.DefaultAPI}/home/objects/{model.ObjectID}";
                 httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                 httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 

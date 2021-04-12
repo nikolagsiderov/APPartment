@@ -18,8 +18,6 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Link
         [APPUIHint(Templates.Hidden)]
         public long TargetObjectID { get; set; }
 
-        public string ObjectAName { get; set; }
-
         public string ObjectBName { get; set; }
     }
 }

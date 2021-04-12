@@ -439,8 +439,8 @@ namespace APPartment.API.Controllers
 
         // api/home/objects
         [HttpGet]
-        [Route("objects")]
-        public ActionResult GetObjects()
+        [Route("objects/{targetObjectID}")]
+        public ActionResult GetObjects(long targetObjectID)
         {
             try
             {
@@ -456,6 +456,15 @@ namespace APPartment.API.Controllers
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
                 var result = new BaseCRUDService(currentUserID).GetCollection(x => x.HomeID == currentHomeID);
+
+                foreach (var item in result)
+                {
+                    if (item.ObjectID == targetObjectID)
+                    {
+                        result.Remove(item);
+                        break;
+                    }
+                }
 
                 if (result.Any())
                     return Ok(result);
