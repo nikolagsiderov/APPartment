@@ -437,10 +437,10 @@ namespace APPartment.API.Controllers
             }
         }
 
-        // api/home/objects
+        // api/home/objects/422
         [HttpGet]
-        [Route("objects/{targetObjectID}")]
-        public ActionResult GetObjects(long targetObjectID)
+        [Route("objects/{excludedObjectID}")]
+        public ActionResult GetObjects(long excludedObjectID)
         {
             try
             {
@@ -459,7 +459,7 @@ namespace APPartment.API.Controllers
 
                 foreach (var item in result)
                 {
-                    if (item.ObjectID == targetObjectID)
+                    if (item.ObjectID == excludedObjectID)
                     {
                         result.Remove(item);
                         break;

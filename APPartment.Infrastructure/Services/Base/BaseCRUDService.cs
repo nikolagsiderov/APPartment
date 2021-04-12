@@ -464,5 +464,10 @@ namespace APPartment.Infrastructure.Services.Base
                 }
             }
         }
+
+        public string GetObjectTypeName(long objectTypeID)
+        {
+            return BaseFacade.GetObjectTypeName(objectTypeID);
+        }
     }
 }

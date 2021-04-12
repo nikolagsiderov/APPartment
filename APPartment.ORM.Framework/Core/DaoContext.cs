@@ -563,12 +563,6 @@ namespace APPartment.ORM.Framework.Core
             if (string.IsNullOrEmpty(businessObject.Details))
                 businessObject.Details = "none";
 
-            if (businessObject.CreatedByID == null || businessObject.CreatedByID == 0)
-                businessObject.CreatedByID = userID;
-
-            if (businessObject.CreatedDate == null)
-                businessObject.CreatedDate = DateTime.Now;
-
             var properties = businessObject.GetType().GetProperties().Where(
                         prop => Attribute.IsDefined(prop, typeof(FieldMappingForObjectTableAttribute)));
             var propertyNamesAndValues = SqlQueryProvider.GetPropertyNamesForDBColumnsAndValuesForUpdate<T>(properties, businessObject);

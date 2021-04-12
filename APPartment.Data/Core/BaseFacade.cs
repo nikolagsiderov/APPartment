@@ -1,6 +1,7 @@
 ﻿using APPartment.Data.Server.Models;
 using APPartment.ORM.Framework.Core;
 using APPartment.ORM.Framework.Declarations;
+using APPartment.ORM.Framework.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -147,6 +148,12 @@ namespace APPartment.Data.Core
         {
             var result = 0;
             return dao.CountBusinessObjects<T>(result, filter);
+        }
+
+        public string GetObjectTypeName(long objectTypeID)
+        {
+            var objectType = (ObjectTypes)objectTypeID;
+            return objectType.ToString();
         }
     }
 }
