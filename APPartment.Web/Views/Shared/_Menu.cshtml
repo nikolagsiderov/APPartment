@@ -17,6 +17,7 @@
     string surveysLink = string.Empty;
     string choresLink = string.Empty;
     string roommatesLink = string.Empty;
+    string neighborsLink = string.Empty;
     string settingsLink = string.Empty;
 
 
@@ -47,6 +48,10 @@
     else if (areaName.Equals("Roommates"))
     {
         roommatesLink = "active";
+    }
+    else if(areaName.Equals("Neighbors"))
+    {
+        neighborsLink = "active";
     }
     else if (!string.IsNullOrEmpty(areaName) && (areaName.Equals("default") && controller.Equals("Home") && action.Equals("Settings")))
     {
@@ -120,6 +125,10 @@
                 <a class="nav-link @roommatesLink" asp-area="Roommates" asp-controller="Roommates" asp-action="Index">
                     <div class="nav-link-icon"><i class="fa fa-users"></i></div>
                     Roommates
+                </a>
+                <a class="nav-link @neighborsLink" asp-area="Neighbors" asp-controller="Neighbors" asp-action="Index">
+                    <div class="nav-link-icon"><i class="fa fa-child"></i></div>
+                    Neighbors
                 </a>
                 <a class="nav-link @settingsLink" asp-area="default" asp-controller="Home" asp-action="Settings">
                     <div class="nav-link-icon"><i class="fas fa-cog"></i></div>

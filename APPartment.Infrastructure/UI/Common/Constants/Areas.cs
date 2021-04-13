@@ -8,5 +8,6 @@
         public const string Surveys = "Surveys";
         public const string Issues = "Issues";
         public const string Roommates = "Roommates";
+        public const string Neighbors = "Neighbors";
     }
 }
