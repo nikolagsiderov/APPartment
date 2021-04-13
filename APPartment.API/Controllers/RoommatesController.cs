@@ -37,5 +37,25 @@ namespace APPartment.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
         }
+
+        // api/home/4/roommates/12
+        [HttpGet]
+        [Route("{userID}")]
+        public ActionResult<List<UserDisplayViewModel>> GetRoommate(long homeID, long userID)
+        {
+            try
+            {
+                var result = new BaseCRUDService(0).GetEntity<UserPostViewModel>(userID);
+
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
         public virtual string Name { get; set; }
 
         [GridFieldDisplay(Order = 3)]
-        public string Details { get; set; }
+        public virtual string Details { get; set; }
 
         public long ObjectID { get; set; }
 

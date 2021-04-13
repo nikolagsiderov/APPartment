@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using APPartment.Infrastructure.UI.Common.ViewModels.Inventory;
+﻿using System.Threading.Tasks;
 using APPartment.Infrastructure.UI.Common.ViewModels.User;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
 using APPartment.Infrastructure.UI.Web.Controllers.Base;
@@ -23,7 +19,7 @@ namespace APPartment.Web.Areas.Roommates.Controllers
 
         public override bool CanManage => false;
 
-         [Breadcrumb(RoommatesBreadcrumbs.Index_Breadcrumb)]
+        [Breadcrumb(RoommatesBreadcrumbs.Index_Breadcrumb)]
         public override async Task<IActionResult> Index()
         {
             return await base.Index();

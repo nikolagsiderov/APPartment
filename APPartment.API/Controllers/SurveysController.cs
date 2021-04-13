@@ -31,6 +31,12 @@ namespace APPartment.API.Controllers
                 }
 
                 var result = new BaseCRUDService(currentUserID).GetEntity<SurveyPostViewModel>(surveyID);
+                var surveyParticipants = new BaseCRUDService(currentUserID).GetCollection<SurveyParticipantPostViewModel>(x => x.SurveyID == result.ID);
+
+                foreach (var surveyParticipant in surveyParticipants)
+                {
+                    result.SurveyParticipantsIDs.Add(surveyParticipant.UserID);
+                }
 
                 if (result != null)
                     return Ok(result);
@@ -150,7 +156,17 @@ namespace APPartment.API.Controllers
                     currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
 
                 model.HomeID = currentHomeID;
+                var surveyParticipantsIDs = model.SurveyParticipantsIDs;
                 var result = new BaseCRUDService(currentUserID).Save(model);
+
+                foreach (var surveyParticipantID in surveyParticipantsIDs)
+                {
+                    if (!new BaseCRUDService(currentUserID).Any<SurveyParticipantPostViewModel>(x => x.SurveyID == result.ID && x.UserID == surveyParticipantID))
+                    {
+                        var surveyParticipant = new SurveyParticipantPostViewModel() { SurveyID = result.ID, UserID = surveyParticipantID };
+                        new BaseCRUDService(currentUserID).Save(surveyParticipant);
+                    }
+                }
 
                 return Ok(result);
             }

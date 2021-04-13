@@ -30,5 +30,25 @@ namespace APPartment.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
         }
+
+        // api/home/4/neighbors/12
+        [HttpGet]
+        [Route("{neighborID}")]
+        public ActionResult<List<HomeDisplayViewModel>> GetNeighbors(long homeID, long neighborID)
+        {
+            try
+            {
+                var result = new BaseCRUDService(0).GetEntity<HomeDisplayViewModel>(neighborID);
+
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
     }
 }

@@ -20,6 +20,7 @@
         ObjectParticipant = 16,
         Event = 17,
         EventParticipant = 18,
-        ObjectLink = 19
+        ObjectLink = 19,
+        SurveyParticipant = 20
     }
 }

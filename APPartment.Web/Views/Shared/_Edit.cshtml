@@ -1,5 +1,7 @@
 ﻿@model APPartment.Infrastructure.UI.Common.ViewModels.Base.PostViewModel
 
+@using APPartment.Infrastructure.UI.Web.Constants
+
 @{
     var action = "Create";
     var consoleHeader = "Console [Create]";
@@ -26,28 +28,37 @@
 
                     @foreach (var row in rowsWithoutSections)
                     {
-                        <div class="row">
-                            @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
+                    <div class="row">
+                        @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
+                        {
+                            if (string.IsNullOrEmpty(propUI.SelectList))
                             {
-                                if (string.IsNullOrEmpty(propUI.SelectList))
-                                {
-                                    <div class="col-md-@propUI.Col">
-                                        <div class="editor-field">
-                                            @Html.Editor(propUI.Property.Name)
-                                        </div>
+                                <div class="col-md-@propUI.Col">
+                                    <div class="editor-field">
+                                        @Html.Editor(propUI.Property.Name)
                                     </div>
-                                }
-                                else
-                                {
-                                    <div class="col-md-@propUI.Col">
-                                        <div class="editor-field">
-                                            @Html.LabelFor(m => m, propUI.DisplayName)
-                                            @Html.Editor(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
-                                        </div>
-                                    </div>
-                                }
+                                </div>
                             }
-                        </div>
+                            else if (propUI.Template.Equals(Templates.Dropdown))
+                            {
+                                <div class="col-md-@propUI.Col">
+                                    <div class="editor-field">
+                                        @Html.LabelFor(m => m, propUI.DisplayName)
+                                        @Html.Editor(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
+                                    </div>
+                                </div>
+                            }
+                            else if (propUI.Template.Equals(Templates.Multiselect))
+                            {
+                                <div class="col-md-@propUI.Col">
+                                    <div class="editor-field">
+                                        @Html.LabelFor(m => m, propUI.DisplayName)
+                                        @Html.Editor(propUI.Property.Name)
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
                     }
 
                     @if (Model.Sections.Any())

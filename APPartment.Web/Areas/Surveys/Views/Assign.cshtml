@@ -1,0 +1,43 @@
+﻿@model APPartment.Infrastructure.UI.Common.ViewModels.Survey.SurveyPostViewModel
+
+@Html.Partial("_Loader")
+
+<h5>Assign survey participants</h5>
+
+<br />
+
+@Html.Editor("SurveyParticipantsIDs", "Multiselect")
+
+<br />
+
+<div>
+    <button type='button' class='btn btn-secondary' id="cancel-postAssign" data-dismiss='modal'>Cancel</button>
+    <button type="button" id="postAssign" class='no-underline btn btn-primary'>Assign</button>
+</div>
+
+<script>
+$(document).ready(function () {
+    $('#postAssign').on("click", function () {
+        $('#loading').fadeIn();
+        var participants = [];
+        $('select[name="SurveyParticipantsIDs"]').find(":selected").each(function(){
+           participants.push(this.value);
+        });
+        $(this).css("pointer-events", "none");
+        $('#cancel-postAssign').css("pointer-events", "none");
+
+        $.ajax({
+            type: 'POST',
+            url: baseApplicationPath + `Surveys/Surveys/Assign`,
+            data: { ID: @Model.ID, surveyParticipantsIDs: participants },
+            success: function () {
+                $('#loading').fadeOut();
+                window.location.reload();
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        });
+    });
+});
+</script>

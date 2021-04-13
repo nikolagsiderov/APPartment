@@ -1,10 +1,14 @@
-﻿@model List<SelectListItem>
+﻿@model List<long>
+
+@{ 
+    List<SelectListItem> selectList = ViewData[ViewData.TemplateInfo.HtmlFieldPrefix] as List<SelectListItem>;
+}
 
 <div class="form-group">
     <select multiple class="form-control form-control-solid" disabled="disabled" name="@ViewData.TemplateInfo.HtmlFieldPrefix">
-        @if (Model.Any(x => x.Selected))
+        @if (selectList.Any(x => x.Selected))
         {
-            foreach (var option in Model.Where(x => x.Selected))
+            foreach (var option in selectList.Where(x => x.Selected))
             {
                 <option selected="@option.Selected" value="@option.Value">@option.Text</option>
             }

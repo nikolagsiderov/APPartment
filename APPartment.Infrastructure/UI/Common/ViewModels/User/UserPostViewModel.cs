@@ -12,12 +12,15 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.User
     {
         [Required]
         [Display(Name = "Username")]
-        [APPUIHint(Templates.Input)]
+        [APPUIHint(Templates.Input, Row = 1, Col = 6, Order = 1, Section = "General Information")]
         public override string Name { get; set; }
-  
+
+        [APPUIHint(Templates.Hidden)]
+        public override string Details { get; set; }
+
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]
-        [APPUIHint(Templates.Password)]
+        [APPUIHint(Templates.Password, Row = 2, Col = 6, Order = 1, Section = "General Information")]
         public string Password { get; set; }
 
         [Compare("Password", ErrorMessage = "Please confirm your password.")]

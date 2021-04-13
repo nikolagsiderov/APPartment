@@ -12,5 +12,7 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.User
         [GridFieldDisplay(Order = 2)]
         [Display(Name = "Username")]
         public override string Name { get; set; }
+
+        public override string Details { get; set; }
     }
 }
