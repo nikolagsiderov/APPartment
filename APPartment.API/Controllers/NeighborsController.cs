@@ -18,7 +18,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var result = new BaseCRUDService(0).GetCollection<HomeDisplayViewModel>(x => x.HomeID != homeID);
+                var result = new BaseCRUDService(0).GetCollection<HomeDisplayViewModel>(x => x.ID != homeID);
 
                 if (result.Any())
                     return Ok(result);

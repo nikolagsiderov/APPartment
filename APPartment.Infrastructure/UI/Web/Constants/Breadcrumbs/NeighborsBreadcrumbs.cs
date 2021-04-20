@@ -2,6 +2,6 @@
 {
     public class NeighborsBreadcrumbs
     {
-        public const string Index_Breadcrumb = "<i class='fa fa-child' style='font-size:20px'></i> Roommates";
+        public const string Index_Breadcrumb = "<i class='fas fa-city' style='font-size:20px'></i> Neighbors";
     }
 }
