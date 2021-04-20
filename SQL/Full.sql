@@ -290,3 +290,271 @@ GO
 
 ALTER TABLE [dbo].[Chore]
 ADD [IsDone] BIT NOT NULL DEFAULT(0);
+
+GO
+
+CREATE TABLE [dbo].[Event] (
+    [ID] bigint IDENTITY(1, 1) NOT NULL,
+	[ObjectID] bigint NOT NULL,
+	[StartDate] DATETIME2 NOT NULL,
+	[EndDate] DATETIME2 NOT NULL,
+	[HomeID] bigint NOT NULL,
+	[TargetObjectID] bigint NOT NULL,
+	CONSTRAINT PK_Event PRIMARY KEY ([ID]),
+	CONSTRAINT FK_ObjectEvent FOREIGN KEY ([ObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
+);
+
+ALTER TABLE [dbo].[Event]
+ADD CONSTRAINT FK_TargetObjectEvent FOREIGN KEY ([TargetObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
+
+ALTER TABLE [dbo].[Event]
+ADD CONSTRAINT FK_HomeEvent FOREIGN KEY ([HomeID])
+    REFERENCES [dbo].[Home]([ID])
+
+GO
+
+INSERT INTO [dbo].[ObjectType] ([ID], [Name])
+VALUES (17, 'Event');
+
+GO
+
+CREATE TABLE [dbo].[EventParticipant] (
+    [ID] bigint IDENTITY(1, 1) NOT NULL,
+	[ObjectID] bigint NOT NULL,
+	[EventID] bigint NOT NULL,
+	[UserID] bigint NOT NULL,
+	CONSTRAINT PK_EventParticipant PRIMARY KEY ([ID]),
+	CONSTRAINT FK_ObjectEventParticipant FOREIGN KEY ([ObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
+);
+
+ALTER TABLE [dbo].[EventParticipant]
+ADD CONSTRAINT FK_EventEventParticipant FOREIGN KEY ([EventID])
+    REFERENCES [dbo].[Event]([ID])
+
+ALTER TABLE [dbo].[EventParticipant]
+ADD CONSTRAINT FK_TargetUserEventParticipant FOREIGN KEY ([UserID])
+    REFERENCES [dbo].[User]([ID])
+
+GO
+
+INSERT INTO [dbo].[ObjectType] ([ID], [Name])
+VALUES (18, 'EventParticipant');
+
+GO
+
+CREATE TABLE [dbo].[Notification] (
+    [ID] bigint IDENTITY(1, 1) NOT NULL,
+	[ObjectID] bigint NOT NULL,
+	[HomeID] bigint NOT NULL,
+	CONSTRAINT PK_Notification PRIMARY KEY ([ID]),
+	CONSTRAINT FK_ObjectNotification FOREIGN KEY ([ObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
+);
+
+ALTER TABLE [dbo].[Notification]
+ADD CONSTRAINT FK_HomeNotification FOREIGN KEY ([HomeID])
+    REFERENCES [dbo].[Home]([ID])
+
+GO
+
+CREATE TABLE [dbo].[NotificationParticipant] (
+    [ID] bigint IDENTITY(1, 1) NOT NULL,
+	[ObjectID] bigint NOT NULL,
+	[NotificationID] bigint NOT NULL,
+	[UserID] bigint NOT NULL,
+	CONSTRAINT PK_NotificationParticipant PRIMARY KEY ([ID]),
+	CONSTRAINT FK_ObjectNotificationParticipant FOREIGN KEY ([ObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
+);
+
+ALTER TABLE [dbo].[NotificationParticipant]
+ADD CONSTRAINT FK_NotificationNotificationParticipant FOREIGN KEY ([NotificationID])
+    REFERENCES [dbo].[Notification]([ID])
+
+ALTER TABLE [dbo].[NotificationParticipant]
+ADD CONSTRAINT FK_UserNotificationParticipant FOREIGN KEY ([UserID])
+    REFERENCES [dbo].[User]([ID])
+
+GO
+
+INSERT INTO [dbo].[ObjectType] ([ID], [Name])
+VALUES (14, 'Notification');
+
+INSERT INTO [dbo].[ObjectType] ([ID], [Name])
+VALUES (15, 'NotificationParticipant');
+
+GO
+
+CREATE TABLE [dbo].[ObjectParticipant] (
+    [ID] bigint IDENTITY(1, 1) NOT NULL,
+	[ObjectID] bigint NOT NULL,
+	[TargetObjectID] bigint NOT NULL,
+	[UserID] bigint NOT NULL,
+	CONSTRAINT PK_ObjectParticipant PRIMARY KEY ([ID]),
+	CONSTRAINT FK_ObjectObjectParticipant FOREIGN KEY ([ObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
+);
+
+ALTER TABLE [dbo].[ObjectParticipant]
+ADD CONSTRAINT FK_TargetObjectObjectParticipant FOREIGN KEY ([TargetObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
+
+ALTER TABLE [dbo].[ObjectParticipant]
+ADD CONSTRAINT FK_TargetUserObjectParticipant FOREIGN KEY ([UserID])
+    REFERENCES [dbo].[User]([ID])
+
+GO
+
+INSERT INTO [dbo].[ObjectType] ([ID], [Name])
+VALUES (16, 'ObjectParticipant');
+
+GO
+
+DELETE FROM [dbo].[ObjectType] WHERE [ID] = 6;
+
+GO
+
+/****** Object:  Table [dbo].[Hygiene]    Script Date: 09-Apr-21 4:02:49 PM ******/
+DROP TABLE [dbo].[Hygiene]
+GO
+
+ALTER TABLE [dbo].[Object]
+ADD HomeID bigint;
+
+ALTER TABLE [dbo].[Object]
+ADD CONSTRAINT FK_HomeObject FOREIGN KEY ([HomeID])
+    REFERENCES [dbo].[Home]([ID])
+
+GO
+
+ALTER TABLE [dbo].[Chore]
+DROP CONSTRAINT FK_HomeChore;
+
+ALTER TABLE [dbo].[Chore]
+DROP COLUMN HomeID;
+
+GO
+
+ALTER TABLE [dbo].[Event]
+DROP CONSTRAINT FK_HomeEvent;
+
+ALTER TABLE [dbo].[Event]
+DROP COLUMN HomeID;
+
+GO
+
+ALTER TABLE [dbo].[HomeSetting]
+DROP CONSTRAINT FK_HomeHomeSetting;
+
+ALTER TABLE [dbo].[HomeSetting]
+DROP COLUMN HomeID;
+
+GO
+
+ALTER TABLE [dbo].[HomeStatus]
+DROP CONSTRAINT FK_HomeHomeStatus;
+
+ALTER TABLE [dbo].[HomeStatus]
+DROP COLUMN HomeID;
+
+GO
+
+ALTER TABLE [dbo].[HomeUser]
+DROP CONSTRAINT FK_HomeHomeUser;
+
+ALTER TABLE [dbo].[HomeUser]
+DROP COLUMN HomeID;
+
+GO
+
+ALTER TABLE [dbo].[Inventory]
+DROP CONSTRAINT FK_HomeInventory;
+
+ALTER TABLE [dbo].[Inventory]
+DROP COLUMN HomeID;
+
+GO
+
+ALTER TABLE [dbo].[Issue]
+DROP CONSTRAINT FK_HomeIssue;
+
+ALTER TABLE [dbo].[Issue]
+DROP COLUMN HomeID;
+
+GO
+
+ALTER TABLE [dbo].[Message]
+DROP CONSTRAINT FK_HomeMessage;
+
+ALTER TABLE [dbo].[Message]
+DROP COLUMN HomeID;
+
+GO
+
+ALTER TABLE [dbo].[Notification]
+DROP CONSTRAINT FK_HomeNotification;
+
+ALTER TABLE [dbo].[Notification]
+DROP COLUMN HomeID;
+
+GO
+
+ALTER TABLE [dbo].[Survey]
+DROP CONSTRAINT FK_HomeSurvey;
+
+ALTER TABLE [dbo].[Survey]
+DROP COLUMN HomeID;
+
+GO
+
+CREATE TABLE [dbo].[ObjectLink] (
+    [ID] bigint IDENTITY(1, 1) NOT NULL,
+	[ObjectID] bigint NOT NULL,
+	[ObjectBID] bigint NOT NULL,
+	[ObjectLinkType] nvarchar(255) NOT NULL,
+	[TargetObjectID] bigint NOT NULL,
+	CONSTRAINT PK_ObjectLink PRIMARY KEY ([ID]),
+	CONSTRAINT FK_ObjectObjectLink FOREIGN KEY ([ObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
+);
+
+ALTER TABLE [dbo].[ObjectLink]
+ADD CONSTRAINT FK_TargetObjectObjectLink FOREIGN KEY ([TargetObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
+
+ALTER TABLE [dbo].[ObjectLink]
+ADD CONSTRAINT FK_TargetObjectBObjectLink FOREIGN KEY ([ObjectBID])
+    REFERENCES [dbo].[Object]([ObjectID])
+
+GO
+
+INSERT INTO [dbo].[ObjectType] ([ID], [Name])
+VALUES (19, 'ObjectLink');
+
+GO
+
+CREATE TABLE [dbo].[SurveyParticipant] (
+    [ID] bigint IDENTITY(1, 1) NOT NULL,
+	[ObjectID] bigint NOT NULL,
+	[SurveyID] bigint NOT NULL,
+	[UserID] bigint NOT NULL,
+	CONSTRAINT PK_SurveyParticipant PRIMARY KEY ([ID]),
+	CONSTRAINT FK_ObjectSurveyParticipant FOREIGN KEY ([ObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
+);
+
+ALTER TABLE [dbo].[SurveyParticipant]
+ADD CONSTRAINT FK_SurveySurveyParticipant FOREIGN KEY ([SurveyID])
+    REFERENCES [dbo].[Survey]([ID])
+
+ALTER TABLE [dbo].[SurveyParticipant]
+ADD CONSTRAINT FK_TargetUserSurveyParticipant FOREIGN KEY ([UserID])
+    REFERENCES [dbo].[User]([ID])
+
+GO
+
+INSERT INTO [dbo].[ObjectType] ([ID], [Name])
+VALUES (20, 'SurveyParticipant');
