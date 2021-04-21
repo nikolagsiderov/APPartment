@@ -20,6 +20,116 @@
 });
 
 $(document).ready(function () {
+
+    var inventoryChart = document.getElementById("inventory-pie-chart");
+    var inventoryChartBuilt = new Chart(inventoryChart, {
+        type: "doughnut",
+        data: {
+            labels: ["Supplied", "Unsupplied"],
+            datasets: [{
+                data: [55, 45],
+                backgroundColor: [
+                    "rgba(0, 172, 105, 1)",
+                    "rgba(244, 161, 0)"
+                ],
+                hoverBackgroundColor: [
+                    "rgba(0, 172, 105, 0.9)",
+                    "rgba(254, 181, 10)" // +10, +20, +10
+                ],
+                hoverBorderColor: "rgba(234, 236, 244, 1)"
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                borderColor: "#dddfeb",
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                caretPadding: 10
+            },
+            legend: {
+                display: true
+            },
+            cutoutPercentage: 80
+        }
+    });
+
+    var choresChart = document.getElementById("chores-pie-chart");
+    var choresChartBuilt = new Chart(choresChart, {
+        type: "doughnut",
+        data: {
+            labels: ["Mine", "Others"],
+            datasets: [{
+                data: [70, 30],
+                backgroundColor: [
+                    "rgba(0, 172, 105, 1)",
+                    "rgba(0, 97, 242, 1)"
+                ],
+                hoverBackgroundColor: [
+                    "rgba(0, 172, 105, 0.9)",
+                    "rgba(0, 97, 242, 0.9)"
+                ],
+                hoverBorderColor: "rgba(234, 236, 244, 1)"
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                borderColor: "#dddfeb",
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                caretPadding: 10
+            },
+            legend: {
+                display: true
+            }
+        }
+    });
+
+    var issuesChart = document.getElementById("issues-pie-chart");
+    var issuesChartBuilt = new Chart(issuesChart, {
+        type: "pie",
+        data: {
+            labels: ["Open", "Closed"],
+            datasets: [{
+                data: [90, 10],
+                backgroundColor: [
+                    "rgba(232, 21, 0)",
+                    "rgba(0, 172, 105, 1)"
+                ],
+                hoverBackgroundColor: [
+                    "rgba(242, 40, 10)", // +10, +20, +10
+                    "rgba(0, 172, 105, 0.9)"
+                ],
+                hoverBorderColor: "rgba(234, 236, 244, 1)"
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                borderColor: "#dddfeb",
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                caretPadding: 10
+            },
+            legend: {
+                display: true
+            }
+        }
+    });
+
     $.ajax({
         url: "Home/GetHomeStatus",
         success: function (data) {

@@ -1,32 +1,40 @@
 ﻿@model APPartment.Infrastructure.UI.Common.ViewModels.Home.HomePageDisplayModel
 
 <div class="row">
-    <div class="col-md-6">
-        <div class="card shadow mb-4 text-center">
-            <div class="card-header py-3">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
                 <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Inventory" asp-controller="Inventory" asp-action="Index" class="no-underline"><i class='fas fa-tasks'></i> Inventory - latest updates</a></h6>
                 <div style="margin-left: auto;"><a asp-area="Inventory" asp-controller="Inventory" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
             </div>
             <div class="card-body">
-                <p class="card-text">No items present.</p>
+                <div class="chart-pie"><canvas id="inventory-pie-chart" width="100%" height="50"></canvas></div>
             </div>
-            <div class="card-footer text-muted">
-                <p>No updates...</p>
-            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card shadow mb-4 text-center">
-            <div class="card-header py-3">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Chores" asp-controller="Chores" asp-action="Index" class="no-underline"><i class='fas fa-shopping-bag'></i> Chores - latest updates</a></h6>
+                <div style="margin-left: auto;"><a asp-area="Chores" asp-controller="Chores" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
+            </div>
+            <div class="card-body">
+                <div class="chart-pie"><canvas id="chores-pie-chart" width="100%" height="50"></canvas></div>
+            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
                 <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Issues" asp-controller="Issues" asp-action="Index" class="no-underline"><i class='fas fa-exclamation-circle'></i> Issues - latest updates</a></h6>
                 <div style="margin-left: auto;"><a asp-area="Issues" asp-controller="Issues" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
             </div>
             <div class="card-body">
-                <p class="card-text">No issues present.</p>
+                <div class="chart-pie"><canvas id="issues-pie-chart" width="100%" height="50"></canvas></div>
             </div>
-            <div class="card-footer text-muted">
-                <p>No updates...</p>
-            </div>
+            <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
         </div>
     </div>
 </div>
@@ -110,7 +118,7 @@
     </div>
 </div>
 
+<script src="~/js/chart.min.js"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/chat.js"></script>
-
 <script src="~/js/home.index.js"></script>
