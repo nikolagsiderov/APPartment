@@ -7,6 +7,10 @@ using APPartment.Infrastructure.UI.Common.ViewModels.Home;
 using APPartment.Infrastructure.Services.Base;
 using APPartment.Infrastructure.UI.Web.Html;
 using APPartment.Infrastructure.UI.Common.ViewModels.Chat;
+using APPartment.Infrastructure.UI.Common.ViewModels.Inventory;
+using APPartment.Infrastructure.UI.Common.Tools;
+using APPartment.Infrastructure.UI.Common.ViewModels.Chore;
+using APPartment.Infrastructure.UI.Common.ViewModels.Issue;
 
 namespace APPartment.API.Controllers
 {
@@ -173,6 +177,51 @@ namespace APPartment.API.Controllers
                     }
 
                     result.RentDueDate = rentDueDate;
+                }
+
+                if (new BaseCRUDService(currentUserID)
+                    .Any<InventoryPostViewModel>(x => x.HomeID == currentHomeID))
+                {
+                    var latestInventoryItem = new BaseCRUDService(currentUserID)
+                                        .GetCollection<InventoryPostViewModel>(x => x.HomeID == currentHomeID)
+                                        .OrderByDescending(x => x.ModifiedDate)
+                                        .FirstOrDefault();
+
+                    result.InventoryLastUpdate = TimeConverter.CalculateRelativeTime(latestInventoryItem.ModifiedDate.Value);
+                }
+                else
+                {
+                    result.InventoryLastUpdate = "Now";
+                }
+
+                if (new BaseCRUDService(currentUserID)
+                    .Any<ChorePostViewModel>(x => x.HomeID == currentHomeID))
+                {
+                    var latestChore = new BaseCRUDService(currentUserID)
+                                        .GetCollection<ChorePostViewModel>(x => x.HomeID == currentHomeID)
+                                        .OrderByDescending(x => x.ModifiedDate)
+                                        .FirstOrDefault();
+
+                    result.ChoresLastUpdate = TimeConverter.CalculateRelativeTime(latestChore.ModifiedDate.Value);
+                }
+                else
+                {
+                    result.ChoresLastUpdate = "Now";
+                }
+
+                if (new BaseCRUDService(currentUserID)
+                    .Any<IssuePostViewModel>(x => x.HomeID == currentHomeID))
+                {
+                    var latestIssue = new BaseCRUDService(currentUserID)
+                                        .GetCollection<IssuePostViewModel>(x => x.HomeID == currentHomeID)
+                                        .OrderByDescending(x => x.ModifiedDate)
+                                        .FirstOrDefault();
+
+                    result.IssuesLastUpdate = TimeConverter.CalculateRelativeTime(latestIssue.ModifiedDate.Value);
+                }
+                else
+                {
+                    result.IssuesLastUpdate = "Now";
                 }
 
                 if (result != null)

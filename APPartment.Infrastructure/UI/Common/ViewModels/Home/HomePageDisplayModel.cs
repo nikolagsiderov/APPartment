@@ -9,5 +9,11 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Home
         public HomeStatusPostViewModel HomeStatus { get; set; }
 
         public string RentDueDate { get; set; }
+
+        public string InventoryLastUpdate { get; set; }
+
+        public string ChoresLastUpdate { get; set; }
+
+        public string IssuesLastUpdate { get; set; }
     }
 }

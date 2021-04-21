@@ -2,9 +2,9 @@
 
 namespace APPartment.Infrastructure.UI.Common.Tools
 {
-    public class TimeConverter
+    public static class TimeConverter
     {
-        public string CalculateRelativeTime(DateTime when)
+        public static string CalculateRelativeTime(DateTime when)
         {
             const int SECOND = 1;
             const int MINUTE = 60 * SECOND;
