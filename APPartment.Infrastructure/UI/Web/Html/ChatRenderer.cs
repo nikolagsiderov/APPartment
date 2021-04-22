@@ -19,7 +19,6 @@ namespace APPartment.Infrastructure.UI.Web.Html
         {
             return messages
                 .OrderByDescending(x => x.ID)
-                .Take(10)
                 .Select(x => $"{BaseService.GetEntity<UserPostViewModel>(x.CreatedByID).Name}: {x.Details}")
                 .ToList();
         }

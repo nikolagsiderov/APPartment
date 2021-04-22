@@ -2,47 +2,6 @@
 
 <div class="row">
     <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Inventory" asp-controller="Inventory" asp-action="Index" class="no-underline"><i class='fas fa-tasks'></i> Inventory - latest updates</a></h6>
-                <div style="margin-left: auto;"><a asp-area="Inventory" asp-controller="Inventory" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
-            </div>
-            <div class="card-body" id="inventory-chart-body">
-                <div class="chart-pie"><canvas id="inventory-pie-chart" width="100%" height="50"></canvas></div>
-            </div>
-            <div class="card-footer small text-muted">@Model.InventoryLastUpdate</div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Chores" asp-controller="Chores" asp-action="Index" class="no-underline"><i class='fas fa-shopping-bag'></i> Chores - latest updates</a></h6>
-                <div style="margin-left: auto;"><a asp-area="Chores" asp-controller="Chores" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
-            </div>
-            <div class="card-body" id="chores-chart-body">
-                <div class="chart-pie"><canvas id="chores-pie-chart" width="100%" height="50"></canvas></div>
-            </div>
-            <div class="card-footer small text-muted">@Model.ChoresLastUpdate</div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-header">
-                <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Issues" asp-controller="Issues" asp-action="Index" class="no-underline"><i class='fas fa-exclamation-circle'></i> Issues - latest updates</a></h6>
-                <div style="margin-left: auto;"><a asp-area="Issues" asp-controller="Issues" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
-            </div>
-            <div class="card-body" id="issues-chart-body">
-                <div class="chart-pie"><canvas id="issues-pie-chart" width="100%" height="50"></canvas></div>
-            </div>
-            <div class="card-footer small text-muted">@Model.IssuesLastUpdate</div>
-        </div>
-    </div>
-</div>
-
-<br />
-
-<div class="row">
-    <div class="col-md-6">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary"><i class="far fa-comment-dots"></i> Chat with housemates</h6>
@@ -65,7 +24,7 @@
                         <hr />
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" style="height: 200px; overflow-y: scroll;">
                     <div class="col-12">
                         <div id="messagesList">
                             @foreach (var message in Model.Messages)
@@ -78,7 +37,8 @@
             </div>
         </div>
     </div>
-    <div class="col-md-6">
+    <br />
+    <div class="col-md-4">
         <div class="card shadow">
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
@@ -102,18 +62,47 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<br />
-
-<div class="row">
-    <div class="col-md-6">
-        <div class="col-lg-6 mb-4" style="font-weight: bold;" id="home-status-card-div">
+        <br />
+        <div style="font-weight: bold;" id="home-status-card-div">
             <div class="card bg-success text-white shadow" id="homeStatusWidget">
                 <div class="card-body" id="homeStatusWidgetBody">
                 </div>
             </div>
+        </div>
+    </div>
+    <br />
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Inventory" asp-controller="Inventory" asp-action="Index" class="no-underline"><i class='fas fa-tasks'></i> Inventory - latest updates</a></h6>
+                <div style="margin-left: auto;"><a asp-area="Inventory" asp-controller="Inventory" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
+            </div>
+            <div class="card-body" id="inventory-chart-body">
+                <div class="chart-pie"><canvas id="inventory-pie-chart" width="100%" height="50"></canvas></div>
+            </div>
+            <div class="card-footer small text-muted">@Model.InventoryLastUpdate</div>
+        </div>
+        <br />
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Chores" asp-controller="Chores" asp-action="Index" class="no-underline"><i class='fas fa-shopping-bag'></i> Chores - latest updates</a></h6>
+                <div style="margin-left: auto;"><a asp-area="Chores" asp-controller="Chores" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
+            </div>
+            <div class="card-body" id="chores-chart-body">
+                <div class="chart-pie"><canvas id="chores-pie-chart" width="100%" height="50"></canvas></div>
+            </div>
+            <div class="card-footer small text-muted">@Model.ChoresLastUpdate</div>
+        </div>
+        <br />
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Issues" asp-controller="Issues" asp-action="Index" class="no-underline"><i class='fas fa-exclamation-circle'></i> Issues - latest updates</a></h6>
+                <div style="margin-left: auto;"><a asp-area="Issues" asp-controller="Issues" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
+            </div>
+            <div class="card-body" id="issues-chart-body">
+                <div class="chart-pie"><canvas id="issues-pie-chart" width="100%" height="50"></canvas></div>
+            </div>
+            <div class="card-footer small text-muted">@Model.IssuesLastUpdate</div>
         </div>
     </div>
 </div>
