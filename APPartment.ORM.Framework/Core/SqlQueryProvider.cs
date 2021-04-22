@@ -88,14 +88,9 @@ namespace APPartment.ORM.Framework.Core
             return string.Format("UPDATE [dbo].[{0}] SET {1} WHERE ObjectID = {2}", table, properties, objectID);
         }
 
-        public static string DeleteBusinessObject(string table, string objectID)
+        public static string DeleteBusinessObjectAndAllItsBaseReferences(string table, string objectID)
         {
-            return string.Format("DELETE FROM [dbo].[{0}] WHERE ObjectID = {1}", table, objectID);
-        }
-
-        public static string DeleteBaseObject(string objectID)
-        {
-            return string.Format("DELETE FROM [dbo].[Object] WHERE ObjectID = {0}", objectID);
+            return string.Format("DELETE FROM [dbo].[{0}] WHERE ObjectID = {1}; DELETE FROM [dbo].[ObjectParticipant] WHERE TargetObjectID = {1}; DELETE FROM [dbo].[Comment] WHERE TargetObjectID = {1}; DELETE FROM [dbo].[Image] WHERE TargetObjectID = {1}; DELETE FROM [dbo].[EventParticipant] WHERE EventID IN (SELECT [ID] FROM [dbo].[Event] WHERE TargetObjectID = {1}); DELETE FROM [dbo].[Event] WHERE TargetObjectID = {1}; DELETE FROM [dbo].[ObjectLink] WHERE TargetObjectID = {1} OR ObjectBID = {1}; DELETE FROM [dbo].[Object] WHERE ObjectID = {1}; ", table, objectID);
         }
 
         public static string AnyCountBusinessObjects(string table)

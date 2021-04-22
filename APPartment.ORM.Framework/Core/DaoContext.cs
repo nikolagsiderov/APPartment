@@ -635,23 +635,14 @@ namespace APPartment.ORM.Framework.Core
             return businessObject;
         }
 
-        public void DeleteBusinessAndBaseObject<T>(T businessObject)
+        public void DeleteBusinessObjectAndAllItsBaseReferences<T>(T businessObject)
             where T : class, IBaseObject
         {
             var table = GetTableName<T>();
-            string deleteBusinessObjectSqlQuery = SqlQueryProvider.DeleteBusinessObject(table, businessObject.ObjectID.ToString());
-            string deleteBaseObjectSqlQuery = SqlQueryProvider.DeleteBaseObject(businessObject.ObjectID.ToString());
+            string deleteBusinessObjectSqlQuery = SqlQueryProvider.DeleteBusinessObjectAndAllItsBaseReferences(table, businessObject.ObjectID.ToString());
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
             using (SqlCommand cmd = new SqlCommand(deleteBusinessObjectSqlQuery, conn))
-            {
-                conn.Open();
-                cmd.ExecuteNonQuery();
-                conn.Close();
-            }
-
-            using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
-            using (SqlCommand cmd = new SqlCommand(deleteBaseObjectSqlQuery, conn))
             {
                 conn.Open();
                 cmd.ExecuteNonQuery();

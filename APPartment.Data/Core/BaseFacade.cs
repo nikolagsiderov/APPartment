@@ -119,7 +119,7 @@ namespace APPartment.Data.Core
         public void Delete<T>(T businessObject)
             where T : class, IBaseObject
         {
-            dao.DeleteBusinessAndBaseObject(businessObject);
+            dao.DeleteBusinessObjectAndAllItsBaseReferences(businessObject);
         }
 
         public bool Any<T>()
