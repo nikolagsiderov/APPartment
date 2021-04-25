@@ -110,6 +110,16 @@ namespace APPartment.Web.Areas.Surveys.Controllers
             {
                 model.SurveyParticipantsIDs.Add(long.Parse(participant.Value));
             }
+
+            var typesSelectList = await GetSurveyTypesSelectList(model);
+            ViewData["SurveyTypeID"] = typesSelectList;
+        }
+
+        protected override void PopulateViewDataForIndex()
+        {
+            base.PopulateViewDataForIndex();
+
+            ViewData["TypesLink"] = Url.Action(nameof(Index), nameof(SurveyTypesController).Replace("Controller", ""));
         }
 
         private async Task<List<SelectListItem>> GetAssignedUsersSelectList(SurveyPostViewModel model)
@@ -133,6 +143,44 @@ namespace APPartment.Web.Areas.Surveys.Controllers
             }
 
             return usersSelectList;
+        }
+
+        private async Task<List<SelectListItem>> GetSurveyTypesSelectList(SurveyPostViewModel model)
+        {
+            var types = new List<SurveyTypeDisplayViewModel>();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{nameof(SurveyTypesController).Replace("Controller", "")}";
+                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        types = JsonConvert.DeserializeObject<List<SurveyTypeDisplayViewModel>>(content);
+                }
+            }
+
+            var typesSelectList = types.Select(x => new SelectListItem() { Text = x.Name, Value = x.ID.ToString() }).ToList();
+
+            if (model.ID > 0)
+            {
+                foreach (var item in typesSelectList)
+                {
+                    if (string.IsNullOrEmpty(item.Value))
+                        continue;
+
+                    if (model.SurveyTypeID.Equals(long.Parse(item.Value)))
+                    {
+                        item.Selected = true;
+                        break;
+                    }
+                }
+            }
+
+            return typesSelectList;
         }
     }
 }

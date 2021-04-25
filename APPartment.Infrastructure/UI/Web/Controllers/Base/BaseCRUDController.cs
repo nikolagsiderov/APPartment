@@ -73,6 +73,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
                 }
             }
 
+            PopulateViewDataForIndex();
             ViewData["CanManage"] = CanManage;
 
             foreach (var model in models)
@@ -94,7 +95,10 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 
             using (var httpClient = new HttpClient())
             {
-                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}";
+                var isTypesController = CurrentControllerName.Contains("Types") ?
+                        "types" : string.Empty;
+
+                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{isTypesController}{(long)ID}";
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
 
                 using (var response = await httpClient.GetAsync(requestUri))
@@ -139,7 +143,10 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/createedit";
+                    var isTypesController = CurrentControllerName.Contains("Types") ?
+                        "types" : string.Empty;
+
+                    var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/createedit{isTypesController}";
                     httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                     httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 
@@ -169,7 +176,10 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 
             using (var httpClient = new HttpClient())
             {
-                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}";
+                var isTypesController = CurrentControllerName.Contains("Types") ?
+                        "types" : string.Empty;
+
+                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}{isTypesController}/{(long)ID}";
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
 
                 using (var response = await httpClient.GetAsync(requestUri))
@@ -205,7 +215,10 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/createedit";
+                    var isTypesController = CurrentControllerName.Contains("Types") ?
+                        "types" : string.Empty;
+
+                    var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/createedit{isTypesController}";
                     httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                     httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 
@@ -231,9 +244,12 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
 
             var model = new U();
 
+            var isTypesController = CurrentControllerName.Contains("Types") ?
+                        "types" : string.Empty;
+
             using (var httpClient = new HttpClient())
             {
-                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/{(long)ID}";
+                var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}{isTypesController}/{(long)ID}";
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
 
                 using (var response = await httpClient.GetAsync(requestUri))
@@ -249,7 +265,7 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/delete/{(long)ID}";
+                    var requestUri = $"{Configuration.DefaultAPI}/home/{CurrentHomeID}/{CurrentAreaName}/delete{isTypesController}/{(long)ID}";
                     httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("CurrentUserID", CurrentUserID.ToString());
 
                     using (var response = await httpClient.GetAsync(requestUri))
@@ -623,6 +639,8 @@ namespace APPartment.Infrastructure.UI.Web.Controllers.Base
             var objectsSelectList = objects.Select(x => new SelectListItem() { Text = x.Name, Value = x.ObjectID.ToString() }).ToList();
             ViewData["ObjectBIDSelectList"] = objectsSelectList;
         }
+
+        protected virtual void PopulateViewDataForIndex() { }
 
         protected async Task<List<UserPostViewModel>> GetUsersInCurrentHome()
         {

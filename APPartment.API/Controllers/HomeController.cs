@@ -24,7 +24,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
+                var currentUserID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -52,7 +52,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
+                var currentUserID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -81,7 +81,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
+                var currentUserID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -111,7 +111,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
+                var currentUserID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -140,8 +140,8 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
-                var currentHomeID = 0l;
+                var currentUserID = 0L;
+                var currentHomeID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -242,8 +242,8 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
-                var currentHomeID = 0l;
+                var currentUserID = 0L;
+                var currentHomeID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -276,8 +276,8 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
-                var currentHomeID = 0l;
+                var currentUserID = 0L;
+                var currentHomeID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -338,8 +338,8 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
-                var currentHomeID = 0l;
+                var currentUserID = 0L;
+                var currentHomeID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -375,8 +375,8 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
-                var currentHomeID = 0l;
+                var currentUserID = 0L;
+                var currentHomeID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -425,8 +425,8 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
-                var currentHomeID = 0l;
+                var currentUserID = 0L;
+                var currentHomeID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -456,8 +456,8 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
-                var currentHomeID = 0l;
+                var currentUserID = 0L;
+                var currentHomeID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -493,8 +493,8 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
-                var currentHomeID = 0l;
+                var currentUserID = 0L;
+                var currentHomeID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 

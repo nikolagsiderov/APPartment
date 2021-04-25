@@ -22,6 +22,11 @@ namespace APPartment.API
             services.AddControllers()
                 .AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+            });
+
             services.Configure<IISServerOptions>(options =>
             {
                 options.MaxRequestBodySize = int.MaxValue;
@@ -47,6 +52,8 @@ namespace APPartment.API
             {
                 endpoints.MapControllers();
             });
+
+            app.UseCors(options => options.AllowAnyOrigin());
         }
     }
 }

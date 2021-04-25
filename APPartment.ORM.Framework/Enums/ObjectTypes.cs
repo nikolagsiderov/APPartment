@@ -21,6 +21,7 @@
         Event = 17,
         EventParticipant = 18,
         ObjectLink = 19,
-        SurveyParticipant = 20
+        SurveyParticipant = 20,
+        SurveyType = 21
     }
 }

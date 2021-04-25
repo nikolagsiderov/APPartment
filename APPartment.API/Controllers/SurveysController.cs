@@ -21,7 +21,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
+                var currentUserID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -50,6 +50,36 @@ namespace APPartment.API.Controllers
             
         }
 
+        // api/home/2/surveys/types/89
+        [HttpGet("{surveyTypeID:long}")]
+        [Route("types")]
+        public ActionResult<SurveyTypePostViewModel> GetType(long surveyTypeID)
+        {
+            try
+            {
+                var currentUserID = 0L;
+                var re = Request;
+                var headers = re.Headers;
+
+                if (headers.ContainsKey("CurrentUserID"))
+                {
+                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
+                }
+
+                var result = new BaseCRUDService(currentUserID).GetEntity<SurveyTypePostViewModel>(surveyTypeID);
+
+                if (result != null)
+                    return Ok(result);
+                else
+                    return NotFound();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+
+        }
+
         // api/home/2/surveys/surveys
         [HttpGet]
         [Route("surveys")]
@@ -57,7 +87,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
+                var currentUserID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -86,7 +116,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
+                var currentUserID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -115,7 +145,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
+                var currentUserID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -137,6 +167,35 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/2/surveys/surveytypes
+        [HttpGet]
+        [Route("surveytypes")]
+        public ActionResult<List<SurveyDisplayViewModel>> GetTypes(long homeID)
+        {
+            try
+            {
+                var currentUserID = 0L;
+                var re = Request;
+                var headers = re.Headers;
+
+                if (headers.ContainsKey("CurrentUserID"))
+                {
+                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
+                }
+
+                var result = new BaseCRUDService(currentUserID).GetCollection<SurveyTypeDisplayViewModel>(x => x.HomeID == homeID);
+
+                if (result.Any())
+                    return Ok(result);
+                else
+                    return NotFound();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
         // api/home/2/surveys/createdit
         [HttpPost]
         [Route("createedit")]
@@ -144,8 +203,8 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
-                var currentHomeID = 0l;
+                var currentUserID = 0L;
+                var currentHomeID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -182,7 +241,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
+                var currentUserID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -202,6 +261,61 @@ namespace APPartment.API.Controllers
             }
         }
 
+        // api/home/2/surveys/createdittypes
+        [HttpPost]
+        [Route("createdittypes")]
+        public ActionResult CreateEditTypes([FromBody] SurveyTypePostViewModel model)
+        {
+            try
+            {
+                var currentUserID = 0L;
+                var currentHomeID = 0L;
+                var re = Request;
+                var headers = re.Headers;
+
+                if (headers.ContainsKey("CurrentUserID"))
+                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
+
+                if (headers.ContainsKey("CurrentHomeID"))
+                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
+
+                model.HomeID = currentHomeID;
+                var result = new BaseCRUDService(currentUserID).Save(model);
+
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
+        // api/home/2/surveys/deletetypes/2
+        [HttpGet("deletetypes/{surveyTypeID:long}")]
+        public ActionResult DeleteTypes(long surveyTypeID)
+        {
+            try
+            {
+                var currentUserID = 0L;
+                var re = Request;
+                var headers = re.Headers;
+
+                if (headers.ContainsKey("CurrentUserID"))
+                {
+                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
+                }
+
+                var model = new BaseCRUDService(currentUserID).GetEntity<SurveyTypePostViewModel>(surveyTypeID);
+                new BaseCRUDService(currentUserID).Delete(model);
+
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
         // api/home/2/surveys/surveys/count
         [HttpGet]
         [Route("surveys/count")]
@@ -209,7 +323,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
+                var currentUserID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -234,7 +348,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
+                var currentUserID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 
@@ -259,7 +373,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0l;
+                var currentUserID = 0L;
                 var re = Request;
                 var headers = re.Headers;
 

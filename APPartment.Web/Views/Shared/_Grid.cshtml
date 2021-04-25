@@ -14,6 +14,12 @@
             <div>
                 <a asp-action="Create" class="no-underline btn btn-success btn-sm" style="font-size: small;"><i class="fas fa-plus"></i>&nbsp; Add</a>
             </div>
+            @if (ViewData["TypesLink"] != null)
+            {
+                <div style="margin-left: auto;">
+                    <a href="@ViewData["TypesLink"].ToString()" class="no-underline btn btn-success btn-sm" style="font-size: small;"><i class="fas fa-plus"></i>&nbsp; Types</a>
+                </div>
+            }
         </div>
     }
     <div class="card-body">
