@@ -19,12 +19,47 @@ namespace APPartment.API.Controllers
 
         protected override Expression<Func<SurveyDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentUserID;
 
+        [HttpPost("{model}")]
+        [Route("createedit")]
+        public override ActionResult CreateEdit([FromBody] SurveyPostViewModel model)
+        {
+            try
+            {
+                var surveyParticipantsIDs = model.SurveyParticipantsIDs;
+                model = BaseCRUDService.Save(model);
+
+                foreach (var surveyParticipantID in surveyParticipantsIDs)
+                {
+                    if (!BaseCRUDService.Any<SurveyParticipantPostViewModel>(x => x.SurveyID == model.ID && x.UserID == surveyParticipantID))
+                    {
+                        var surveyParticipant = new SurveyParticipantPostViewModel() { SurveyID = model.ID, UserID = surveyParticipantID };
+                        BaseCRUDService.Save(surveyParticipant);
+                    }
+                }
+
+                model = BaseCRUDService.Save(model);
+                NormalizePostModel(model);
+
+                return Ok(model);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
         protected override void NormalizeDisplayModel(SurveyDisplayViewModel model)
         {
         }
 
         protected override void NormalizePostModel(SurveyPostViewModel model)
         {
+            var surveyParticipants = BaseCRUDService.GetCollection<SurveyParticipantPostViewModel>(x => x.SurveyID == model.ID);
+
+            foreach (var surveyParticipant in surveyParticipants)
+            {
+                model.SurveyParticipantsIDs.Add(surveyParticipant.UserID);
+            }
         }
     }
 }
