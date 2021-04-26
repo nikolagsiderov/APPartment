@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using APPartment.Infrastructure.Controllers.Api;
 using APPartment.Infrastructure.Services.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Event;
 using APPartment.Infrastructure.UI.Common.ViewModels.GeneralCalendar;
@@ -11,8 +11,12 @@ namespace APPartment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CalendarController : ControllerBase
+    public class CalendarController : BaseAPIController
     {
+        public CalendarController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        {
+        }
+
         // api/calendar/events
         [HttpGet]
         [Route("events")]
@@ -20,18 +24,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0L;
-                var currentHomeID = 0L;
-                var re = Request;
-                var headers = re.Headers;
-
-                if (headers.ContainsKey("CurrentUserID"))
-                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
-
-                if (headers.ContainsKey("CurrentHomeID"))
-                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
-
-                var events = new BaseCRUDService(currentUserID).GetCollection<EventPostViewModel>(x => x.HomeID == currentHomeID);
+                var events = BaseCRUDService.GetCollection<EventPostViewModel>(x => x.HomeID == CurrentHomeID);
 
                 var result = new List<EventViewModel>();
 
@@ -49,7 +42,7 @@ namespace APPartment.API.Controllers
 
                 return Ok(result);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }

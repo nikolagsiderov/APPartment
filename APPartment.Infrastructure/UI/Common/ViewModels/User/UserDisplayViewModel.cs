@@ -1,8 +1,7 @@
-﻿using APPartment.Infrastructure.Services.Attributes;
-using APPUser = APPartment.Data.Server.Models.User.User;
+﻿using APPUser = APPartment.Data.Server.Models.User.User;
 using APPartment.Infrastructure.UI.Common.ViewModels.Base;
-using APPartment.Infrastructure.UI.Web.Attributes;
 using System.ComponentModel.DataAnnotations;
+using APPartment.Infrastructure.Attributes;
 
 namespace APPartment.Infrastructure.UI.Common.ViewModels.User
 {

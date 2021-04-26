@@ -1,5 +1,5 @@
-﻿using APPartment.Infrastructure.Services.Attributes;
-using APPartment.Infrastructure.Services.Tools;
+﻿using APPartment.Infrastructure.Attributes;
+using APPartment.Infrastructure.Tools;
 using APPartment.ORM.Framework.Declarations;
 using AutoMapper;
 using System;

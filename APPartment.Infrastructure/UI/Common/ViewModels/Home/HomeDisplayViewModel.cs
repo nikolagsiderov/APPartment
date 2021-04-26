@@ -1,8 +1,7 @@
-﻿using APPartment.Infrastructure.Services.Attributes;
-using APPHome = APPartment.Data.Server.Models.Home.Home;
-using APPartment.Infrastructure.UI.Web.Attributes;
+﻿using APPHome = APPartment.Data.Server.Models.Home.Home;
 using System.ComponentModel.DataAnnotations;
 using APPartment.Infrastructure.UI.Common.ViewModels.Base;
+using APPartment.Infrastructure.Attributes;
 
 namespace APPartment.Infrastructure.UI.Common.ViewModels.Home
 {

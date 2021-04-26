@@ -3,9 +3,9 @@ using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Http;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using System.Threading.Tasks;
-using APPartment.Infrastructure.UI.Web.Controllers.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Chore;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
+using APPartment.Infrastructure.Controllers.Web;
 
 namespace APPartment.Web.Areas.Chores.Controllers
 {

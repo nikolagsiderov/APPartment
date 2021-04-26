@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using APPartment.Common;
@@ -9,7 +8,7 @@ using Newtonsoft.Json;
 using SmartBreadcrumbs.Attributes;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
 using APPartment.Infrastructure.UI.Common.ViewModels.GeneralCalendar;
-using APPartment.Infrastructure.UI.Web.Controllers.Base;
+using APPartment.Infrastructure.Controllers.Web;
 
 namespace APPartment.Web.Controllers
 {

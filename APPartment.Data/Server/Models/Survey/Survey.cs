@@ -9,5 +9,8 @@ namespace APPartment.Data.Server.Models.Survey
     {
         [FieldMappingForMainTable]
         public bool IsCompleted { get; set; } = false;
+
+        [FieldMappingForMainTable]
+        public long SurveyTypeID { get; set; }
     }
 }

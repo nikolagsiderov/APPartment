@@ -1,6 +1,5 @@
-﻿using APPartment.Infrastructure.Services.Attributes;
+﻿using APPartment.Infrastructure.Attributes;
 using APPartment.Infrastructure.UI.Common.ViewModels.Base;
-using APPartment.Infrastructure.UI.Web.Attributes;
 using APPartment.Infrastructure.UI.Web.Constants;
 using System.ComponentModel.DataAnnotations;
 using APPIssue = APPartment.Data.Server.Models.Issue.Issue;

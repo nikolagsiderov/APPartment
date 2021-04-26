@@ -1,5 +1,5 @@
 ﻿using APPartment.Data.Server.Models;
-using APPartment.Infrastructure.Services.Attributes;
+using APPartment.Infrastructure.Attributes;
 using APPartment.Infrastructure.UI.Common.ViewModels.Base;
 
 namespace APPartment.Infrastructure.UI.Common.ViewModels

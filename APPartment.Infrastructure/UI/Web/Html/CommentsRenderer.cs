@@ -10,9 +10,9 @@ namespace APPartment.Infrastructure.UI.Web.Html
     {
         private readonly BaseCRUDService BaseService;
 
-        public CommentsRenderer(long? currentUserID)
+        public CommentsRenderer(long? currentUserID, long? currentHomeID)
         {
-            BaseService = new BaseCRUDService(currentUserID);
+            BaseService = new BaseCRUDService(currentUserID, currentHomeID);
         }
 
         public List<string> BuildComments(List<CommentPostViewModel> comments)

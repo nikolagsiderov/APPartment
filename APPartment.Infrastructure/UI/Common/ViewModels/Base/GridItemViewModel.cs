@@ -1,5 +1,5 @@
-﻿using APPartment.Infrastructure.UI.Web.Attributes;
-using APPartment.Infrastructure.UI.Web.Tools;
+﻿using APPartment.Infrastructure.Attributes;
+using APPartment.Infrastructure.Tools;
 using APPartment.ORM.Framework.Declarations;
 using System;
 using System.Collections.Generic;

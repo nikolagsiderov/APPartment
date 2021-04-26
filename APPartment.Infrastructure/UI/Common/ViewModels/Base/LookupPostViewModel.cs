@@ -1,4 +1,4 @@
-﻿using APPartment.Infrastructure.UI.Web.Attributes;
+﻿using APPartment.Infrastructure.Attributes;
 using APPartment.Infrastructure.UI.Web.Constants;
 using APPartment.ORM.Framework.Declarations;
 

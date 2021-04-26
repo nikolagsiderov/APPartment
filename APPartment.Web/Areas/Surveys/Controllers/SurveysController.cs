@@ -3,7 +3,6 @@ using SmartBreadcrumbs.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using System.Threading.Tasks;
-using APPartment.Infrastructure.UI.Web.Controllers.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Survey;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,6 +12,7 @@ using System.Net.Http;
 using APPartment.Common;
 using Newtonsoft.Json;
 using APPartment.Infrastructure.UI.Web.Html;
+using APPartment.Infrastructure.Controllers.Web;
 
 namespace APPartment.Web.Areas.Surveys.Controllers
 {

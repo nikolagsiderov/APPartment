@@ -473,11 +473,12 @@ namespace APPartment.ORM.Framework.Core
             return result;
         }
 
-        public long SaveCreateBaseObject<T>(T businessObject, long userID)
+        public long SaveCreateBaseObject<T>(T businessObject, long userID, long homeID)
             where T : class, IBaseObject
         {
             object objectID = 0;
             businessObject.ObjectTypeID = GetObjectTypeID(businessObject.GetType().Name);
+            businessObject.HomeID = homeID;
             businessObject.CreatedByID = userID;
             businessObject.CreatedDate = DateTime.Now;
             businessObject.ModifiedByID = userID;
@@ -548,9 +549,10 @@ namespace APPartment.ORM.Framework.Core
             return SelectGetBusinessObjectAfterSave<T>(businessObject, table, objectID);
         }
 
-        public void SaveUpdateBaseObject<T>(T businessObject, long userID)
+        public void SaveUpdateBaseObject<T>(T businessObject, long userID, long homeID)
             where T : class, IBaseObject
         {
+            businessObject.HomeID = homeID;
             businessObject.ModifiedByID = userID;
             businessObject.ModifiedDate = DateTime.Now;
 

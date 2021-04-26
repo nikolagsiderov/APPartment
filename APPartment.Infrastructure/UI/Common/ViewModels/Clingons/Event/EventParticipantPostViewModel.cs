@@ -1,4 +1,4 @@
-﻿using APPartment.Infrastructure.Services.Attributes;
+﻿using APPartment.Infrastructure.Attributes;
 using APPartment.Infrastructure.UI.Common.ViewModels.Base;
 using APPEventParticipant = APPartment.Data.Server.Models.Clingons.EventParticipant;
 

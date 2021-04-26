@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using System.Threading.Tasks;
-using APPartment.Infrastructure.UI.Web.Controllers.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Inventory;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
+using APPartment.Infrastructure.Controllers.Web;
 
 namespace APPartment.Web.Areas.Inventory.Controllers
 {

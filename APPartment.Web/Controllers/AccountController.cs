@@ -1,6 +1,6 @@
 ﻿using APPartment.Common;
+using APPartment.Infrastructure.Controllers.Web;
 using APPartment.Infrastructure.UI.Common.ViewModels.User;
-using APPartment.Infrastructure.UI.Web.Controllers.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

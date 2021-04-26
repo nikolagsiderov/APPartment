@@ -7,12 +7,10 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using APPartment.Common;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
-using APPartment.Infrastructure.UI.Web.Controllers.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Home;
 using APPartment.Infrastructure.UI.Common.ViewModels.User;
 using APPartment.Infrastructure.UI.Common.ViewModels;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using APPartment.Infrastructure.Controllers.Web;
 
 namespace APPartment.Web.Controllers
 {

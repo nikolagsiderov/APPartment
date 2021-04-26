@@ -1,4 +1,4 @@
-﻿using APPartment.Data.Core;
+﻿using APPartment.Data.Server.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels;
 using APPartment.ORM.Framework.Declarations;
 using APPartment.ORM.Framework.Enums;
@@ -14,11 +14,13 @@ namespace APPartment.Infrastructure.Services.Base
     {
         private BaseFacade BaseFacade;
         protected long? CurrentUserID;
+        protected long? CurrentHomeID;
 
-        public BaseCRUDService(long? currentUserID)
+        public BaseCRUDService(long? currentUserID, long? currentHomeID)
         {
             BaseFacade = new BaseFacade();
             CurrentUserID = currentUserID;
+            CurrentHomeID = currentHomeID;
         }
 
         public T GetEntity<T>(long ID)
@@ -244,7 +246,7 @@ namespace APPartment.Infrastructure.Services.Base
                 var serverModel = toServerModelFunc.Invoke(this, new object[] { model });
 
                 serverModel = updateFunc
-                    .Invoke(BaseFacade, new object[] { serverModel, CurrentUserID });
+                    .Invoke(BaseFacade, new object[] { serverModel, CurrentUserID, CurrentHomeID });
 
                 var toViewModelFunc = typeof(MapperService)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
@@ -275,7 +277,7 @@ namespace APPartment.Infrastructure.Services.Base
                 var serverModel = toServerModelFunc.Invoke(this, new object[] { model });
 
                 serverModel = createFunc
-                    .Invoke(BaseFacade, new object[] { serverModel, CurrentUserID });
+                    .Invoke(BaseFacade, new object[] { serverModel, CurrentUserID, CurrentHomeID });
 
                 var toViewModelFunc = typeof(MapperService)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)

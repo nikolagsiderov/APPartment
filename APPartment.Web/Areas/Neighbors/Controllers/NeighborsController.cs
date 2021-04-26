@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
+using APPartment.Infrastructure.Controllers.Web;
 using APPartment.Infrastructure.UI.Common.ViewModels.Home;
-using APPartment.Infrastructure.UI.Common.ViewModels.User;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
-using APPartment.Infrastructure.UI.Web.Controllers.Base;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartBreadcrumbs.Attributes;

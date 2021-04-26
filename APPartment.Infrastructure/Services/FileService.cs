@@ -1,5 +1,5 @@
 ﻿using APPartment.Infrastructure.Services.Base;
-using APPartment.Infrastructure.UI.Common.Tools;
+using APPartment.Infrastructure.Tools;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Image;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -9,7 +9,7 @@ namespace APPartment.Infrastructure.Services
 {
     public class FileService : BaseCRUDService
     {
-        public FileService(long? currentUserID) : base(currentUserID)
+        public FileService(long? currentUserID, long? currentHomeID) : base(currentUserID, currentHomeID)
         {
         }
 

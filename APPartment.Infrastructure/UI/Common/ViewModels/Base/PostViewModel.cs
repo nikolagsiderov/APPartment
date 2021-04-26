@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
-using APPartment.Infrastructure.UI.Web.Attributes;
 using APPartment.Infrastructure.UI.Web.Constants;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Image;
-using APPartment.Infrastructure.UI.Web.Tools;
+using APPartment.Infrastructure.Attributes;
+using APPartment.Infrastructure.Tools;
 
 namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
 {

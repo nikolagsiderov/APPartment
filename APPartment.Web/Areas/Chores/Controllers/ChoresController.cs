@@ -9,10 +9,10 @@ using System.Net.Http;
 using APPartment.Common;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using APPartment.Infrastructure.UI.Web.Controllers.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Chore;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
 using APPartment.Infrastructure.UI.Web.Html;
+using APPartment.Infrastructure.Controllers.Web;
 
 namespace APPartment.Web.Areas.Chores.Controllers
 {

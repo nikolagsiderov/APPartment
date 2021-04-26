@@ -1,6 +1,6 @@
-﻿using APPartment.Infrastructure.Services.Attributes;
-using APPSurveyType = APPartment.Data.Server.Models.Survey.SurveyType;
+﻿using APPSurveyType = APPartment.Data.Server.Models.Survey.SurveyType;
 using APPartment.Infrastructure.UI.Common.ViewModels.Base;
+using APPartment.Infrastructure.Attributes;
 
 namespace APPartment.Infrastructure.UI.Common.ViewModels.Survey
 {

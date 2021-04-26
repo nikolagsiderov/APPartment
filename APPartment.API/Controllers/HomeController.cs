@@ -8,16 +8,21 @@ using APPartment.Infrastructure.Services.Base;
 using APPartment.Infrastructure.UI.Web.Html;
 using APPartment.Infrastructure.UI.Common.ViewModels.Chat;
 using APPartment.Infrastructure.UI.Common.ViewModels.Inventory;
-using APPartment.Infrastructure.UI.Common.Tools;
 using APPartment.Infrastructure.UI.Common.ViewModels.Chore;
 using APPartment.Infrastructure.UI.Common.ViewModels.Issue;
+using APPartment.Infrastructure.Controllers.Api;
+using APPartment.Infrastructure.Tools;
 
 namespace APPartment.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class HomeController : ControllerBase
+    public class HomeController : BaseAPIController
     {
+        public HomeController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
+        {
+        }
+
         // api/home/5
         [HttpGet("{homeID:long}")]
         public ActionResult<HomePostViewModel> Get(long homeID)
@@ -33,7 +38,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseCRUDService(currentUserID).GetEntity<HomePostViewModel>(homeID);
+                var result = BaseCRUDService.GetEntity<HomePostViewModel>(homeID);
 
                 if (result != null)
                     return Ok(result);
@@ -61,7 +66,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var result = new BaseCRUDService(currentUserID).GetCollection<HomePostViewModel>();
+                var result = BaseCRUDService.GetCollection<HomePostViewModel>();
 
                 if (result.Any())
                     return Ok(result);
@@ -90,12 +95,12 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                var homeNameAlreadyExists = new BaseCRUDService(0).Any<HomePostViewModel>(x => x.Name == home.Name);
+                var homeNameAlreadyExists = BaseCRUDService.Any<HomePostViewModel>(x => x.Name == home.Name);
 
                 if (homeNameAlreadyExists)
                     return StatusCode(StatusCodes.Status403Forbidden, "This home name is already taken.");
 
-                home = new BaseCRUDService(currentUserID).Save(home);
+                home = BaseCRUDService.Save(home);
                 return Ok(home);
             }
             catch (System.Exception ex)
@@ -120,7 +125,7 @@ namespace APPartment.API.Controllers
                     currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
                 }
 
-                home = new BaseCRUDService(currentUserID).GetEntity<HomePostViewModel>(x => x.Name == home.Name && x.Password == home.Password);
+                home = BaseCRUDService.GetEntity<HomePostViewModel>(x => x.Name == home.Name && x.Password == home.Password);
 
                 if (home != null)
                     return Ok(home);
@@ -140,31 +145,20 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0L;
-                var currentHomeID = 0L;
-                var re = Request;
-                var headers = re.Headers;
-
-                if (headers.ContainsKey("CurrentUserID"))
-                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
-
-                if (headers.ContainsKey("CurrentHomeID"))
-                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
-
-                var messages = new BaseCRUDService(currentUserID).GetCollection<MessageDisplayViewModel>(x => x.HomeID == currentHomeID && x.CreatedByID != 0);
-                var messagesResult = new ChatRenderer(currentUserID).BuildMessagesForChat(messages);
+                var messages = BaseCRUDService.GetCollection<MessageDisplayViewModel>(x => x.HomeID == CurrentHomeID && x.CreatedByID != 0);
+                var messagesResult = new ChatRenderer(CurrentUserID, CurrentHomeID).BuildMessagesForChat(messages);
 
                 var result = new HomePageDisplayModel()
                 {
                     Messages = messagesResult
                 };
 
-                if (new BaseCRUDService(currentUserID).Any<HomeSettingPostViewModel>(x => x.HomeID == currentHomeID))
+                if (BaseCRUDService.Any<HomeSettingPostViewModel>(x => x.HomeID == CurrentHomeID))
                 {
                     var nextMonth = DateTime.Now.AddMonths(1).Month.ToString();
                     var thisMonth = DateTime.Now.Month.ToString();
                     var rentDueDate = string.Empty;
-                    var rentDueDateDay = new BaseCRUDService(currentUserID).GetEntity<HomeSettingPostViewModel>(x => x.HomeID == currentHomeID).RentDueDateDay;
+                    var rentDueDateDay = BaseCRUDService.GetEntity<HomeSettingPostViewModel>(x => x.HomeID == CurrentHomeID).RentDueDateDay;
 
                     if (rentDueDateDay.ToString() != "0")
                     {
@@ -179,11 +173,10 @@ namespace APPartment.API.Controllers
                     result.RentDueDate = rentDueDate;
                 }
 
-                if (new BaseCRUDService(currentUserID)
-                    .Any<InventoryPostViewModel>(x => x.HomeID == currentHomeID))
+                if (BaseCRUDService.Any<InventoryPostViewModel>(x => x.HomeID == CurrentHomeID))
                 {
-                    var latestInventoryItem = new BaseCRUDService(currentUserID)
-                                        .GetCollection<InventoryPostViewModel>(x => x.HomeID == currentHomeID)
+                    var latestInventoryItem = BaseCRUDService
+                                        .GetCollection<InventoryPostViewModel>(x => x.HomeID == CurrentHomeID)
                                         .OrderByDescending(x => x.ModifiedDate)
                                         .FirstOrDefault();
 
@@ -194,11 +187,10 @@ namespace APPartment.API.Controllers
                     result.InventoryLastUpdate = "Now";
                 }
 
-                if (new BaseCRUDService(currentUserID)
-                    .Any<ChorePostViewModel>(x => x.HomeID == currentHomeID))
+                if (BaseCRUDService.Any<ChorePostViewModel>(x => x.HomeID == CurrentHomeID))
                 {
-                    var latestChore = new BaseCRUDService(currentUserID)
-                                        .GetCollection<ChorePostViewModel>(x => x.HomeID == currentHomeID)
+                    var latestChore = BaseCRUDService
+                                        .GetCollection<ChorePostViewModel>(x => x.HomeID == CurrentHomeID)
                                         .OrderByDescending(x => x.ModifiedDate)
                                         .FirstOrDefault();
 
@@ -209,11 +201,10 @@ namespace APPartment.API.Controllers
                     result.ChoresLastUpdate = "Now";
                 }
 
-                if (new BaseCRUDService(currentUserID)
-                    .Any<IssuePostViewModel>(x => x.HomeID == currentHomeID))
+                if (BaseCRUDService.Any<IssuePostViewModel>(x => x.HomeID == CurrentHomeID))
                 {
-                    var latestIssue = new BaseCRUDService(currentUserID)
-                                        .GetCollection<IssuePostViewModel>(x => x.HomeID == currentHomeID)
+                    var latestIssue = BaseCRUDService
+                                        .GetCollection<IssuePostViewModel>(x => x.HomeID == CurrentHomeID)
                                         .OrderByDescending(x => x.ModifiedDate)
                                         .FirstOrDefault();
 
@@ -242,21 +233,10 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0L;
-                var currentHomeID = 0L;
-                var re = Request;
-                var headers = re.Headers;
-
-                if (headers.ContainsKey("CurrentUserID"))
-                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
-
-                if (headers.ContainsKey("CurrentHomeID"))
-                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
-
                 var result = new HomeStatusPostViewModel();
 
-                if (new BaseCRUDService(currentUserID).Any<HomeStatusPostViewModel>(x => x.HomeID == currentHomeID))
-                    result = new BaseCRUDService(currentUserID).GetEntity<HomeStatusPostViewModel>(x => x.HomeID == currentHomeID);
+                if (BaseCRUDService.Any<HomeStatusPostViewModel>(x => x.HomeID == CurrentHomeID))
+                    result = BaseCRUDService.GetEntity<HomeStatusPostViewModel>(x => x.HomeID == CurrentHomeID);
 
                 if (result != null)
                     return Ok(result);
@@ -276,31 +256,20 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0L;
-                var currentHomeID = 0L;
-                var re = Request;
-                var headers = re.Headers;
-
-                if (headers.ContainsKey("CurrentUserID"))
-                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
-
-                if (headers.ContainsKey("CurrentHomeID"))
-                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
-
                 var homeStatusDetails = string.Empty;
 
                 if (!string.IsNullOrEmpty(homeStatusDetailsString))
                     homeStatusDetails = homeStatusDetailsString;
 
-                if (new BaseCRUDService(currentUserID).Any<HomeStatusPostViewModel>(x => x.HomeID == currentHomeID))
+                if (BaseCRUDService.Any<HomeStatusPostViewModel>(x => x.HomeID == CurrentHomeID))
                 {
-                    var status = new BaseCRUDService(currentUserID).GetEntity<HomeStatusPostViewModel>(x => x.HomeID == currentHomeID);
+                    var status = BaseCRUDService.GetEntity<HomeStatusPostViewModel>(x => x.HomeID == CurrentHomeID);
 
                     status.Status = int.Parse(homeStatusString);
                     status.Details = homeStatusDetails;
-                    status.UserID = currentUserID;
+                    status.UserID = CurrentUserID;
 
-                    new BaseCRUDService(currentUserID).Save(status);
+                    status = BaseCRUDService.Save(status);
 
                     if (status != null)
                         return Ok(status);
@@ -313,11 +282,11 @@ namespace APPartment.API.Controllers
                     {
                         Status = int.Parse(homeStatusString),
                         Details = homeStatusDetails,
-                        UserID = currentUserID,
-                        HomeID = currentHomeID
+                        UserID = CurrentUserID,
+                        HomeID = CurrentHomeID
                     };
 
-                    new BaseCRUDService(currentUserID).Save(status);
+                    status = BaseCRUDService.Save(status);
 
                     if (status != null)
                         return Ok(status);
@@ -325,7 +294,7 @@ namespace APPartment.API.Controllers
                         return NotFound();
                 }
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
@@ -338,22 +307,11 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0L;
-                var currentHomeID = 0L;
-                var re = Request;
-                var headers = re.Headers;
-
-                if (headers.ContainsKey("CurrentUserID"))
-                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
-
-                if (headers.ContainsKey("CurrentHomeID"))
-                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
-
-                var result = new BaseCRUDService(currentUserID).GetEntity<HomeSettingPostViewModel>(x => x.HomeID == currentHomeID);
+                var result = BaseCRUDService.GetEntity<HomeSettingPostViewModel>(x => x.HomeID == CurrentHomeID);
 
                 if (result != null)
                 {
-                    var homeModel = new BaseCRUDService(currentUserID).GetEntity<HomePostViewModel>(currentHomeID);
+                    var homeModel = BaseCRUDService.GetEntity<HomePostViewModel>(CurrentHomeID);
                     result.HomeName = homeModel.Name;
                 }
 
@@ -362,7 +320,7 @@ namespace APPartment.API.Controllers
                 else
                     return NotFound();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
@@ -375,34 +333,23 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0L;
-                var currentHomeID = 0L;
-                var re = Request;
-                var headers = re.Headers;
-
-                if (headers.ContainsKey("CurrentUserID"))
-                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
-
-                if (headers.ContainsKey("CurrentHomeID"))
-                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
-
-                var settingsExists = new BaseCRUDService(currentUserID).GetEntity<HomeSettingPostViewModel>(x => x.HomeID == currentHomeID);
+                var settingsExists = BaseCRUDService.GetEntity<HomeSettingPostViewModel>(x => x.HomeID == CurrentHomeID);
 
                 if (settingsExists != null)
                     settings.ID = settingsExists.ID;
 
-                settings.HomeID = currentHomeID;
+                settings.HomeID = CurrentHomeID;
 
-                var home = new BaseCRUDService(currentUserID).GetEntity<HomePostViewModel>(currentHomeID);
+                var home = BaseCRUDService.GetEntity<HomePostViewModel>(CurrentHomeID);
                 var currentHomeName = home.Name;
 
                 if (!string.IsNullOrEmpty(settings.HomeName) && !home.Name.Equals(settings.HomeName))
                 {
                     home.Name = settings.HomeName;
-                    new BaseCRUDService(currentUserID).Save(home);
+                    BaseCRUDService.Save(home);
                 }
 
-                settings = new BaseCRUDService(currentUserID).Save(settings);
+                settings = BaseCRUDService.Save(settings);
 
                 if (!string.IsNullOrEmpty(settings.HomeName) && !currentHomeName.Equals(settings.HomeName))
                     settings.ChangeHttpSession = true;
@@ -412,7 +359,7 @@ namespace APPartment.API.Controllers
                 else
                     return NotFound();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
@@ -425,25 +372,14 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0L;
-                var currentHomeID = 0L;
-                var re = Request;
-                var headers = re.Headers;
-
-                if (headers.ContainsKey("CurrentUserID"))
-                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
-
-                if (headers.ContainsKey("CurrentHomeID"))
-                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
-
                 var adjustedMessage = string.Join(" <br /> ", messageText.Split('\n').ToList());
-                var message = new MessageDisplayViewModel() { Details = adjustedMessage, CreatedByID = currentUserID, HomeID = currentHomeID, CreatedDate = DateTime.Now };
+                var message = new MessageDisplayViewModel() { Details = adjustedMessage, CreatedByID = CurrentUserID, HomeID = CurrentHomeID, CreatedDate = DateTime.Now };
 
-                message = new BaseCRUDService(currentUserID).Save(message);
+                message = BaseCRUDService.Save(message);
 
                 return Ok(message);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
@@ -456,31 +392,20 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0L;
-                var currentHomeID = 0L;
-                var re = Request;
-                var headers = re.Headers;
-
-                if (headers.ContainsKey("CurrentUserID"))
-                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
-
-                if (headers.ContainsKey("CurrentHomeID"))
-                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
-
                 var homeUser = new HomeUserPostViewModel()
                 {
-                    HomeID = currentHomeID,
-                    UserID = currentUserID
+                    HomeID = CurrentHomeID,
+                    UserID = CurrentUserID
                 };
 
-                var userIsAlreadyApartOfCurrentHome = new BaseCRUDService(currentUserID).Any<HomeUserPostViewModel>(x => x.UserID == homeUser.UserID && x.HomeID == homeUser.HomeID);
+                var userIsAlreadyApartOfCurrentHome = BaseCRUDService.Any<HomeUserPostViewModel>(x => x.UserID == homeUser.UserID && x.HomeID == homeUser.HomeID);
 
                 if (!userIsAlreadyApartOfCurrentHome)
-                    new BaseCRUDService(currentUserID).Save(homeUser);
+                    BaseCRUDService.Save(homeUser);
 
                 return Ok();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
@@ -493,18 +418,7 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var currentUserID = 0L;
-                var currentHomeID = 0L;
-                var re = Request;
-                var headers = re.Headers;
-
-                if (headers.ContainsKey("CurrentUserID"))
-                    currentUserID = long.Parse(headers.GetCommaSeparatedValues("CurrentUserID").FirstOrDefault());
-
-                if (headers.ContainsKey("CurrentHomeID"))
-                    currentHomeID = long.Parse(headers.GetCommaSeparatedValues("CurrentHomeID").FirstOrDefault());
-
-                var result = new BaseCRUDService(currentUserID).GetCollection(x => x.HomeID == currentHomeID);
+                var result = BaseCRUDService.GetCollection(x => x.HomeID == CurrentHomeID);
 
                 foreach (var item in result)
                 {
@@ -520,7 +434,7 @@ namespace APPartment.API.Controllers
                 else
                     return NotFound();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }

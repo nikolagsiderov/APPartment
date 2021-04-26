@@ -1,9 +1,8 @@
-﻿using APPartment.Infrastructure.Services.Attributes;
-using APPEvent = APPartment.Data.Server.Models.Clingons.Event;
+﻿using APPEvent = APPartment.Data.Server.Models.Clingons.Event;
 using APPartment.Infrastructure.UI.Common.ViewModels.Base;
-using APPartment.Infrastructure.UI.Web.Attributes;
 using APPartment.Infrastructure.UI.Web.Constants;
 using System;
+using APPartment.Infrastructure.Attributes;
 
 namespace APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Event
 {
