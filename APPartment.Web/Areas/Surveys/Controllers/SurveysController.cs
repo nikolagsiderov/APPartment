@@ -52,7 +52,7 @@ namespace APPartment.Web.Areas.Surveys.Controllers
             }
 
             var participantsSelectList = await GetAssignedUsersSelectList(model);
-            ViewData["SurveyParticipantsIDs"] = participantsSelectList;
+            ViewData[nameof(model.SurveyParticipantsIDs)] = participantsSelectList;
 
             return View(model);
         }
@@ -106,7 +106,7 @@ namespace APPartment.Web.Areas.Surveys.Controllers
             await base.PopulateViewData(model);
 
             var participantsSelectList = await GetAssignedUsersSelectList(model);
-            ViewData["SurveyParticipantsIDs"] = participantsSelectList;
+            ViewData[nameof(model.SurveyParticipantsIDs)] = participantsSelectList;
 
             foreach (var participant in participantsSelectList)
             {
@@ -114,7 +114,7 @@ namespace APPartment.Web.Areas.Surveys.Controllers
             }
 
             var typesSelectList = await GetSurveyTypesSelectList(model);
-            ViewData["SurveyTypeID"] = typesSelectList;
+            ViewData[nameof(model.SurveyTypeID)] = typesSelectList;
         }
 
         protected override void PopulateViewDataForIndex()

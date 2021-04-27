@@ -13,7 +13,7 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Chore
         [Display(Name = "Done")]
         public bool IsDone { get; set; }
 
-        [APPUIHint(Templates.Dropdown, Row = 3, Col = 4, Order = 1, Section = "General Information", SelectList = "AssignedToUserID")]
+        [APPUIHint(Templates.Dropdown, Row = 3, Col = 4, Order = 1, Section = "General Information", SelectList = nameof(AssignedToUserID))]
         [Display(Name = "Assigned to")]
         public long? AssignedToUserID { get; set; }
     }

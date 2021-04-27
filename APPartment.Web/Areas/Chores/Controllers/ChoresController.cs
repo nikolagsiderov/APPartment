@@ -52,7 +52,7 @@ namespace APPartment.Web.Areas.Chores.Controllers
             }
 
             var users = await GetAssignedUsersSelectList(model);
-            ViewData["AssignedToUserID"] = users;
+            ViewData[nameof(model.AssignedToUserID)] = users;
 
             return View(model);
         }
@@ -99,7 +99,7 @@ namespace APPartment.Web.Areas.Chores.Controllers
             await base.PopulateViewData(model);
 
             var users = await GetAssignedUsersSelectList(model);
-            ViewData["AssignedToUserID"] = users;
+            ViewData[nameof(model.AssignedToUserID)] = users;
         }
 
         private async Task<List<SelectListItem>> GetAssignedUsersSelectList(ChorePostViewModel model)
