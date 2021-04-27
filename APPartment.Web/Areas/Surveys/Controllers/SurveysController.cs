@@ -122,6 +122,7 @@ namespace APPartment.Web.Areas.Surveys.Controllers
             base.PopulateViewDataForIndex();
 
             ViewData["TypesLink"] = Url.Action(nameof(Index), nameof(SurveyTypesController).Replace("Controller", ""));
+            ViewData["TypesLinkFAIcon"] = "fas fa-poll";
         }
 
         private async Task<List<SelectListItem>> GetAssignedUsersSelectList(SurveyPostViewModel model)
@@ -178,7 +179,6 @@ namespace APPartment.Web.Areas.Surveys.Controllers
                     if (model.SurveyTypeID.Equals(long.Parse(item.Value)))
                     {
                         item.Selected = true;
-                        break;
                     }
                 }
             }

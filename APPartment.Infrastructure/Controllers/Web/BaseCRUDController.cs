@@ -113,9 +113,9 @@ namespace APPartment.Infrastructure.Controllers.Web
             {
                 ViewData["CanManage"] = CanManage;
 
-                await GetClingons(model);
-                await SetObjectActions(model);
                 await PopulateViewData(model);
+                await SetObjectActions(model);
+                await GetClingons(model);
 
                 return View("_Details", model);
             }
@@ -187,9 +187,9 @@ namespace APPartment.Infrastructure.Controllers.Web
 
             if (model.ID > 0)
             {
-                await GetClingons(model);
                 await PopulateViewData(model);
                 await SetObjectActions(model);
+                await GetClingons(model);
 
                 return View("_Edit", model);
             }

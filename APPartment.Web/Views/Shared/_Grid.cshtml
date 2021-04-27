@@ -11,13 +11,13 @@
     @if (canManage)
     {
         <div class="card-header py-3">
-            <div>
+            <div style="margin-left: 4px; margin-right: 4px;">
                 <a asp-action="Create" class="no-underline btn btn-success btn-sm" style="font-size: small;"><i class="fas fa-plus"></i>&nbsp; Add</a>
             </div>
             @if (ViewData["TypesLink"] != null)
             {
-                <div style="margin-left: auto;">
-                    <a href="@ViewData["TypesLink"].ToString()" class="no-underline btn btn-success btn-sm" style="font-size: small;"><i class="fas fa-plus"></i>&nbsp; Types</a>
+                <div style="margin-left: 4px; margin-right: 4px;">
+                    <a href="@ViewData["TypesLink"].ToString()" class="no-underline btn btn-info btn-sm" style="font-size: small;"><i class="@ViewData["TypesLinkFAIcon"]"></i>&nbsp; Types</a>
                 </div>
             }
         </div>
