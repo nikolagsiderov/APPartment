@@ -13,7 +13,7 @@
 
     <a class="navbar-brand d-none d-sm-block" asp-controller="Home" asp-action="Index">@homeName</a>
     <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle" href="#"><i data-feather="menu"></i></button>
-    <form class="form-inline mr-auto d-none d-lg-block"><input class="form-control form-control-solid mr-sm-2" type="search" placeholder="Search for... (not implemented)" aria-label="Search" /></form>
+    <form class="form-inline mr-auto d-none d-lg-block" role="search" action="/Search/Search" autocomplete="off"><input class="form-control form-control-solid mr-md-2" type="search" name="keyWords" placeholder="Search for anything..." aria-label="Search" /></form>
     <ul class="navbar-nav align-items-center ml-auto">
         <li class="nav-item dropdown no-caret mr-3 dropdown-notifications">
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="homeStatus" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>

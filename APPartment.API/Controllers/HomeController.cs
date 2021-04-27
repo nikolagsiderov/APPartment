@@ -439,5 +439,24 @@ namespace APPartment.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
         }
+
+        [HttpGet]
+        [Route("objects/search/{keyWords}")]
+        public ActionResult GetAllObjects(string keyWords)
+        {
+            try
+            {
+                var result = BaseCRUDService.GetCollection(x => x.HomeID == CurrentHomeID && (x.Name == keyWords || x.Details == keyWords));
+
+                if (result.Any())
+                    return Ok(result);
+                else
+                    return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
     }
 }

@@ -1,0 +1,39 @@
+﻿@model GeneralSearchViewModel
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header">
+                <strong>
+                    @Model.Result.Count() results for '@Model.KeyWords'
+                </strong>
+                <small style="margin-left: auto; font: small-caption;">
+                    Request time: @Model.ElapsedTime milliseconds
+                </small>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    @if (Model.Result.Count() > 0)
+                    {
+                        @foreach (var item in Model.Result)
+                        {
+                            <li class="list-group-item">
+                                <a href="#">
+                                    <div>
+                                        <span style="font-weight: bold;">Name: </span>@item.Name
+                                    </div>
+                                    <div>
+                                        <span style="font-weight: bold;">Details: </span>@item.Details
+                                    </div>
+                                    <span style="font:small-caption" class="text-muted">
+                                        @item.CreatedDate
+                                    </span>
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
