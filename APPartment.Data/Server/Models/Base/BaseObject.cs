@@ -35,5 +35,8 @@ namespace APPartment.Data.Server.Models.Base
 
         [FieldMappingForObjectTable]
         public DateTime? ModifiedDate { get; set; }
+
+        [FieldMappingForObjectTable]
+        public long MainID { get; set; }
     }
 }

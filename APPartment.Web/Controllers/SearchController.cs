@@ -41,7 +41,7 @@ namespace APPartment.Web.Controllers
 
             var model = new GeneralSearchViewModel(objects, keyWords);
             watch.Stop();
-            model.ElapsedTime = watch.ElapsedMilliseconds;
+            model.ElapsedTime = (double)watch.ElapsedMilliseconds / 1000;
 
             return View("_Search", model);
         }

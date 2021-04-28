@@ -73,9 +73,9 @@ namespace APPartment.ORM.Framework.Core
             return string.Format("INSERT INTO [dbo].[Object] ({0}) VALUES ({1})" + "SELECT SCOPE_IDENTITY()", propertyNames, propertyValues);
         }
 
-        public static string InsertBusinessObject(string table, string propertyNames, string propertyValues)
+        public static string InsertBusinessObject(string table, string propertyNames, string propertyValues, string objectID)
         {
-            return string.Format("INSERT INTO [dbo].[{0}] ({1}) VALUES ({2})", table, propertyNames, propertyValues);
+            return string.Format("DECLARE @MainIDValue BIGINT; INSERT INTO [dbo].[{0}] ({1}) VALUES ({2})" + "SET @MainIDValue = SCOPE_IDENTITY(); UPDATE [dbo].[Object] SET [MainID] = @MainIDValue WHERE [ObjectID] = {3}", table, propertyNames, propertyValues, objectID);
         }
 
         public static string UpdateBaseObject(string properties, string objectID)

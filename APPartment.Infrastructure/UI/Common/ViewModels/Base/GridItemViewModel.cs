@@ -35,6 +35,8 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
 
         public DateTime? ModifiedDate { get; set; }
 
+        public long MainID { get; set; }
+
         public List<string> ActionsHtml { get; set; } = new List<string>();
 
         [JsonIgnore]

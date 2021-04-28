@@ -521,7 +521,7 @@ namespace APPartment.ORM.Framework.Core
             {
                 var propertyColumnNames = SqlQueryProvider.GetPropertyNamesForDBColumns(properties) + ", [ObjectID]";
                 var propertyValues = SqlQueryProvider.GetPropertyValues<T>(properties, businessObject) + $", {objectID}";
-                var query = SqlQueryProvider.InsertBusinessObject(table, propertyColumnNames, propertyValues);
+                var query = SqlQueryProvider.InsertBusinessObject(table, propertyColumnNames, propertyValues, objectID.ToString());
 
                 using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
                 using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -535,7 +535,7 @@ namespace APPartment.ORM.Framework.Core
             {
                 var propertyColumnNames = "[ObjectID]";
                 var propertyValues = $"{objectID}";
-                var query = SqlQueryProvider.InsertBusinessObject(table, propertyColumnNames, propertyValues);
+                var query = SqlQueryProvider.InsertBusinessObject(table, propertyColumnNames, propertyValues, objectID.ToString());
 
                 using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
                 using (SqlCommand cmd = new SqlCommand(query, conn))

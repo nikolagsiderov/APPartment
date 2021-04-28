@@ -49,6 +49,9 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
 
         [APPUIHint(Templates.Hidden)]
         public DateTime? ModifiedDate { get; set; }
+
+        [APPUIHint(Templates.Hidden)]
+        public long MainID { get; set; }
         #endregion
 
         public List<string> CommentsHtml { get; set; } = new List<string>();

@@ -23,5 +23,7 @@ namespace APPartment.ORM.Framework.Declarations
         public long? ModifiedByID { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
+
+        public long MainID { get; set; }
     }
 }
