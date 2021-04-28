@@ -12,6 +12,7 @@ using APPartment.Infrastructure.UI.Common.ViewModels.Chore;
 using APPartment.Infrastructure.UI.Common.ViewModels.Issue;
 using APPartment.Infrastructure.Controllers.Api;
 using APPartment.Infrastructure.Tools;
+using APPartment.Common;
 
 namespace APPartment.API.Controllers
 {
@@ -418,15 +419,14 @@ namespace APPartment.API.Controllers
         {
             try
             {
-                var result = BaseCRUDService.GetCollection(x => x.HomeID == CurrentHomeID);
+                var result = BaseCRUDService.GetCollection(x => x.HomeID == CurrentHomeID && x.ObjectID != excludedObjectID);
 
                 foreach (var item in result)
                 {
-                    if (item.ObjectID == excludedObjectID)
-                    {
-                        result.Remove(item);
-                        break;
-                    }
+                    var areaName = item.Area;
+                    var controllerName = item.Area;
+                    var page = "Details";
+                    item.WebLink = string.Format($"{Configuration.DefaultBaseURL}/{areaName}/{controllerName}/{page}/{item.MainID}");
                 }
 
                 if (result.Any())
@@ -447,6 +447,14 @@ namespace APPartment.API.Controllers
             try
             {
                 var result = BaseCRUDService.GetCollection(x => x.HomeID == CurrentHomeID && (x.Name == keyWords || x.Details == keyWords));
+
+                foreach (var item in result)
+                {
+                    var areaName = item.Area;
+                    var controllerName = item.Area;
+                    var page = "Details";
+                    item.WebLink = string.Format($"{Configuration.DefaultBaseURL}/{areaName}/{controllerName}/{page}/{item.MainID}");
+                }
 
                 if (result.Any())
                     return Ok(result);

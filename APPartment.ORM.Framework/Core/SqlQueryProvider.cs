@@ -30,7 +30,19 @@ namespace APPartment.ORM.Framework.Core
 
         public static string SelectBusinessObjectByClause(string sqlClause)
         {
-            return string.Format("SELECT TOP(1) * FROM [dbo].[Object] WHERE {0}", sqlClause);
+            return string.Format(@"SELECT TOP(1) [ObjectID]
+      ,[ObjectTypeID]
+      ,obj.[Name]
+      ,[Details]
+      ,[CreatedByID]
+      ,[CreatedDate]
+      ,[ModifiedByID]
+      ,[ModifiedDate]
+      ,[HomeID]
+      ,[MainID]
+	  ,objType.[Name] AS [ObjectTypeName]
+	  ,[Area]
+FROM [dbo].[Object] as obj LEFT JOIN [dbo].[ObjectType] as objType ON obj.[ObjectTypeID] = objType.[ID] WHERE {0}", sqlClause);
         }
 
         public static string SelectBusinessObjects(string table)
@@ -45,7 +57,19 @@ namespace APPartment.ORM.Framework.Core
 
         public static string SelectBusinessObjectsByClause(string sqlClause)
         {
-            return string.Format("SELECT * FROM [dbo].[Object] WHERE {0}", sqlClause);
+            return string.Format(@"SELECT [ObjectID]
+      ,[ObjectTypeID]
+      ,obj.[Name]
+      ,[Details]
+      ,[CreatedByID]
+      ,[CreatedDate]
+      ,[ModifiedByID]
+      ,[ModifiedDate]
+      ,[HomeID]
+      ,[MainID]
+	  ,objType.[Name] AS [ObjectTypeName]
+	  ,[Area]
+FROM [dbo].[Object] as obj LEFT JOIN [dbo].[ObjectType] as objType ON obj.[ObjectTypeID] = objType.[ID] WHERE {0}", sqlClause);
         }
 
         public static string SelectLookupObjectByID(string table, string ID)

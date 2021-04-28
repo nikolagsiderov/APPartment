@@ -231,6 +231,7 @@ namespace APPartment.ORM.Framework.Core
             where T : class, IBaseObject, new()
         {
             var sqlClause = expressionToSql.Translate(filter);
+            sqlClause = sqlClause.Replace("Name", "obj.[Name]");
             var query = SqlQueryProvider.SelectBusinessObjectByClause(sqlClause);
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))
@@ -269,6 +270,7 @@ namespace APPartment.ORM.Framework.Core
             where T : class, IBaseObject, new()
         {
             var sqlClause = expressionToSql.Translate(filter);
+            sqlClause = sqlClause.Replace("Name", "obj.[Name]");
             var query = SqlQueryProvider.SelectBusinessObjectsByClause(sqlClause);
             T obj = null;
             var propertiesCount = typeof(T)
