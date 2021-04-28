@@ -6,10 +6,6 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Home
     {
         public List<string> Messages { get; set; }
 
-        public HomeStatusPostViewModel HomeStatus { get; set; }
-
-        public string RentDueDate { get; set; }
-
         public string InventoryLastUpdate { get; set; }
 
         public string ChoresLastUpdate { get; set; }

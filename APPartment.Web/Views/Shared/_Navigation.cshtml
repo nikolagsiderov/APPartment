@@ -3,7 +3,7 @@
     @using Microsoft.AspNetCore.Http
 
     @{
-        var homeName = @Context.Session.GetString("HomeName");
+        var homeName = @Context.Session.GetString("CurrentHomeName");
 
         if (homeName.Length > 10)
         {
@@ -16,34 +16,8 @@
     <form class="form-inline mr-auto d-none d-lg-block" role="search" action="/Search/Search" autocomplete="off"><input class="form-control form-control-solid mr-md-2" type="search" name="keyWords" placeholder="Search for anything..." aria-label="Search" /></form>
     <ul class="navbar-nav align-items-center ml-auto">
         <li class="nav-item dropdown no-caret mr-3 dropdown-notifications">
-            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="homeStatus" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
-            <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="homeStatus">
-                <h6 class="dropdown-header dropdown-notifications-header">Home status</h6>
-                <a class="dropdown-item dropdown-notifications-item" href="#!">
-                    <div class="dropdown-notifications-item-icon bg-warning"><i data-feather="info"></i></div>
-                    <div class="dropdown-notifications-item-content">
-                        <div class="dropdown-notifications-item-content-details" id="homeStatusUserSetNavItem"></div>
-                        <div class="dropdown-notifications-item-content-text" id="homeStatusDetailsNavItem"></div>
-                    </div>
-                </a>
-                <a class="dropdown-item dropdown-notifications-item" href="#!" data-toggle="modal" data-target="#setHomeStatus">
-                    <div class="dropdown-notifications-item-icon bg-info"><i data-feather="plus"></i></div>
-                    <div class="dropdown-notifications-item-content">
-                        <div class="dropdown-notifications-item-content-text">Click to set home status</div>
-                    </div>
-                </a>
-            </div>
-        </li>
-
-        <li class="nav-item dropdown no-caret mr-3 dropdown-notifications">
             <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownNotifications" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell"></i><span class="badge badge-sm badge-info badge-pill" id="notificationsCount"></span></a>
             <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" id="notifications-contents" aria-labelledby="navbarDropdownAlerts">
-            </div>
-        </li>
-        <li class="nav-item dropdown no-caret mr-3 dropdown-notifications">
-            <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownMessages" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="users"></i></a>
-            <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownMessages">
-                <h6 class="dropdown-header dropdown-notifications-header"><i class="mr-2" data-feather="users"></i> Present Homemates (not implemented)</h6>
             </div>
         </li>
         <partial name="_LoginPartial" />

@@ -11,8 +11,8 @@ namespace APPartment.Infrastructure.Attributes
         {
             base.OnActionExecuting(filterContext);
 
-            var currentUserID = filterContext.HttpContext.Session.GetString("UserID");
-            var currentHomeID = filterContext.HttpContext.Session.GetString("HomeID");
+            var currentUserID = filterContext.HttpContext.Session.GetString("CurrentUserID");
+            var currentHomeID = filterContext.HttpContext.Session.GetString("CurrentHomeID");
 
             if (string.IsNullOrEmpty(currentUserID))
             {

@@ -4,7 +4,7 @@
     var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
 }
 
-<input type="hidden" class="form-control" id="userInput" value="@ViewData["Username"]" />
+<input type="hidden" class="form-control" id="userInput" value="@ViewData["CurrentUsername"]" />
 <div class="row">
     <div class="col-10">
         <textarea type="text" class="form-control" id="commentTextbox" rows="5" placeholder="Type a comment..."></textarea>

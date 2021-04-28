@@ -1,14 +1,14 @@
 ﻿@model APPartment.Infrastructure.UI.Common.ViewModels.Home.HomePageDisplayModel
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary"><i class="far fa-comment-dots"></i> Chat with housemates</h6>
             </div>
             <div class="card-body">
                 <div class="container">
-                    <input type="hidden" class="form-control" id="userInput" value="@ViewData["Username"]" />
+                    <input type="hidden" class="form-control" id="userInput" value="@ViewData["CurrentUsername"]" />
                     <div class="row">
                         <div class="col-12"><textarea type="text" class="form-control" id="messageInput" rows="5" placeholder="Type a message..."></textarea></div>
                     </div>
@@ -33,39 +33,6 @@
                             }
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <br />
-    <div class="col-md-4">
-        <div class="card shadow">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Rent due date</div>
-                        <br />
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            @if (!string.IsNullOrEmpty(Model.RentDueDate))
-                            {
-                                <h1 class="display-4">Rent due in @Model.RentDueDate</h1>
-                            }
-                            else
-                            {
-                                <h1 class="display-4">Rent due date not set!</h1>
-                            }
-
-                            <hr class="my-4">
-                            <p>New rent due date? You can manage your home from <a href="@Url.Action("Settings", "Home")">Settings</a>.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <br />
-        <div style="font-weight: bold;" id="home-status-card-div">
-            <div class="card bg-success text-white shadow" id="homeStatusWidget">
-                <div class="card-body" id="homeStatusWidgetBody">
                 </div>
             </div>
         </div>

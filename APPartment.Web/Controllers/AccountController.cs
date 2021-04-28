@@ -17,7 +17,7 @@ namespace APPartment.Web.Controllers
 
         public IActionResult Register()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("CurrentUserID")))
                 return RedirectToAction("EnterCreateHomeOptions", "Home");
 
             return View();
@@ -48,8 +48,8 @@ namespace APPartment.Web.Controllers
 
                 ModelState.Clear();
 
-                HttpContext.Session.SetString("UserID", user.ID.ToString());
-                HttpContext.Session.SetString("Username", user.Name.ToString());
+                HttpContext.Session.SetString("CurrentUserID", user.ID.ToString());
+                HttpContext.Session.SetString("CurrentUsername", user.Name.ToString());
 
                 return RedirectToAction("EnterCreateHomeOptions", "Home");
             }
@@ -59,7 +59,7 @@ namespace APPartment.Web.Controllers
 
         public IActionResult Login()
         {
-            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("UserID")))
+            if (!string.IsNullOrEmpty(HttpContext.Session.GetString("CurrentUserID")))
                 return RedirectToAction("EnterCreateHomeOptions", "Home");
 
             return View();
@@ -91,8 +91,8 @@ namespace APPartment.Web.Controllers
 
                             if (user != null)
                             {
-                                HttpContext.Session.SetString("UserID", user.ID.ToString());
-                                HttpContext.Session.SetString("Username", user.Name.ToString());
+                                HttpContext.Session.SetString("CurrentUserID", user.ID.ToString());
+                                HttpContext.Session.SetString("CurrentUsername", user.Name.ToString());
 
                                 return RedirectToAction("EnterCreateHomeOptions", "Home");
                             }
@@ -114,8 +114,8 @@ namespace APPartment.Web.Controllers
 
         public IActionResult Logout()
         {
-            HttpContext.Session.SetString("UserID", string.Empty);
-            HttpContext.Session.SetString("HomeID", string.Empty);
+            HttpContext.Session.SetString("CurrentUserID", string.Empty);
+            HttpContext.Session.SetString("CurrentHomeID", string.Empty);
 
             return RedirectToAction("Index", "Home");
         }

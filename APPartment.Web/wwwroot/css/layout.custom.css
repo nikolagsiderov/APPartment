@@ -2,10 +2,6 @@
     background-color: unset;
 }
 
-#homeStatus {
-    align-self: center;
-}
-
 .no-underline {
     text-decoration: none !important;
 }

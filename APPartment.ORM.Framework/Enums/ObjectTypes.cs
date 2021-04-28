@@ -5,8 +5,6 @@
     {
         User = 1,
         Home = 2,
-        HomeStatus = 3,
-        HomeSetting = 4,
         Inventory = 5,
         Issue = 7,
         Message = 8,
