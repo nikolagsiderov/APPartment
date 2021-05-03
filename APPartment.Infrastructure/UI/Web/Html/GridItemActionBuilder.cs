@@ -43,8 +43,9 @@ namespace APPartment.Infrastructure.UI.Web.Html
             return buttonWithModal;
         }
 
-        public static string BuildCustomAction(string currentArea, string currentController, string action, long modelID, string buttonColorClass, string faIconClass)
+        public static string BuildCustomAction(string currentArea, string currentController, string action, long modelID, string buttonColorClass, string faIconClass, string buttonName = null, bool isModal = false)
         {
+            var button = string.Empty;
             var href = string.Empty;
 
             if (!currentArea.Equals(Areas.Default))
@@ -52,7 +53,14 @@ namespace APPartment.Infrastructure.UI.Web.Html
             else
                 href = $"href='/{currentController}/{action}/{modelID}?area='{currentArea}''";
 
-            var button = $@"<button {href} name='{action}' class='no-underline btn {buttonColorClass} btn-xs btn-icon' title='{action}'><i class='{faIconClass}'></i></button>";
+            if (string.IsNullOrEmpty(buttonName))
+                buttonName = action;
+
+            if (isModal)
+                button = $@"<button {href} name='{action}' class='no-underline btn {buttonColorClass} btn-xs btn-icon' title='{buttonName}'><i class='{faIconClass}'></i></button>";
+            else
+                button = $@"<a {href} name='{action}' class='no-underline btn {buttonColorClass} btn-xs btn-icon' title='{buttonName}'><i class='{faIconClass}'></i></a>";
+
             return button;
         }
     }

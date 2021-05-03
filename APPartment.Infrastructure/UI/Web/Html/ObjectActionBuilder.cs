@@ -4,19 +4,19 @@ namespace APPartment.Infrastructure.UI.Web.Html
 {
     public class ObjectActionBuilder
     {
-        public static string BuildDetailsAction(string currentArea, string currentController, long modelID)
+        public static string BuildDetailsAction(string areaName, string controllerName, long modelID)
         {
-            var button = $@"<a href='/{currentArea}/{currentController}/Details/{modelID}' title='Details' class='no-underline btn btn-outline-info btn-xs'><i class='fas fa-info-circle'></i> Details</a>";
+            var button = $@"<a href='/{areaName}/{controllerName}/Details/{modelID}' title='Details' class='no-underline btn btn-outline-info btn-xs'><i class='fas fa-info-circle'></i> Details</a>";
             return button;
         }
 
-        public static string BuildEditAction(string currentArea, string currentController, long modelID)
+        public static string BuildEditAction(string areaName, string controllerName, long modelID)
         {
-            var button = $@"<a href='/{currentArea}/{currentController}/Edit/{modelID}' title='Edit' class='no-underline btn btn-outline-primary btn-xs'><i class='fas fa-edit'></i> Edit</a>";
+            var button = $@"<a href='/{areaName}/{controllerName}/Edit/{modelID}' title='Edit' class='no-underline btn btn-outline-primary btn-xs'><i class='fas fa-edit'></i> Edit</a>";
             return button;
         }
 
-        public static string BuildDeleteAction(string currentArea, string currentController, long modelID)
+        public static string BuildDeleteAction(string areaName, string controllerName, long modelID)
         {
             var modalID = $"deleteModal-{modelID}";
             var button = $@"<button type='button' title='Delete' class='btn btn-outline-danger btn-xs' data-toggle='modal' data-target='#{modalID}'><i class='fas fa-trash-alt'></i> Delete</button>";
@@ -34,7 +34,7 @@ namespace APPartment.Infrastructure.UI.Web.Html
                                                     </div>
                                                     <div class='modal-footer'>
                                                         <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
-                                                        <a href='/{currentArea}/{currentController}/Delete/{modelID}' class='no-underline btn btn-danger'>Delete</a>
+                                                        <a href='/{areaName}/{controllerName}/Delete/{modelID}' class='no-underline btn btn-danger'>Delete</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -43,16 +43,24 @@ namespace APPartment.Infrastructure.UI.Web.Html
             return buttonWithModal;
         }
 
-        public static string BuildCustomAction(string currentArea, string currentController, string action, long modelID, string buttonColorClass, string faIconClass)
+        public static string BuildCustomAction(string areaName, string controllerName, string action, long modelID, string buttonColorClass, string faIconClass, string buttonName = null, bool isModal = false)
         {
+            var button = string.Empty;
             var href = string.Empty;
 
-            if (!currentArea.Equals(Areas.Default))
-                href = $"href='/{currentArea}/{currentController}/{action}/{modelID}'";
+            if (!areaName.Equals(Areas.Default))
+                href = $"href='/{areaName}/{controllerName}/{action}/{modelID}'";
             else
-                href = $"href='/{currentController}/{action}/{modelID}?area='{currentArea}''";
+                href = $"href='/{controllerName}/{action}/{modelID}?area='{areaName}''";
 
-            var button = $@"<a {href} name='{action}' class='no-underline btn {buttonColorClass} btn-xs' title='{action}'><i class='{faIconClass}'></i> {action}</a>";
+            if (string.IsNullOrEmpty(buttonName))
+                buttonName = action;
+
+            if (isModal)
+                button = $@"<button {href} name='{action}' class='no-underline btn {buttonColorClass} btn-xs' title='{action}'><i class='{faIconClass}'></i> {buttonName}</button>";
+            else
+                button = $@"<a {href} name='{action}' class='no-underline btn {buttonColorClass} btn-xs' title='{action}'><i class='{faIconClass}'></i> {buttonName}</a>";
+
             return button;
         }
     }

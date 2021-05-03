@@ -91,13 +91,15 @@ namespace APPartment.Web.Areas.Surveys.Controllers
 
         public override async Task SetObjectActions(SurveyPostViewModel model)
         {
-            model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Assign), model.ID, "btn-outline-warning", "fas fa-tag"));
+            model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Assign), model.ID, "btn-outline-warning", "fas fa-tag", null, true));
+            model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, nameof(QuestionsController).Replace("Controller", ""), nameof(Index), model.ID, "btn-outline-primary", "fas fa-question", nameof(QuestionsController).Replace("Controller", "")));
             await base.SetObjectActions(model);
         }
 
         public override async Task SetGridItemActions(SurveyDisplayViewModel model)
         {
-            model.ActionsHtml.Add(GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Assign), model.ID, "btn-outline-warning", "fas fa-tag"));
+            model.ActionsHtml.Add(GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Assign), model.ID, "btn-outline-warning", "fas fa-tag", null, true));
+            model.ActionsHtml.Add(GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, nameof(QuestionsController).Replace("Controller", ""), nameof(Index), model.ID, "btn-outline-primary", "fas fa-question", nameof(QuestionsController).Replace("Controller", "")));
             await base.SetGridItemActions(model);
         }
 
