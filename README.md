@@ -1,6 +1,6 @@
 # APPartment
 
-APPartment is a collection of projects (**ASP.NET Core MVC** with **Web API**) that work together with an original purpose to serve as a platform where housemates keep track of everything in their apartment/house.
+APPartment is a project (**ASP.NET Core MVC** with **Web API**) with an original purpose to serve as a platform where housemates keep track of everything in their apartment/house.
 Later on, the purpose changed to an entirely educational one. Throughout the project's development, lots of modifications have been made, for example, at the beginning **Entity Framework Core with code first** approach was used, then I migrated it to **database first**, later **EF Core** was entirely removed and I developed my **own custom object-relational mapping framework with a facade design pattern**.
 
 # What I have learned
