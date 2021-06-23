@@ -558,3 +558,271 @@ GO
 
 INSERT INTO [dbo].[ObjectType] ([ID], [Name])
 VALUES (20, 'SurveyParticipant');
+
+GO
+
+CREATE TABLE [dbo].[SurveyType] (
+    [ID] bigint IDENTITY(1, 1) NOT NULL,
+	[ObjectID] bigint NOT NULL,
+	CONSTRAINT PK_SurveyType PRIMARY KEY ([ID]),
+	CONSTRAINT FK_ObjectSurveyType FOREIGN KEY ([ObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
+);
+
+GO
+
+ALTER TABLE [dbo].[Survey]
+ADD [SurveyTypeID] bigint NOT NULL DEFAULT(0);
+
+ALTER TABLE [dbo].[Survey]
+ADD CONSTRAINT FK_SurveyTypeSurvey
+FOREIGN KEY (SurveyTypeID) REFERENCES [dbo].[SurveyType](ID);
+
+GO
+
+INSERT INTO [dbo].[ObjectType] ([ID], [Name])
+VALUES (21, 'SurveyType');
+
+GO
+
+ALTER TABLE [dbo].[ObjectType]
+ADD [Area] nvarchar(255);
+
+GO
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'Roommates'
+WHERE [Name] = 'User'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'Neighbors'
+WHERE [Name] = 'Home'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'default'
+WHERE [Name] = 'HomeStatus'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'default'
+WHERE [Name] = 'HomeSetting'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'Inventory'
+WHERE [Name] = 'Inventory'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'Issues'
+WHERE [Name] = 'Issue'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'default'
+WHERE [Name] = 'Message'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'default'
+WHERE [Name] = 'Comment'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'default'
+WHERE [Name] = 'Image'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'Surveys'
+WHERE [Name] = 'Survey'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'Chores'
+WHERE [Name] = 'Chore'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'default'
+WHERE [Name] = 'HomeUser'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'default'
+WHERE [Name] = 'Notification'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'default'
+WHERE [Name] = 'NotificationParticipant'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'default'
+WHERE [Name] = 'ObjectParticipant'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'default'
+WHERE [Name] = 'Event'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'default'
+WHERE [Name] = 'EventParticipant'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'default'
+WHERE [Name] = 'ObjectLink'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'default'
+WHERE [Name] = 'SurveyParticipant'
+
+UPDATE [dbo].[ObjectType]
+SET [Area] = 'Surveys'
+WHERE [Name] = 'SurveyType'
+
+GO
+
+ALTER TABLE [dbo].[Object]
+ADD MainID BIGINT NOT NULL DEFAULT(0);
+
+GO
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[Chore] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[Comment] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[Event] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[EventParticipant] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[Home] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[HomeSetting] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[HomeStatus] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[HomeUser] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[Image] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[Inventory] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[Issue] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[Message] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[Notification] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[NotificationParticipant] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[ObjectLink] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[ObjectParticipant] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[Survey] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[SurveyParticipant] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[SurveyType] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+UPDATE obj
+SET MainID = mainObj.[ID]
+FROM [dbo].[Object] AS obj
+INNER JOIN [dbo].[User] AS mainObj
+ON obj.[ObjectID] = mainObj.[ObjectID]
+
+GO
+
+DROP TABLE [dbo].[HomeSetting]
+
+DROP TABLE [dbo].[HomeStatus]
+
+DELETE FROM [dbo].[ObjectType] WHERE [ID] = 3;
+
+DELETE FROM [dbo].[ObjectType] WHERE [ID] = 4;
+
+GO
+
+CREATE TABLE [dbo].[SurveyQuestion] (
+    [ID] bigint IDENTITY(1, 1) NOT NULL,
+	[SurveyID] bigint NOT NULL Default(0),
+	[ObjectID] bigint NOT NULL,
+	CONSTRAINT PK_SurveyQuestion PRIMARY KEY ([ID]),
+	CONSTRAINT FK_ObjectSurveyQuestion FOREIGN KEY ([ObjectID])
+    REFERENCES [dbo].[Object]([ObjectID])
+);
+
+ALTER TABLE [dbo].[SurveyQuestion]
+ADD CONSTRAINT FK_SurveySurveyQuestion FOREIGN KEY ([SurveyID])
+    REFERENCES [dbo].[Survey]([ID])
+
+GO
+
+INSERT INTO [dbo].[ObjectType] ([ID], [Name])
+VALUES (22, 'SurveyQuestion');
