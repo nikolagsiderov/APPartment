@@ -19,9 +19,8 @@ namespace APPartment.API.Controllers
 
         protected override Expression<Func<SurveyDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentUserID;
 
-        [HttpPost("{model}")]
-        [Route("createedit")]
-        public override ActionResult CreateEdit([FromBody] SurveyPostViewModel model)
+        [HttpPost]
+        public override ActionResult CreateOrEdit([FromBody] SurveyPostViewModel model)
         {
             try
             {

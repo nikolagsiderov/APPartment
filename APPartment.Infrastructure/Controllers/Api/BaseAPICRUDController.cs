@@ -65,9 +65,8 @@ namespace APPartment.Infrastructure.Controllers.Api
             }
         }
 
-        [HttpPost("{model}")]
-        [Route("createedit")]
-        public virtual ActionResult CreateEdit([FromBody] U model)
+        [HttpPost]
+        public virtual ActionResult CreateOrEdit([FromBody] U model)
         {
             try
             {
@@ -82,7 +81,7 @@ namespace APPartment.Infrastructure.Controllers.Api
             }
         }
 
-        [HttpGet("delete/{modelID:long}")]
+        [HttpDelete("{modelID:long}")]
         public virtual ActionResult Delete(long modelID)
         {
             try
