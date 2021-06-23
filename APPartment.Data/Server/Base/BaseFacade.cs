@@ -102,7 +102,7 @@ namespace APPartment.Data.Server.Base
             return result;
         }
 
-        public T Create<T>(T businessObject, long userID, long homeID)
+        public T Create<T>(T businessObject, long userID, long? homeID)
             where T : class, IBaseObject
         {
             var objectID = dao.SaveCreateBaseObject(businessObject, userID, homeID);

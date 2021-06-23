@@ -176,7 +176,7 @@ namespace APPartment.API.Controllers
             try
             {
                 var adjustedMessage = string.Join(" <br /> ", messageText.Split('\n').ToList());
-                var message = new MessageDisplayViewModel() { Details = adjustedMessage, CreatedByID = CurrentUserID, HomeID = CurrentHomeID, CreatedDate = DateTime.Now };
+                var message = new MessageDisplayViewModel() { Details = adjustedMessage, CreatedByID = (long)CurrentUserID, HomeID = CurrentHomeID, CreatedDate = DateTime.Now };
 
                 message = BaseCRUDService.Save(message);
 
@@ -198,7 +198,7 @@ namespace APPartment.API.Controllers
                 var homeUser = new HomeUserPostViewModel()
                 {
                     HomeID = CurrentHomeID,
-                    UserID = CurrentUserID
+                    UserID = (long)CurrentUserID
                 };
 
                 var userIsAlreadyApartOfCurrentHome = BaseCRUDService.Any<HomeUserPostViewModel>(x => x.UserID == homeUser.UserID && x.HomeID == homeUser.HomeID);

@@ -475,7 +475,7 @@ namespace APPartment.ORM.Framework.Core
             return result;
         }
 
-        public long SaveCreateBaseObject<T>(T businessObject, long userID, long homeID)
+        public long SaveCreateBaseObject<T>(T businessObject, long userID, long? homeID)
             where T : class, IBaseObject
         {
             object objectID = 0;

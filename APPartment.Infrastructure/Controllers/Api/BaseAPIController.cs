@@ -11,8 +11,8 @@ namespace APPartment.Infrastructure.Controllers.Api
     [ApiController]
     public abstract class BaseAPIController : ControllerBase
     {
-        protected long CurrentUserID = 0L;
-        protected long CurrentHomeID = 0L;
+        protected long? CurrentUserID = null;
+        protected long? CurrentHomeID = null;
         protected BaseCRUDService BaseCRUDService;
 
         public BaseAPIController(IHttpContextAccessor contextAccessor)

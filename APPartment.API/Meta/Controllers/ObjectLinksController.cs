@@ -53,7 +53,7 @@ namespace APPartment.API.Controllers
             try
             {
                 link = BaseCRUDService.Save(link);
-                BaseCRUDService.AddUserAsParticipantToObject(link.TargetObjectID, CurrentUserID, link.ObjectTypeID);
+                BaseCRUDService.AddUserAsParticipantToObject(link.TargetObjectID, (long)CurrentUserID, link.ObjectTypeID);
 
                 link.ObjectBName = BaseCRUDService.GetEntity(link.ObjectBID).Name;
 
