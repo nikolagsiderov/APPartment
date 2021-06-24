@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 
-namespace APPartment.API.Controllers
+namespace APPartment.API.Areas.Account.Controllers
 {
     [Area(APPAreas.Account)]
     [Route("api/[area]/[controller]")]

@@ -58,7 +58,7 @@ namespace APPartment.Infrastructure.Controllers.Web
         [HttpGet]
         public virtual async Task<IActionResult> Index()
         {
-            List<T> models = await RequestEntities();
+            List<T> models = await APPI.RequestEntities<T>();
             PopulateViewDataForIndex();
             ViewData["CanManage"] = CanManage;
 
@@ -77,7 +77,7 @@ namespace APPartment.Infrastructure.Controllers.Web
             if (ID == null)
                 return new Error404NotFoundViewResult();
 
-            var model = await RequestGetEntity((long)ID);
+            var model = await APPI.RequestEntity<U>((long)ID);
 
             if (model.ID > 0)
             {
@@ -110,7 +110,7 @@ namespace APPartment.Infrastructure.Controllers.Web
         {
             if (ModelState.IsValid)
             {
-                if (await RequestPostEntity(model))
+                if (await APPI.RequestPostEntity(model))
                     return RedirectToAction(nameof(Index));
                 else
                     return View("_Edit", model);
@@ -126,7 +126,7 @@ namespace APPartment.Infrastructure.Controllers.Web
             if (ID == null)
                 return new Error404NotFoundViewResult();
 
-            var model = await RequestGetEntity((long)ID);
+            var model = await APPI.RequestEntity<U>((long)ID);
 
             if (model.ID > 0)
             {
@@ -150,7 +150,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
             if (ModelState.IsValid)
             {
-                if (await RequestPostEntity(model))
+                if (await APPI.RequestPostEntity(model))
                     return RedirectToAction(nameof(Index));
                 else
                     return View("_Edit", model);
@@ -166,7 +166,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
             if (ID > 0)
             {
-                if (await RequestDeleteEntity((long)ID))
+                if (await APPI.RequestDeleteEntity((long)ID))
                     return RedirectToAction(nameof(Index));
                 else
                     return new Error404NotFoundViewResult();
@@ -177,121 +177,9 @@ namespace APPartment.Infrastructure.Controllers.Web
 
         public async Task<JsonResult> GetCount()
         {
-            var count = await RequestEntitiesCount();
+            var count = await APPI.RequestEntitiesCount();
             return Json(count);
         }
-
-        #region Base API Requests
-        protected async Task<U> RequestGetEntity(long ID)
-        {
-            var model = new U();
-
-            using (var httpClient = new HttpClient())
-            {
-                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}/{ID}";
-                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
-                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
-
-                using (var response = await httpClient.GetAsync(requestUri))
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
-                        model = JsonConvert.DeserializeObject<U>(content);
-                }
-            }
-
-            return model;
-        }
-
-        protected async Task<List<T>> RequestEntities()
-        {
-            var models = new List<T>();
-
-            using (var httpClient = new HttpClient())
-            {
-                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}";
-                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
-                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
-
-                using (var response = await httpClient.GetAsync(requestUri))
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
-                        models = JsonConvert.DeserializeObject<List<T>>(content);
-                }
-            }
-
-            return models;
-        }
-
-        protected async Task<bool> RequestPostEntity(U model)
-        {
-            var responseIsSuccess = false;
-
-            using (var httpClient = new HttpClient())
-            {
-                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}";
-                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
-                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
-
-                using (var response = await httpClient.PostAsJsonAsync(requestUri, model))
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
-                        responseIsSuccess = true;
-                }
-            }
-
-            return responseIsSuccess;
-        }
-
-        protected async Task<bool> RequestDeleteEntity(long ID)
-        {
-            var responseIsSuccess = false;
-
-            using (var httpClient = new HttpClient())
-            {
-                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}/{nameof(this.Delete)}/{ID}";
-                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
-                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
-
-                using (var response = await httpClient.DeleteAsync(requestUri))
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
-                        responseIsSuccess = true;
-                }
-            }
-
-            return responseIsSuccess;
-        }
-
-        protected async Task<int> RequestEntitiesCount()
-        {
-            var count = 0;
-
-            using (var httpClient = new HttpClient())
-            {
-                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}/count";
-                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
-                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
-
-                using (var response = await httpClient.GetAsync(requestUri))
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
-                        count = JsonConvert.DeserializeObject<int>(content);
-                }
-            }
-
-            return count;
-        }
-        #endregion
 
         #region Clingons
         protected async Task GetClingons(U model)

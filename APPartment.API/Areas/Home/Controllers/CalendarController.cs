@@ -7,7 +7,7 @@ using APPartment.Infrastructure.UI.Common.ViewModels.GeneralCalendar;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace APPartment.API.Controllers
+namespace APPartment.API.Areas.Home.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

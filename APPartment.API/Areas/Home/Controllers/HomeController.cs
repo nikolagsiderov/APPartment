@@ -15,7 +15,7 @@ using APPartment.Common;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using System.Linq.Expressions;
 
-namespace APPartment.API.Controllers
+namespace APPartment.API.Areas.Home.Controllers
 {
     [Area(APPAreas.Home)]
     [Route("api/[area]/[controller]")]
