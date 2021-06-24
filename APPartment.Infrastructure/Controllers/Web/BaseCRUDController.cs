@@ -55,7 +55,6 @@ namespace APPartment.Infrastructure.Controllers.Web
         public abstract bool CanManage { get; }
         #endregion
 
-        [Breadcrumb("Base")]
         [HttpGet]
         public virtual async Task<IActionResult> Index()
         {

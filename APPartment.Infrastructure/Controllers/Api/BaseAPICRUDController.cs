@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using APPartment.Infrastructure.UI.Common.ViewModels.Base;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
@@ -10,7 +9,6 @@ using System;
 
 namespace APPartment.Infrastructure.Controllers.Api
 {
-    [Area(APPAreas.Default)]
     [Route("api/[area]/[controller]")]
     [ApiController]
     public abstract class BaseAPICRUDController<T, U> : BaseAPIController

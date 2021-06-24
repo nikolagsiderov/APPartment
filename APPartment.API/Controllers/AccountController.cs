@@ -1,20 +1,24 @@
 ﻿using APPartment.Infrastructure.Controllers.Api;
 using APPartment.Infrastructure.Services.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.User;
+using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq.Expressions;
 
 namespace APPartment.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Area(APPAreas.Account)]
+    [Route("api/[area]/[controller]")]
     [ApiController]
-    public class AccountController : BaseAPIController
+    public class AccountController : BaseAPICRUDController<UserDisplayViewModel, UserPostViewModel>
     {
+        protected override Expression<System.Func<UserDisplayViewModel, bool>> FilterExpression => null;
+
         public AccountController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
-        // api/account/register
         [HttpPost]
         [Route("register")]
         public ActionResult Register([FromBody] UserPostViewModel user)
@@ -35,7 +39,6 @@ namespace APPartment.API.Controllers
             }
         }
 
-        // api/account/login
         [HttpPost]
         [Route("login")]
         public ActionResult Login([FromBody] UserPostViewModel user)
@@ -53,6 +56,14 @@ namespace APPartment.API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
+        }
+
+        protected override void NormalizeDisplayModel(UserDisplayViewModel model)
+        {
+        }
+
+        protected override void NormalizePostModel(UserPostViewModel model)
+        {
         }
     }
 }

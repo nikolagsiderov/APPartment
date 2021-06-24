@@ -9,9 +9,11 @@ using SmartBreadcrumbs.Attributes;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
 using APPartment.Infrastructure.UI.Common.ViewModels.GeneralCalendar;
 using APPartment.Infrastructure.Controllers.Web;
+using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 
-namespace APPartment.Web.Controllers
+namespace APPartment.Web.Areas.Home.Controllers
 {
+    [Area(APPAreas.Home)]
     public class CalendarController : BaseAuthorizeController
     {
         public CalendarController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
@@ -22,7 +24,7 @@ namespace APPartment.Web.Controllers
         [Breadcrumb(CalendarBreadcrumbs.Index)]
         public ActionResult Index()
         {
-            return View(new EventViewModel());
+            return View(CurrentControllerName, new EventViewModel());
         }
 
         public async Task<JsonResult> GetEvents()
@@ -31,7 +33,7 @@ namespace APPartment.Web.Controllers
 
             using (var httpClient = new HttpClient())
             {
-                var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/events";
+                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}/events";
                 httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                 httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 

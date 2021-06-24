@@ -1,20 +1,33 @@
 ﻿using APPartment.Common;
 using APPartment.Infrastructure.Controllers.Web;
 using APPartment.Infrastructure.UI.Common.ViewModels.User;
+using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using SmartBreadcrumbs.Attributes;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace APPartment.Web.Controllers
+namespace APPartment.Web.Areas.Account.Controllers
 {
-    public class AccountController : BaseController
+    [Area(APPAreas.Account)]
+    public class AccountController : BaseCRUDController<UserDisplayViewModel, UserPostViewModel>
     {
+        public override bool CanManage => true;
+
         public AccountController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
+        [Breadcrumb("Users")]
+        public override Task<IActionResult> Index()
+        {
+            return base.Index();
+        }
+
+        [AllowAnonymous]
         public IActionResult Register()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("CurrentUserID")))
@@ -24,13 +37,14 @@ namespace APPartment.Web.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(UserPostViewModel user)
         {
             if (ModelState.IsValid)
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/{nameof(Register)}";
+                    var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}/{nameof(Register)}";
 
                     using (var response = await httpClient.PostAsJsonAsync(requestUri, user))
                     {
@@ -51,12 +65,14 @@ namespace APPartment.Web.Controllers
                 HttpContext.Session.SetString("CurrentUserID", user.ID.ToString());
                 HttpContext.Session.SetString("CurrentUsername", user.Name.ToString());
 
-                return RedirectToAction("EnterCreateHomeOptions", "Home");
+                return RedirectToAction("EnterCreateHomeOptions", "Home", new { area = APPAreas.Home });
             }
 
             return View();
         }
 
+        [HttpGet]
+        [AllowAnonymous]
         public IActionResult Login()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("CurrentUserID")))
@@ -66,6 +82,7 @@ namespace APPartment.Web.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(UserPostViewModel user)
         {
             user.ConfirmPassword = user.Password;
@@ -79,7 +96,7 @@ namespace APPartment.Web.Controllers
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/{nameof(Login)}";
+                    var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}/{nameof(Login)}";
 
                     using (var response = await httpClient.PostAsJsonAsync(requestUri, user))
                     {
@@ -94,7 +111,7 @@ namespace APPartment.Web.Controllers
                                 HttpContext.Session.SetString("CurrentUserID", user.ID.ToString());
                                 HttpContext.Session.SetString("CurrentUsername", user.Name.ToString());
 
-                                return RedirectToAction("EnterCreateHomeOptions", "Home");
+                                return RedirectToAction("EnterCreateHomeOptions", "Home", new { area = APPAreas.Home });
                             }
                             else
                             {
@@ -117,7 +134,7 @@ namespace APPartment.Web.Controllers
             HttpContext.Session.SetString("CurrentUserID", string.Empty);
             HttpContext.Session.SetString("CurrentHomeID", string.Empty);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { area = APPAreas.Home });
         }
     }
 }

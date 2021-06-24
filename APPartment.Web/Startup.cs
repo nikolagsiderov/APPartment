@@ -64,7 +64,7 @@ namespace APPartment.Web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Home/Home/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -76,9 +76,6 @@ namespace APPartment.Web
 
             app.UseRouting();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
@@ -87,10 +84,10 @@ namespace APPartment.Web
 
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area=Home}/{controller=Home}/{action=Index}/{id?}");
 
                 endpoints.MapRazorPages();
-                endpoints.MapHub<ChatHub>("/Home/Index");
+                endpoints.MapHub<ChatHub>("/Home/Home/Index");
             });
         }
     }

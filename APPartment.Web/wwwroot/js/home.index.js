@@ -5,7 +5,7 @@
 
     $.ajax({
         type: "POST",
-        url: "Home/CreateMessage",
+        url: "Home/Home/CreateMessage",
         data: { username: usernameValue, messageText: messageValue },
         dataType: "text",
         success: function () {

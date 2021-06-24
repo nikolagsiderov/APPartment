@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>APPartment: Create Home</title>
+    <title>APPartment: Register</title>
 
     <link rel="icon" href="~/images/test.png">
     <link rel="stylesheet" href="~/vendor/jquery/jquery-ui.min.css" />
@@ -27,7 +27,7 @@
 </head>
 <body class="bg-primary">
 
-    @model APPartment.Infrastructure.UI.Common.ViewModels.Home.HomePostViewModel
+    @model APPartment.Infrastructure.UI.Common.ViewModels.User.UserPostViewModel
 
     <div id="layoutAuthentication">
         <div id="layoutAuthentication_content">
@@ -37,8 +37,7 @@
                         <div class="col-xl-5 col-lg-6 col-md-8 col-sm-11">
                             <div class="card my-5">
                                 <div class="card-body p-5 text-center">
-                                    <div class="icons-org-create align-items-center mx-auto"><i class="icon-users" data-feather="users"></i><i class="icon-plus fas fa-plus"></i></div>
-                                    <div class="h3 text-primary font-weight-300 mb-0">Create a home</div>
+                                    <div class="h3 font-weight-light mb-3">Register an account</div>
                                 </div>
                                 <hr class="my-0" />
                                 <div class="card-body p-5">
@@ -56,7 +55,7 @@
                                 </div>
                                 <hr class="my-0" />
                                 <div class="card-body px-5 py-4">
-                                    <div class="small text-center">Already have a home? <a asp-action="Login" asp-controller="Home">Enter your home!</a></div>
+                                    <div class="small text-center">Already have an account? <a asp-action="Login" asp-controller="Account">Sign-in!</a></div>
                                 </div>
                             </div>
                         </div>

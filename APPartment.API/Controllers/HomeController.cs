@@ -13,53 +13,19 @@ using APPartment.Infrastructure.Controllers.Api;
 using APPartment.Infrastructure.Tools;
 using APPartment.Common;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
-using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace APPartment.API.Controllers
 {
-    [Area(APPAreas.Default)]
-    [Route("api/[controller]")]
+    [Area(APPAreas.Home)]
+    [Route("api/[area]/[controller]")]
     [ApiController]
-    public class HomeController : BaseAPIController
+    public class HomeController : BaseAPICRUDController<HomeDisplayViewModel, HomePostViewModel>
     {
+        protected override Expression<Func<HomeDisplayViewModel, bool>> FilterExpression => null;
+
         public HomeController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
-        }
-
-        [HttpGet("{homeID:long}")]
-        public ActionResult<HomePostViewModel> Get(long homeID)
-        {
-            try
-            {
-                var result = BaseCRUDService.GetEntity<HomePostViewModel>(homeID);
-
-                if (result != null)
-                    return Ok(result);
-                else
-                    return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
-            }
-        }
-
-        [HttpGet]
-        public ActionResult<List<HomePostViewModel>> Get()
-        {
-            try
-            {
-                var result = BaseCRUDService.GetCollection<HomePostViewModel>();
-
-                if (result.Any())
-                    return Ok(result);
-                else
-                    return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
-            }
         }
 
         [HttpPost]
@@ -125,9 +91,7 @@ namespace APPartment.API.Controllers
                     result.InventoryLastUpdate = TimeConverter.CalculateRelativeTime(latestInventoryItem.ModifiedDate.Value);
                 }
                 else
-                {
                     result.InventoryLastUpdate = "Now";
-                }
 
                 if (BaseCRUDService.Any<ChorePostViewModel>(x => x.HomeID == CurrentHomeID))
                 {
@@ -139,9 +103,7 @@ namespace APPartment.API.Controllers
                     result.ChoresLastUpdate = TimeConverter.CalculateRelativeTime(latestChore.ModifiedDate.Value);
                 }
                 else
-                {
                     result.ChoresLastUpdate = "Now";
-                }
 
                 if (BaseCRUDService.Any<IssuePostViewModel>(x => x.HomeID == CurrentHomeID))
                 {
@@ -153,9 +115,7 @@ namespace APPartment.API.Controllers
                     result.IssuesLastUpdate = TimeConverter.CalculateRelativeTime(latestIssue.ModifiedDate.Value);
                 }
                 else
-                {
                     result.IssuesLastUpdate = "Now";
-                }
 
                 if (result != null)
                     return Ok(result);
@@ -222,8 +182,9 @@ namespace APPartment.API.Controllers
             try
             {
                 var result = BaseCRUDService.GetCollection(x => x.HomeID == CurrentHomeID && x.ObjectID != excludedObjectID);
+                var filteredResult = result.Where(x => string.IsNullOrEmpty(x.Area) == false);
 
-                foreach (var item in result)
+                foreach (var item in filteredResult)
                 {
                     var areaName = item.Area;
                     var controllerName = item.Area;
@@ -231,8 +192,8 @@ namespace APPartment.API.Controllers
                     item.WebLink = string.Format($"{Configuration.DefaultBaseURL}/{areaName}/{controllerName}/{page}/{item.MainID}");
                 }
 
-                if (result.Any())
-                    return Ok(result);
+                if (filteredResult.Any())
+                    return Ok(filteredResult);
                 else
                     return NotFound();
             }
@@ -249,8 +210,9 @@ namespace APPartment.API.Controllers
             try
             {
                 var result = BaseCRUDService.GetCollection(x => x.HomeID == CurrentHomeID && (x.Name == keyWords || x.Details == keyWords));
+                var filteredSearchResult = result.Where(x => string.IsNullOrEmpty(x.Area) == false);
 
-                foreach (var item in result)
+                foreach (var item in filteredSearchResult)
                 {
                     var areaName = item.Area;
                     var controllerName = item.Area;
@@ -258,8 +220,8 @@ namespace APPartment.API.Controllers
                     item.WebLink = string.Format($"{Configuration.DefaultBaseURL}/{areaName}/{controllerName}/{page}/{item.MainID}");
                 }
 
-                if (result.Any())
-                    return Ok(result);
+                if (filteredSearchResult.Any())
+                    return Ok(filteredSearchResult);
                 else
                     return NotFound();
             }
@@ -267,6 +229,14 @@ namespace APPartment.API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
+        }
+
+        protected override void NormalizeDisplayModel(HomeDisplayViewModel model)
+        {
+        }
+
+        protected override void NormalizePostModel(HomePostViewModel model)
+        {
         }
     }
 }

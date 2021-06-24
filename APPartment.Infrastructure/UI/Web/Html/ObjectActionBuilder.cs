@@ -46,12 +46,7 @@ namespace APPartment.Infrastructure.UI.Web.Html
         public static string BuildCustomAction(string areaName, string controllerName, string action, long modelID, string buttonColorClass, string faIconClass, string buttonName = null, bool isModal = false)
         {
             var button = string.Empty;
-            var href = string.Empty;
-
-            if (!areaName.Equals(Areas.Default))
-                href = $"href='/{areaName}/{controllerName}/{action}/{modelID}'";
-            else
-                href = $"href='/{controllerName}/{action}/{modelID}?area='{areaName}''";
+            var href = $"href='/{areaName}/{controllerName}/{action}/{modelID}'";
 
             if (string.IsNullOrEmpty(buttonName))
                 buttonName = action;

@@ -1,7 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Routing;
+using System.Diagnostics.Contracts;
+using System.Linq;
+using System.Reflection;
 
 namespace APPartment.Infrastructure.Attributes
 {
@@ -11,27 +16,36 @@ namespace APPartment.Infrastructure.Attributes
         {
             base.OnActionExecuting(filterContext);
 
-            var currentUserID = filterContext.HttpContext.Session.GetString("CurrentUserID");
-            var currentHomeID = filterContext.HttpContext.Session.GetString("CurrentHomeID");
+            if (SkipAuthorization(filterContext) == false)
+            {
+                var currentUserID = filterContext.HttpContext.Session.GetString("CurrentUserID");
+                var currentHomeID = filterContext.HttpContext.Session.GetString("CurrentHomeID");
 
-            if (string.IsNullOrEmpty(currentUserID))
-            {
-                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
+                if (string.IsNullOrEmpty(currentUserID))
                 {
-                    area = "default",
-                    controller = "Account",
-                    action = "Login"
-                }));
-            }
-            else if (string.IsNullOrEmpty(currentHomeID))
-            {
-                filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
+                    filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
+                    {
+                        area = "Account",
+                        controller = "Account",
+                        action = "Login"
+                    }));
+                }
+                else if (string.IsNullOrEmpty(currentHomeID))
                 {
-                    area = "default",
-                    controller = "Home",
-                    action = "Login"
-                }));
+                    filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(new
+                    {
+                        area = "Home",
+                        controller = "Home",
+                        action = "Login"
+                    }));
+                }
             }
+        }
+
+        private static bool SkipAuthorization(ActionExecutingContext filterContext)
+        {
+            Contract.Assert(filterContext != null);
+            return (filterContext.ActionDescriptor as ControllerActionDescriptor).MethodInfo.GetCustomAttributes<AllowAnonymousAttribute>().Any();
         }
     }
 }

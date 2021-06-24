@@ -1,6 +1,6 @@
 ﻿function GetNotificationsCount() {
     $.ajax({
-        url: baseApplicationPath + "Notifications/GetCount",
+        url: baseApplicationPath + "Home/Notifications/GetCount",
         success: function (data) {
             $("#notificationsCount").html(data);
         },
@@ -18,7 +18,7 @@ function GetNotificationsContent() {
 
     if (isDropdownExpanded === 'false') {
         $.ajax({
-            url: baseApplicationPath + "Notifications/GetContents",
+            url: baseApplicationPath + "Home/Notifications/GetContents",
             success: function (data) {
                 $("#notifications-contents").html(data);
             },

@@ -10,29 +10,28 @@ using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
 using APPartment.Infrastructure.UI.Common.ViewModels.Home;
 using APPartment.Infrastructure.UI.Common.ViewModels;
 using APPartment.Infrastructure.Controllers.Web;
+using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
+using Microsoft.AspNetCore.Authorization;
 
-namespace APPartment.Web.Controllers
+namespace APPartment.Web.Areas.Home.Controllers
 {
-    public class HomeController : BaseController
+    [Area(APPAreas.Home)]
+    public class HomeController : BaseCRUDController<HomeDisplayViewModel, HomePostViewModel>
     {
+        public override bool CanManage => false;
+
         public HomeController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
         }
 
         [DefaultBreadcrumb(HomeBreadcrumbs.Default_Breadcrumb)]
-        public async Task<IActionResult> Index()
+        public override async Task<IActionResult> Index()
         {
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("CurrentUserID")))
-                return RedirectToAction("Login", "Account");
-
-            if (string.IsNullOrEmpty(HttpContext.Session.GetString("CurrentHomeID")))
-                return RedirectToAction("Login");
-
             var model = new HomePageDisplayModel();
 
             using (var httpClient = new HttpClient())
             {
-                var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/page";
+                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}/page";
                 httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                 httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 
@@ -50,6 +49,7 @@ namespace APPartment.Web.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
         public IActionResult EnterCreateHomeOptions()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("CurrentHomeID")))
@@ -58,6 +58,7 @@ namespace APPartment.Web.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Register()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("CurrentHomeID")))
@@ -67,13 +68,14 @@ namespace APPartment.Web.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(HomePostViewModel home)
         {
             if (ModelState.IsValid)
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/{nameof(Register)}";
+                    var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}/{nameof(Register)}";
                     httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
 
                     using (var response = await httpClient.PostAsJsonAsync(requestUri, home))
@@ -103,6 +105,7 @@ namespace APPartment.Web.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Login()
         {
             if (!string.IsNullOrEmpty(HttpContext.Session.GetString("CurrentHomeID")))
@@ -112,6 +115,7 @@ namespace APPartment.Web.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(HomePostViewModel home)
         {
             home.ConfirmPassword = home.Password;
@@ -125,7 +129,7 @@ namespace APPartment.Web.Controllers
             {
                 using (var httpClient = new HttpClient())
                 {
-                    var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/{nameof(Login)}";
+                    var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}/{nameof(Login)}";
                     httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
 
                     using (var response = await httpClient.PostAsJsonAsync(requestUri, home))
@@ -163,6 +167,7 @@ namespace APPartment.Web.Controllers
 
         [HttpGet]
         [Breadcrumb(HomeBreadcrumbs.About_Breadcrumb)]
+        [AllowAnonymous]
         public IActionResult About()
         {
             return View();
@@ -173,7 +178,7 @@ namespace APPartment.Web.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/chat?username={username}&messageText={messageText}";
+                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}/chat?username={username}&messageText={messageText}";
                 httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                 httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 
@@ -192,6 +197,7 @@ namespace APPartment.Web.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        [AllowAnonymous]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestID = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
@@ -201,7 +207,7 @@ namespace APPartment.Web.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                var requestUri = $"{Configuration.DefaultAPI}/{CurrentControllerName}/homeuser";
+                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}/homeuser";
                 httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                 httpClient.DefaultRequestHeaders.Add("CurrentHomeID", homeID.ToString());
 
