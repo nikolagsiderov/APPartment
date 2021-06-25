@@ -72,7 +72,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Details_Breadcrumb)]
         [HttpGet]
-        public async Task<IActionResult> Details(long? ID)
+        public virtual async Task<IActionResult> Details(long? ID)
         {
             if (ID == null)
                 return new Error404NotFoundViewResult();
@@ -96,7 +96,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Create_Breadcrumb)]
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public virtual async Task<IActionResult> Create()
         {
             var newModel = new U();
 
@@ -106,7 +106,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(U model)
+        public virtual async Task<IActionResult> Create(U model)
         {
             if (ModelState.IsValid)
             {
@@ -121,7 +121,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
         [HttpGet]
-        public async Task<IActionResult> Edit(long? ID)
+        public virtual async Task<IActionResult> Edit(long? ID)
         {
             if (ID == null)
                 return new Error404NotFoundViewResult();
@@ -143,7 +143,7 @@ namespace APPartment.Infrastructure.Controllers.Web
         [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long ID, U model)
+        public virtual async Task<IActionResult> Edit(long ID, U model)
         {
             if (ID != model.ID)
                 return new Error404NotFoundViewResult();
@@ -159,7 +159,7 @@ namespace APPartment.Infrastructure.Controllers.Web
             return View("_Edit", model);
         }
 
-        public async Task<IActionResult> Delete(long? ID)
+        public virtual async Task<IActionResult> Delete(long? ID)
         {
             if (ID == null)
                 return new Error404NotFoundViewResult();
@@ -175,7 +175,7 @@ namespace APPartment.Infrastructure.Controllers.Web
                 return new Error404NotFoundViewResult();
         }
 
-        public async Task<JsonResult> GetCount()
+        public virtual async Task<JsonResult> GetCount()
         {
             var count = await APPI.RequestEntitiesCount();
             return Json(count);

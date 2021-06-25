@@ -9,5 +9,8 @@ namespace APPartment.Data.Server.Models.Home
     {
         [FieldMappingForMainTable]
         public string Password { get; set; }
+
+        [FieldMappingForMainTable]
+        public int? RentDueDay { get; set; }
     }
 }

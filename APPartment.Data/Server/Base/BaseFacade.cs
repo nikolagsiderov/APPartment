@@ -45,7 +45,12 @@ namespace APPartment.Data.Server.Base
             where T : class, IBaseObject, new()
         {
             var result = new List<T>();
-            result = dao.SelectGetObjects<T>(result, filter);
+
+            if (filter == null)
+                result = dao.SelectGetObjects<T>(result);
+            else
+                result = dao.SelectGetObjects<T>(result, filter);
+
             return result;
         }
 
@@ -98,7 +103,12 @@ namespace APPartment.Data.Server.Base
             where T : class, ILookupObject, new()
         {
             var result = new List<T>();
-            result = dao.SelectGetLookupObjects<T>(result, filter);
+
+            if (filter == null)
+                result = dao.SelectGetLookupObjects<T>(result);
+            else
+                result = dao.SelectGetLookupObjects<T>(result, filter);
+
             return result;
         }
 
@@ -133,7 +143,13 @@ namespace APPartment.Data.Server.Base
             where T : class, IBaseObject
         {
             var result = false;
-            return dao.AnyBusinessObjects<T>(result, filter);
+
+            if (filter == null)
+                result = dao.AnyBusinessObjects<T>(result);
+            else
+                result = dao.AnyBusinessObjects<T>(result, filter);
+
+            return result;
         }
 
         public int Count<T>()
@@ -147,7 +163,13 @@ namespace APPartment.Data.Server.Base
             where T : class, IBaseObject
         {
             var result = 0;
-            return dao.CountBusinessObjects<T>(result, filter);
+
+            if (filter == null)
+                result = dao.CountBusinessObjects<T>(result);
+            else
+                result = dao.CountBusinessObjects<T>(result, filter);
+
+            return result;
         }
 
         public string GetObjectTypeName(long objectTypeID)

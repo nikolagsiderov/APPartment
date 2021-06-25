@@ -9,8 +9,6 @@ using APPartment.Infrastructure.Controllers.Api;
 namespace APPartment.API.Areas.Inventory.Controllers
 {
     [Area(APPAreas.Inventory)]
-    [ApiController]
-    [Route("api/[area]/[controller]")]
     public class SuppliedController : BaseAPICRUDController<InventoryDisplayViewModel, InventoryPostViewModel>
     {
         public SuppliedController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

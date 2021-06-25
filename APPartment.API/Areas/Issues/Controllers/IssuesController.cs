@@ -9,8 +9,6 @@ using APPartment.Infrastructure.Controllers.Api;
 namespace APPartment.API.Controllers
 {
     [Area(APPAreas.Issues)]
-    [ApiController]
-    [Route("api/[area]/[controller]")]
     public class IssuesController : BaseAPICRUDController<IssueDisplayViewModel, IssuePostViewModel>
     {
         public IssuesController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

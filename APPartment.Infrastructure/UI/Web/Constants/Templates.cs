@@ -8,6 +8,7 @@
         public const string Password = "Password";
         public const string Boolean = "Boolean";
         public const string Number = "Number";
+        public const string NumberNullable = "NumberNullable";
         public const string Date = "Date";
         public const string Dropdown = "Dropdown";
         public const string Multiselect = "Multiselect";

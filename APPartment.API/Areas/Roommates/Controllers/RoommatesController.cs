@@ -9,8 +9,6 @@ using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 namespace APPartment.API.Controllers
 {
     [Area(APPAreas.Roommates)]
-    [ApiController]
-    [Route("api/[area]/[controller]")]
     public class RoommatesController : BaseAPICRUDController<UserDisplayViewModel, UserPostViewModel>
     {
         public RoommatesController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

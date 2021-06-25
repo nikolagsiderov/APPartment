@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace APPartment.API.Areas.Home.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class CalendarController : BaseAPIController
     {
         public CalendarController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

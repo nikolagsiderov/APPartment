@@ -10,7 +10,6 @@ using System;
 namespace APPartment.Infrastructure.Controllers.Api
 {
     [Route("api/[area]/[controller]")]
-    [ApiController]
     public abstract class BaseAPICRUDController<T, U> : BaseAPIController
         where T : GridItemViewModel, new()
         where U : PostViewModel, new()

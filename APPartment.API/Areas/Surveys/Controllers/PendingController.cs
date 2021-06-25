@@ -9,8 +9,6 @@ using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 namespace APPartment.API.Areas.Surveys.Controllers
 {
     [Area(APPAreas.Surveys)]
-    [ApiController]
-    [Route("api/[area]/[controller]")]
     public class PendingController : BaseAPICRUDController<SurveyDisplayViewModel, SurveyPostViewModel>
     {
         public PendingController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

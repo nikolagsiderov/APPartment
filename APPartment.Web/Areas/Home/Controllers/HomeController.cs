@@ -44,9 +44,21 @@ namespace APPartment.Web.Areas.Home.Controllers
                 }
             }
 
-            ViewData["CurrentUsername"] = CurrentUserName;
-
             return View(model);
+        }
+
+        [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public override async Task<IActionResult> Edit(long ID, HomePostViewModel model)
+        {
+            if (ID != model.ID)
+                return new Error404NotFoundViewResult();
+
+            if (await APPI.RequestPostEntity(model))
+                return RedirectToAction(nameof(Index));
+            else
+                return RedirectToAction(nameof(Edit));
         }
 
         [AllowAnonymous]

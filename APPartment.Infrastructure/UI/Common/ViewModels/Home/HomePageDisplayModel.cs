@@ -11,5 +11,7 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Home
         public string ChoresLastUpdate { get; set; }
 
         public string IssuesLastUpdate { get; set; }
+
+        public string RentDueDisplay { get; set; }
     }
 }

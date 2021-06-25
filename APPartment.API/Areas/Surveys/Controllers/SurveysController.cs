@@ -9,8 +9,6 @@ using APPartment.Infrastructure.Controllers.Api;
 namespace APPartment.API.Controllers
 {
     [Area(APPAreas.Surveys)]
-    [ApiController]
-    [Route("api/[area]/[controller]")]
     public class SurveysController : BaseAPICRUDController<SurveyDisplayViewModel, SurveyPostViewModel>
     {
         public SurveysController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

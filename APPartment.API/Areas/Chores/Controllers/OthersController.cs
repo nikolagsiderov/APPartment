@@ -9,8 +9,6 @@ using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
 namespace APPartment.API.Areas.Chores.Controllers
 {
     [Area(APPAreas.Chores)]
-    [ApiController]
-    [Route("api/[area]/[controller]")]
     public class OthersController : BaseAPICRUDController<ChoreDisplayViewModel, ChorePostViewModel>
     {
         public OthersController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

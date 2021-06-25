@@ -9,8 +9,6 @@ using System.Linq.Expressions;
 namespace APPartment.API.Areas.Account.Controllers
 {
     [Area(APPAreas.Account)]
-    [Route("api/[area]/[controller]")]
-    [ApiController]
     public class AccountController : BaseAPICRUDController<UserDisplayViewModel, UserPostViewModel>
     {
         protected override Expression<System.Func<UserDisplayViewModel, bool>> FilterExpression => null;

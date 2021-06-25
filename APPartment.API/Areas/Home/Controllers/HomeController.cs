@@ -18,8 +18,6 @@ using System.Linq.Expressions;
 namespace APPartment.API.Areas.Home.Controllers
 {
     [Area(APPAreas.Home)]
-    [Route("api/[area]/[controller]")]
-    [ApiController]
     public class HomeController : BaseAPICRUDController<HomeDisplayViewModel, HomePostViewModel>
     {
         protected override Expression<Func<HomeDisplayViewModel, bool>> FilterExpression => null;
@@ -73,6 +71,7 @@ namespace APPartment.API.Areas.Home.Controllers
         {
             try
             {
+                var currentHome = BaseCRUDService.GetEntity<HomePostViewModel>((long)CurrentHomeID);
                 var messages = BaseCRUDService.GetCollection<MessageDisplayViewModel>(x => x.HomeID == CurrentHomeID && x.CreatedByID != 0);
                 var messagesResult = new ChatRenderer(CurrentUserID, CurrentHomeID).BuildMessagesForChat(messages);
 
@@ -80,6 +79,28 @@ namespace APPartment.API.Areas.Home.Controllers
                 {
                     Messages = messagesResult
                 };
+
+                if (currentHome.RentDueDay != null)
+                {
+                    if (currentHome.RentDueDay >= 1 && currentHome.RentDueDay <= 28)
+                    {
+                        var now = DateTime.Now;
+                        if (now.Day < currentHome.RentDueDay)
+                        {
+                            var rentDueDate = new DateTime(now.Year, now.Month, (int)currentHome.RentDueDay);
+                            var daysLeft = (rentDueDate - now).TotalDays;
+                            result.RentDueDisplay = rentDueDate.ToLongDateString() + $" (days left: {daysLeft})";
+                        }
+                        else if (now.Day == currentHome.RentDueDay)
+                            result.RentDueDisplay = "TODAY";
+                        else
+                        {
+                            var rentDueDate = new DateTime(now.Year, now.Month, (int)currentHome.RentDueDay).AddMonths(1);
+                            var daysLeft = (rentDueDate - now).TotalDays;
+                            result.RentDueDisplay = rentDueDate.ToLongDateString() + $" (days left: {daysLeft})";
+                        }
+                    }
+                }
 
                 if (BaseCRUDService.Any<InventoryPostViewModel>(x => x.HomeID == CurrentHomeID))
                 {
@@ -116,6 +137,7 @@ namespace APPartment.API.Areas.Home.Controllers
                 }
                 else
                     result.IssuesLastUpdate = "Now";
+
 
                 if (result != null)
                     return Ok(result);

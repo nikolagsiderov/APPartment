@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace APPartment.Infrastructure.Controllers.Api
 {
-    [Route("api/[area]/[controller]")]
     [ApiController]
     public abstract class BaseAPIController : ControllerBase
     {

@@ -1,5 +1,7 @@
 ﻿@model APPartment.Infrastructure.UI.Common.ViewModels.Home.HomePageDisplayModel
 
+@using Microsoft.AspNetCore.Http
+
 <div class="row">
     <div class="col-md-8">
         <div class="card shadow mb-4">
@@ -8,7 +10,7 @@
             </div>
             <div class="card-body">
                 <div class="container">
-                    <input type="hidden" class="form-control" id="userInput" value="@ViewData["CurrentUsername"]" />
+                    <input type="hidden" class="form-control" id="userInput" value="@Context.Session.GetString("CurrentUsername")" />
                     <div class="row">
                         <div class="col-12"><textarea type="text" class="form-control" id="messageInput" rows="5" placeholder="Type a message..."></textarea></div>
                     </div>
@@ -34,6 +36,18 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <br />
+        <div class="card border-danger mb-3" style="max-width: 18rem;">
+            <div class="card-body text-danger">
+                <h5 class="card-title">Rent due in:</h5>
+                @if (string.IsNullOrEmpty(Model.RentDueDisplay))
+                {
+                    <p class="card-text">
+                        Go to <a asp-area="Home" asp-controller="Home" asp-action="Edit" asp-route-id="@Context.Session.GetString("CurrentHomeID")">Settings</a> in order to set rent due day.
+                    </p>
+                }
             </div>
         </div>
     </div>

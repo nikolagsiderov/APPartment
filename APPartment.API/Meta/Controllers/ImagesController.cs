@@ -8,7 +8,6 @@ namespace APPartment.API.Controllers
 {
     // TODO: Complete this here...
     [Route("api/[controller]")]
-    [ApiController]
     public class ImagesController : BaseAPIController
     {
         public ImagesController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

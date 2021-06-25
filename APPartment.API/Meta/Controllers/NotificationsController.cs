@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace APPartment.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class NotificationsController : BaseAPIController
     {
         public NotificationsController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

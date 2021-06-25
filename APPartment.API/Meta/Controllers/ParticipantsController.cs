@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace APPartment.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class ParticipantsController : BaseAPIController
     {
         public ParticipantsController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

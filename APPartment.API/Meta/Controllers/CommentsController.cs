@@ -8,7 +8,6 @@ using APPartment.Infrastructure.Controllers.Api;
 namespace APPartment.API.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class CommentsController : BaseAPIController
     {
         public CommentsController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
