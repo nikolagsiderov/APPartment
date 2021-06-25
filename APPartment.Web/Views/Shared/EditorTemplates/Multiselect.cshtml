@@ -1,7 +1,7 @@
 ﻿@model List<SelectListItem>
 
 <div class="form-group">
-    <select multiple class="form-control form-control-solid" name="@ViewData.TemplateInfo.HtmlFieldPrefix">
+    <select multiple class="form-control" name="@ViewData.TemplateInfo.HtmlFieldPrefix">
         @foreach (var option in Model)
         {
             <option selected="@option.Selected" value="@option.Value">@option.Text</option>
