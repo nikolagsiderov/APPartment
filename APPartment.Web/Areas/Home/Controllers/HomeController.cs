@@ -47,20 +47,6 @@ namespace APPartment.Web.Areas.Home.Controllers
             return View(model);
         }
 
-        [Breadcrumb(BaseCRUDBreadcrumbs.Edit_Breadcrumb)]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public override async Task<IActionResult> Edit(long ID, HomePostViewModel model)
-        {
-            if (ID != model.ID)
-                return new Error404NotFoundViewResult();
-
-            if (await APPI.RequestPostEntity(model))
-                return RedirectToAction(nameof(Index));
-            else
-                return RedirectToAction(nameof(Edit));
-        }
-
         [AllowAnonymous]
         public IActionResult EnterCreateHomeOptions()
         {
@@ -130,14 +116,7 @@ namespace APPartment.Web.Areas.Home.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(HomePostViewModel home)
         {
-            home.ConfirmPassword = home.Password;
-            ModelState.Clear();
-
-            if (string.IsNullOrEmpty(home.Name))
-                ModelState.AddModelError("Name", "Home name field is required.");
-            else if (string.IsNullOrEmpty(home.Password))
-                ModelState.AddModelError("Password", "Password field is required.");
-            else
+            if (ModelState.IsValid)
             {
                 using (var httpClient = new HttpClient())
                 {

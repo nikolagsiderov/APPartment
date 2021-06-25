@@ -39,13 +39,21 @@
             </div>
         </div>
         <br />
-        <div class="card border-danger mb-3" style="max-width: 18rem;">
+        <div class="card border-danger mb-3">
             <div class="card-body text-danger">
-                <h5 class="card-title">Rent due in:</h5>
                 @if (string.IsNullOrEmpty(Model.RentDueDisplay))
                 {
                     <p class="card-text">
-                        Go to <a asp-area="Home" asp-controller="Home" asp-action="Edit" asp-route-id="@Context.Session.GetString("CurrentHomeID")">Settings</a> in order to set rent due day.
+                        Go to <a style="text-decoration: none;" asp-area="Home" asp-controller="Home" asp-action="Edit" asp-route-id="@Context.Session.GetString("CurrentHomeID")">Settings</a> in order to set rent due day.
+                    </p>
+                }
+                else
+                {
+                    <p class="card-text">
+                        Rent due in: <strong>@Model.RentDueDisplay</strong>
+                    </p>
+                    <p class="card-text">
+                        You can manage your rent due day by going to <a style="text-decoration: none;" asp-area="Home" asp-controller="Home" asp-action="Edit" asp-route-id="@Context.Session.GetString("CurrentHomeID")">Settings</a>.
                     </p>
                 }
             </div>

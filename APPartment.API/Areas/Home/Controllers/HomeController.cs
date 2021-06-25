@@ -88,7 +88,7 @@ namespace APPartment.API.Areas.Home.Controllers
                         if (now.Day < currentHome.RentDueDay)
                         {
                             var rentDueDate = new DateTime(now.Year, now.Month, (int)currentHome.RentDueDay);
-                            var daysLeft = (rentDueDate - now).TotalDays;
+                            var daysLeft = (int)(rentDueDate - now).TotalDays;
                             result.RentDueDisplay = rentDueDate.ToLongDateString() + $" (days left: {daysLeft})";
                         }
                         else if (now.Day == currentHome.RentDueDay)
@@ -96,7 +96,7 @@ namespace APPartment.API.Areas.Home.Controllers
                         else
                         {
                             var rentDueDate = new DateTime(now.Year, now.Month, (int)currentHome.RentDueDay).AddMonths(1);
-                            var daysLeft = (rentDueDate - now).TotalDays;
+                            var daysLeft = (int)(rentDueDate - now).TotalDays;
                             result.RentDueDisplay = rentDueDate.ToLongDateString() + $" (days left: {daysLeft})";
                         }
                     }

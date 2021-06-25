@@ -25,12 +25,6 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Home
         [APPUIHint(Templates.Password, Row = 2, Col = 6, Order = 1, Section = "General Information")]
         public string Password { get; set; }
 
-        [Compare("Password", ErrorMessage = "Please confirm your password.")]
-        [DataType(DataType.Password)]
-        [APPUIHint(Templates.Password, Row = 3, Col = 6, Order = 1, Section = "General Information")]
-        [Display(Name = "Confirm password")]
-        public string ConfirmPassword { get; set; }
-
         [APPUIHint(Templates.NumberNullable, Row = 1, Col = 3, Order = 1, Section = "Settings")]
         [Display(Name = "Rent due day")]
         public int? RentDueDay { get; set; }
