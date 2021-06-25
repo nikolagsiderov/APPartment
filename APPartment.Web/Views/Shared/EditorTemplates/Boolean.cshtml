@@ -1,5 +1,14 @@
 ﻿@model bool
 
+@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+
+@{ 
+    var thePropertyAsMember = ViewData.ModelMetadata.ContainerType.GetMember(ViewData.ModelMetadata.PropertyName)[0];
+    var requiredAttribute = thePropertyAsMember.GetCustomAttribute(typeof(RequiredAttribute)) as RequiredAttribute;
+    var isRequired = requiredAttribute != null;
+}
+
 <style type="text/css">
     .slider [type="checkbox"] {
         display: none;
@@ -41,7 +50,7 @@
         }
 </style>
 
-<span>@ViewData.ModelMetadata.GetDisplayName()</span>
+<span>@ViewData.ModelMetadata.GetDisplayName() @if (isRequired) { <span style="color: red;">*</span> }</span>
 <div class="slider">
     @Html.CheckBoxFor(m => m, new { @class = "toggle-pill" })
     @Html.LabelFor(m => m, new { @class = "toggle-label" })

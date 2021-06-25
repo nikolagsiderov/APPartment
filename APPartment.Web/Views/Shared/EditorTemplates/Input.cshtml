@@ -1,7 +1,16 @@
 ﻿@model string
 
+@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;
+
+@{
+    var thePropertyAsMember = ViewData.ModelMetadata.ContainerType.GetMember(ViewData.ModelMetadata.PropertyName)[0];
+    var requiredAttribute = thePropertyAsMember.GetCustomAttribute(typeof(RequiredAttribute)) as RequiredAttribute;
+    var isRequired = requiredAttribute != null;
+}
+
 <div class="form-group">
-    @Html.LabelFor(m => m, @ViewData.ModelMetadata.GetDisplayName())
+    @Html.LabelFor(m => m, @ViewData.ModelMetadata.GetDisplayName()) @if (isRequired) { <span style="color: red;">*</span> }
     <input name="@ViewData.ModelMetadata.PropertyName" value="@ViewData.Model" class="form-control" placeholder="@ViewData.ModelMetadata.GetDisplayName()" />
     @Html.ValidationMessageFor(model => model, "", new { @class = "text-danger" })
 </div>
