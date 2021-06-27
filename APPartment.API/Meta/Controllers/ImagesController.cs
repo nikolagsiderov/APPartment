@@ -4,6 +4,7 @@ using APPartment.Infrastructure.Services.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Image;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace APPartment.API.Controllers
 {
@@ -46,11 +47,15 @@ namespace APPartment.API.Controllers
         }
 
         [HttpPost("upload/{targetObjectID:long}")]
-        public ActionResult Upload(long targetObjectID, [FromBody] IFormFile file)
+        public ActionResult Upload(long targetObjectID, ICollection<IFormFile> files)
         {
             try
             {
-                fileService.UploadImage(file, targetObjectID);
+                foreach (var file in files)
+                {
+                    fileService.UploadImage(file, targetObjectID);
+                }
+
                 return Ok();
             }
             catch (System.Exception ex)

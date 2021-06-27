@@ -245,33 +245,28 @@ namespace APPartment.Infrastructure.Controllers.Web
 
         #region Images
         [HttpPost]
-        public async Task<ActionResult> UploadImages(string targetObjectIDString)
+        public async Task<ActionResult> UploadImages(string targetObjectIDString, [FromForm] ICollection<IFormFile> files)
         {
             var targetObjectID = long.Parse(targetObjectIDString);
 
             try
             {
-                foreach (string fileName in HttpContext.Request.Form.Files.Select(x => x.FileName))
+                if (files != null && files.Any())
                 {
-                    IFormFile file = HttpContext.Request.Form.Files.Where(x => x.FileName == fileName).FirstOrDefault();
-
-                    if (file != null && file.Length > 0)
+                    using (var httpClient = new HttpClient())
                     {
-                        using (var httpClient = new HttpClient())
+                        var requestUri = $"{Configuration.DefaultAPI}/images/upload/{targetObjectID}";
+                        httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                        httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                        using (var response = await httpClient.PostAsJsonAsync(requestUri, files))
                         {
-                            var requestUri = $"{Configuration.DefaultAPI}/images/upload";
-                            httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
-                            httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+                            string content = await response.Content.ReadAsStringAsync();
 
-                            using (var response = await httpClient.PostAsJsonAsync(requestUri, file))
-                            {
-                                string content = await response.Content.ReadAsStringAsync();
-
-                                if (response.IsSuccessStatusCode)
-                                    return Ok();
-                                else
-                                    return Json(new { Message = "Error in saving file" });
-                            }
+                            if (response.IsSuccessStatusCode)
+                                return Ok();
+                            else
+                                return Json(new { Message = "Error in saving file" });
                         }
                     }
                 }

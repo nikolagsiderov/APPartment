@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Mvc.Razor;
 using APPartment.Infrastructure.Services;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace APPartment.Web
 {
@@ -24,6 +23,7 @@ namespace APPartment.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddMvc()
                 .AddSessionStateTempDataProvider();
             services.AddSignalR();
@@ -42,21 +42,6 @@ namespace APPartment.Web
             services.AddRazorPages();
 
             services.AddBreadcrumbs(GetType().Assembly);
-
-            // ********************
-            // Setup CORS
-            // ********************
-            var corsBuilder = new CorsPolicyBuilder();
-            corsBuilder.AllowAnyHeader();
-            corsBuilder.AllowAnyMethod();
-            corsBuilder.AllowAnyOrigin(); // For anyone access.
-            corsBuilder.WithOrigins(Common.Configuration.DefaultCorsOrigin);
-            corsBuilder.AllowCredentials();
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
-            });
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
@@ -77,16 +62,9 @@ namespace APPartment.Web
                 app.UseHsts();
             }
 
-            // Make sure you call this before calling app.UseMvc()
-            app.UseCors(
-                options => options.WithOrigins(Common.Configuration.DefaultCorsOrigin).AllowAnyMethod()
-            );
-
-            app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
+            app.UseCors(x => x.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

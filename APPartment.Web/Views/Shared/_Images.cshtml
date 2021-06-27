@@ -2,6 +2,7 @@
 
 @{
     var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    var areaName = this.ViewContext.RouteData.Values["area"].ToString();
 }
 
 <link href="~/css/images_displayview.css" rel="stylesheet" />
@@ -15,7 +16,7 @@
                 <div style="text-align:center; margin:10px;">
                     <div class="square" style="margin: 10px; text-align:center;">
                         <a href="~/BaseObject_Images/@image.Name" data-fancybox="gallery" data-caption="@image.Name">
-                            <img src="~/BaseObject_Images/@image.Name" class="image-img" />
+                            <img src="C:\APPartmentFileShare\Images\@image.Name" class="image-img" />
                         </a>
                     </div>
 
@@ -58,7 +59,7 @@
 
 <div class="row">
     <div class="col-md-12">
-        <form action="/@controllerName/UploadImages?targetIDString=@Model.ObjectID" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
+        <form action="/@areaName/@controllerName/UploadImages?targetObjectIDString=@Model.ObjectID" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
             <div class="dz-message">
                 Drop images here or click to upload.
             </div>
