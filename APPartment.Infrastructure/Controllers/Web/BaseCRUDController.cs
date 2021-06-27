@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using SmartBreadcrumbs.Attributes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -245,24 +246,29 @@ namespace APPartment.Infrastructure.Controllers.Web
 
         #region Images
         [HttpPost]
-        public async Task<ActionResult> UploadImages(string targetObjectIDString, [FromForm] ICollection<IFormFile> files)
+        public async Task<ActionResult> UploadImages(string targetObjectIDString, IFormFile file)
         {
             var targetObjectID = long.Parse(targetObjectIDString);
+            byte[] fileBytes;
+
+            using (var ms = new MemoryStream())
+            {
+                file.CopyTo(ms);
+                fileBytes = ms.ToArray();
+            }
 
             try
             {
-                if (files != null && files.Any())
+                if (file != null && file.Length > 0)
                 {
                     using (var httpClient = new HttpClient())
                     {
-                        var requestUri = $"{Configuration.DefaultAPI}/images/upload/{targetObjectID}";
+                        var requestUri = $"{Configuration.DefaultAPI}/images/{targetObjectID}";
                         httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                         httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 
-                        using (var response = await httpClient.PostAsJsonAsync(requestUri, files))
+                        using (var response = await httpClient.PostAsJsonAsync(requestUri, fileBytes))
                         {
-                            string content = await response.Content.ReadAsStringAsync();
-
                             if (response.IsSuccessStatusCode)
                                 return Ok();
                             else
@@ -271,7 +277,7 @@ namespace APPartment.Infrastructure.Controllers.Web
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Json(new { Message = "Error in saving file" });
             }
@@ -289,8 +295,6 @@ namespace APPartment.Infrastructure.Controllers.Web
 
                 using (var response = await httpClient.DeleteAsync(requestUri))
                 {
-                    string content = await response.Content.ReadAsStringAsync();
-
                     if (response.IsSuccessStatusCode)
                         return Ok();
                     else

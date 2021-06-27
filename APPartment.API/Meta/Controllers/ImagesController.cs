@@ -4,7 +4,7 @@ using APPartment.Infrastructure.Services.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Image;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
+using System;
 
 namespace APPartment.API.Controllers
 {
@@ -26,7 +26,7 @@ namespace APPartment.API.Controllers
                 var result = BaseCRUDService.GetEntity<ImagePostViewModel>(ID);
                 return Ok(result);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
@@ -40,25 +40,21 @@ namespace APPartment.API.Controllers
                 var result = BaseCRUDService.GetCollection<ImagePostViewModel>(x => x.TargetObjectID == targetObjectID);
                 return Ok(result);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
         }
 
-        [HttpPost("upload/{targetObjectID:long}")]
-        public ActionResult Upload(long targetObjectID, ICollection<IFormFile> files)
+        [HttpPost("{targetObjectID:long}")]
+        public ActionResult Upload(long targetObjectID, [FromBody] byte[] fileBytes)
         {
             try
             {
-                foreach (var file in files)
-                {
-                    fileService.UploadImage(file, targetObjectID);
-                }
-
+                fileService.UploadImage(fileBytes, targetObjectID);
                 return Ok();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
@@ -72,7 +68,7 @@ namespace APPartment.API.Controllers
                 fileService.DeleteImage(ID);
                 return Ok();
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }

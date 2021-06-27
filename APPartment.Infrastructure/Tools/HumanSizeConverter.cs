@@ -5,10 +5,10 @@ namespace APPartment.Infrastructure.Tools
 {
     public static class HumanSizeConverter
     {
-        public static string ConvertFileLength(IFormFile file)
+        public static string ConvertFileLength(byte[] fileBytes)
         {
             string[] sizes = { "bytes", "kB", "MB", "GB", "TB" };
-            double len = file.Length;
+            double len = fileBytes.Length;
             int order = 0;
             while (len >= 1024 && order < sizes.Length - 1)
             {

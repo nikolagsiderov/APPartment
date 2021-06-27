@@ -1,7 +1,7 @@
 ﻿using APPartment.Infrastructure.Services.Base;
 using APPartment.Infrastructure.Tools;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Image;
-using Microsoft.AspNetCore.Http;
+using APPartment.Common;
 using System;
 using System.IO;
 
@@ -9,43 +9,38 @@ namespace APPartment.Infrastructure.Services
 {
     public class FileService : BaseCRUDService
     {
-        private string imagesFileSharePath = @"C:\APPartmentFileShare\Images";
-
         public FileService(long? currentUserID, long? currentHomeID) : base(currentUserID, currentHomeID)
         {
         }
 
-        public void UploadImage(IFormFile file, long targetObjectID)
+        public void UploadImage(byte[] fileBytes, long targetObjectID)
         {
-            var imageName = SaveImageToDB(file, targetObjectID);
-            bool isExists = Directory.Exists(imagesFileSharePath);
+            var imageName = SaveImageToDB(fileBytes, targetObjectID);
+            bool isExists = Directory.Exists(Configuration.ImagesPath);
 
             if (!isExists)
-                Directory.CreateDirectory(imagesFileSharePath);
+                Directory.CreateDirectory(Configuration.ImagesPath);
 
-            var path = string.Format($"{imagesFileSharePath}\\{imageName}");
+            var path = string.Format($"{Configuration.ImagesPath}\\{imageName}");
 
-            using (var fileStream = new FileStream(path, FileMode.Create))
-            {
-                file.CopyTo(fileStream);
-            }
+            File.WriteAllBytes(path, fileBytes);
         }
 
-        private string SaveImageToDB(IFormFile file, long targetObjectID)
+        private string SaveImageToDB(byte[] fileBytes, long targetObjectID)
         {
             var image = new ImagePostViewModel()
             {
-                Name = file.FileName,
-                FileSize = HumanSizeConverter.ConvertFileLength(file),
+                Name = "temp",
+                FileSize = HumanSizeConverter.ConvertFileLength(fileBytes),
                 CreatedDate = DateTime.Now,
                 TargetObjectID = targetObjectID,
             };
 
             // We save the image once
             // Then we save again with modified Name property to add its ID
-            Save(image);
-            image.Name = $"{image.ID}_{targetObjectID}_{file.FileName}";
-            Save(image);
+            image = Save(image);
+            image.Name = $"{image.ID}_{targetObjectID}.png";
+            image = Save(image);
 
             return image.Name;
         }
@@ -54,9 +49,9 @@ namespace APPartment.Infrastructure.Services
         {
             var image = GetEntity<ImagePostViewModel>(ID);
 
-            if (Directory.Exists(imagesFileSharePath))
+            if (Directory.Exists(Configuration.ImagesPath))
             {
-                var di = new DirectoryInfo(imagesFileSharePath);
+                var di = new DirectoryInfo(Configuration.ImagesPath);
                 foreach (var file in di.GetFiles())
                 {
                     if (file.Name == image.Name)
