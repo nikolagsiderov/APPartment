@@ -1,4 +1,5 @@
 ﻿using APPartment.Infrastructure.Controllers.Api;
+using APPartment.Infrastructure.Services;
 using APPartment.Infrastructure.Services.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Image;
 using Microsoft.AspNetCore.Http;
@@ -6,15 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace APPartment.API.Controllers
 {
-    // TODO: Complete this here...
     [Route("api/[controller]")]
     public class ImagesController : BaseAPIController
     {
+        private FileService fileService { get; set; }
+
         public ImagesController(IHttpContextAccessor contextAccessor) : base(contextAccessor)
         {
+            fileService = new FileService(CurrentUserID, CurrentHomeID);
         }
 
-        // api/images/image/43
         [HttpGet("image/{ID:long}")]
         public ActionResult GetImage(long ID)
         {
@@ -29,7 +31,6 @@ namespace APPartment.API.Controllers
             }
         }
 
-        // api/images/76
         [HttpGet("{targetObjectID:long}")]
         public ActionResult Get(long targetObjectID)
         {
@@ -37,6 +38,34 @@ namespace APPartment.API.Controllers
             {
                 var result = BaseCRUDService.GetCollection<ImagePostViewModel>(x => x.TargetObjectID == targetObjectID);
                 return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
+        [HttpPost("upload/{targetObjectID:long}")]
+        public ActionResult Upload(long targetObjectID, [FromBody] IFormFile file)
+        {
+            try
+            {
+                fileService.UploadImage(file, targetObjectID);
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
+
+        [HttpDelete("image/{ID:long}")]
+        public ActionResult Delete(long ID)
+        {
+            try
+            {
+                fileService.DeleteImage(ID);
+                return Ok();
             }
             catch (System.Exception ex)
             {

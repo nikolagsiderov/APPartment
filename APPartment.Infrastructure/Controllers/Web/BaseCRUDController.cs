@@ -245,81 +245,62 @@ namespace APPartment.Infrastructure.Controllers.Web
 
         #region Images
         [HttpPost]
-        public ActionResult UploadImages(string targetObjectIDString)
+        public async Task<ActionResult> UploadImages(string targetObjectIDString)
         {
-            // TODO: This here needs to send request to API
-            // Also, make sure we store images outside of wwwroot
-            //var targetObjectID = long.Parse(targetObjectIDString);
+            var targetObjectID = long.Parse(targetObjectIDString);
 
-            //bool isSavedSuccessfully = true;
-            //string fName = "";
-            //try
-            //{
-            //    foreach (string fileName in HttpContext.Request.Form.Files.Select(x => x.FileName))
-            //    {
-            //        IFormFile file = HttpContext.Request.Form.Files.Where(x => x.FileName == fileName).FirstOrDefault();
+            try
+            {
+                foreach (string fileName in HttpContext.Request.Form.Files.Select(x => x.FileName))
+                {
+                    IFormFile file = HttpContext.Request.Form.Files.Where(x => x.FileName == fileName).FirstOrDefault();
 
-            //        fName = file.FileName;
-            //        if (file != null && file.Length > 0)
-            //            fileUploadService.UploadImage(file, targetObjectID, (long)CurrentUserID);
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    isSavedSuccessfully = false;
-            //}
+                    if (file != null && file.Length > 0)
+                    {
+                        using (var httpClient = new HttpClient())
+                        {
+                            var requestUri = $"{Configuration.DefaultAPI}/images/upload";
+                            httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                            httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 
-            //if (isSavedSuccessfully)
-            //    return Json(new { Message = fName });
-            //else
+                            using (var response = await httpClient.PostAsJsonAsync(requestUri, file))
+                            {
+                                string content = await response.Content.ReadAsStringAsync();
+
+                                if (response.IsSuccessStatusCode)
+                                    return Ok();
+                                else
+                                    return Json(new { Message = "Error in saving file" });
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
                 return Json(new { Message = "Error in saving file" });
+            }
+
+            return Json(new { Message = "Error in saving file" });
         }
 
         public async Task<ActionResult> DeleteImage(long ID)
         {
-            var image = new ImagePostViewModel();
-
             using (var httpClient = new HttpClient())
             {
                 var requestUri = $"{Configuration.DefaultAPI}/images/image/{ID}";
                 httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                 httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 
-                using (var response = await httpClient.GetAsync(requestUri))
+                using (var response = await httpClient.DeleteAsync(requestUri))
                 {
                     string content = await response.Content.ReadAsStringAsync();
 
                     if (response.IsSuccessStatusCode)
-                        image = JsonConvert.DeserializeObject<ImagePostViewModel>(content);
+                        return Ok();
+                    else
+                        return Json(new { Message = "404: Image does not exist." });
                 }
-            }
-
-            if (image == null)
-                return Json(new { success = false, message = "404: Image does not exist." });
-            else
-            {
-                return Json(new { success = false, message = "404: Image does not exist." });
-
-                // TODO: This here needs to send request to API
-                // Also, make sure directory path is outside of wwwroot
-                //if (Directory.Exists(ImagesPath))
-                //{
-                //    var di = new DirectoryInfo(ImagesPath);
-                //    foreach (var file in di.GetFiles())
-                //    {
-                //        if (file.Name == image.Name)
-                //        {
-                //            file.Delete();
-                //            break;
-                //        }
-                //    }
-
-                //    BaseWebService.Delete(image);
-
-                //    return Json(new { success = true, message = "Image deleted successfully." });
-                //}
-                //else
-                //    return Json(new { success = false, message = "404: Images path does not exist." });
             }
         }
 

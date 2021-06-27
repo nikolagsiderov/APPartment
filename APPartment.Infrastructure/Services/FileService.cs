@@ -9,20 +9,21 @@ namespace APPartment.Infrastructure.Services
 {
     public class FileService : BaseCRUDService
     {
+        private string imagesFileSharePath = @"C:\APPartmentFileShare\Images";
+
         public FileService(long? currentUserID, long? currentHomeID) : base(currentUserID, currentHomeID)
         {
         }
 
-        public void UploadImage(IFormFile file, long targetObjectID, long currentUserID)
+        public void UploadImage(IFormFile file, long targetObjectID)
         {
-            var imageName = SaveImageToDB(file, targetObjectID, currentUserID);
-            string pathString = "wwwroot\\BaseObject_Images";
-            bool isExists = Directory.Exists(pathString);
+            var imageName = SaveImageToDB(file, targetObjectID);
+            bool isExists = Directory.Exists(imagesFileSharePath);
 
             if (!isExists)
-                Directory.CreateDirectory(pathString);
+                Directory.CreateDirectory(imagesFileSharePath);
 
-            var path = string.Format($"{pathString}\\{imageName}");
+            var path = string.Format($"{imagesFileSharePath}\\{imageName}");
 
             using (var fileStream = new FileStream(path, FileMode.Create))
             {
@@ -30,7 +31,7 @@ namespace APPartment.Infrastructure.Services
             }
         }
 
-        private string SaveImageToDB(IFormFile file, long targetObjectID, long currentUserID)
+        private string SaveImageToDB(IFormFile file, long targetObjectID)
         {
             var image = new ImagePostViewModel()
             {
@@ -47,6 +48,26 @@ namespace APPartment.Infrastructure.Services
             Save(image);
 
             return image.Name;
+        }
+
+        public void DeleteImage(long ID)
+        {
+            var image = GetEntity<ImagePostViewModel>(ID);
+
+            if (Directory.Exists(imagesFileSharePath))
+            {
+                var di = new DirectoryInfo(imagesFileSharePath);
+                foreach (var file in di.GetFiles())
+                {
+                    if (file.Name == image.Name)
+                    {
+                        file.Delete();
+                        break;
+                    }
+                }
+
+                this.Delete(image);
+            }
         }
     }
 }

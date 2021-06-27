@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Mvc.Razor;
 using APPartment.Infrastructure.Services;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace APPartment.Web
 {
@@ -42,13 +43,20 @@ namespace APPartment.Web
 
             services.AddBreadcrumbs(GetType().Assembly);
 
-            services.AddCors(o => o.AddPolicy("CorsPolicy", builder =>
+            // ********************
+            // Setup CORS
+            // ********************
+            var corsBuilder = new CorsPolicyBuilder();
+            corsBuilder.AllowAnyHeader();
+            corsBuilder.AllowAnyMethod();
+            corsBuilder.AllowAnyOrigin(); // For anyone access.
+            corsBuilder.WithOrigins(Common.Configuration.DefaultCorsOrigin);
+            corsBuilder.AllowCredentials();
+
+            services.AddCors(options =>
             {
-                builder
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .WithOrigins("http://localhost:4200");
-            }));
+                options.AddPolicy("SiteCorsPolicy", corsBuilder.Build());
+            });
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
@@ -69,7 +77,10 @@ namespace APPartment.Web
                 app.UseHsts();
             }
 
-            app.UseCors("CorsPolicy");
+            // Make sure you call this before calling app.UseMvc()
+            app.UseCors(
+                options => options.WithOrigins(Common.Configuration.DefaultCorsOrigin).AllowAnyMethod()
+            );
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
