@@ -14,7 +14,6 @@ namespace APPartment.API.Controllers
         {
         }
 
-        // api/objectlinks/82
         [HttpGet("{targetObjectID:long}")]
         public ActionResult Get(long targetObjectID)
         {
@@ -44,10 +43,8 @@ namespace APPartment.API.Controllers
             }
         }
 
-        // api/objectlinks/post
         [HttpPost]
-        [Route("post")]
-        public ActionResult Post([FromBody] ObjectLinkPostViewModel link)
+        public ActionResult Post(ObjectLinkPostViewModel link)
         {
             try
             {

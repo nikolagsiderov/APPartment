@@ -227,7 +227,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
             using (var httpClient = new HttpClient())
             {
-                var requestUri = $"{Configuration.DefaultAPI}/comments/post";
+                var requestUri = $"{Configuration.DefaultAPI}/comments";
                 httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                 httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 
@@ -246,43 +246,46 @@ namespace APPartment.Infrastructure.Controllers.Web
 
         #region Images
         [HttpPost]
-        public async Task<ActionResult> UploadImages(string targetObjectIDString, IFormFile file)
+        public async Task<ActionResult> UploadImages(string targetObjectIDString)
         {
             var targetObjectID = long.Parse(targetObjectIDString);
             byte[] fileBytes;
 
-            using (var ms = new MemoryStream())
-            {
-                file.CopyTo(ms);
-                fileBytes = ms.ToArray();
-            }
+            var files = HttpContext.Request.Form.Files;
 
-            try
+            foreach (var file in files)
             {
-                if (file != null && file.Length > 0)
+                using (var ms = new MemoryStream())
                 {
-                    using (var httpClient = new HttpClient())
-                    {
-                        var requestUri = $"{Configuration.DefaultAPI}/images/{targetObjectID}";
-                        httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
-                        httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+                    file.CopyTo(ms);
+                    fileBytes = ms.ToArray();
+                }
 
-                        using (var response = await httpClient.PostAsJsonAsync(requestUri, fileBytes))
+                try
+                {
+                    if (file != null && file.Length > 0)
+                    {
+                        using (var httpClient = new HttpClient())
                         {
-                            if (response.IsSuccessStatusCode)
-                                return Ok();
-                            else
-                                return Json(new { Message = "Error in saving file" });
+                            var requestUri = $"{Configuration.DefaultAPI}/images/{targetObjectID}";
+                            httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                            httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                            using (var response = await httpClient.PostAsJsonAsync(requestUri, fileBytes))
+                            {
+                                if (response.IsSuccessStatusCode == false)
+                                    return Json(new { Message = "Error in saving file" });
+                            }
                         }
                     }
                 }
-            }
-            catch (Exception)
-            {
-                return Json(new { Message = "Error in saving file" });
+                catch (Exception)
+                {
+                    return Json(new { Message = "Error in saving file" });
+                }
             }
 
-            return Json(new { Message = "Error in saving file" });
+            return Ok();
         }
 
         public async Task<ActionResult> DeleteImage(long ID)
@@ -296,7 +299,7 @@ namespace APPartment.Infrastructure.Controllers.Web
                 using (var response = await httpClient.DeleteAsync(requestUri))
                 {
                     if (response.IsSuccessStatusCode)
-                        return Ok();
+                        return Ok(new { success = "true" });
                     else
                         return Json(new { Message = "404: Image does not exist." });
                 }
@@ -367,7 +370,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
             using (var httpClient = new HttpClient())
             {
-                var requestUri = $"{Configuration.DefaultAPI}/events/post";
+                var requestUri = $"{Configuration.DefaultAPI}/events";
                 httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                 httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 
@@ -421,7 +424,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
             using (var httpClient = new HttpClient())
             {
-                var requestUri = $"{Configuration.DefaultAPI}/objectlinks/post";
+                var requestUri = $"{Configuration.DefaultAPI}/objectlinks";
                 httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                 httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 
@@ -481,7 +484,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
             using (var httpClient = new HttpClient())
             {
-                var requestUri = $"{Configuration.DefaultAPI}/home/objects/{model.ObjectID}";
+                var requestUri = $"{Configuration.DefaultAPI}/home/home/objects/{model.ObjectID}";
                 httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
                 httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
 

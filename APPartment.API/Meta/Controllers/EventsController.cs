@@ -15,7 +15,6 @@ namespace APPartment.API.Controllers
         {
         }
 
-        // api/events/82
         [HttpGet("{targetObjectID:long}")]
         public ActionResult Get(long targetObjectID)
         {
@@ -45,10 +44,8 @@ namespace APPartment.API.Controllers
             }
         }
 
-        // api/events/post
         [HttpPost]
-        [Route("post")]
-        public ActionResult Post([FromBody] EventPostViewModel @event)
+        public ActionResult Post(EventPostViewModel @event)
         {
             try
             {

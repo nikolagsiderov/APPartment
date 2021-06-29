@@ -14,7 +14,6 @@ namespace APPartment.API.Controllers
         {
         }
 
-        // api/participants/82
         [HttpGet("{targetObjectID:long}")]
         public ActionResult Get(long targetObjectID)
         {

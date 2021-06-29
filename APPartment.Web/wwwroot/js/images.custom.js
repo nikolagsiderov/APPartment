@@ -1,9 +1,10 @@
-﻿$(document).ready(function () {
-    Dropzone.options.dropzoneForm = {
-        maxFilesize: 209715200, // MB
-        maxFiles: 3,
+﻿document.addEventListener("DOMContentLoaded", function () {
+    Dropzone.options.imagesDropzone = {
+        maxFilesize: 15, // MB
         acceptedFiles: "image/*",
         uploadMultiple: true,
+        parallelUploads: 100,
+        maxFiles: 100,
         timeout: 180000,
         init: function () {
             this.on("complete", function (file) {
@@ -16,4 +17,6 @@
             });
         }
     };
+
+    Dropzone.options.imagesDropzone.init();
 });

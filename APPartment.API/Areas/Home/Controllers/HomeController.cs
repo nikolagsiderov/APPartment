@@ -239,7 +239,7 @@ namespace APPartment.API.Areas.Home.Controllers
                     var areaName = item.Area;
                     var controllerName = item.Area;
                     var page = "Details";
-                    item.WebLink = string.Format($"{Configuration.DefaultBaseURL}/{areaName}/{controllerName}/{page}/{item.MainID}");
+                    item.WebLink = string.Format($"{Configuration.DefaultBaseURL}{areaName}/{controllerName}/{page}/{item.MainID}");
                 }
 
                 if (filteredSearchResult.Any())

@@ -19,7 +19,6 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
         [IgnoreDataMember]
         public virtual List<string> Sections { get; } = new List<string>() { "General Information" };
 
-        [Required]
         [APPUIHint(Templates.Input, Row = 1, Col = 6, Order = 1, Section = "General Information")]
         public virtual string Name { get; set; }
 

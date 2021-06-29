@@ -27,6 +27,7 @@ namespace APPartment.Web.Areas.Home.Controllers
             return View(CurrentControllerName, new EventViewModel());
         }
 
+        [HttpGet]
         public async Task<JsonResult> GetEvents()
         {
             var result = new List<EventViewModel>();
