@@ -37,7 +37,6 @@ namespace APPartment.API.Controllers
             try
             {
                 comment = BaseCRUDService.Save(comment);
-                BaseCRUDService.AddUserAsParticipantToObject(comment.TargetObjectID, (long)CurrentUserID, comment.ObjectTypeID);
                 var result = new CommentsRenderer(CurrentUserID, CurrentHomeID).BuildPostComment(comment);
 
                 return Ok(result);

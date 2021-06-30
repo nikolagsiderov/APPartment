@@ -113,34 +113,36 @@ namespace APPartment.Data.Server.Base
         }
 
         public T Create<T>(T businessObject, long userID, long? homeID)
-            where T : class, IBaseObject
+            where T : class, IBaseObject, new()
         {
             var objectID = dao.SaveCreateBaseObject(businessObject, userID, homeID);
+            AddUserAsParticipantToObjectIfNecessary<T>(objectID);
             return dao.SaveCreateBusinessObject(businessObject, objectID);
         }
 
         public T Update<T>(T businessObject, long userID, long homeID)
-            where T : class, IBaseObject
+            where T : class, IBaseObject, new()
         {
             dao.SaveUpdateBaseObject(businessObject, userID, homeID);
+            AddUserAsParticipantToObjectIfNecessary<T>(businessObject.ObjectID);
             return dao.SaveUpdateBusinessObject(businessObject);
         }
 
         public void Delete<T>(T businessObject)
-            where T : class, IBaseObject
+            where T : class, IBaseObject, new()
         {
             dao.DeleteBusinessObjectAndAllItsBaseReferences(businessObject);
         }
 
         public bool Any<T>()
-            where T : class, IBaseObject
+            where T : class, IBaseObject, new()
         {
             var result = false;
             return dao.AnyBusinessObjects<T>(result);
         }
 
         public bool Any<T>(Expression<Func<T, bool>> filter)
-            where T : class, IBaseObject
+            where T : class, IBaseObject, new()
         {
             var result = false;
 
@@ -153,14 +155,14 @@ namespace APPartment.Data.Server.Base
         }
 
         public int Count<T>()
-            where T : class, IBaseObject
+            where T : class, IBaseObject, new()
         {
             var result = 0;
             return dao.CountBusinessObjects<T>(result);
         }
 
         public int Count<T>(Expression<Func<T, bool>> filter)
-            where T : class, IBaseObject
+            where T : class, IBaseObject, new()
         {
             var result = 0;
 
@@ -176,6 +178,24 @@ namespace APPartment.Data.Server.Base
         {
             var objectType = (ObjectTypes)objectTypeID;
             return objectType.ToString();
+        }
+
+        public void AddUserAsParticipantToObjectIfNecessary<T>(long targetObjectID)
+            where T : class, IBaseObject, new()
+        {
+            var theObject = GetObject<T>(x => x.ObjectID == targetObjectID);
+
+            if (theObject.ModifiedByID != null && theObject.ModifiedByID > 0)
+            {
+                if (theObject.ObjectTypeID != (long)ObjectTypes.ObjectParticipant && theObject.ObjectTypeID != (long)ObjectTypes.Message)
+                {
+                    if (!Any<ObjectParticipant>(x => x.TargetObjectID == targetObjectID && x.UserID == theObject.ModifiedByID))
+                    {
+                        var participant = new ObjectParticipant() { TargetObjectID = targetObjectID, UserID = (long)theObject.ModifiedByID };
+                        Create(participant, (long)theObject.ModifiedByID, theObject.HomeID);
+                    }
+                }
+            }
         }
     }
 }

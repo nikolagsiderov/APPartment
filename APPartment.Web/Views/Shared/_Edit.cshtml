@@ -4,12 +4,10 @@
 
 @{
     var action = "Create";
-    var consoleHeader = "Console [Create]";
 
     if (Model.ID > 0)
     {
         action = "Edit";
-        consoleHeader = $"Console [ID: {Model.ID}, Name: {Model.Name}]";
     }
 }
 
@@ -28,37 +26,37 @@
 
                     @foreach (var row in rowsWithoutSections)
                     {
-                    <div class="row">
-                        @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
-                        {
-                            if (string.IsNullOrEmpty(propUI.SelectList))
+                        <div class="row">
+                            @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
                             {
-                                <div class="col-md-@propUI.Col">
-                                    <div class="editor-field">
-                                        @Html.Editor(propUI.Property.Name)
+                                if (string.IsNullOrEmpty(propUI.SelectList))
+                                {
+                                    <div class="col-md-@propUI.Col">
+                                        <div class="editor-field">
+                                            @Html.Editor(propUI.Property.Name)
+                                        </div>
                                     </div>
-                                </div>
-                            }
-                            else if (propUI.Template.Equals(Templates.Dropdown))
-                            {
-                                <div class="col-md-@propUI.Col">
-                                    <div class="editor-field">
-                                        @Html.LabelFor(m => m, propUI.DisplayName)
-                                        @Html.Editor(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
+                                }
+                                else if (propUI.Template.Equals(Templates.Dropdown))
+                                {
+                                    <div class="col-md-@propUI.Col">
+                                        <div class="editor-field">
+                                            @Html.LabelFor(m => m, propUI.DisplayName)
+                                            @Html.Editor(propUI.Property.Name, propUI.Template, ViewData[propUI.SelectList])
+                                        </div>
                                     </div>
-                                </div>
-                            }
-                            else if (propUI.Template.Equals(Templates.Multiselect))
-                            {
-                                <div class="col-md-@propUI.Col">
-                                    <div class="editor-field">
-                                        @Html.LabelFor(m => m, propUI.DisplayName)
-                                        @Html.Editor(propUI.Property.Name)
+                                }
+                                else if (propUI.Template.Equals(Templates.Multiselect))
+                                {
+                                    <div class="col-md-@propUI.Col">
+                                        <div class="editor-field">
+                                            @Html.LabelFor(m => m, propUI.DisplayName)
+                                            @Html.Editor(propUI.Property.Name)
+                                        </div>
                                     </div>
-                                </div>
+                                }
                             }
-                        }
-                    </div>
+                        </div>
                     }
 
                     @if (Model.Sections.Any())
@@ -121,42 +119,7 @@
             }
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="card">
-            <div class="card-header">
-                @consoleHeader
-            </div>
-            <div class="card-body">
-                @if (Model.ID > 0)
-                {
-                    <div id="object-additional-info-for-@Model.ID" style="font-family: monospace;">
-                        Created by ID: @Model.CreatedByID
-                        <br />
-                        Created date: @Model.CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")
-                        <br />
-                        Modified by ID: @Model.ModifiedByID
-                        <br />
-                        Modified date: @Model.ModifiedDate.Value.ToString("dd'/'MM'/'yyyy HH:mm:ss")
-                    </div>
-                    <hr />
-                    <div id="object-actions-for-@Model.ID">
-                        @{
-                            var actionsHtml = string.Join(" &nbsp;", Model.ActionsHtml);
-                        }
-                        @Html.Raw(actionsHtml)
-                    </div>
-                }
-                else
-                {
-                    <div style="font-family: monospace;">
-                        Created by ID: Probably you
-                        <br />
-                        Created date: Probably now
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
+    @await Html.PartialAsync("_Console", Model)
 </div>
 
 @section Scripts {

@@ -256,8 +256,6 @@ namespace APPartment.Infrastructure.Services.Base
 
                 var result = (T)toViewModelFunc.Invoke(this, new object[] { serverModel });
 
-                AddUserAsParticipantToObject(result.ObjectID, (long)result.ModifiedByID, result.ObjectTypeID);
-
                 return result;
             }
             else
@@ -286,8 +284,6 @@ namespace APPartment.Infrastructure.Services.Base
                 .MakeGenericMethod(typeof(T), serverModelType);
 
                 var result = (T)toViewModelFunc.Invoke(this, new object[] { serverModel });
-
-                AddUserAsParticipantToObject(result.ObjectID, (long)result.ModifiedByID, result.ObjectTypeID);
 
                 return result;
             }
@@ -349,7 +345,7 @@ namespace APPartment.Infrastructure.Services.Base
         }
 
         // TODO: Complete function
-        public List<T> GetLookupObjects<T>()
+        public List<T> GetLookupCollection<T>()
             where T : class, ILookupObject, new()
         {
             // TODO: Implement mapping from server to view model
@@ -365,7 +361,7 @@ namespace APPartment.Infrastructure.Services.Base
         }
 
         // TODO: Complete function
-        public List<T> GetLookupObjects<T>(Expression<Func<T, bool>> filter)
+        public List<T> GetLookupCollection<T>(Expression<Func<T, bool>> filter)
             where T : class, ILookupObject, new()
         {
             // TODO: Implement mapping from server to view model
@@ -385,7 +381,7 @@ namespace APPartment.Infrastructure.Services.Base
         {
             var anyFunc = typeof(BaseFacade)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(BaseFacade.Any)))
+                .Where(x => x.Name.Equals(nameof(this.Any)))
                 .FirstOrDefault()
                 .MakeGenericMethod(GetServerModelType<T>());
 
@@ -400,7 +396,7 @@ namespace APPartment.Infrastructure.Services.Base
 
             var anyFilteredFunc = typeof(BaseFacade)
                 .GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(BaseFacade.Any)))
+                .Where(x => x.Name.Equals(nameof(this.Any)))
                 .Last()
                 .MakeGenericMethod(serverModelType);
 
@@ -421,7 +417,7 @@ namespace APPartment.Infrastructure.Services.Base
         {
             var countFunc = typeof(BaseFacade)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(BaseFacade.Count)))
+                .Where(x => x.Name.Equals(nameof(this.Count)))
                 .FirstOrDefault()
                 .MakeGenericMethod(GetServerModelType<T>());
 
@@ -436,7 +432,7 @@ namespace APPartment.Infrastructure.Services.Base
 
             var countFilteredFunc = typeof(BaseFacade)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(BaseFacade.Count)))
+                .Where(x => x.Name.Equals(nameof(this.Count)))
                 .Last()
                 .MakeGenericMethod(serverModelType);
 
@@ -450,21 +446,6 @@ namespace APPartment.Infrastructure.Services.Base
 
             return (int)countFilteredFunc
                 .Invoke(BaseFacade, new object[] { convertedFilter });
-        }
-
-        public void AddUserAsParticipantToObject(long targetObjectID, long userID, long objectTypeID)
-        {
-            if (userID != 0)
-            {
-                if (objectTypeID != (long)ObjectTypes.ObjectParticipant && objectTypeID != (long)ObjectTypes.Message)
-                {
-                    if (!Any<ObjectParticipantPostViewModel>(x => x.TargetObjectID == targetObjectID && x.UserID == userID))
-                    {
-                        var participant = new ObjectParticipantPostViewModel() { TargetObjectID = targetObjectID, UserID = userID };
-                        Save(participant);
-                    }
-                }
-            }
         }
 
         public string GetObjectTypeName(long objectTypeID)
