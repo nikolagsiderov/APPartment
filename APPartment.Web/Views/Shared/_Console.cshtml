@@ -7,6 +7,9 @@
     {
         consoleHeader = $"Console [ID: {Model.ID}, Name: {Model.Name}]";
     }
+
+    var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+    var areaName = this.ViewContext.RouteData.Values["area"].ToString();
 }
 
 <div class="col-md-3">
@@ -34,9 +37,16 @@
                     @Html.Raw(actionsHtml)
                 </div>
                 <hr />
+                <div id="add-participants-manually">
+                    <div class="form-group">
+                        <input id="addParticipantField" class="form-control form-control-sm" placeholder="Add new participant" />
+                    </div>
+                    <button type="button" id="addParticipantsBtn" class="btn btn-outline-secondary btn-xs" style="float: right;">Add</button>
+                </div>
+                <br />
                 <div id="object-participants-for-@Model.ID">
                     <strong><i class="fas fa-user-friends"></i> Participants:</strong>
-                    <div id="objectg-participants">
+                    <div id="object-participants">
                         @if (Model.Participants.Any())
                         {
                             @foreach (var participant in Model.Participants)
@@ -66,3 +76,26 @@
         </div>
     </div>
 </div>
+
+<script>
+    window.addEventListener('DOMContentLoaded', function () {
+        $('#addParticipantsBtn').click(function () {
+            var newParticipantValue = $('#addParticipantField').val();
+
+            if (newParticipantValue != '') {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("AddParticipant", controllerName)',
+                    cache: false,
+                    dataType: 'json',
+                    data: { 'username': newParticipantValue, 'targetObjectID': @Model.ObjectID },
+                    success: function (data) {
+                        if (data.success) {
+                            window.location.reload();
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>

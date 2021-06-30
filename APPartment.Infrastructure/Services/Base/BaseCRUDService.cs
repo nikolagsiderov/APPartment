@@ -452,5 +452,10 @@ namespace APPartment.Infrastructure.Services.Base
         {
             return BaseFacade.GetObjectTypeName(objectTypeID);
         }
+
+        public void AddUserAsParticipantToObjectIfNecessary(long targetObjectID, long userID)
+        {
+            BaseFacade.AddUserAsParticipantToObjectIfNecessary(targetObjectID, userID);
+        }
     }
 }

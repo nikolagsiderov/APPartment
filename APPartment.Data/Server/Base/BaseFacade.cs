@@ -116,7 +116,7 @@ namespace APPartment.Data.Server.Base
             where T : class, IBaseObject, new()
         {
             var objectID = dao.SaveCreateBaseObject(businessObject, userID, homeID);
-            AddUserAsParticipantToObjectIfNecessary<T>(objectID);
+            AddUserAsParticipantToObjectIfNecessary(objectID);
             return dao.SaveCreateBusinessObject(businessObject, objectID);
         }
 
@@ -124,7 +124,7 @@ namespace APPartment.Data.Server.Base
             where T : class, IBaseObject, new()
         {
             dao.SaveUpdateBaseObject(businessObject, userID, homeID);
-            AddUserAsParticipantToObjectIfNecessary<T>(businessObject.ObjectID);
+            AddUserAsParticipantToObjectIfNecessary(businessObject.ObjectID);
             return dao.SaveUpdateBusinessObject(businessObject);
         }
 
@@ -180,19 +180,38 @@ namespace APPartment.Data.Server.Base
             return objectType.ToString();
         }
 
-        public void AddUserAsParticipantToObjectIfNecessary<T>(long targetObjectID)
-            where T : class, IBaseObject, new()
+        public void AddUserAsParticipantToObjectIfNecessary(long targetObjectID, long? userID = null)
         {
-            var theObject = GetObject<T>(x => x.ObjectID == targetObjectID);
+            var theObject = GetBusinessObject(targetObjectID);
 
-            if (theObject.ModifiedByID != null && theObject.ModifiedByID > 0)
+            if (theObject != null)
             {
-                if (theObject.ObjectTypeID != (long)ObjectTypes.ObjectParticipant && theObject.ObjectTypeID != (long)ObjectTypes.Message)
+                if (userID != null)
                 {
-                    if (!Any<ObjectParticipant>(x => x.TargetObjectID == targetObjectID && x.UserID == theObject.ModifiedByID))
+                    if (userID != null && userID > 0)
                     {
-                        var participant = new ObjectParticipant() { TargetObjectID = targetObjectID, UserID = (long)theObject.ModifiedByID };
-                        Create(participant, (long)theObject.ModifiedByID, theObject.HomeID);
+                        if (theObject.ObjectTypeID != (long)ObjectTypes.ObjectParticipant && theObject.ObjectTypeID != (long)ObjectTypes.Message)
+                        {
+                            if (!Any<ObjectParticipant>(x => x.TargetObjectID == targetObjectID && x.UserID == userID))
+                            {
+                                var participant = new ObjectParticipant() { TargetObjectID = targetObjectID, UserID = (long)userID };
+                                Create(participant, (long)userID, theObject.HomeID);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (theObject.ModifiedByID != null && theObject.ModifiedByID > 0)
+                    {
+                        if (theObject.ObjectTypeID != (long)ObjectTypes.ObjectParticipant && theObject.ObjectTypeID != (long)ObjectTypes.Message)
+                        {
+                            if (!Any<ObjectParticipant>(x => x.TargetObjectID == targetObjectID && x.UserID == theObject.ModifiedByID))
+                            {
+                                var participant = new ObjectParticipant() { TargetObjectID = targetObjectID, UserID = (long)theObject.ModifiedByID };
+                                Create(participant, (long)theObject.ModifiedByID, theObject.HomeID);
+                            }
+                        }
                     }
                 }
             }

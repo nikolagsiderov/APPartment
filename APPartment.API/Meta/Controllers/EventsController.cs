@@ -52,6 +52,7 @@ namespace APPartment.API.Controllers
                 var participants = @event.ParticipantUserIDs;
 
                 @event = BaseCRUDService.Save(@event);
+                BaseCRUDService.AddUserAsParticipantToObjectIfNecessary(@event.TargetObjectID, @event.CreatedByID);
 
                 foreach (var userID in participants)
                 {

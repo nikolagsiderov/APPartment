@@ -33,5 +33,26 @@ namespace APPartment.API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
         }
+
+        [HttpPost("{targetObjectID:long}")]
+        public ActionResult Post(long targetObjectID, [FromBody] string username)
+        {
+            try
+            {
+                var userExists = BaseCRUDService.Any<UserPostViewModel>(x => x.Name == username);
+
+                if (userExists)
+                {
+                    var user = BaseCRUDService.GetEntity<UserPostViewModel>(x => x.Name == username);
+                    BaseCRUDService.AddUserAsParticipantToObjectIfNecessary(targetObjectID, user.ID);
+                }
+
+                return Ok();
+            }
+            catch (System.Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
     }
 }

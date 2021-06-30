@@ -41,6 +41,7 @@ namespace APPartment.Infrastructure.Services
             image = Save(image);
             image.Name = $"{image.ID}_{targetObjectID}.png";
             image = Save(image);
+            AddUserAsParticipantToObjectIfNecessary(image.TargetObjectID, image.CreatedByID);
 
             return image.Name;
         }

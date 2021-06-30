@@ -463,6 +463,27 @@ namespace APPartment.Infrastructure.Controllers.Web
 
             return result;
         }
+
+        [HttpPost]
+        public async Task<JsonResult> AddParticipant(string username, long targetObjectID)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/participants/{targetObjectID}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.PostAsJsonAsync(requestUri, username))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        return Json(new { success = true });
+                    else
+                        return Json(StatusCodes.Status500InternalServerError);
+                }
+            }
+        }
         #endregion
         #endregion Clingons
 

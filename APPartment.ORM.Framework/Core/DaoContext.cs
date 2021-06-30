@@ -62,6 +62,7 @@ namespace APPartment.ORM.Framework.Core
         {
             var table = GetTableName<T>();
             var sqlClause = expressionToSql.Translate(filter);
+            sqlClause = sqlClause.Replace("ObjectID =", "[dbo].[Object].[ObjectID] = ");
             var query = SqlQueryProvider.SelectBusinessObjectByClause(table, sqlClause);
 
             using (SqlConnection conn = new SqlConnection(Configuration.DefaultConnectionString))

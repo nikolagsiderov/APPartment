@@ -49,12 +49,13 @@ namespace APPartment.API.Controllers
             try
             {
                 link = BaseCRUDService.Save(link);
+                BaseCRUDService.AddUserAsParticipantToObjectIfNecessary(link.TargetObjectID, link.CreatedByID);
 
                 link.ObjectBName = BaseCRUDService.GetEntity(link.ObjectBID).Name;
 
                 return Ok(link);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
