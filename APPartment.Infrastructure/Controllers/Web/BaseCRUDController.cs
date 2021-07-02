@@ -84,6 +84,7 @@ namespace APPartment.Infrastructure.Controllers.Web
             {
                 ViewData["CanManage"] = CanManage;
 
+                Normalize(model);
                 await PopulateViewData(model);
                 await SetObjectActions(model);
                 await GetClingons(model);
@@ -101,7 +102,9 @@ namespace APPartment.Infrastructure.Controllers.Web
         {
             var newModel = new U();
 
+            Normalize(newModel);
             await PopulateViewData(newModel);
+
             return View("_Edit", newModel);
         }
 
@@ -131,6 +134,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
             if (model.ID > 0)
             {
+                Normalize(model);
                 await PopulateViewData(model);
                 await SetObjectActions(model);
                 await GetClingons(model);
@@ -524,6 +528,8 @@ namespace APPartment.Infrastructure.Controllers.Web
 
         protected virtual void PopulateViewDataForIndex() { }
         #endregion
+
+        protected abstract void Normalize(U model);
 
         protected async Task<List<UserPostViewModel>> GetUsersInCurrentHome()
         {

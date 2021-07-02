@@ -24,5 +24,9 @@ namespace APPartment.Web.Areas.Roommates.Controllers
         {
             return await base.Index();
         }
+
+        protected override void Normalize(UserPostViewModel model)
+        {
+        }
     }
 }

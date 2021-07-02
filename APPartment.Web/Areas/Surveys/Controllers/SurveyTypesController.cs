@@ -23,5 +23,9 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         {
             return await base.Index();
         }
+
+        protected override void Normalize(SurveyTypePostViewModel model)
+        {
+        }
     }
 }

@@ -45,6 +45,29 @@ namespace APPartment.Infrastructure.Services.Base
             return model;
         }
 
+        public async Task<T> RequestEntity<T>(long ID, string areaName, string controllerName)
+            where T : IBaseObject, new()
+        {
+            var model = new T();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/{areaName}/{controllerName}/{ID}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", currentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", currentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        model = JsonConvert.DeserializeObject<T>(content);
+                }
+            }
+
+            return model;
+        }
+
         public async Task<List<T>> RequestEntities<T>()
             where T : IBaseObject, new()
         {
@@ -53,6 +76,29 @@ namespace APPartment.Infrastructure.Services.Base
             using (var httpClient = new HttpClient())
             {
                 var requestUri = $"{Configuration.DefaultAPI}/{currentAreaName}/{currentControllerName}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", currentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", currentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        models = JsonConvert.DeserializeObject<List<T>>(content);
+                }
+            }
+
+            return models;
+        }
+
+        public async Task<List<T>> RequestEntities<T>(string areaName, string controllerName)
+            where T : IBaseObject, new()
+        {
+            var models = new List<T>();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/{areaName}/{controllerName}";
                 httpClient.DefaultRequestHeaders.Add("CurrentUserID", currentUserID.ToString());
                 httpClient.DefaultRequestHeaders.Add("CurrentHomeID", currentHomeID.ToString());
 
@@ -91,6 +137,29 @@ namespace APPartment.Infrastructure.Services.Base
             return responseIsSuccess;
         }
 
+        public async Task<bool> RequestPostEntity<T>(T model, string areaName, string controllerName)
+            where T : IBaseObject, new()
+        {
+            var responseIsSuccess = false;
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/{areaName}/{controllerName}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", currentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", currentHomeID.ToString());
+
+                using (var response = await httpClient.PostAsJsonAsync(requestUri, model))
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        responseIsSuccess = true;
+                }
+            }
+
+            return responseIsSuccess;
+        }
+
         public async Task<bool> RequestDeleteEntity(long ID)
         {
             var responseIsSuccess = false;
@@ -113,6 +182,28 @@ namespace APPartment.Infrastructure.Services.Base
             return responseIsSuccess;
         }
 
+        public async Task<bool> RequestDeleteEntity(long ID, string areaName, string controllerName)
+        {
+            var responseIsSuccess = false;
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/{areaName}/{controllerName}/{ID}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", currentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", currentHomeID.ToString());
+
+                using (var response = await httpClient.DeleteAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        responseIsSuccess = true;
+                }
+            }
+
+            return responseIsSuccess;
+        }
+
         public async Task<int> RequestEntitiesCount()
         {
             var count = 0;
@@ -120,6 +211,28 @@ namespace APPartment.Infrastructure.Services.Base
             using (var httpClient = new HttpClient())
             {
                 var requestUri = $"{Configuration.DefaultAPI}/{currentAreaName}/{currentControllerName}/count";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", currentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", currentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        count = JsonConvert.DeserializeObject<int>(content);
+                }
+            }
+
+            return count;
+        }
+
+        public async Task<int> RequestEntitiesCount(string areaName, string controllerName)
+        {
+            var count = 0;
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/{areaName}/{controllerName}/count";
                 httpClient.DefaultRequestHeaders.Add("CurrentUserID", currentUserID.ToString());
                 httpClient.DefaultRequestHeaders.Add("CurrentHomeID", currentHomeID.ToString());
 

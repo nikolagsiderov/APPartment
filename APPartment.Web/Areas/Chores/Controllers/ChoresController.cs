@@ -122,5 +122,9 @@ namespace APPartment.Web.Areas.Chores.Controllers
 
             return usersSelectList;
         }
+
+        protected override void Normalize(ChorePostViewModel model)
+        {
+        }
     }
 }

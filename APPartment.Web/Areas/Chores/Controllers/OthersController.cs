@@ -23,5 +23,9 @@ namespace APPartment.Web.Areas.Chores.Controllers
         {
             return await base.Index();
         }
+
+        protected override void Normalize(ChorePostViewModel model)
+        {
+        }
     }
 }

@@ -23,5 +23,9 @@ namespace APPartment.Web.Areas.Inventory.Controllers
         {
             return await base.Index();
         }
+
+        protected override void Normalize(InventoryPostViewModel model)
+        {
+        }
     }
 }

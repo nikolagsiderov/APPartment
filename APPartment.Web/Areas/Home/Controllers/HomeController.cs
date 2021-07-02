@@ -207,5 +207,9 @@ namespace APPartment.Web.Areas.Home.Controllers
                 }
             }
         }
+
+        protected override void Normalize(HomePostViewModel model)
+        {
+        }
     }
 }

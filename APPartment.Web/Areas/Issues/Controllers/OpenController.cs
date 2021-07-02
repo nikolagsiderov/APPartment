@@ -23,5 +23,9 @@ namespace APPartment.Web.Areas.Issues.Controllers
         {
             return await base.Index();
         }
+
+        protected override void Normalize(IssuePostViewModel model)
+        {
+        }
     }
 }

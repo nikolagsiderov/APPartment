@@ -135,5 +135,15 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
                 return hiddenProperties;
             }
         }
+
+        [JsonIgnore]
+        [IgnoreDataMember]
+        public bool IsNew
+        {
+            get
+            {
+                return this.ID <= 0;
+            }
+        }
     }
 }

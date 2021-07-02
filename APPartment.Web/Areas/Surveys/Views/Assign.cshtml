@@ -1,6 +1,10 @@
 ﻿@model APPartment.Infrastructure.UI.Common.ViewModels.Survey.SurveyPostViewModel
 
-@Html.Partial("_Loader")
+@{
+    Layout = null;
+}
+
+@await Html.PartialAsync("_Loader")
 
 <h5>Assign survey participants</h5>
 

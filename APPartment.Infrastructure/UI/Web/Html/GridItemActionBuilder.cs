@@ -1,4 +1,5 @@
 ﻿using APPartment.Infrastructure.UI.Common.Constants;
+using System.Collections.Generic;
 
 namespace APPartment.Infrastructure.UI.Web.Html
 {
@@ -43,7 +44,7 @@ namespace APPartment.Infrastructure.UI.Web.Html
             return buttonWithModal;
         }
 
-        public static string BuildCustomAction(string currentArea, string currentController, string action, long modelID, string buttonColorClass, string faIconClass, string buttonName = null, bool isModal = false)
+        public static string BuildCustomAction(string currentArea, string currentController, string action, long modelID, string buttonColorClass, string faIconClass, string buttonName = null, bool isModal = false, bool isForDropdown = false)
         {
             var button = string.Empty;
             var href = $"href='/{currentArea}/{currentController}/{action}/{modelID}'";
@@ -52,11 +53,42 @@ namespace APPartment.Infrastructure.UI.Web.Html
                 buttonName = action;
 
             if (isModal)
-                button = $@"<button {href} name='{action}' class='no-underline btn {buttonColorClass} btn-xs btn-icon' title='{buttonName}'><i class='{faIconClass}'></i></button>";
+            {
+                if (isForDropdown)
+                    button = $@"<button {href} name='{action}' class='no-underline btn btn-xs dropdown-item' title='{buttonName}'><i class='{faIconClass}'></i> &nbsp;{buttonName}</button>";
+                else
+                    button = $@"<button {href} name='{action}' class='no-underline btn {buttonColorClass} btn-xs btn-icon' title='{buttonName}'><i class='{faIconClass}'></i></button>";
+            }
             else
-                button = $@"<a {href} name='{action}' class='no-underline btn {buttonColorClass} btn-xs btn-icon' title='{buttonName}'><i class='{faIconClass}'></i></a>";
+            {
+                if (isForDropdown)
+                    button = $@"<a {href} name='{action}' class='no-underline btn {buttonColorClass} btn-xs dropdown-item' title='{buttonName}'><i class='{faIconClass}'></i> &nbsp;{buttonName}</a>";
+                else
+                    button = $@"<a {href} name='{action}' class='no-underline btn {buttonColorClass} btn-xs btn-icon' title='{buttonName}'><i class='{faIconClass}'></i></a>";
+            }
 
             return button;
+        }
+
+        public static string BuildDropdownButton(long modelID)
+        {
+            var button = $@"<div class='dropdown'><button class='btn btn-outline-info btn-xs btn-icon' type='button' id='dropdownButtonForModelID-{modelID}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fas fa-ellipsis-v'></i></button>";
+            return button;
+        }
+
+        public static string BuildDropdownButton(long modelID, string groupName, string title = null, string buttonColorClass = null)
+        {
+            if (string.IsNullOrEmpty(buttonColorClass))
+                buttonColorClass = "btn-outline-info";
+
+            var button = $@"<br/><div class='dropdown'><button class='btn {buttonColorClass} btn-xs' title='{title}' type='button' id='dropdownButtonForModelID-{modelID}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fas fa-ellipsis-v'></i> &nbsp;{groupName}</button>";
+            return button;
+        }
+
+        public static string PopulateDropdownButton(long modelID, string dropdownButton, IEnumerable<string> actions)
+        {
+            var populatedButton = dropdownButton + $@"<div class='dropdown-menu' aria-labelledby='dropdownButtonForModelID-{modelID}'>{string.Join(" ", actions)}</div></div>";
+            return populatedButton;
         }
     }
 }

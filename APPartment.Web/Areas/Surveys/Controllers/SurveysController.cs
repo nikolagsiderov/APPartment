@@ -32,24 +32,27 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         }
 
         [HttpGet]
+        public IActionResult CreateQuestion(long id) // surveyID
+        {
+            ViewData["SurveyID"] = id.ToString();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateQuestion(string surveyID, string question)
+        {
+            if (question.Contains("?") == false)
+                question += "?";
+
+            var model = new SurveyQuestionPostViewModel() { SurveyID = long.Parse(surveyID), Name = question };
+            await APPI.RequestPostEntity(model, CurrentAreaName, "Questions");
+            return Ok();
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Assign(long id)
         {
-            var model = new SurveyPostViewModel();
-
-            using (var httpClient = new HttpClient())
-            {
-                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}/{id}";
-                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
-                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
-
-                using (var response = await httpClient.GetAsync(requestUri))
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
-                        model = JsonConvert.DeserializeObject<SurveyPostViewModel>(content);
-                }
-            }
+            var model = await APPI.RequestEntity<SurveyPostViewModel>(id);
 
             var participantsSelectList = await GetAssignedUsersSelectList(model);
             ViewData[nameof(model.SurveyParticipantsIDs)] = participantsSelectList;
@@ -60,23 +63,7 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         [HttpPost]
         public async Task<IActionResult> Assign(string ID, string[] surveyParticipantsIDs)
         {
-            var model = new SurveyPostViewModel();
-
-            using (var httpClient = new HttpClient())
-            {
-                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{CurrentControllerName}/{long.Parse(ID)}";
-                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
-                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
-
-                using (var response = await httpClient.GetAsync(requestUri))
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-
-                    if (response.IsSuccessStatusCode)
-                        model = JsonConvert.DeserializeObject<SurveyPostViewModel>(content);
-                }
-            }
-
+            var model = await APPI.RequestEntity<SurveyPostViewModel>(long.Parse(ID));
             var parsedSurveyParticipantsIDs = new List<long>();
 
             foreach (var IDstring in surveyParticipantsIDs)
@@ -85,22 +72,30 @@ namespace APPartment.Web.Areas.Surveys.Controllers
             }
 
             model.SurveyParticipantsIDs = parsedSurveyParticipantsIDs;
+            await APPI.RequestPostEntity(model);
 
-            return await base.Edit(model.ID, model);
+            return Ok();
         }
 
         public override async Task SetObjectActions(SurveyPostViewModel model)
         {
-            model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Assign), model.ID, "btn-outline-warning", "fas fa-tag", null, true));
-            model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, nameof(QuestionsController).Replace("Controller", ""), nameof(Index), model.ID, "btn-outline-primary", "fas fa-question", nameof(QuestionsController).Replace("Controller", "")));
             await base.SetObjectActions(model);
+
+            model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Assign), model.ID, "btn-outline-warning", "fas fa-tag", null, true));
+            model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(CreateQuestion), model.ID, "btn-outline-warning", "fas fa-question", "Create a question", true));
         }
 
         public override async Task SetGridItemActions(SurveyDisplayViewModel model)
         {
-            model.ActionsHtml.Add(GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Assign), model.ID, "btn-outline-warning", "fas fa-tag", null, true));
-            model.ActionsHtml.Add(GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, nameof(QuestionsController).Replace("Controller", ""), nameof(Index), model.ID, "btn-outline-primary", "fas fa-question", nameof(QuestionsController).Replace("Controller", "")));
             await base.SetGridItemActions(model);
+
+            model.ActionsHtml.Add(GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Assign), model.ID, "btn-outline-warning", "fas fa-tag", null, true));
+
+            var dropdownActions = new List<string>();
+            var dropdownButton = GridItemActionBuilder.BuildDropdownButton(model.ID, "Q&A", "btn-outline-warning");
+            var createQuestion = GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(CreateQuestion), model.ID, "btn-warning", "fas fa-question", "Create a question", true, true);
+            dropdownActions.Add(createQuestion);
+            model.ActionsHtml.Add(GridItemActionBuilder.PopulateDropdownButton(model.ID, dropdownButton, dropdownActions));
         }
 
         protected override async Task PopulateViewData(SurveyPostViewModel model)
@@ -186,6 +181,10 @@ namespace APPartment.Web.Areas.Surveys.Controllers
             }
 
             return typesSelectList;
+        }
+
+        protected override void Normalize(SurveyPostViewModel model)
+        {
         }
     }
 }

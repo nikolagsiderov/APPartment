@@ -136,5 +136,9 @@ namespace APPartment.Web.Areas.Account.Controllers
 
             return RedirectToAction("Index", "Home", new { area = APPAreas.Home });
         }
+
+        protected override void Normalize(UserPostViewModel model)
+        {
+        }
     }
 }

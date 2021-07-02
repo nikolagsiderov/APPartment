@@ -23,5 +23,9 @@ namespace APPartment.Web.Areas.Neighbors.Controllers
         {
             return await base.Index();
         }
+
+        protected override void Normalize(HomePostViewModel model)
+        {
+        }
     }
 }
