@@ -9,5 +9,20 @@ namespace APPartment.Data.Server.Models.Survey
     {
         [FieldMappingForMainTable]
         public long SurveyID { get; set; }
+
+        [FieldMappingForMainTable]
+        public bool EnableOneCorrectAnswer { get; set; }
+
+        [FieldMappingForMainTable]
+        public bool EnableManyCorrectAnswers { get; set; }
+
+        [FieldMappingForMainTable]
+        public bool EnableOpenEndedAnswer { get; set; }
+
+        [FieldMappingForMainTable]
+        public bool EnableRatingAnswer { get; set; }
+
+        [FieldMappingForMainTable]
+        public bool EnableQuestionWithNoIncorrectAnswers { get; set; }
     }
 }

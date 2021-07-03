@@ -72,7 +72,7 @@ namespace APPartment.Infrastructure.UI.Web.Html
 
         public static string BuildDropdownButton(long modelID)
         {
-            var button = $@"<div class='dropdown'><button class='btn btn-outline-info btn-xs btn-icon' type='button' id='dropdownButtonForModelID-{modelID}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fas fa-ellipsis-v'></i></button>";
+            var button = $@"<div class='dropdown' style='display: inline-block;'><button class='btn btn-outline-info btn-xs btn-icon' type='button' id='dropdownButtonForModelID-{modelID}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fas fa-ellipsis-v'></i></button>";
             return button;
         }
 
@@ -81,7 +81,7 @@ namespace APPartment.Infrastructure.UI.Web.Html
             if (string.IsNullOrEmpty(buttonColorClass))
                 buttonColorClass = "btn-outline-info";
 
-            var button = $@"<br/><div class='dropdown'><button class='btn {buttonColorClass} btn-xs' title='{title}' type='button' id='dropdownButtonForModelID-{modelID}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fas fa-ellipsis-v'></i> &nbsp;{groupName}</button>";
+            var button = $@"<div class='dropdown' style='display: inline-block;'><button class='btn {buttonColorClass} btn-xs' title='{title}' type='button' id='dropdownButtonForModelID-{modelID}' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><i class='fas fa-ellipsis-v'></i> &nbsp;{groupName}</button>";
             return button;
         }
 
