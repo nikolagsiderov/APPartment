@@ -40,7 +40,7 @@
             var question = $('#surveyQuestion').val();
             var typeID = $('#questionType').find(':selected').val();
             $(this).css("pointer-events", "none");
-            $('#cancel-postAssign').css("pointer-events", "none");
+            $('#cancel-postQuestion').css("pointer-events", "none");
 
             $.ajax({
                 type: 'POST',
@@ -48,7 +48,8 @@
                 data: { surveyID: @surveyID, question: question, typeID: typeID },
                 success: function () {
                     $('#loading').fadeOut();
-                    window.location.reload();
+                    $('#cancel-postQuestion').css("pointer-events", "");
+                    $('#cancel-postQuestion').click();
                 },
                 error: function (req, status, error) {
                     alert(error);
