@@ -10,9 +10,16 @@
 
 <br />
 
-@foreach (var question in Model)
+@if (Model.Any())
 {
-    <div style="margin: 5px;">Question: <strong>@question.Name</strong> (@question.TypeDisplayName) <button type="button" onclick="removeQuestion(@question.ID.ToString())" class='no-underline btn btn-xs btn-danger'>Remove</button></div>
+    foreach (var question in Model)
+    {
+        <div style="margin: 5px;">Question: <strong>@question.Name</strong> (@question.TypeDisplayName) <button type="button" onclick="removeQuestion(@question.ID.ToString())" class='no-underline btn btn-xs btn-danger'>Remove</button></div>
+    }
+}
+else
+{
+    <div style="margin: 5px;">No questions available...</div>
 }
 
 <script>

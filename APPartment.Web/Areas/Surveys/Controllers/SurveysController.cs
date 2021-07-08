@@ -54,7 +54,23 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         [HttpGet]
         public async Task<IActionResult> Questions(long id) // surveyID
         {
-            var questions = await APPI.RequestEntities<SurveyQuestionDisplayViewModel>(CurrentAreaName, nameof(this.Questions));
+            var questions = new List<SurveyQuestionDisplayViewModel>();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{nameof(Questions)}/survey/{id}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        questions = JsonConvert.DeserializeObject<List<SurveyQuestionDisplayViewModel>>(content);
+                }
+            }
+
             return View(questions);
         }
 

@@ -46,7 +46,19 @@ namespace APPartment.ORM.Framework.Core
                             if (value == DBNull.Value)
                                 continue;
 
-                            property.SetValue(result, value, null);
+                            try
+                            {
+                                property.SetValue(result, value, null);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message.Contains("Object of type 'System.String' cannot be converted to type 'System.DateTime'"))
+                                {
+                                    DateTime dateTimeValue;
+                                    DateTime.TryParse(value.ToString(), out dateTimeValue);
+                                    property.SetValue(result, dateTimeValue, null);
+                                }
+                            }
                         }
                     }
                 }
@@ -83,7 +95,19 @@ namespace APPartment.ORM.Framework.Core
                             if (value == DBNull.Value)
                                 continue;
 
-                            property.SetValue(result, value, null);
+                            try
+                            {
+                                property.SetValue(result, value, null);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message.Contains("Object of type 'System.String' cannot be converted to type 'System.DateTime'"))
+                                {
+                                    DateTime dateTimeValue;
+                                    DateTime.TryParse(value.ToString(), out dateTimeValue);
+                                    property.SetValue(result, dateTimeValue, null);
+                                }
+                            }
                         }
                     }
                 }
@@ -132,7 +156,19 @@ namespace APPartment.ORM.Framework.Core
                             if (value == DBNull.Value)
                                 continue;
 
-                            property.SetValue(obj, value, null);
+                            try
+                            {
+                                property.SetValue(obj, value, null);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message.Contains("Object of type 'System.String' cannot be converted to type 'System.DateTime'"))
+                                {
+                                    DateTime dateTimeValue;
+                                    DateTime.TryParse(value.ToString(), out dateTimeValue);
+                                    property.SetValue(obj, dateTimeValue, null);
+                                }
+                            }
                         }
                     }
 
@@ -181,7 +217,19 @@ namespace APPartment.ORM.Framework.Core
                             if (value == DBNull.Value)
                                 continue;
 
-                            property.SetValue(obj, value, null);
+                            try
+                            {
+                                property.SetValue(obj, value, null);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message.Contains("Object of type 'System.String' cannot be converted to type 'System.DateTime'"))
+                                {
+                                    DateTime dateTimeValue;
+                                    DateTime.TryParse(value.ToString(), out dateTimeValue);
+                                    property.SetValue(obj, dateTimeValue, null);
+                                }
+                            }
                         }
                     }
 
@@ -217,7 +265,19 @@ namespace APPartment.ORM.Framework.Core
                             if (value == DBNull.Value)
                                 continue;
 
-                            property.SetValue(result, value, null);
+                            try
+                            {
+                                property.SetValue(result, value, null);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message.Contains("Object of type 'System.String' cannot be converted to type 'System.DateTime'"))
+                                {
+                                    DateTime dateTimeValue;
+                                    DateTime.TryParse(value.ToString(), out dateTimeValue);
+                                    property.SetValue(result, dateTimeValue, null);
+                                }
+                            }
                         }
                     }
                 }
@@ -253,7 +313,19 @@ namespace APPartment.ORM.Framework.Core
                             if (value == DBNull.Value)
                                 continue;
 
-                            property.SetValue(result, value, null);
+                            try
+                            {
+                                property.SetValue(result, value, null);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message.Contains("Object of type 'System.String' cannot be converted to type 'System.DateTime'"))
+                                {
+                                    DateTime dateTimeValue;
+                                    DateTime.TryParse(value.ToString(), out dateTimeValue);
+                                    property.SetValue(result, dateTimeValue, null);
+                                }
+                            }
                         }
                     }
                 }
@@ -301,7 +373,19 @@ namespace APPartment.ORM.Framework.Core
                             if (value == DBNull.Value)
                                 continue;
 
-                            property.SetValue(obj, value, null);
+                            try
+                            {
+                                property.SetValue(obj, value, null);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message.Contains("Object of type 'System.String' cannot be converted to type 'System.DateTime'"))
+                                {
+                                    DateTime dateTimeValue;
+                                    DateTime.TryParse(value.ToString(), out dateTimeValue);
+                                    property.SetValue(obj, dateTimeValue, null);
+                                }
+                            }
                         }
                     }
 
@@ -338,7 +422,19 @@ namespace APPartment.ORM.Framework.Core
                             if (value == DBNull.Value)
                                 continue;
 
-                            property.SetValue(result, value, null);
+                            try
+                            {
+                                property.SetValue(result, value, null);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message.Contains("Object of type 'System.String' cannot be converted to type 'System.DateTime'"))
+                                {
+                                    DateTime dateTimeValue;
+                                    DateTime.TryParse(value.ToString(), out dateTimeValue);
+                                    property.SetValue(result, dateTimeValue, null);
+                                }
+                            }
                         }
                     }
                 }
@@ -374,7 +470,19 @@ namespace APPartment.ORM.Framework.Core
                             if (value == DBNull.Value)
                                 continue;
 
-                            property.SetValue(result, value, null);
+                            try
+                            {
+                                property.SetValue(result, value, null);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message.Contains("Object of type 'System.String' cannot be converted to type 'System.DateTime'"))
+                                {
+                                    DateTime dateTimeValue;
+                                    DateTime.TryParse(value.ToString(), out dateTimeValue);
+                                    property.SetValue(result, dateTimeValue, null);
+                                }
+                            }
                         }
                     }
                 }
@@ -417,7 +525,19 @@ namespace APPartment.ORM.Framework.Core
                             if (value == DBNull.Value)
                                 continue;
 
-                            property.SetValue(obj, value, null);
+                            try
+                            {
+                                property.SetValue(obj, value, null);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message.Contains("Object of type 'System.String' cannot be converted to type 'System.DateTime'"))
+                                {
+                                    DateTime dateTimeValue;
+                                    DateTime.TryParse(value.ToString(), out dateTimeValue);
+                                    property.SetValue(obj, dateTimeValue, null);
+                                }
+                            }
                         }
                     }
 
@@ -463,7 +583,19 @@ namespace APPartment.ORM.Framework.Core
                             if (value == DBNull.Value)
                                 continue;
 
-                            property.SetValue(obj, value, null);
+                            try
+                            {
+                                property.SetValue(obj, value, null);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message.Contains("Object of type 'System.String' cannot be converted to type 'System.DateTime'"))
+                                {
+                                    DateTime dateTimeValue;
+                                    DateTime.TryParse(value.ToString(), out dateTimeValue);
+                                    property.SetValue(obj, dateTimeValue, null);
+                                }
+                            }
                         }
                     }
 
@@ -629,7 +761,19 @@ namespace APPartment.ORM.Framework.Core
                             if (value == DBNull.Value)
                                 continue;
 
-                            property.SetValue(businessObject, value, null);
+                            try
+                            {
+                                property.SetValue(businessObject, value, null);
+                            }
+                            catch (ArgumentException ex)
+                            {
+                                if (ex.Message.Contains("Object of type 'System.String' cannot be converted to type 'System.DateTime'"))
+                                {
+                                    DateTime dateTimeValue;
+                                    DateTime.TryParse(value.ToString(), out dateTimeValue);
+                                    property.SetValue(businessObject, dateTimeValue, null);
+                                }
+                            }
                         }
                     }
                 }

@@ -1,18 +1,18 @@
 ﻿@model List<SelectListItem>
 
-@using System.Reflection;
-@using System.ComponentModel.DataAnnotations;
+@*@using System.Reflection;
+@using System.ComponentModel.DataAnnotations;*@
 
-@{
-    var thePropertyAsMember = ViewData.ModelMetadata.ContainerType.GetMember(ViewData.ModelMetadata.PropertyName)[0];
+@*@{
+    var thePropertyAsMember = ViewData.ModelMetadata.ContainerType.GetMember(ViewData.TemplateInfo.HtmlFieldPrefix)[0];
     var requiredAttribute = thePropertyAsMember.GetCustomAttribute(typeof(RequiredAttribute)) as RequiredAttribute;
     var isRequired = requiredAttribute != null;
-}
+}*@
 
-@if (isRequired)
+@*@if (isRequired)
 {
     <span style="color: red;">*</span>
-}
+}*@
 
 <div class="form-group">
     <select multiple class="form-control" name="@ViewData.TemplateInfo.HtmlFieldPrefix">

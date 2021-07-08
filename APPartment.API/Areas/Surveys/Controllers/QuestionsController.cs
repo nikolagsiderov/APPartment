@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using APPartment.Infrastructure.Controllers.Api;
 using APPartment.Infrastructure.UI.Common.ViewModels.Survey;
@@ -16,6 +17,29 @@ namespace APPartment.API.Areas.Surveys.Controllers
         }
 
         protected override Expression<Func<SurveyQuestionDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentUserID;
+
+        [HttpGet("survey/{surveyID:long}")]
+        public virtual ActionResult GetCollection(long surveyID)
+        {
+            try
+            {
+                var models = BaseCRUDService.GetCollection<SurveyQuestionDisplayViewModel>(x => x.SurveyID == surveyID);
+
+                foreach (var model in models)
+                {
+                    NormalizeDisplayModel(model);
+                }
+
+                if (models.Any())
+                    return Ok(models);
+                else
+                    return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
+            }
+        }
 
         protected override void NormalizeDisplayModel(SurveyQuestionDisplayViewModel model)
         {

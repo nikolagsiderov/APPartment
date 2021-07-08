@@ -15,7 +15,7 @@ namespace APPartment.API.Areas.Surveys.Controllers
         {
         }
 
-        protected override Expression<Func<SurveyDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentUserID && x.IsCompleted == false;
+        protected override Expression<Func<SurveyDisplayViewModel, bool>> FilterExpression => x => x.HomeID == CurrentUserID;
 
         protected override void NormalizeDisplayModel(SurveyDisplayViewModel model)
         {

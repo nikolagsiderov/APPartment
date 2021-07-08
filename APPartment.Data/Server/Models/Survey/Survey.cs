@@ -1,5 +1,6 @@
 ﻿using APPartment.Data.Server.Models.Base;
 using APPartment.ORM.Framework.Attributes;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Data.Server.Models.Survey
@@ -8,7 +9,7 @@ namespace APPartment.Data.Server.Models.Survey
     public class Survey : BaseObject
     {
         [FieldMappingForMainTable]
-        public bool IsCompleted { get; set; } = false;
+        public DateTime ExpireDate { get; set; }
 
         [FieldMappingForMainTable]
         public long SurveyTypeID { get; set; }
