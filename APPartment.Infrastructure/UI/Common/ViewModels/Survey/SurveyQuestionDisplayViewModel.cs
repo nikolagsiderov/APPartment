@@ -7,6 +7,10 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Survey
     [IMapFrom(typeof(APPSurveyQuestion))]
     public class SurveyQuestionDisplayViewModel : GridItemViewModel
     {
+        public long TypeID { get; set; }
+
         public long SurveyID { get; set; }
+
+        public string TypeDisplayName { get; set; }
     }
 }

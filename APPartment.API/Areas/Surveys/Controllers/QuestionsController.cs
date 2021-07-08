@@ -19,6 +19,10 @@ namespace APPartment.API.Areas.Surveys.Controllers
 
         protected override void NormalizeDisplayModel(SurveyQuestionDisplayViewModel model)
         {
+            if (model.TypeID > 0)
+                model.TypeDisplayName = BaseCRUDService.GetLookupEntity<SurveyQuestionTypeLookupViewModel>(model.TypeID).Name;
+            else
+                model.TypeDisplayName = "Bizarre question without possible answers";
         }
 
         protected override void NormalizePostModel(SurveyQuestionPostViewModel model)

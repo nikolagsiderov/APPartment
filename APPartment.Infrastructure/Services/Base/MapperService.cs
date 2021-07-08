@@ -1,5 +1,6 @@
 ﻿using APPartment.Infrastructure.Attributes;
 using APPartment.Infrastructure.Tools;
+using APPartment.Infrastructure.UI.Common.ViewModels.Base;
 using APPartment.ORM.Framework.Declarations;
 using AutoMapper;
 using System;
@@ -37,6 +38,32 @@ namespace APPartment.Infrastructure.Services.Base
             return mapper.Map<List<U>, List<T>>(serverModels);
         }
 
+        public T GetLookupViewModel<T, U>(U serverModel)
+            where T : LookupPostViewModel
+            where U : ILookupObject
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<U, T>();
+            });
+
+            var mapper = config.CreateMapper();
+            return mapper.Map<U, T>(serverModel);
+        }
+
+        public List<T> GetLookupViewModelCollection<T, U>(List<U> serverModels)
+            where T : LookupPostViewModel
+            where U : ILookupObject
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<U, T>();
+            });
+
+            var mapper = config.CreateMapper();
+            return mapper.Map<List<U>, List<T>>(serverModels);
+        }
+
         public U GetServerModel<T, U>(T viewModel)
             where T : IBaseObject
             where U : IBaseObject
@@ -53,6 +80,32 @@ namespace APPartment.Infrastructure.Services.Base
         public List<U> GetServerModelCollection<T, U>(List<T> viewModels)
             where T : IBaseObject
             where U : IBaseObject
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<T, U>();
+            });
+
+            var mapper = config.CreateMapper();
+            return mapper.Map<List<T>, List<U>>(viewModels);
+        }
+
+        public U GetLookupServerModel<T, U>(T viewModel)
+            where T : LookupPostViewModel
+            where U : ILookupObject
+        {
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<T, U>();
+            });
+
+            var mapper = config.CreateMapper();
+            return mapper.Map<T, U>(viewModel);
+        }
+
+        public List<U> GetLookupServerModelCollection<T, U>(List<T> viewModels)
+            where T : LookupPostViewModel
+            where U : ILookupObject
         {
             var config = new MapperConfiguration(cfg =>
             {
@@ -108,6 +161,14 @@ namespace APPartment.Infrastructure.Services.Base
         protected Expression<Func<U, bool>> ConvertExpression<T, U>(Expression<Func<T, bool>> source)
             where T : IBaseObject
             where U : IBaseObject
+        {
+            var result = source.ReplaceParameter<T, U>();
+            return result;
+        }
+
+        protected Expression<Func<U, bool>> ConvertLookupExpression<T, U>(Expression<Func<T, bool>> source)
+            where T : LookupPostViewModel
+            where U : ILookupObject
         {
             var result = source.ReplaceParameter<T, U>();
             return result;

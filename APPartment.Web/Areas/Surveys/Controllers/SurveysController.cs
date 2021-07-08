@@ -13,6 +13,7 @@ using APPartment.Common;
 using Newtonsoft.Json;
 using APPartment.Infrastructure.UI.Web.Html;
 using APPartment.Infrastructure.Controllers.Web;
+using APPartment.Infrastructure.Tools;
 
 namespace APPartment.Web.Areas.Surveys.Controllers
 {
@@ -32,20 +33,35 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateQuestion(long id) // surveyID
+        public async Task<IActionResult> CreateQuestion(long id) // surveyID
         {
-            ViewData["SurveyID"] = id.ToString();
+            ViewBag.SurveyID = id.ToString();
+
+            var questionTypes = await APPI.RequestLookupEntities<SurveyQuestionTypeLookupViewModel>(CurrentAreaName, "QuestionTypes");
+            var questionTypesSelectList = questionTypes.ToLookupSelectList();
+            ViewData["TypeIDsSelectList"] = questionTypesSelectList;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateQuestion(string surveyID, string question)
+        public async Task<IActionResult> CreateQuestion(string surveyID, string question, string typeID)
         {
-            if (question.Contains("?") == false)
-                question += "?";
+            var model = new SurveyQuestionPostViewModel() { SurveyID = long.Parse(surveyID), Name = question, TypeID = long.Parse(typeID) };
+            await APPI.RequestPostEntity(model, CurrentAreaName, nameof(this.Questions));
+            return Ok();
+        }
 
-            var model = new SurveyQuestionPostViewModel() { SurveyID = long.Parse(surveyID), Name = question };
-            await APPI.RequestPostEntity(model, CurrentAreaName, "Questions");
+        [HttpGet]
+        public async Task<IActionResult> Questions(long id) // surveyID
+        {
+            var questions = await APPI.RequestEntities<SurveyQuestionDisplayViewModel>(CurrentAreaName, nameof(this.Questions));
+            return View(questions);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveQuestion(string ID)
+        {
+            await APPI.RequestDeleteEntity(long.Parse(ID), CurrentAreaName, nameof(this.Questions));
             return Ok();
         }
 
@@ -83,6 +99,7 @@ namespace APPartment.Web.Areas.Surveys.Controllers
 
             model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Assign), model.ID, "btn-outline-warning", "fas fa-tag", null, true));
             model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(CreateQuestion), model.ID, "btn-outline-warning", "fas fa-question", "Create a question", true));
+            model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Questions), model.ID, "btn-outline-warning", "fas fa-question", "View questions", true));
         }
 
         public override async Task SetGridItemActions(SurveyDisplayViewModel model)
@@ -94,7 +111,9 @@ namespace APPartment.Web.Areas.Surveys.Controllers
             var dropdownActions = new List<string>();
             var dropdownButton = GridItemActionBuilder.BuildDropdownButton(model.ID, "Q&A", "btn-outline-warning");
             var createQuestion = GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(CreateQuestion), model.ID, "btn-warning", "fas fa-question", "Create a question", true, true);
+            var questions = GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Questions), model.ID, "btn-warning", "fas fa-question", "View questions", true, true);
             dropdownActions.Add(createQuestion);
+            dropdownActions.Add(questions);
             model.ActionsHtml.Add(GridItemActionBuilder.PopulateDropdownButton(model.ID, dropdownButton, dropdownActions));
         }
 

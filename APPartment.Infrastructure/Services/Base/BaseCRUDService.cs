@@ -56,7 +56,7 @@ namespace APPartment.Infrastructure.Services.Base
             var getObjectFilteredFunc = typeof(BaseFacade)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.Name.Equals(nameof(BaseFacade.GetObject)))
-                .Last()
+                .LastOrDefault()
                 .MakeGenericMethod(serverModelType);
 
             var convertFilterFunc = typeof(MapperService)
@@ -114,7 +114,7 @@ namespace APPartment.Infrastructure.Services.Base
             var getObjectsFilteredFunc = typeof(BaseFacade)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.Name.Equals(nameof(BaseFacade.GetObjects)))
-                .Last()
+                .LastOrDefault()
                 .MakeGenericMethod(serverModelType);
 
             var convertFilterFunc = typeof(MapperService)
@@ -169,7 +169,7 @@ namespace APPartment.Infrastructure.Services.Base
             var getObjectFilteredFunc = typeof(BaseFacade)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.Name.Equals(nameof(BaseFacade.GetBusinessObject)))
-                .Last();
+                .LastOrDefault();
 
             var convertFilterFunc = typeof(MapperService)
                 .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
@@ -200,7 +200,7 @@ namespace APPartment.Infrastructure.Services.Base
             var getObjectsFilteredFunc = typeof(BaseFacade)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.Name.Equals(nameof(BaseFacade.GetBusinessObjects)))
-                .Last();
+                .LastOrDefault();
 
             var convertFilterFunc = typeof(MapperService)
                 .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
@@ -220,6 +220,122 @@ namespace APPartment.Infrastructure.Services.Base
                 .MakeGenericMethod(typeof(BusinessObjectDisplayViewModel), serverModelType);
 
             var result = toViewModelFunc.Invoke(this, new object[] { serverModels }) as List<BusinessObjectDisplayViewModel>;
+
+            return result;
+        }
+
+        public T GetLookupEntity<T>(long ID)
+            where T : class, ILookupObject, new()
+        {
+            var serverModelType = GetLookupServerModelType<T>();
+
+            var getLookupObjectByIDFunc = typeof(BaseFacade)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(BaseFacade.GetLookupObject)))
+                .FirstOrDefault()
+                .MakeGenericMethod(GetLookupServerModelType<T>());
+
+            var serverModel = getLookupObjectByIDFunc
+                .Invoke(BaseFacade, new object[] { ID });
+
+            var toViewModelFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(MapperService.GetLookupViewModel)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+            var result = (T)toViewModelFunc.Invoke(this, new object[] { serverModel });
+
+            return result;
+        }
+
+        public T GetLookupEntity<T>(Expression<Func<T, bool>> filter)
+            where T : class, ILookupObject, new()
+        {
+            var serverModelType = GetLookupServerModelType<T>();
+
+            var getLookupObjectFilteredFunc = typeof(BaseFacade)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(BaseFacade.GetLookupObject)))
+                .LastOrDefault()
+                .MakeGenericMethod(GetLookupServerModelType<T>());
+
+            var convertFilterFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(ConvertExpression)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+            var convertedFilter = convertFilterFunc.Invoke(this, new object[] { filter });
+
+            var serverModel = getLookupObjectFilteredFunc
+                .Invoke(BaseFacade, new object[] { convertedFilter });
+
+            var toViewModelFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(MapperService.GetLookupViewModel)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+            var result = (T)toViewModelFunc.Invoke(this, new object[] { serverModel });
+
+            return result;
+        }
+
+        public List<T> GetLookupCollection<T>()
+            where T : class, ILookupObject, new()
+        {
+            var serverModelType = GetLookupServerModelType<T>();
+
+            var getLookupObjectsFunc = typeof(BaseFacade)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(BaseFacade.GetLookupObjects)))
+                .FirstOrDefault()
+                .MakeGenericMethod(GetLookupServerModelType<T>());
+
+            var serverModels = getLookupObjectsFunc
+                .Invoke(BaseFacade, null);
+
+            var toViewModelFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(MapperService.GetLookupViewModelCollection)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+            var result = toViewModelFunc.Invoke(this, new object[] { serverModels }) as List<T>;
+
+            return result;
+        }
+
+        public List<T> GetLookupCollection<T>(Expression<Func<T, bool>> filter)
+            where T : class, ILookupObject, new()
+        {
+            var serverModelType = GetLookupServerModelType<T>();
+
+            var getLookupObjectsFilteredFunc = typeof(BaseFacade)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(BaseFacade.GetLookupObjects)))
+                .LastOrDefault()
+                .MakeGenericMethod(GetLookupServerModelType<T>());
+
+            var convertFilterFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(ConvertLookupExpression)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+            var convertedFilter = convertFilterFunc.Invoke(this, new object[] { filter });
+
+            var serverModels = getLookupObjectsFilteredFunc
+                .Invoke(BaseFacade, new object[] { convertedFilter });
+
+            var toViewModelFunc = typeof(MapperService)
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(x => x.Name.Equals(nameof(MapperService.GetLookupViewModelCollection)))
+                .FirstOrDefault()
+                .MakeGenericMethod(typeof(T), serverModelType);
+
+            var result = toViewModelFunc.Invoke(this, new object[] { serverModels }) as List<T>;
 
             return result;
         }
@@ -312,70 +428,6 @@ namespace APPartment.Infrastructure.Services.Base
                 .Invoke(BaseFacade, new object[] { serverModel });
         }
 
-        // TODO: Complete function
-        public T GetLookupEntity<T>(long ID)
-            where T : class, ILookupObject, new()
-        {
-            // TODO: Implement mapping from server to view model
-
-            var getLookupObjectByIDFunc = typeof(BaseFacade)
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(BaseFacade.GetLookupObject)))
-                .FirstOrDefault()
-                .MakeGenericMethod(GetLookupServerModelType<T>());
-
-            return (T)getLookupObjectByIDFunc
-                .Invoke(BaseFacade, new object[] { ID });
-        }
-
-        // TODO: Complete function
-        public T GetLookupEntity<T>(Expression<Func<T, bool>> filter)
-            where T : class, ILookupObject, new()
-        {
-            // TODO: Implement mapping from server to view model
-
-            var getLookupObjectFilteredFunc = typeof(BaseFacade)
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(BaseFacade.GetLookupObject)))
-                .Last()
-                .MakeGenericMethod(GetLookupServerModelType<T>());
-
-            return (T)getLookupObjectFilteredFunc
-                .Invoke(BaseFacade, new object[] { filter });
-        }
-
-        // TODO: Complete function
-        public List<T> GetLookupCollection<T>()
-            where T : class, ILookupObject, new()
-        {
-            // TODO: Implement mapping from server to view model
-
-            var getLookupObjectsFunc = typeof(BaseFacade)
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(BaseFacade.GetLookupObjects)))
-                .FirstOrDefault()
-                .MakeGenericMethod(GetLookupServerModelType<T>());
-
-            return (List<T>)getLookupObjectsFunc
-                .Invoke(BaseFacade, new object[] { });
-        }
-
-        // TODO: Complete function
-        public List<T> GetLookupCollection<T>(Expression<Func<T, bool>> filter)
-            where T : class, ILookupObject, new()
-        {
-            // TODO: Implement mapping from server to view model
-
-            var getLookupObjectsFilteredFunc = typeof(BaseFacade)
-                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Where(x => x.Name.Equals(nameof(BaseFacade.GetLookupObjects)))
-                .FirstOrDefault()
-                .MakeGenericMethod(GetLookupServerModelType<T>());
-
-            return (List<T>)getLookupObjectsFilteredFunc
-                .Invoke(BaseFacade, new object[] { filter });
-        }
-
         public bool Any<T>()
             where T : class, IBaseObject, new()
         {
@@ -397,7 +449,7 @@ namespace APPartment.Infrastructure.Services.Base
             var anyFilteredFunc = typeof(BaseFacade)
                 .GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
                 .Where(x => x.Name.Equals(nameof(this.Any)))
-                .Last()
+                .LastOrDefault()
                 .MakeGenericMethod(serverModelType);
 
             var convertFilterFunc = typeof(MapperService)
@@ -433,7 +485,7 @@ namespace APPartment.Infrastructure.Services.Base
             var countFilteredFunc = typeof(BaseFacade)
                 .GetMethods(BindingFlags.Public | BindingFlags.Instance)
                 .Where(x => x.Name.Equals(nameof(this.Count)))
-                .Last()
+                .LastOrDefault()
                 .MakeGenericMethod(serverModelType);
 
             var convertFilterFunc = typeof(MapperService)

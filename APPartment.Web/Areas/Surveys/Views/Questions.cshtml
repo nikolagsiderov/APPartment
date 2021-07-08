@@ -1,0 +1,33 @@
+﻿@{
+    Layout = null;
+}
+
+@model IEnumerable<SurveyQuestionDisplayViewModel>
+
+@await Html.PartialAsync("_Loader")
+
+<h5 style="margin: 5px;">Current survey questions</h5>
+
+<br />
+
+@foreach (var question in Model)
+{
+    <div style="margin: 5px;">Question: <strong>@question.Name</strong> (@question.TypeDisplayName) <button type="button" onclick="removeQuestion(@question.ID.ToString())" class='no-underline btn btn-xs btn-danger'>Remove</button></div>
+}
+
+<script>
+    function removeQuestion(questionID) {
+        $.ajax({
+            type: 'POST',
+            url: baseApplicationPath + `Surveys/Surveys/RemoveQuestion`,
+            data: { ID: questionID },
+            success: function () {
+                $('#loading').fadeOut();
+                window.location.reload();
+            },
+            error: function (req, status, error) {
+                alert(error);
+            }
+        });
+    }
+</script>

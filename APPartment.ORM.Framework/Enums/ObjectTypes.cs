@@ -21,6 +21,7 @@
         ObjectLink = 19,
         SurveyParticipant = 20,
         SurveyType = 21,
-        SurveyQuestion = 22
+        SurveyQuestion = 22,
+        SurveyQuestionType = 23
     }
 }

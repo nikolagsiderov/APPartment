@@ -3,17 +3,29 @@
 }
 
 @{
-    var surveyID = ViewData["SurveyID"].ToString();
+    var surveyID = ViewBag.SurveyID.ToString();
 }
 
 @await Html.PartialAsync("_Loader")
 
 <h5>Add question to survey</h5>
 
+<br />
+
 <div class="form-group">
-    <input id="surveyQuestion" class="form-control form-control-sm" placeholder="Write down question..." />
+    <textarea id="surveyQuestion" class="form-control form-control-sm" rows="5" placeholder="Write down question..."></textarea>
 </div>
 
+<div class="editor-field">
+    <div class="form-group">
+        <select class="form-control" id="questionType">
+            @foreach (var option in ViewData["TypeIDsSelectList"] as List<SelectListItem>)
+            {
+                <option selected="@option.Selected" value="@option.Value">@option.Text</option>
+            }
+        </select>
+    </div>
+</div>
 <br />
 
 <div>
@@ -26,13 +38,14 @@
         $('#postQuestion').on("click", function () {
             $('#loading').fadeIn();
             var question = $('#surveyQuestion').val();
+            var typeID = $('#questionType').find(':selected').val();
             $(this).css("pointer-events", "none");
             $('#cancel-postAssign').css("pointer-events", "none");
 
             $.ajax({
                 type: 'POST',
                 url: baseApplicationPath + `Surveys/Surveys/CreateQuestion`,
-                data: { surveyID: @surveyID, question: question },
+                data: { surveyID: @surveyID, question: question, typeID: typeID },
                 success: function () {
                     $('#loading').fadeOut();
                     window.location.reload();
