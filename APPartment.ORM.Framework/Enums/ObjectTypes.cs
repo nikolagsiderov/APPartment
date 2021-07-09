@@ -22,6 +22,9 @@
         SurveyParticipant = 20,
         SurveyType = 21,
         SurveyQuestion = 22,
-        SurveyQuestionType = 23
+        SurveyQuestionType = 23,
+        SurveyAnswer = 24,
+        SurveyParticipantAnswer = 25,
+        SurveyParticipantStatus = 26
     }
 }

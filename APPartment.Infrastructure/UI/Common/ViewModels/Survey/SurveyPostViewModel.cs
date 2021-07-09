@@ -24,5 +24,7 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Survey
         [APPUIHint(Templates.Dropdown, Row = 3, Col = 4, Order = 2, Section = "General Information", SelectList = nameof(SurveyTypeID))]
         [Display(Name = "Survey type")]
         public long SurveyTypeID { get; set; }
+
+        public bool Active { get; set; }
     }
 }

@@ -26,6 +26,7 @@ namespace APPartment.Infrastructure.Tools
                 {
                     return Expression.PropertyOrField(_parameter, node.Member.Name);
                 }
+
                 return base.VisitMember(node);
             }
         }

@@ -229,11 +229,9 @@ namespace APPartment.Infrastructure.Services.Base
             return responseIsSuccess;
         }
 
-        public async Task<bool> RequestPostEntity<T>(T model, string areaName, string controllerName)
+        public async Task<T> RequestPostEntity<T>(T model, string areaName, string controllerName)
             where T : IBaseObject, new()
         {
-            var responseIsSuccess = false;
-
             using (var httpClient = new HttpClient())
             {
                 var requestUri = $"{Configuration.DefaultAPI}/{areaName}/{controllerName}";
@@ -245,11 +243,11 @@ namespace APPartment.Infrastructure.Services.Base
                     var content = await response.Content.ReadAsStringAsync();
 
                     if (response.IsSuccessStatusCode)
-                        responseIsSuccess = true;
+                        return JsonConvert.DeserializeObject<T>(content);
                 }
             }
 
-            return responseIsSuccess;
+            return new T();
         }
 
         public async Task<bool> RequestDeleteEntity(long ID)

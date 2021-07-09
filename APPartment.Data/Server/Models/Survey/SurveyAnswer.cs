@@ -1,20 +1,22 @@
 ﻿using APPartment.Data.Server.Models.Base;
 using APPartment.ORM.Framework.Attributes;
-using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APPartment.Data.Server.Models.Survey
 {
-    [Table("Survey", Schema = "dbo")]
-    public class Survey : BaseObject
+    [Table("SurveyAnswer", Schema = "dbo")]
+    public class SurveyAnswer : BaseObject
     {
         [FieldMappingForMainTable]
-        public DateTime ExpireDate { get; set; }
+        public string Answer { get; set; }
 
         [FieldMappingForMainTable]
-        public long SurveyTypeID { get; set; }
+        public bool IsCorrect { get; set; }
 
         [FieldMappingForMainTable]
-        public bool Active { get; set; }
+        public int? ChoiceCap { get; set; }
+
+        [FieldMappingForMainTable]
+        public long QuestionID { get; set; }
     }
 }

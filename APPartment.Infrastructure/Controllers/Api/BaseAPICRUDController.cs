@@ -51,8 +51,8 @@ namespace APPartment.Infrastructure.Controllers.Api
                     NormalizeDisplayModel(model);
                 }
 
-                if (models.Any())
-                    return Ok(models);
+                if (models.Where(x => x.HideItem == false).Any())
+                    return Ok(models.Where(x => x.HideItem == false));
                 else
                     return NotFound();
             }
@@ -100,8 +100,17 @@ namespace APPartment.Infrastructure.Controllers.Api
         {
             try
             {
-                var count = BaseCRUDService.Count<T>(FilterExpression);
-                return Ok(count);
+                var models = BaseCRUDService.GetCollection(FilterExpression);
+
+                foreach (var model in models)
+                {
+                    NormalizeDisplayModel(model);
+                }
+
+                if (models.Where(x => x.HideItem == false).Any())
+                    return Ok(models.Where(x => x.HideItem == false).Count());
+                else
+                    return Ok(0);
             }
             catch (Exception ex)
             {

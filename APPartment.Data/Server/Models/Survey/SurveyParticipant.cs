@@ -12,5 +12,8 @@ namespace APPartment.Data.Server.Models.Survey
 
         [FieldMappingForMainTable]
         public long UserID { get; set; }
+
+        [FieldMappingForMainTable]
+        public long StatusID { get; set; }
     }
 }

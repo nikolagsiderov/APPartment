@@ -26,6 +26,11 @@
         </select>
     </div>
 </div>
+
+<div id="answers">
+    <button type="button" class="btn btn-primary btn-xs" id="add-answer-btn">Add answer</button>
+    <br />
+</div>
 <br />
 
 <div>
@@ -35,6 +40,123 @@
 
 <script>
     $(document).ready(function () {
+        var answersCount = 1;
+
+        $('#add-answer-btn').on('click', function () {
+            // Standard question with one correct answer is 1
+            // Standard question with many correct answers is 2
+            // Standard question with no incorrect answer is 3
+            // Rating question is 4
+            // Open-ended question is 5
+            var selectedQuestionType = $('#questionType').find(':selected').val();
+
+            if (selectedQuestionType == 1) {
+                var inputElement = $('<input/>', {
+                    type: 'text',
+                    id: `standart-question-answer-${answersCount}`,
+                    class: 'form-control form-control-sm col-md-6',
+                    placeholder: 'Write down answer'
+                });
+
+                var formCheckDivElement = $('<div/>', {
+                    class: 'form-check'
+                });
+
+                var isCorrectBooleanElement = $('<input/>', {
+                    type: 'radio',
+                    id: `is-correct-standart-question-answer-${answersCount}`,
+                    class: 'form-check-input'
+                });
+
+                var isCorrectBooleanLabelElement = $('<label/>', {
+                    for: `is-correct-standart-question-answer-${answersCount}`,
+                    class: 'form-check-label'
+                });
+
+                isCorrectBooleanLabelElement.html('Correct');
+
+                var removeAnswerButtonElement = $('<button/>', {
+                    type: 'button',
+                    id: `remove-standart-question-answer-${answersCount}`,
+                    class: 'btn btn-danger btn-xs'
+                });
+
+                removeAnswerButtonElement.html('Remove answer').click(function () {
+                    $(inputElement).remove();
+                    $(formCheckDivElement).remove();
+                    $(isCorrectBooleanElement).remove();
+                    $(isCorrectBooleanLabelElement).remove();
+                    $(this).remove();
+                });
+
+                formCheckDivElement.append(isCorrectBooleanElement).append(isCorrectBooleanLabelElement).append('<span>&nbsp;</span>').append(removeAnswerButtonElement);
+
+                $('#answers').append('<br/>').append(inputElement).append(formCheckDivElement);
+            } else if (selectedQuestionType == 2) {
+                var inputElement = $('<input/>', {
+                    type: 'text',
+                    id: `standart-question-answer-${answersCount}`,
+                    class: 'form-control form-control-sm col-md-6',
+                    placeholder: 'Write down answer'
+                });
+
+                var formCheckDivElement = $('<div/>', {
+                    class: 'form-check'
+                });
+
+                var isCorrectBooleanElement = $('<input/>', {
+                    type: 'checkbox',
+                    id: `is-correct-standart-question-answer-${answersCount}`,
+                    class: 'form-check-input'
+                });
+
+                var isCorrectBooleanLabelElement = $('<label/>', {
+                    for: `is-correct-standart-question-answer-${answersCount}`,
+                    class: 'form-check-label'
+                });
+
+                isCorrectBooleanLabelElement.html('Correct');
+
+                var removeAnswerButtonElement = $('<button/>', {
+                    type: 'button',
+                    id: `remove-standart-question-answer-${answersCount}`,
+                    class: 'btn btn-danger btn-xs'
+                });
+
+                removeAnswerButtonElement.html('Remove answer').click(function () {
+                    $(inputElement).remove();
+                    $(formCheckDivElement).remove();
+                    $(isCorrectBooleanElement).remove();
+                    $(isCorrectBooleanLabelElement).remove();
+                    $(this).remove();
+                });
+
+                formCheckDivElement.append(isCorrectBooleanElement).append(isCorrectBooleanLabelElement).append('<span>&nbsp;</span>').append(removeAnswerButtonElement);
+
+                $('#answers').append('<br/>').append(inputElement).append(formCheckDivElement);
+            } else if (selectedQuestionType == 3) {
+                var inputElement = $('<input/>', {
+                    type: 'text',
+                    id: `standart-question-answer-${answersCount}`,
+                    class: 'form-control form-control-sm col-md-6',
+                    placeholder: 'Write down answer'
+                });
+
+                var removeAnswerButtonElement = $('<button/>', {
+                    type: 'button',
+                    id: `remove-standart-question-answer-${answersCount}`,
+                    class: 'btn btn-danger btn-xs'
+                });
+
+                removeAnswerButtonElement.html('Remove answer').click(function () {
+                    $(inputElement).remove();
+                    $(this).remove();
+                });
+
+                $('#answers').append('<br/>').append(inputElement).append('<span>&nbsp;</span>').append(removeAnswerButtonElement);
+            }
+        });
+
         $('#postQuestion').on("click", function () {
             $('#loading').fadeIn();
             var question = $('#surveyQuestion').val();
@@ -46,7 +168,41 @@
                 type: 'POST',
                 url: baseApplicationPath + `Surveys/Surveys/CreateQuestion`,
                 data: { surveyID: @surveyID, question: question, typeID: typeID },
-                success: function () {
+                success: function (data) {
+                    if (typeID == 1 || typeID == 2 || typeID == 3) {
+                        var answers = $('[id^="standart-question-answer-"]');
+
+                        for (var i = 0; i < answers.length; i++) {
+                            var currentAnswer = answers[i];
+
+                            if (typeID != 3) {
+                                var currentAnswerIsCorrect = $(`#is-correct-${currentAnswer.getAttribute('id')}`).is(':checked');
+
+                                $.ajax({
+                                    type: 'POST',
+                                    url: baseApplicationPath + `Surveys/Surveys/CreateStandardAnswer`,
+                                    data: { questionID: data, isCorrect: currentAnswerIsCorrect, answer: currentAnswer.value },
+                                    success: function () {
+                                    },
+                                    error: function (req, status, error) {
+                                        alert(error);
+                                    }
+                                });
+                            } else {
+                                $.ajax({
+                                    type: 'POST',
+                                    url: baseApplicationPath + `Surveys/Surveys/CreateAnswer`,
+                                    data: { questionID: data, answer: currentAnswer.value },
+                                    success: function () {
+                                    },
+                                    error: function (req, status, error) {
+                                        alert(error);
+                                    }
+                                });
+                            }
+                        }
+                    }
+
                     $('#loading').fadeOut();
                     $('#cancel-postQuestion').css("pointer-events", "");
                     $('#cancel-postQuestion').click();

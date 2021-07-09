@@ -10,5 +10,7 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Survey
         public long SurveyID { get; set; }
 
         public long UserID { get; set; }
+
+        public long StatusID { get; set; }
     }
 }

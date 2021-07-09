@@ -33,11 +33,53 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> Activate(long id)
+        {
+            var survey = await APPI.RequestEntity<SurveyPostViewModel>(id);
+            survey.Active = true;
+
+            await APPI.RequestPostEntity(survey);
+
+            return RedirectToAction(nameof(base.Index), CurrentControllerName);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Inactivate(long id)
+        {
+            var survey = await APPI.RequestEntity<SurveyPostViewModel>(id);
+            survey.Active = false;
+
+            await APPI.RequestPostEntity(survey);
+
+            return RedirectToAction(nameof(base.Index), CurrentControllerName);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateStandardAnswer(string questionID, bool isCorrect, string answer)
+        {
+            var model = new SurveyAnswerPostViewModel() { QuestionID = long.Parse(questionID), Answer = answer, IsCorrect = isCorrect };
+            await APPI.RequestPostEntity(model, CurrentAreaName, "Answers");
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAnswer(string questionID, string answer)
+        {
+            var model = new SurveyAnswerPostViewModel() { QuestionID = long.Parse(questionID), Answer = answer, IsCorrect = true };
+            await APPI.RequestPostEntity(model, CurrentAreaName, "Answers");
+            return Ok();
+        }
+
+        [HttpGet]
         public async Task<IActionResult> CreateQuestion(long id) // surveyID
         {
             ViewBag.SurveyID = id.ToString();
 
             var questionTypes = await APPI.RequestLookupEntities<SurveyQuestionTypeLookupViewModel>(CurrentAreaName, "QuestionTypes");
+
+            // This is temporary, until we get stardard question with ONE correct answer working properly
+            questionTypes.RemoveAt(0);
+
             var questionTypesSelectList = questionTypes.ToLookupSelectList();
             ViewData["TypeIDsSelectList"] = questionTypesSelectList;
             return View();
@@ -47,8 +89,9 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         public async Task<IActionResult> CreateQuestion(string surveyID, string question, string typeID)
         {
             var model = new SurveyQuestionPostViewModel() { SurveyID = long.Parse(surveyID), Name = question, TypeID = long.Parse(typeID) };
-            await APPI.RequestPostEntity(model, CurrentAreaName, nameof(this.Questions));
-            return Ok();
+            var savedQuestion = await APPI.RequestPostEntity(model, CurrentAreaName, nameof(this.Questions));
+
+            return Ok(savedQuestion.ID);
         }
 
         [HttpGet]
@@ -113,6 +156,11 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         {
             await base.SetObjectActions(model);
 
+            if (model.Active == false)
+                model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Activate), model.ID, "btn-outline-warning", "fas fa-level-up-alt"));
+            else
+                model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Inactivate), model.ID, "btn-outline-warning", "fas fa-level-down-alt"));
+
             model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Assign), model.ID, "btn-outline-warning", "fas fa-tag", null, true));
             model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(CreateQuestion), model.ID, "btn-outline-warning", "fas fa-question", "Create a question", true));
             model.ActionsHtml.Add(ObjectActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Questions), model.ID, "btn-outline-warning", "fas fa-question", "View questions", true));
@@ -122,10 +170,15 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         {
             await base.SetGridItemActions(model);
 
+            if (model.Active == false)
+                model.ActionsHtml.Add(GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Activate), model.ID, "btn-outline-warning", "fas fa-level-up-alt"));
+            else
+                model.ActionsHtml.Add(GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Inactivate), model.ID, "btn-outline-warning", "fas fa-level-down-alt"));
+
             model.ActionsHtml.Add(GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Assign), model.ID, "btn-outline-warning", "fas fa-tag", null, true));
 
             var dropdownActions = new List<string>();
-            var dropdownButton = GridItemActionBuilder.BuildDropdownButton(model.ID, "Q&A", "btn-outline-warning");
+            var dropdownButton = GridItemActionBuilder.BuildDropdownButton(model.ID, "Q&A", "Questions & answers", "btn-outline-warning");
             var createQuestion = GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(CreateQuestion), model.ID, "btn-warning", "fas fa-question", "Create a question", true, true);
             var questions = GridItemActionBuilder.BuildCustomAction(APPAreas.Surveys, CurrentControllerName, nameof(Questions), model.ID, "btn-warning", "fas fa-question", "View questions", true, true);
             dropdownActions.Add(createQuestion);

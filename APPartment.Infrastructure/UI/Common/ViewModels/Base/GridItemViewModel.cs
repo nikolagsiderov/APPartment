@@ -39,6 +39,8 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Base
 
         public List<string> ActionsHtml { get; set; } = new List<string>();
 
+        public bool HideItem { get; set; } = false;
+
         [JsonIgnore]
         [IgnoreDataMember]
         public IEnumerable<PropertyUIInfo> Properties

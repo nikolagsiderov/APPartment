@@ -12,5 +12,8 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Survey
         [Display(Name = "Expire date")]
         [GridFieldDisplay]
         public DateTime ExpireDate { get; set; }
+
+        [GridFieldDisplay]
+        public bool Active { get; set; }
     }
 }
