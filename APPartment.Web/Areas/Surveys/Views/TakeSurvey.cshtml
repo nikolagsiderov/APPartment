@@ -1,0 +1,33 @@
+﻿@model TakeSurveyPostViewModel
+
+@{ 
+    var questions = Model.QuestionsAndAnswers.Select(x => x.Key);
+    var answers = Model.QuestionsAndAnswers.Select(x => x.Value);
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header">
+                @Model.SurveyDisplayName
+                <div style="margin-left: auto">
+                    <button id="btn-submit-survey-@Model.SurveyID" type="button" class="btn btn-primary">Submit</button>
+                    <button id="btn-finish-later-survey-@Model.SurveyID" type="button" class="btn btn-primary">Finish later</button>
+                </div>
+            </div>
+            <div class="card-body">
+                @foreach (var question in questions)
+                {
+                    <strong>@question.Name</strong>
+
+                    foreach (var answer in answers.Where(x => x.QuestionID == question.ID))
+                    {
+                        <br />
+                        <span>@answer.Answer</span>
+                    }
+                    <hr />
+                }
+            </div>
+        </div>
+    </div>
+</div>

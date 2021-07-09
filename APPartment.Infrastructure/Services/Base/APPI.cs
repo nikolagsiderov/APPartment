@@ -68,6 +68,29 @@ namespace APPartment.Infrastructure.Services.Base
             return model;
         }
 
+        public async Task<T> RequestEntity<T>(long ID, string areaName, string controllerName, string endpoint)
+            where T : class, new()
+        {
+            var model = new T();
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/{areaName}/{controllerName}/{endpoint}/{ID}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", currentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", currentHomeID.ToString());
+
+                using (var response = await httpClient.GetAsync(requestUri))
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        model = JsonConvert.DeserializeObject<T>(content);
+                }
+            }
+
+            return model;
+        }
+
         public async Task<List<T>> RequestEntities<T>()
             where T : IBaseObject, new()
         {

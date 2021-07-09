@@ -77,6 +77,7 @@ namespace APPartment.Web.Areas.Surveys.Controllers
 
             var questionTypes = await APPI.RequestLookupEntities<SurveyQuestionTypeLookupViewModel>(CurrentAreaName, "QuestionTypes");
 
+            // TODO: Ensure only one answer can be marked as correct on question type = Standard question with ONE correct answer
             // This is temporary, until we get stardard question with ONE correct answer working properly
             questionTypes.RemoveAt(0);
 
