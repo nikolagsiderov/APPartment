@@ -4,14 +4,14 @@
     var canManage = false;
     var isReadonly = false;
 
-    if (ViewData["ReadOnly"] != null)
+    if (ViewBag.ReadOnly != null)
     {
-        isReadonly = bool.Parse(ViewData["ReadOnly"].ToString());
+        isReadonly = bool.Parse(ViewBag.ReadOnly.ToString());
     }
 
-    if (ViewData["CanManage"] != null)
+    if (ViewBag.Manage != null)
     {
-        canManage = bool.Parse(ViewData["CanManage"].ToString());
+        canManage = bool.Parse(ViewBag.Manage.ToString());
     }
 }
 
@@ -97,7 +97,7 @@
 
                 <br />
 
-                @if (!isReadonly)
+                @if (isReadonly == false)
                 {
                     @await Html.PartialAsync("_ObjectMetadataTab", Model)
                 }

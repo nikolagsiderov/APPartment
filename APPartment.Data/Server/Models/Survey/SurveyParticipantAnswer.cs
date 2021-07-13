@@ -12,5 +12,8 @@ namespace APPartment.Data.Server.Models.Survey
 
         [FieldMappingForMainTable]
         public long AnswerID { get; set; }
+
+        [FieldMappingForMainTable]
+        public bool MarkedAsCorrect { get; set; }
     }
 }

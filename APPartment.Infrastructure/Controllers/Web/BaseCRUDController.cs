@@ -61,7 +61,7 @@ namespace APPartment.Infrastructure.Controllers.Web
         {
             List<T> models = await APPI.RequestEntities<T>();
             PopulateViewDataForIndex();
-            ViewData["CanManage"] = CanManage;
+            ViewBag.Manage = CanManage;
 
             foreach (var model in models)
             {
@@ -82,7 +82,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
             if (model.ID > 0)
             {
-                ViewData["CanManage"] = CanManage;
+                ViewBag.Manage = CanManage;
 
                 Normalize(model);
                 await PopulateViewData(model);

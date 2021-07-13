@@ -207,8 +207,8 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         {
             base.PopulateViewDataForIndex();
 
-            ViewData["TypesLink"] = Url.Action(nameof(Index), nameof(SurveyTypesController).Replace("Controller", ""));
-            ViewData["TypesLinkFAIcon"] = "fas fa-poll";
+            ViewBag.TypesURL = Url.Action(nameof(Index), nameof(SurveyTypesController).Replace("Controller", ""));
+            ViewBag.TypesFAIcon = "fas fa-poll";
         }
 
         private async Task<List<SelectListItem>> GetAssignedUsersSelectList(SurveyPostViewModel model)

@@ -38,6 +38,12 @@ namespace APPartment.API.Areas.Surveys.Controllers
 
                 foreach (var question in questions)
                 {
+                    if (question.TypeID == (long)SurveyQuestionTypes.OpenEndedQuestion || question.TypeID == (long)SurveyQuestionTypes.RatingQuestion)
+                    {
+                        model.QuestionsAndAnswers.Add(new KeyValuePair<SurveyQuestionPostViewModel, SurveyAnswerPostViewModel>(question, new SurveyAnswerPostViewModel()));
+                        continue;
+                    }
+
                     var answers = BaseCRUDService.GetCollection<SurveyAnswerPostViewModel>(x => x.QuestionID == question.ID);
 
                     foreach (var answer in answers)

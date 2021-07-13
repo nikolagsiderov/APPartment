@@ -4,7 +4,7 @@
 @using System.ComponentModel.DataAnnotations
 
 @{
-    var canManage = bool.Parse(ViewData["CanManage"].ToString());
+    var canManage = bool.Parse(ViewBag.Manage.ToString());
 }
 
 <div class="card shadow mb-4">
@@ -14,10 +14,10 @@
             <div style="margin-left: 4px; margin-right: 4px;">
                 <a asp-action="Create" class="no-underline btn btn-success btn-sm" style="font-size: small;"><i class="fas fa-plus"></i>&nbsp; Add</a>
             </div>
-            @if (ViewData["TypesLink"] != null)
+            @if (ViewBag.TypesURL != null)
             {
                 <div style="margin-left: 4px; margin-right: 4px;">
-                    <a href="@ViewData["TypesLink"].ToString()" class="no-underline btn btn-info btn-sm" style="font-size: small;"><i class="@ViewData["TypesLinkFAIcon"]"></i>&nbsp; Types</a>
+                    <a href="@ViewBag.TypesURL.ToString()" class="no-underline btn btn-info btn-sm" style="font-size: small;"><i class="@ViewBag.TypesFAIcon"></i>&nbsp; Types</a>
                 </div>
             }
         </div>
