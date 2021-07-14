@@ -25,17 +25,27 @@ namespace APPartment.API.Controllers
             {
                 var surveyParticipantsIDs = model.SurveyParticipantsIDs;
                 model = BaseCRUDService.Save(model);
+                var currentSurveyParticipants = BaseCRUDService.GetCollection<SurveyParticipantPostViewModel>(x => x.SurveyID == model.ID);
+
+                if (currentSurveyParticipants != null && currentSurveyParticipants.Count > 0)
+                {
+                    foreach (var participant in currentSurveyParticipants)
+                    {
+                        var surveyParticipantAnswers = BaseCRUDService.GetCollection<SurveyParticipantAnswerPostViewModel>(x => x.SurveyParticipantID == participant.ID);
+                        surveyParticipantAnswers.ForEach(participantAnswer => BaseCRUDService.Delete(participantAnswer));
+                        BaseCRUDService.Delete(participant);
+                    }
+                }
 
                 foreach (var surveyParticipantID in surveyParticipantsIDs)
                 {
-                    if (!BaseCRUDService.Any<SurveyParticipantPostViewModel>(x => x.SurveyID == model.ID && x.UserID == surveyParticipantID))
+                    if (BaseCRUDService.Any<SurveyParticipantPostViewModel>(x => x.SurveyID == model.ID && x.UserID == surveyParticipantID) == false)
                     {
                         var surveyParticipant = new SurveyParticipantPostViewModel() { SurveyID = model.ID, UserID = surveyParticipantID };
                         BaseCRUDService.Save(surveyParticipant);
                     }
                 }
 
-                model = BaseCRUDService.Save(model);
                 NormalizePostModel(model);
 
                 return Ok(model);
@@ -71,7 +81,7 @@ namespace APPartment.API.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, $"{ex.Message}");
             }
-            
+
         }
 
         [HttpPost("markascorrect")]
