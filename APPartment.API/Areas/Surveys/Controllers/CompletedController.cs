@@ -29,8 +29,12 @@ namespace APPartment.API.Areas.Surveys.Controllers
             var currentSurveyParticipant = BaseCRUDService.GetEntity<SurveyParticipantPostViewModel>(y => y.UserID == CurrentUserID && y.SurveyID == model.ID);
 
             if (currentSurveyParticipant != null)
+            {
                 if (currentSurveyParticipant.StatusID != (long)SurveyParticipantStatuses.Submitted && model.Active)
                     model.HideItem = true;
+            }
+            else
+                model.HideItem = true;
         }
 
         protected override void NormalizePostModel(SurveyPostViewModel model)

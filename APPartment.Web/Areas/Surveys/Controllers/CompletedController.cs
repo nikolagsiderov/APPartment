@@ -28,7 +28,7 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         [HttpGet]
         public async Task<IActionResult> ViewSurvey(long id)
         {
-            var model = await APPI.RequestEntity<TakeSurveyPostViewModel>(id, CurrentAreaName, CurrentControllerName, nameof(ViewSurvey));
+            var model = await APPI.RequestEntity<TakeSurveyPostViewModel>(id, CurrentAreaName, nameof(PendingController).Replace("Controller", ""), nameof(PendingController.TakeSurvey));
             return View(model);
         }
 

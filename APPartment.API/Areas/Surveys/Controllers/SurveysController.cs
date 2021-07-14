@@ -53,14 +53,19 @@ namespace APPartment.API.Controllers
             {
                 var currentSurveyParticipant = BaseCRUDService.GetEntity<SurveyParticipantPostViewModel>(x => x.UserID == CurrentUserID && x.SurveyID == surveyID);
 
-                if (finishLater)
-                    currentSurveyParticipant.StatusID = (long)SurveyParticipantStatuses.StartedNotCompleted;
+                if (currentSurveyParticipant != null)
+                {
+                    if (finishLater)
+                        currentSurveyParticipant.StatusID = (long)SurveyParticipantStatuses.StartedNotCompleted;
+                    else
+                        currentSurveyParticipant.StatusID = (long)SurveyParticipantStatuses.Submitted;
+
+                    BaseCRUDService.Save(currentSurveyParticipant);
+
+                    return Ok();
+                }
                 else
-                    currentSurveyParticipant.StatusID = (long)SurveyParticipantStatuses.Submitted;
-
-                BaseCRUDService.Save(currentSurveyParticipant);
-
-                return Ok();
+                    return StatusCode(StatusCodes.Status404NotFound);
             }
             catch (Exception ex)
             {
@@ -69,8 +74,8 @@ namespace APPartment.API.Controllers
             
         }
 
-        [HttpPost("markascorrect/{answerID:long}")]
-        public ActionResult MarkAsCorrect(long answerID)
+        [HttpPost("markascorrect")]
+        public ActionResult MarkAsCorrect([FromBody] long answerID)
         {
             try
             {
@@ -112,12 +117,13 @@ namespace APPartment.API.Controllers
             }
         }
 
-        [HttpPost("setopenendedanswer/{answerID:long}")]
-        public ActionResult SetOpenEndedAnswer(long answerID, [FromBody] string answer)
+        [HttpPost("setopenendedanswer/{questionID:long}")]
+        public ActionResult SetOpenEndedAnswer(long questionID, [FromBody] string answer)
         {
             try
             {
-                var theAnswer = BaseCRUDService.GetEntity<SurveyAnswerPostViewModel>(answerID);
+                var theAnswer = BaseCRUDService.GetEntity<SurveyAnswerPostViewModel>(x => x.QuestionID == questionID);
+                theAnswer.Answer = answer;
                 var singleQuestion = BaseCRUDService.GetEntity<SurveyQuestionPostViewModel>(theAnswer.QuestionID);
                 var surveyID = singleQuestion.SurveyID;
                 var currentSurveyParticipant = BaseCRUDService.GetEntity<SurveyParticipantPostViewModel>(x => x.UserID == CurrentUserID && x.SurveyID == surveyID);
@@ -125,24 +131,25 @@ namespace APPartment.API.Controllers
                 if (currentSurveyParticipant != null)
                 {
                     var currentSurveyParticipantAnswer = BaseCRUDService.GetEntity<SurveyParticipantAnswerPostViewModel>
-                        (x => x.AnswerID == answerID && x.SurveyParticipantID == currentSurveyParticipant.ID);
+                        (x => x.AnswerID == theAnswer.ID && x.SurveyParticipantID == currentSurveyParticipant.ID);
 
                     if (currentSurveyParticipantAnswer != null)
                     {
-                        currentSurveyParticipantAnswer.AnswerID = answerID;
+                        currentSurveyParticipantAnswer.AnswerID = theAnswer.ID;
                         currentSurveyParticipantAnswer.MarkedAsCorrect = true;
                     }
                     else
                     {
                         currentSurveyParticipantAnswer = new SurveyParticipantAnswerPostViewModel()
                         {
-                            AnswerID = answerID,
+                            AnswerID = theAnswer.ID,
                             SurveyParticipantID = currentSurveyParticipant.ID,
                             MarkedAsCorrect = true
                         };
                     }
 
                     BaseCRUDService.Save(currentSurveyParticipantAnswer);
+                    BaseCRUDService.Save(theAnswer);
 
                     return Ok();
                 }

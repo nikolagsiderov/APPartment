@@ -7,6 +7,8 @@ using APPartment.Infrastructure.UI.Common.ViewModels.Survey;
 using APPartment.Infrastructure.UI.Web.Constants.Breadcrumbs;
 using APPartment.Infrastructure.Controllers.Web;
 using APPartment.Infrastructure.UI.Web.Html;
+using System.Net.Http;
+using APPartment.Common;
 
 namespace APPartment.Web.Areas.Surveys.Controllers
 {
@@ -35,22 +37,79 @@ namespace APPartment.Web.Areas.Surveys.Controllers
         [HttpPost]
         public async Task<IActionResult> FinishSurvey(string surveyID, string finishLater)
         {
-            // TODO: Call APPI
-            return Ok();
+            var responseIsSuccess = false;
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{nameof(SurveysController).Replace("Controller", "")}/{nameof(FinishSurvey)}/{long.Parse(surveyID)}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.PostAsJsonAsync(requestUri, bool.Parse(finishLater)))
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        responseIsSuccess = true;
+                }
+            }
+
+            if (responseIsSuccess)
+                return Ok();
+            else
+                return Json(false);
         }
 
         [HttpPost]
         public async Task<IActionResult> MarkAsCorrect(string answerID)
         {
-            // TODO: Call APPI
-            return Ok();
+            var responseIsSuccess = false;
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{nameof(SurveysController).Replace("Controller", "")}/{nameof(MarkAsCorrect)}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.PostAsJsonAsync(requestUri, long.Parse(answerID)))
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        responseIsSuccess = true;
+                }
+            }
+
+            if (responseIsSuccess)
+                return Ok();
+            else
+                return Json(false);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SetOpenEndedAnswer(string answerID, string answer)
+        public async Task<IActionResult> SetOpenEndedAnswer(string questionID, string answer)
         {
-            // TODO: Call APPI
-            return Ok();
+            var responseIsSuccess = false;
+
+            using (var httpClient = new HttpClient())
+            {
+                var requestUri = $"{Configuration.DefaultAPI}/{CurrentAreaName}/{nameof(SurveysController).Replace("Controller", "")}/{nameof(SetOpenEndedAnswer)}/{long.Parse(questionID)}";
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+
+                using (var response = await httpClient.PostAsJsonAsync(requestUri, answer))
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+
+                    if (response.IsSuccessStatusCode)
+                        responseIsSuccess = true;
+                }
+            }
+
+            if (responseIsSuccess)
+                return Ok();
+            else
+                return Json(false);
         }
 
         public override async Task SetGridItemActions(SurveyDisplayViewModel model)

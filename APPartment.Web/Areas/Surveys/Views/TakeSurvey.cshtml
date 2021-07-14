@@ -1,6 +1,7 @@
 ﻿@model TakeSurveyPostViewModel
 
 @using APPartment.Infrastructure.UI.Common.Constants
+@using APPartment.Infrastructure.Tools
 
 @{
     var questions = Model.QuestionsAndAnswers.Select(x => x.Key);
@@ -18,7 +19,7 @@
                 </div>
             </div>
             <div class="card-body">
-                @foreach (var question in questions)
+                @foreach (var question in questions.DistinctBy(x => x.ID))
                 {
                     <strong>@question.Name</strong>
 
@@ -27,7 +28,15 @@
                         foreach (var answer in answers.Where(x => x.QuestionID == question.ID))
                         {
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" id="answer-@answer.ID">
+                                @if (@answer.SurveyParticipantAnswer.MarkedAsCorrect)
+                                {
+                                    <input class="form-check-input" type="radio" id="answer-@answer.ID" checked>
+                                }
+                                else
+                                {
+                                    <input class="form-check-input" type="radio" id="answer-@answer.ID">
+                                }
+
                                 <label class="form-check-label" for="answer-@answer.ID">
                                     @answer.Answer
                                 </label>
@@ -39,7 +48,15 @@
                         foreach (var answer in answers.Where(x => x.QuestionID == question.ID))
                         {
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="answer-@answer.ID">
+                                @if (@answer.SurveyParticipantAnswer.MarkedAsCorrect)
+                                {
+                                    <input class="form-check-input" type="radio" id="answer-@answer.ID" checked>
+                                }
+                                else
+                                {
+                                    <input class="form-check-input" type="radio" id="answer-@answer.ID">
+                                }
+
                                 <label class="form-check-label" for="answer-@answer.ID">
                                     @answer.Answer
                                 </label>
@@ -51,7 +68,15 @@
                         foreach (var answer in answers.Where(x => x.QuestionID == question.ID))
                         {
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="answer-@answer.ID">
+                                @if (@answer.SurveyParticipantAnswer.MarkedAsCorrect)
+                                {
+                                    <input class="form-check-input" type="radio" id="answer-@answer.ID" checked>
+                                }
+                                else
+                                {
+                                    <input class="form-check-input" type="radio" id="answer-@answer.ID">
+                                }
+
                                 <label class="form-check-label" for="answer-@answer.ID">
                                     @answer.Answer
                                 </label>
@@ -66,9 +91,19 @@
                     }
                     else if (question.TypeID.Equals((long)SurveyQuestionTypes.OpenEndedQuestion))
                     {
-                        <div class="form-group">
-                            <textarea id="open-ended-answer-to-question-@question.ID" class="form-control form-control-sm" rows="5" placeholder="Write down your answer..."></textarea>
-                        </div>
+                        foreach (var answer in answers.Where(x => x.QuestionID == question.ID))
+                        {
+                            <div class="form-group">
+                                @if (@answer.SurveyParticipantAnswer.MarkedAsCorrect)
+                                {
+                                    <textarea id="open-ended-answer-to-question-@question.ID" class="form-control form-control-sm" rows="5" placeholder="Write down your answer...">@answer.Answer</textarea>
+                                }
+                                else
+                                {
+                                    <textarea id="open-ended-answer-to-question-@question.ID" class="form-control form-control-sm" rows="5" placeholder="Write down your answer..."></textarea>
+                                }
+                            </div>
+                        }
                     }
                     <hr />
                 }
@@ -96,8 +131,8 @@
 
             for (var i = 0; i < standardQuestionAnswers.length; i++) {
                 var currentAnswer = standardQuestionAnswers[i];
-                var currentAnswerIsMarkedAsCorrect = currentAnswer.is(':checked');
-                var currentAnswerID = currentAnswer.getAttribute('id');
+                var currentAnswerIsMarkedAsCorrect = currentAnswer.value === "on";
+                var currentAnswerID = currentAnswer.getAttribute('id').split('-')[1];
 
                 if (currentAnswerIsMarkedAsCorrect) {
                     $.ajax({
@@ -115,13 +150,13 @@
 
             for (var i = 0; i < openEndedQuestionAnswers.length; i++) {
                 var currentAnswer = openEndedQuestionAnswers[i];
-                var currentAnswerID = currentAnswer.getAttribute('id');
+                var currentAnswerQuestionID = currentAnswer.getAttribute('id').split('-')[5];
 
-                if (currentAnswer.val()) {
+                if (currentAnswer.value) {
                     $.ajax({
                         type: 'POST',
                         url: baseApplicationPath + `Surveys/Pending/SetOpenEndedAnswer`,
-                        data: { answerID: currentAnswerID, answer: currentAnswer.val() },
+                        data: { questionID: currentAnswerQuestionID, answer: currentAnswer.value },
                         success: function () {
                         },
                         error: function (req, status, error) {
@@ -130,6 +165,8 @@
                     });
                 }
             }
+
+            window.location.replace(`${baseApplicationPath}Surveys/Pending`);
         });
 
         $('#btn-finish-later-survey-@Model.SurveyID').on("click", function () {
@@ -149,8 +186,8 @@
 
             for (var i = 0; i < standardQuestionAnswers.length; i++) {
                 var currentAnswer = standardQuestionAnswers[i];
-                var currentAnswerIsMarkedAsCorrect = currentAnswer.is(':checked');
-                var currentAnswerID = currentAnswer.getAttribute('id');
+                var currentAnswerIsMarkedAsCorrect = currentAnswer.value === "on";
+                var currentAnswerID = currentAnswer.getAttribute('id').split('-')[1];
 
                 if (currentAnswerIsMarkedAsCorrect) {
                     $.ajax({
@@ -168,13 +205,13 @@
 
             for (var i = 0; i < openEndedQuestionAnswers.length; i++) {
                 var currentAnswer = openEndedQuestionAnswers[i];
-                var currentAnswerID = currentAnswer.getAttribute('id');
+                var currentAnswerQuestionID = currentAnswer.getAttribute('id').split('-')[5];
 
-                if (currentAnswer.val()) {
+                if (currentAnswer.value) {
                     $.ajax({
                         type: 'POST',
                         url: baseApplicationPath + `Surveys/Pending/SetOpenEndedAnswer`,
-                        data: { answerID: currentAnswerID, answer: currentAnswer.val() },
+                        data: { questionID: currentAnswerQuestionID, answer: currentAnswer.value },
                         success: function () {
                         },
                         error: function (req, status, error) {
@@ -183,6 +220,8 @@
                     });
                 }
             }
+
+            window.location.replace(`${baseApplicationPath}Surveys/Pending`);
         });
     });
 </script>

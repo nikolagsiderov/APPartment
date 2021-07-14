@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using APPartment.Infrastructure.Controllers.Api;
 using APPartment.Infrastructure.UI.Common.Constants;
@@ -21,7 +22,7 @@ namespace APPartment.API.Areas.Surveys.Controllers
         {
             get
             {
-                return x => x.HomeID == CurrentUserID;
+                return x => x.HomeID == CurrentHomeID;
             }
         }
 
@@ -31,23 +32,25 @@ namespace APPartment.API.Areas.Surveys.Controllers
             try
             {
                 var model = new TakeSurveyPostViewModel() { SurveyID = surveyID };
-                model.ParticipantID = BaseCRUDService.GetEntity<SurveyParticipantPostViewModel>(x => x.UserID == CurrentUserID).ID;
+                var surveyParticipant = BaseCRUDService.GetEntity<SurveyParticipantPostViewModel>(x => x.UserID == CurrentUserID && x.SurveyID == surveyID);
+                model.ParticipantID = surveyParticipant.ID;
                 var survey = BaseCRUDService.GetEntity<SurveyPostViewModel>(model.SurveyID);
                 model.SurveyDisplayName = survey.Name;
                 var questions = BaseCRUDService.GetCollection<SurveyQuestionPostViewModel>(x => x.SurveyID == survey.ID);
+                var surveyParticipantAnswers = BaseCRUDService.GetCollection<SurveyParticipantAnswerPostViewModel>(x => x.SurveyParticipantID == surveyParticipant.ID);
 
                 foreach (var question in questions)
                 {
-                    if (question.TypeID == (long)SurveyQuestionTypes.OpenEndedQuestion || question.TypeID == (long)SurveyQuestionTypes.RatingQuestion)
-                    {
-                        model.QuestionsAndAnswers.Add(new KeyValuePair<SurveyQuestionPostViewModel, SurveyAnswerPostViewModel>(question, new SurveyAnswerPostViewModel()));
-                        continue;
-                    }
-
                     var answers = BaseCRUDService.GetCollection<SurveyAnswerPostViewModel>(x => x.QuestionID == question.ID);
 
                     foreach (var answer in answers)
                     {
+                        if (surveyParticipantAnswers.Any(x => x.AnswerID == answer.ID))
+                        {
+                            var currentAnswerSurveyParticipation = BaseCRUDService.GetEntity<SurveyParticipantAnswerPostViewModel>(x => x.AnswerID == answer.ID);
+                            answer.SurveyParticipantAnswer = currentAnswerSurveyParticipation;
+                        }
+
                         model.QuestionsAndAnswers.Add(new KeyValuePair<SurveyQuestionPostViewModel, SurveyAnswerPostViewModel>(question, answer));
                     }
                 }
@@ -65,10 +68,14 @@ namespace APPartment.API.Areas.Surveys.Controllers
             var currentSurveyParticipant = BaseCRUDService.GetEntity<SurveyParticipantPostViewModel>(y => y.UserID == CurrentUserID && y.SurveyID == model.ID);
 
             if (currentSurveyParticipant != null)
+            {
                 if (currentSurveyParticipant.StatusID == (long)SurveyParticipantStatuses.Submitted && model.Active)
                     model.HideItem = true;
                 else if (model.Active == false)
                     model.HideItem = true;
+            }
+            else
+                model.HideItem = true;
         }
 
         protected override void NormalizePostModel(SurveyPostViewModel model)

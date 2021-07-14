@@ -22,5 +22,7 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Survey
 
         [APPUIHint(Templates.Hidden)]
         public long QuestionID { get; set; }
+
+        public SurveyParticipantAnswerPostViewModel SurveyParticipantAnswer { get; set; } = new SurveyParticipantAnswerPostViewModel();
     }
 }

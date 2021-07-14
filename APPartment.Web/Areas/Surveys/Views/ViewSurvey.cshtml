@@ -1,0 +1,109 @@
+﻿@model TakeSurveyPostViewModel
+
+@using APPartment.Infrastructure.UI.Common.Constants
+@using APPartment.Infrastructure.Tools
+
+@{
+    var questions = Model.QuestionsAndAnswers.Select(x => x.Key);
+    var answers = Model.QuestionsAndAnswers.Select(x => x.Value);
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header">
+                @Model.SurveyDisplayName
+            </div>
+            <div class="card-body">
+                @foreach (var question in questions.DistinctBy(x => x.ID))
+                {
+                    <strong>@question.Name</strong>
+
+                    if (question.TypeID.Equals((long)SurveyQuestionTypes.StandardQuestionWithOneCorrectAnswer))
+                    {
+                        foreach (var answer in answers.Where(x => x.QuestionID == question.ID))
+                        {
+                            <div class="form-check">
+                                @if (@answer.SurveyParticipantAnswer.MarkedAsCorrect)
+                                {
+                                    <input disabled class="form-check-input" type="radio" id="answer-@answer.ID" checked>
+                                }
+                                else
+                                {
+                                    <input disabled class="form-check-input" type="radio" id="answer-@answer.ID">
+                                }
+
+                                <label class="form-check-label" for="answer-@answer.ID">
+                                    @answer.Answer
+                                </label>
+                            </div>
+                        }
+                    }
+                    else if (question.TypeID.Equals((long)SurveyQuestionTypes.StandardQuestionWithManyCorrectAnswers))
+                    {
+                        foreach (var answer in answers.Where(x => x.QuestionID == question.ID))
+                        {
+                            <div class="form-check">
+                                @if (@answer.SurveyParticipantAnswer.MarkedAsCorrect)
+                                {
+                                    <input disabled class="form-check-input" type="radio" id="answer-@answer.ID" checked>
+                                }
+                                else
+                                {
+                                    <input disabled class="form-check-input" type="radio" id="answer-@answer.ID">
+                                }
+
+                                <label class="form-check-label" for="answer-@answer.ID">
+                                    @answer.Answer
+                                </label>
+                            </div>
+                        }
+                    }
+                    else if (question.TypeID.Equals((long)SurveyQuestionTypes.StandardQuestionWithNoIncorrectAnswer))
+                    {
+                        foreach (var answer in answers.Where(x => x.QuestionID == question.ID))
+                        {
+                            <div class="form-check">
+                                @if (@answer.SurveyParticipantAnswer.MarkedAsCorrect)
+                                {
+                                    <input disabled class="form-check-input" type="radio" id="answer-@answer.ID" checked>
+                                }
+                                else
+                                {
+                                    <input disabled class="form-check-input" type="radio" id="answer-@answer.ID">
+                                }
+
+                                <label class="form-check-label" for="answer-@answer.ID">
+                                    @answer.Answer
+                                </label>
+                            </div>
+                        }
+                    }
+                    else if (question.TypeID.Equals((long)SurveyQuestionTypes.RatingQuestion))
+                    {
+                        <div>
+                            Not implemented yet...
+                        </div>
+                    }
+                    else if (question.TypeID.Equals((long)SurveyQuestionTypes.OpenEndedQuestion))
+                    {
+                        foreach (var answer in answers.Where(x => x.QuestionID == question.ID))
+                        {
+                            <div class="form-group">
+                                @if (@answer.SurveyParticipantAnswer.MarkedAsCorrect)
+                                {
+                                    <textarea disabled id="open-ended-answer-to-question-@question.ID" class="form-control form-control-sm" rows="5" placeholder="Write down your answer...">@answer.Answer</textarea>
+                                }
+                                else
+                                {
+                                    <textarea disabled id="open-ended-answer-to-question-@question.ID" class="form-control form-control-sm" rows="5" placeholder="Write down your answer..."></textarea>
+                                }
+                            </div>
+                        }
+                    }
+                    <hr />
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using APPartment.Infrastructure.Controllers.Api;
+using APPartment.Infrastructure.UI.Common.Constants;
 using APPartment.Infrastructure.UI.Common.ViewModels.Survey;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +52,17 @@ namespace APPartment.API.Areas.Surveys.Controllers
 
         protected override void NormalizePostModel(SurveyQuestionPostViewModel model)
         {
+            if (model.TypeID == (long)SurveyQuestionTypes.OpenEndedQuestion)
+            {
+                if (model.ID > 0)
+                {
+                    if (BaseCRUDService.Any<SurveyAnswerPostViewModel>(x => x.QuestionID == model.ID) == false)
+                    {
+                        var answer = new SurveyAnswerPostViewModel() { QuestionID = model.ID, IsCorrect = true };
+                        BaseCRUDService.Save(answer);
+                    }
+                }
+            }
         }
     }
 }
