@@ -1,0 +1,67 @@
+﻿@page "/search"
+@page "/home/search"
+
+@using APPartment.Infrastructure.UI.Common.ViewModels
+@using System.Diagnostics;
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-header">
+                <strong>
+                    @Model.Result.Count() results for '@Model.KeyWords'
+                </strong>
+                <small style="margin-left: auto; font: small-caption;">
+                    Request time: @Model.ElapsedTime seconds
+                </small>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    @if (Model.Result.Count() > 0)
+                    {
+                        @foreach (var item in Model.Result)
+                        {
+                            <li class="list-group-item">
+                                <a href="@item.WebLink">
+                                    <div>
+                                        <span style="font-weight: bold;">Name: </span>@item.Name
+                                    </div>
+                                    <div>
+                                        <span style="font-weight: bold;">Details: </span>@item.Details
+                                    </div>
+                                    <span style="font:small-caption" class="text-muted">
+                                        @item.CreatedDate
+                                    </span>
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string KeyWords { get; set; }
+
+    private GeneralSearchViewModel Model;
+    private List<BusinessObjectDisplayViewModel> result;
+    private Stopwatch watch;
+
+    protected override async Task OnInitializedAsync()
+    {
+        watch = new Stopwatch();
+        watch.Start();
+
+        var currentUserID = await sessionStorage.GetItemAsync<string>("currentUserID");
+        var currentHomeID = await sessionStorage.GetItemAsync<string>("currentHomeID");
+
+        result = await _API.RequestAsync<List<BusinessObjectDisplayViewModel>>(new string[] { "home", "home", "objects", "search", KeyWords }, currentUserID, currentHomeID);
+        Model = new GeneralSearchViewModel(result, KeyWords);
+
+        watch.Stop();
+        Model.ElapsedTime = (double)watch.ElapsedMilliseconds / 1000;
+    }
+}

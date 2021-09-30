@@ -6,9 +6,12 @@ using APPartment.Infrastructure.Services.Base;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System;
+using System.Threading.Tasks;
+using APPartment.Infrastructure.UI.Web.Html;
 
 namespace APPartment.Infrastructure.Controllers.Api
 {
+    [Route("api/[controller]")]
     [Route("api/[area]/[controller]")]
     public abstract class BaseAPICRUDController<T, U> : BaseAPIController
         where T : GridItemViewModel, new()
@@ -21,12 +24,13 @@ namespace APPartment.Infrastructure.Controllers.Api
         protected abstract Expression<Func<T, bool>> FilterExpression { get; }
 
         [HttpGet("{modelID:long}")]
-        public virtual ActionResult GetEntity(long modelID)
+        public virtual async Task<ActionResult> GetEntity(long modelID)
         {
             try
             {
                 var model = BaseCRUDService.GetEntity<U>(modelID);
                 NormalizePostModel(model);
+                await SetObjectActions(model);
 
                 if (model != null)
                     return Ok(model);
@@ -40,7 +44,7 @@ namespace APPartment.Infrastructure.Controllers.Api
         }
 
         [HttpGet]
-        public virtual ActionResult GetCollection()
+        public virtual async Task<ActionResult> GetCollection()
         {
             try
             {
@@ -49,6 +53,7 @@ namespace APPartment.Infrastructure.Controllers.Api
                 foreach (var model in models)
                 {
                     NormalizeDisplayModel(model);
+                    await SetGridItemActions(model);
                 }
 
                 if (models.Where(x => x.HideItem == false).Any())
@@ -121,5 +126,23 @@ namespace APPartment.Infrastructure.Controllers.Api
         protected abstract void NormalizeDisplayModel(T model);
 
         protected abstract void NormalizePostModel(U model);
+
+        #region Web UI settings and actions (HTML)
+        public virtual async Task SetGridItemActions(T model)
+        {
+            model.ActionsHtml.Add(GridItemActionBuilder.BuildDetailsAction(CurrentArea, model.ID));
+
+                model.ActionsHtml.Add(GridItemActionBuilder.BuildEditAction(CurrentArea, model.ID));
+                model.ActionsHtml.Add(GridItemActionBuilder.BuildDeleteAction(CurrentArea, model.ID));
+        }
+
+        public virtual async Task SetObjectActions(U model)
+        {
+            model.ActionsHtml.Add(ObjectActionBuilder.BuildDetailsAction(CurrentArea, model.ID));
+
+                model.ActionsHtml.Add(ObjectActionBuilder.BuildEditAction(CurrentArea, model.ID));
+                model.ActionsHtml.Add(ObjectActionBuilder.BuildDeleteAction(CurrentArea, model.ID));
+        }
+        #endregion
     }
 }

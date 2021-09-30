@@ -1,0 +1,37 @@
+﻿<div class="row">
+    <div class="col-10">
+        <textarea type="text" class="form-control" id="commentTextbox" rows="5" placeholder="Type a comment..."></textarea>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-2">
+        <button class="btn btn-primary btn-sm" id="commentButton"><i class="far fa-comment"></i> Comment</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-10" id="comment-text-data">
+        @if (Model.CommentsHtml.Any())
+        {
+            foreach (var comment in Model.CommentsHtml)
+            {
+                <hr style="opacity: 0.4;" />
+                <p>@comment</p>
+            }
+        }
+        else
+        {
+            <br />
+            <span id="no-comments-added-message">
+                No comments have been added to this object.
+            </span>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public PostViewModel Model { get; set; }
+
+    // TODO: Validate comment textarea and call api to post comment, then clear textarea and populate comments list
+}

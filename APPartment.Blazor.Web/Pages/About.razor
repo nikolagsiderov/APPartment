@@ -1,0 +1,46 @@
+﻿@page "/about"
+@attribute [AllowAnonymous]
+@layout UnauthorizedLayout
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <p>APPartment is a collection of projects (<strong>ASP.NET Core MVC</strong> with <strong>Web API</strong>) that work together with an original purpose to serve as a platform where housemates keep track of everything in their apartment/house. Later on, the purpose changed to an entirely educational one. Throughout the project's development, lots of modifications have been made, for example, at the beginning <strong>Entity Framework Core with code first</strong> approach was used, then I migrated it to <strong>database first</strong>, later <strong>EF Core</strong> was entirely removed and I developed my <strong>own custom object-relational mapping framework with a facade design pattern</strong>.</p>
+                <br />
+                <p><i class="fas fa-code"></i> Contributors: <strong><a href="https://github.com/nikolagsiderov" style="text-decoration: none;">nikolagsiderov</a></strong> and <strong><a href="https://github.com/fr0wBtW" style="text-decoration: none;">fr0wBtW</a></strong></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <ul class="timeline">
+            <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
+                <div class="timeline-arrow"></div>
+                <h2 class="h5 mb-0">APPartment v2.0-beta</h2><span class="small text-gray" style="font-size: small;"><i class="fa fa-clock-o mr-1"></i>25 March, 2021</span>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Usage of base properties <code>CreatedByID</code> and <code>ModifiedByID</code></p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> ORM framework enhancements</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Introduction of web service layer (<code>BaseWebService.cs</code>) with view models using AutoMapper and display and editor templates. Implementation of custom UIHint, called <code>APPUIHint.cs</code> and mapping service - <code>MapperService.cs</code></p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> <code>APPartment.csproj</code> is now renamed to <code>APPartment.Web.csproj</code>. <code>APPartment.sln</code> is moved</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> <code>_Grid.cshtml</code>, <code>_Details.cshtml</code> and <code>_Edit.cshtml</code> pages now 'know' about all view models properties and their attributes</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Areas are implemented and used with new controllers for different filtering cases across all modules</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> <code>APPartment.Web.Services.csproj</code> has been dropped</p>
+            </li>
+            <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
+                <div class="timeline-arrow"></div>
+                <h2 class="h5 mb-0">APPartment v1.0-beta</h2><span class="small text-gray" style="font-size: small;"><i class="fa fa-clock-o mr-1"></i>13 March, 2021</span>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Introduction of custom object relational mapping framework</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Separations of layers</p>
+            </li>
+            <li class="timeline-item bg-white rounded ml-3 p-4 shadow">
+                <div class="timeline-arrow"></div>
+                <h2 class="h5 mb-0">APPartment v1.0-alpha</h2><span class="small text-gray" style="font-size: small;"><i class="fa fa-clock-o mr-1"></i>04 March, 2021</span>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Double authentication process - authentication for user, then authentication for home</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Home presence status, with ability to modify and set custom messages, informing other housemates</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Chat</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Storage and traceability of inventory, chores and issues</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Metadata for all objects. Commenting image storing functionalities and history tracing</p>
+                <p class="text-small mt-2 font-weight-light"><i class="fas fa-check-circle"></i> Home settings</p>
+            </li>
+        </ul>
+    </div>
+</div>

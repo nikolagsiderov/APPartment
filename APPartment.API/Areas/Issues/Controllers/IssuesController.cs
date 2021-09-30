@@ -1,14 +1,14 @@
 ﻿using APPartment.Infrastructure.UI.Common.ViewModels.Issue;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
+using APPArea = APPartment.Infrastructure.Attributes.AreaAttribute;
 using System.Linq.Expressions;
 using System;
 using APPartment.Infrastructure.Controllers.Api;
 
 namespace APPartment.API.Controllers
 {
-    [Area(APPAreas.Issues)]
+    [APPArea(APPAreas.Issues)]
     public class IssuesController : BaseAPICRUDController<IssueDisplayViewModel, IssuePostViewModel>
     {
         public IssuesController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

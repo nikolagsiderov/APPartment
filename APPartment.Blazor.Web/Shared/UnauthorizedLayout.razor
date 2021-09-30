@@ -1,0 +1,21 @@
+﻿@inherits LayoutComponentBase
+
+<div class="page">
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_content">
+            <main>
+                <div class="page-header pb-10 page-header-dark bg-gradient-primary-to-secondary">
+                    <div class="container-fluid">
+                        <NavClock />
+                        <div class="page-header-content no-underline">
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid mt-n15">
+                    @Body
+                </div>
+            </main>
+            <Footer />
+        </div>
+    </div>
+</div>

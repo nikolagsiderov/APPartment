@@ -1,0 +1,205 @@
+﻿@using System.Reflection
+@using System.ComponentModel.DataAnnotations
+
+@if (FieldTemplate.Equals(Templates.Input))
+{
+    <div class="form-group">
+        <label>@displayName</label>
+        @if (isRequired)
+        {
+            <span style="color: red;">*</span>
+        }
+        <input name="@property.Name" value="@valueString" @onchange="(e) => property.SetValue(Source, e.Value)" class="form-control" placeholder="@property.Name" />
+    </div>
+}
+else if (FieldTemplate.Equals(Templates.TextArea))
+{
+    <div class="form-group">
+        <label>@displayName</label>
+        <textarea name="@property.Name" class="form-control form-control-solid" rows="5" @onchange="(e) => property.SetValue(Source, e.Value)" placeholder="@property.Name">@valueString</textarea>
+    </div>
+}
+else if (FieldTemplate.Equals(Templates.Password))
+{
+    <div class="form-group">
+        <label>@displayName</label>
+        @if (isRequired)
+        {
+            <span style="color: red;">*</span>
+        }
+        <input type="password" name="@property.Name" value="@valueString" @onchange="(e) => property.SetValue(Source, e.Value)" class="form-control" placeholder="@property.Name" />
+    </div>
+}
+else if (FieldTemplate.Equals(Templates.Number))
+{
+    <div class="form-group">
+        <label>@displayName</label>
+        @if (isRequired)
+        {
+            <span style="color: red;">*</span>
+        }
+        <input type="number" name="@property.Name" value="@valueInteger" @onchange="(e) => property.SetValue(Source, e.Value)" class="form-control" placeholder="@property.Name" />
+    </div>
+}
+else if (FieldTemplate.Equals(Templates.NumberNullable))
+{
+    <div class="form-group">
+        <label>@displayName</label>
+        @if (isRequired)
+        {
+            <span style="color: red;">*</span>
+        }
+        <input type="number" name="@property.Name" value="@valueIntegerNullable" @onchange="(e) => property.SetValue(Source, e.Value)" class="form-control" placeholder="@property.Name" />
+    </div>
+}
+else if (FieldTemplate.Equals(Templates.Boolean))
+{
+    <span>@displayName</span>
+    <div class="slider">
+        <input type="checkbox" name="@property.Name" value="@valueBoolean" class="toggle-pill" />
+        <label class="toggle-label" for="toggle-pill"></label>
+    </div>
+}
+else if (FieldTemplate.Equals(Templates.BooleanNullable))
+{
+    <span>@displayName</span>
+    <div class="slider">
+        <input type="checkbox" name="@property.Name" value="@valueBooleanNullable" class="toggle-pill" />
+        <label class="toggle-label" for="toggle-pill"></label>
+    </div>
+}
+else if (FieldTemplate.Equals(Templates.Dropdown))
+{
+    <div class="form-group">
+        <label>@displayName</label>
+        <select class="form-control form-control-solid" name="@property.Name">
+            @*@if (Model.Any(x => x.Selected))
+                {
+                    <option selected="@Model.Where(x => x.Selected).FirstOrDefault().Selected" value="@Model.Where(x => x.Selected).FirstOrDefault().Value">@Model.Where(x => x.Selected).FirstOrDefault().Text</option>
+                }
+                else
+                {
+                    <option>None selected</option>
+                }*@
+
+            <option>None selected</option>
+        </select>
+    </div>
+}
+else if (FieldTemplate.Equals(Templates.Date))
+{
+    <div class="form-group">
+        <label>@displayName</label>
+        @if (isRequired)
+        {
+            <span style="color: red;">*</span>
+        }
+        <input type="date" name="@property.Name" value="@valueDateTime" @onchange="(e) => property.SetValue(Source, e.Value)" class="form-control" placeholder="@property.Name" />
+    </div>
+}
+else if (FieldTemplate.Equals(Templates.DateNullable))
+{
+    <div class="form-group">
+        <label>@displayName</label>
+        @if (isRequired)
+        {
+            <span style="color: red;">*</span>
+        }
+        <input type="date" name="@property.Name" value="@valueDateTimeNullable" @onchange="(e) => property.SetValue(Source, e.Value)" class="form-control" placeholder="@property.Name" />
+    </div>
+}
+else if (FieldTemplate.Equals(Templates.Multiselect))
+{
+    <div class="form-group">
+        <label>@displayName</label>
+        <select multiple class="form-control form-control-solid" name="@property.Name">
+            @*@if (Model.Any(x => x.Selected))
+                {
+                    foreach (var option in Model.Where(x => x.Selected))
+                    {
+                        <option selected="@option.Selected" value="@option.Value">@option.Text</option>
+                    }
+                }
+                else
+                {
+                    <option>None selected</option>
+                }*@
+
+            <option>None selected</option>
+        </select>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string PropertyName { get; set; }
+
+    [Parameter]
+    public object Source { get; set; }
+
+    private string FieldTemplate { get; set; }
+
+    private string valueString;
+    private int valueInteger;
+    private int? valueIntegerNullable;
+    private long valueBigInteger;
+    private bool valueBoolean;
+    private bool? valueBooleanNullable;
+    private DateTime valueDateTime;
+    private DateTime? valueDateTimeNullable;
+    private IEnumerable<long> valueBigIntegerCollection;
+
+    private bool isRequired;
+    private string displayName;
+    private PropertyInfo property;
+
+    protected override Task OnInitializedAsync()
+    {
+        property = Source.GetType().GetProperty(PropertyName);
+
+        this.FieldTemplate = (property.GetCustomAttribute(typeof(APPUIHintAttribute)) as APPUIHintAttribute).Template;
+
+        var requiredAttribute = property.GetCustomAttribute(typeof(RequiredAttribute)) as RequiredAttribute;
+        isRequired = requiredAttribute != null;
+
+        displayName = property.GetCustomAttributes(typeof(DisplayAttribute), true).Any() ? property.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>().Single().Name : property.Name;
+
+        switch (FieldTemplate)
+        {
+            case Templates.Input:
+                this.valueString = property.GetValue(Source) == null ? string.Empty : property.GetValue(Source).ToString();
+                break;
+            case Templates.Password:
+                this.valueString = property.GetValue(Source) == null ? string.Empty : property.GetValue(Source).ToString();
+                break;
+            case Templates.Number:
+                this.valueInteger = property.GetValue(Source) == null ? 0 : (int)property.GetValue(Source);
+                break;
+            case Templates.NumberNullable:
+                this.valueIntegerNullable = property.GetValue(Source) == null ? null : (int?)property.GetValue(Source);
+                break;
+            case Templates.Dropdown:
+                this.valueBigInteger = property.GetValue(Source) == null ? 0 : (long)property.GetValue(Source);
+                break;
+            case Templates.Boolean:
+                this.valueBoolean = property.GetValue(Source) == null ? false : (bool)property.GetValue(Source);
+                break;
+            case Templates.BooleanNullable:
+                this.valueBooleanNullable = property.GetValue(Source) == null ? null : (bool?)property.GetValue(Source);
+                break;
+            case Templates.Date:
+                this.valueDateTime = property.GetValue(Source) == null ? DateTime.Now : (DateTime)property.GetValue(Source);
+                break;
+            case Templates.DateNullable:
+                this.valueDateTimeNullable = property.GetValue(Source) == null ? null : (DateTime?)property.GetValue(Source);
+                break;
+            case Templates.Multiselect:
+                this.valueBigIntegerCollection = property.GetValue(Source) == null ? new List<long>() : property.GetValue(Source) as List<long>;
+                break;
+            default:
+                break;
+        }
+
+        return base.OnInitializedAsync();
+    }
+}

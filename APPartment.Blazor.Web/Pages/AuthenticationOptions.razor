@@ -1,0 +1,71 @@
+﻿@page "/auth"
+@attribute [AllowAnonymous]
+@layout UnauthorizedLayout
+
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+        <main>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <!-- Enter Home-->
+                    <div class="col-xl-5 col-lg-6 col-md-8 col-sm-11 mt-4">
+                        <div class="card text-center h-100">
+                            <div class="card-body px-5 pt-5 d-flex flex-column align-items-between">
+                                <div>
+                                    <div class="h3 text-secondary font-weight-300">Enter your home</div>
+                                    <p class="text-muted mb-4">Enter home name and password to proceed</p>
+                                </div>
+                                <div class="icons-org-join align-items-center mx-auto"><i class="icon-user" data-feather="user"></i><i class="icon-arrow fas fa-long-arrow-alt-right"></i><i class="icon-users" data-feather="users"></i></div>
+                            </div>
+                            <div class="card-footer bg-transparent px-5 py-4">
+                                <div class="small text-center"><a class="btn btn-block btn-secondary" href="/login?returnURL=@returnURL">Enter</a></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Create Home-->
+                    <div class="col-xl-5 col-lg-6 col-md-8 col-sm-11 mt-4">
+                        <div class="card text-center h-100">
+                            <div class="card-body px-5 pt-5 d-flex flex-column">
+                                <div>
+                                    <div class="h3 text-primary font-weight-300">Create a home</div>
+                                    <p class="text-muted mb-4">Create your home</p>
+                                </div>
+                                <div class="icons-org-create align-items-center mx-auto mt-auto"><i class="icon-users" data-feather="users"></i><i class="icon-plus fas fa-plus"></i></div>
+                            </div>
+                            <div class="card-footer bg-transparent px-5 py-4">
+                                <div class="small text-center"><a class="btn btn-block btn-primary" href="/register">Create a new home</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-xl-8 col-lg-8 col-md-10 col-sm-11">
+                        <div class="card my-5">
+                            <div class="card-body p-5">
+                                <div>
+                                    <div class="h3 text-secondary font-weight-300">Find a home</div>
+                                    <p class="text-muted mb-4">Type a home name and request an invitation</p>
+                                </div>
+                            </div>
+                            <div class="card-footer bg-transparent px-5 py-4">
+                                <form class="mr-auto d-lg-block">
+                                    <input class="form-control form-control-solid mr-sm-2" type="search" placeholder="Find a home... (not implemented yet)" aria-label="Find" />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+@code {
+    private string returnURL;
+
+    protected override Task OnInitializedAsync()
+    {
+        NavigationManager.TryGetQueryString<string>("returnURL", out returnURL);
+        return base.OnInitializedAsync();
+    }
+}

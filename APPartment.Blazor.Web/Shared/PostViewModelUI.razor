@@ -1,0 +1,76 @@
+﻿@using APPartment.Infrastructure.Tools
+
+@foreach (var row in PropertiesWithoutSection.Select(x => x.Row).Distinct())
+{
+    <div class="row">
+        @foreach (var propUI in PropertiesWithoutSection.Where(x => x.Row == row))
+        {
+            <div class="col-md-@propUI.Col">
+                <div class="display-field">
+                    @if (Editable)
+                    {
+                        <EditorWrapper PropertyName="@propUI.Property.Name" Source="@Model" />
+                    }
+                    else
+                    {
+                        <DisplayWrapper PropertyName="@propUI.Property.Name" Source="@Model" />
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@if (Model.Sections.Any())
+{
+    @foreach (var uiSection in Model.Sections)
+    {
+        <div class="section">
+            <h4 style="opacity: 0.8;">@uiSection</h4>
+
+            @{
+                var propertiesOfCurrentSection = Model.Properties.Where(x => x.Section == uiSection);
+            }
+
+            @foreach (var row in propertiesOfCurrentSection.Select(x => x.Row).Distinct())
+            {
+                <div class="row">
+                    @foreach (var propUI in propertiesOfCurrentSection.Where(x => x.Row == row))
+                    {
+                        <div class="col-md-@propUI.Col">
+                            <div class="display-field">
+                                @if (Editable)
+                                {
+                                    <EditorWrapper PropertyName="@propUI.Property.Name" Source="@Model" />
+                                }
+                                else
+                                {
+                                    <DisplayWrapper PropertyName="@propUI.Property.Name" Source="@Model" />
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+}
+
+@code {
+    [Parameter]
+    public PostViewModel Model { get; set; }
+
+    [Parameter]
+    public bool Editable { get; set; } = false;
+
+    [Parameter]
+    public string Controller { get; set; }
+
+    private IEnumerable<PropertyUIInfo> PropertiesWithoutSection
+    {
+        get
+        {
+            return Model.Properties.Where(x => x.Section == null);
+        }
+    }
+}

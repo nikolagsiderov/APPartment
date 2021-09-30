@@ -1,0 +1,68 @@
+﻿<div class="row">
+    <div class="col-10">
+        <div class="form-group">
+            <label>Event name: </label>
+            <input id="create-event-name" class="form-control form-control-solid" placeholder="Event name" />
+        </div>
+        <div class="form-group">
+            <label>Event description: </label>
+            <textarea id="create-event-description" class="form-control form-control-solid" rows="5" placeholder="Event description"></textarea>
+        </div>
+        <div class="form-group">
+            <label>Start date: </label>
+            <input type="text" class="form-control form-control-solid datepicker" id="create-event-startdate" placeholder="dd/mm/yy" />
+        </div>
+        <div class="form-group">
+            <label>End date: </label>
+            <input type="text" class="form-control form-control-solid datepicker" id="create-event-enddate" placeholder="dd/mm/yy" />
+        </div>
+        <button id="create-event-button" class="btn btn-primary btn-sm">Add</button>
+    </div>
+</div>
+<br />
+<div class="row">
+    @if (Model.EventsHtml.Any())
+    {
+        <div class="col-md-10">
+            <hr style="opacity: 0.4;" />
+
+            <div style="font-weight: bold;" class='row'>
+                <div class='col-md-2'>
+                    Event name
+                </div>
+                <div class='col-md-3'>
+                    Event description
+                </div>
+                <div class='col-md-2'>
+                    Start date
+                </div>
+                <div class='col-md-2'>
+                    End date
+                </div>
+            </div>
+        </div>
+    }
+    <div class="col-md-10" id="events-data">
+        @if (Model.EventsHtml.Any())
+        {
+            foreach (var @eventHtml in Model.EventsHtml)
+            {
+                <hr style="opacity: 0.4;" />
+                @eventHtml
+            }
+        }
+        else
+        {
+            <span id="no-events-added-message">
+                No events have been added to this object.
+            </span>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public PostViewModel Model { get; set; }
+
+    // TODO: onclick button create, send api call to create event, also validate fields
+}

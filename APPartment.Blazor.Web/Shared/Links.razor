@@ -1,0 +1,52 @@
+﻿<div class="row">
+    <div class="col-10">
+        <div class="form-group">
+            <strong>This object</strong>
+        </div>
+        <div class="form-group">
+            <select class="form-control form-control-solid" id="create-objectLink-objectLinkType">
+                @*@foreach (var option in ViewData["ObjectLinkTypeSelectList"] as List<SelectListItem>)
+                    {
+                        <option selected="@option.Selected" value="@option.Value">@option.Text</option>
+                    }*@
+                <option selected="selected" value="0">test</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select class="form-control form-control-solid" id="create-objectLink-objectBID">
+                @*@foreach (var option in ViewData["ObjectBIDSelectList"] as List<SelectListItem>)
+                    {
+                        <option selected="@option.Selected" value="@option.Value">@option.Text</option>
+                    }*@
+                <option selected="selected" value="0">test</option>
+            </select>
+        </div>
+        <button id="create-objectLink-button" class="btn btn-primary btn-sm">Add</button>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-10" id="objectLinks-data">
+        @if (Model.ObjectLinksHtml.Any())
+        {
+            foreach (var link in Model.ObjectLinksHtml)
+            {
+                <hr style="opacity: 0.4;" />
+                @link
+            }
+        }
+        else
+        {
+            <span id="no-objectLinks-added-message">
+                No links have been added to this object.
+            </span>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public PostViewModel Model { get; set; }
+
+    // TODO: onclick button create, send api call to create link, also validate fields
+}

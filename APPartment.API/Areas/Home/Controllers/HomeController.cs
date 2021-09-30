@@ -13,11 +13,12 @@ using APPartment.Infrastructure.Controllers.Api;
 using APPartment.Infrastructure.Tools;
 using APPartment.Common;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
+using APPArea = APPartment.Infrastructure.Attributes.AreaAttribute;
 using System.Linq.Expressions;
 
 namespace APPartment.API.Areas.Home.Controllers
 {
-    [Area(APPAreas.Home)]
+    [APPArea(APPAreas.Home)]
     public class HomeController : BaseAPICRUDController<HomeDisplayViewModel, HomePostViewModel>
     {
         protected override Expression<Func<HomeDisplayViewModel, bool>> FilterExpression => null;

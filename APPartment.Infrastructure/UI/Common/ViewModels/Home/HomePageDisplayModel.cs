@@ -4,7 +4,7 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Home
 {
     public class HomePageDisplayModel
     {
-        public List<string> Messages { get; set; }
+        public List<string> Messages { get; set; } = new List<string>();
 
         public string InventoryLastUpdate { get; set; }
 

@@ -2,13 +2,14 @@
 using APPartment.Infrastructure.Services.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.User;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
+using APPArea = APPartment.Infrastructure.Attributes.AreaAttribute;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 
 namespace APPartment.API.Areas.Account.Controllers
 {
-    [Area(APPAreas.Account)]
+    [APPArea(APPAreas.Account)]
     public class AccountController : BaseAPICRUDController<UserDisplayViewModel, UserPostViewModel>
     {
         protected override Expression<System.Func<UserDisplayViewModel, bool>> FilterExpression => null;

@@ -1,0 +1,31 @@
+﻿<li class="nav-item dropdown no-caret mr-3 dropdown-user">
+    <a class="btn btn-icon btn-transparent-dark dropdown-toggle" id="navbarDropdownUserImage" href="javascript:void(0);" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img class="img-fluid" src="~/images/user.png" /></a>
+    <div class="dropdown-menu dropdown-menu-right border-0 shadow animated--fade-in-up" aria-labelledby="navbarDropdownUserImage">
+        <h6 class="dropdown-header d-flex align-items-center">
+            <img class="dropdown-user-img" src="~/images/user.png" />
+            <div class="dropdown-user-details">
+                <div class="dropdown-user-details-name">@currentUsername</div>
+            </div>
+        </h6>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" asp-area="Account" href="/account/details/@currentUserID">
+            <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
+            Account
+        </a>
+        <a class="dropdown-item" asp-area="Account" href="/logout">
+            <div class="dropdown-item-icon"><i data-feather="log-out"></i></div>
+            Logout
+        </a>
+    </div>
+</li>
+
+@code {
+    private string currentUsername;
+    private string currentUserID;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUsername = await sessionStorage.GetItemAsync<string>("currentUsername");
+        currentUserID = await sessionStorage.GetItemAsync<string>("currentUserID");
+    }
+}

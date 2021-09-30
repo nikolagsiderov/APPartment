@@ -33,23 +33,23 @@ namespace APPartment.Infrastructure.Controllers.Web
         #region UI Settings and Actions
         public virtual async Task SetGridItemActions(T model)
         {
-            model.ActionsHtml.Add(GridItemActionBuilder.BuildDetailsAction(CurrentAreaName, CurrentControllerName, model.ID));
+            model.ActionsHtml.Add(GridItemActionBuilder.BuildDetailsAction(CurrentAreaName, model.ID));
 
             if (CanManage)
             {
-                model.ActionsHtml.Add(GridItemActionBuilder.BuildEditAction(CurrentAreaName, CurrentControllerName, model.ID));
-                model.ActionsHtml.Add(GridItemActionBuilder.BuildDeleteAction(CurrentAreaName, CurrentControllerName, model.ID));
+                model.ActionsHtml.Add(GridItemActionBuilder.BuildEditAction(CurrentAreaName, model.ID));
+                model.ActionsHtml.Add(GridItemActionBuilder.BuildDeleteAction(CurrentAreaName, model.ID));
             }
         }
 
         public virtual async Task SetObjectActions(U model)
         {
-            model.ActionsHtml.Add(ObjectActionBuilder.BuildDetailsAction(CurrentAreaName, CurrentControllerName, model.ID));
+            model.ActionsHtml.Add(ObjectActionBuilder.BuildDetailsAction(CurrentAreaName, model.ID));
 
             if (CanManage)
             {
-                model.ActionsHtml.Add(ObjectActionBuilder.BuildEditAction(CurrentAreaName, CurrentControllerName, model.ID));
-                model.ActionsHtml.Add(ObjectActionBuilder.BuildDeleteAction(CurrentAreaName, CurrentControllerName, model.ID));
+                model.ActionsHtml.Add(ObjectActionBuilder.BuildEditAction(CurrentAreaName, model.ID));
+                model.ActionsHtml.Add(ObjectActionBuilder.BuildDeleteAction(CurrentAreaName, model.ID));
             }
         }
 
@@ -59,7 +59,7 @@ namespace APPartment.Infrastructure.Controllers.Web
         [HttpGet]
         public virtual async Task<IActionResult> Index()
         {
-            List<T> models = await APPI.RequestEntities<T>();
+            List<T> models = await APPI.RequestManyAsync<T>(new string[] { CurrentAreaName, CurrentControllerName }, CurrentUserID, CurrentHomeID);
             PopulateViewDataForIndex();
             ViewBag.Manage = CanManage;
 
@@ -78,7 +78,7 @@ namespace APPartment.Infrastructure.Controllers.Web
             if (ID == null)
                 return new Error404NotFoundViewResult();
 
-            var model = await APPI.RequestEntity<U>((long)ID);
+            var model = await APPI.RequestAsync<U>(new string[] { CurrentAreaName, CurrentControllerName, ID.ToString() }, CurrentUserID, CurrentHomeID);
 
             if (model.ID > 0)
             {
@@ -114,7 +114,7 @@ namespace APPartment.Infrastructure.Controllers.Web
         {
             if (ModelState.IsValid)
             {
-                if (await APPI.RequestPostEntity(model))
+                if (await APPI.PostAsync(model, new string[] { CurrentAreaName, CurrentControllerName }, CurrentUserID, CurrentHomeID))
                     return RedirectToAction(nameof(Index));
                 else
                     return View("_Edit", model);
@@ -130,7 +130,7 @@ namespace APPartment.Infrastructure.Controllers.Web
             if (ID == null)
                 return new Error404NotFoundViewResult();
 
-            var model = await APPI.RequestEntity<U>((long)ID);
+            var model = await APPI.RequestAsync<U>(new string[] { CurrentAreaName, CurrentControllerName, ID.ToString() }, CurrentUserID, CurrentHomeID);
 
             if (model.ID > 0)
             {
@@ -155,7 +155,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
             if (ModelState.IsValid)
             {
-                if (await APPI.RequestPostEntity(model))
+                if (await APPI.PostAsync(model, new string[] { CurrentAreaName, CurrentControllerName }, CurrentUserID, CurrentHomeID))
                     return RedirectToAction(nameof(Index));
                 else
                     return View("_Edit", model);
@@ -171,7 +171,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
             if (ID > 0)
             {
-                if (await APPI.RequestDeleteEntity((long)ID))
+                if (await APPI.DeleteAsync(new string[] { CurrentAreaName, CurrentControllerName, ID.ToString() }, CurrentUserID, CurrentHomeID))
                     return RedirectToAction(nameof(Index));
                 else
                     return new Error404NotFoundViewResult();
@@ -182,7 +182,7 @@ namespace APPartment.Infrastructure.Controllers.Web
 
         public virtual async Task<JsonResult> GetCount()
         {
-            var count = await APPI.RequestEntitiesCount();
+            var count = await APPI.RequestManyAsync<int>(new string[] { CurrentAreaName, CurrentControllerName, "count" }, CurrentUserID, CurrentHomeID);
             return Json(count);
         }
 
@@ -204,8 +204,8 @@ namespace APPartment.Infrastructure.Controllers.Web
             using (var httpClient = new HttpClient())
             {
                 var requestUri = $"{Configuration.DefaultAPI}/comments/{targetObjectID}";
-                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
-                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID);
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID);
 
                 using (var response = await httpClient.GetAsync(requestUri))
                 {
@@ -232,8 +232,8 @@ namespace APPartment.Infrastructure.Controllers.Web
             using (var httpClient = new HttpClient())
             {
                 var requestUri = $"{Configuration.DefaultAPI}/comments";
-                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
-                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID);
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID);
 
                 using (var response = await httpClient.PostAsJsonAsync(requestUri, theComment))
                 {
@@ -341,8 +341,8 @@ namespace APPartment.Infrastructure.Controllers.Web
             using (var httpClient = new HttpClient())
             {
                 var requestUri = $"{Configuration.DefaultAPI}/events/{targetObjectID}";
-                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
-                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID);
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID);
 
                 using (var response = await httpClient.GetAsync(requestUri))
                 {
@@ -363,7 +363,7 @@ namespace APPartment.Infrastructure.Controllers.Web
         {
             var @event = new EventPostViewModel()
             {
-                HomeID = (long)CurrentHomeID,
+                HomeID = long.Parse(CurrentHomeID),
                 Name = name,
                 Details = description,
                 StartDate = DateTime.Parse(startdate),
@@ -375,8 +375,8 @@ namespace APPartment.Infrastructure.Controllers.Web
             using (var httpClient = new HttpClient())
             {
                 var requestUri = $"{Configuration.DefaultAPI}/events";
-                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID.ToString());
-                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID.ToString());
+                httpClient.DefaultRequestHeaders.Add("CurrentUserID", CurrentUserID);
+                httpClient.DefaultRequestHeaders.Add("CurrentHomeID", CurrentHomeID);
 
                 using (var response = await httpClient.PostAsJsonAsync(requestUri, @event))
                 {

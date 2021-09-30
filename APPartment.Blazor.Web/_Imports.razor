@@ -1,0 +1,23 @@
+﻿@attribute [Microsoft.AspNetCore.Authorization.Authorize]
+
+@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.JSInterop
+@using APPartment.Blazor.Web
+@using APPartment.Blazor.Web.Shared
+@using APPartment.Blazor.Web.Data
+@using APPartment.Infrastructure.Services.Base
+@using APPartment.Infrastructure.UI.Common.Constants
+@using APPartment.Infrastructure.UI.Web.Constants
+@using APPartment.Infrastructure.UI.Common.ViewModels.Base
+@using APPartment.Infrastructure.Attributes
+
+@inject APPI _API
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+@inject Blazored.SessionStorage.ISessionStorageService sessionStorage

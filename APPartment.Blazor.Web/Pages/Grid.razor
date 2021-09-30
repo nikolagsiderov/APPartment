@@ -1,0 +1,76 @@
+﻿@page "/{area}"
+@page "/{area}/{controller}"
+
+@using APPartment.Infrastructure.UI.Common.ViewModels.Inventory
+@using APPartment.Infrastructure.UI.Common.ViewModels.Issue
+@using APPartment.Infrastructure.UI.Common.ViewModels.Chore
+@using APPartment.Infrastructure.UI.Common.ViewModels.Survey
+@using APPartment.Infrastructure.UI.Common.ViewModels.User
+@using APPartment.Infrastructure.UI.Common.ViewModels.Home
+
+@if (this.Data != null)
+{
+    <Datatable Data="this.Data" />
+}
+
+@code {
+    [Parameter]
+    public string Area { get; set; }
+
+    [Parameter]
+    public string Controller { get; set; }
+
+    public IEnumerable<GridItemViewModel> Data { get; set; }
+
+    private string area;
+    private string controller;
+
+    protected override async Task OnInitializedAsync()
+    {
+        area = this.Area;
+        controller = this.Controller;
+
+        await LoadDataAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (area != this.Area || controller != this.Controller)
+        {
+            area = this.Area;
+            controller = this.Controller;
+
+            await LoadDataAsync();
+        }
+    }
+
+    private async Task LoadDataAsync()
+    {
+        var currentUserID = await sessionStorage.GetItemAsync<string>("currentUserID");
+        var currentHomeID = await sessionStorage.GetItemAsync<string>("currentHomeID");
+
+        switch (Area)
+        {
+            case "inventory":
+                Data = await _API.RequestManyAsync<InventoryDisplayViewModel>(new string[] { Area, Controller }, currentUserID, currentHomeID);
+                break;
+            case "issues":
+                Data = await _API.RequestManyAsync<IssueDisplayViewModel>(new string[] { Area, Controller }, currentUserID, currentHomeID);
+                break;
+            case "chores":
+                Data = await _API.RequestManyAsync<ChoreDisplayViewModel>(new string[] { Area, Controller }, currentUserID, currentHomeID);
+                break;
+            case "surveys":
+                Data = await _API.RequestManyAsync<SurveyDisplayViewModel>(new string[] { Area, Controller }, currentUserID, currentHomeID);
+                break;
+            case "roommates":
+                Data = await _API.RequestManyAsync<UserDisplayViewModel>(new string[] { Area, Controller }, currentUserID, currentHomeID);
+                break;
+            case "neighbors":
+                Data = await _API.RequestManyAsync<HomeDisplayViewModel>(new string[] { Area, Controller }, currentUserID, currentHomeID);
+                break;
+            default:
+                break;
+        }
+    }
+}

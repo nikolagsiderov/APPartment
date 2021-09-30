@@ -1,0 +1,81 @@
+﻿@using APPartment.Infrastructure.UI.Common.ViewModels.Base
+@using APPartment.Infrastructure.Attributes
+@using System.ComponentModel.DataAnnotations
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <div style="margin-left: 4px; margin-right: 4px;">
+            <button class="btn btn-success btn-sm" style="font-size: small;"><i class="fas fa-plus"></i>&nbsp; Add</button>
+        </div>
+        @*@if (ViewBag.TypesURL != null)
+            {
+                <div style="margin-left: 4px; margin-right: 4px;">
+                    <a href="@ViewBag.TypesURL.ToString()" class="no-underline btn btn-info btn-sm" style="font-size: small;"><i class="@ViewBag.TypesFAIcon"></i>&nbsp; Types</a>
+                </div>
+            }*@
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        @if (Data.Any())
+                        {
+                            @foreach (var property in Data.FirstOrDefault().Properties)
+                            {
+                                <th>
+                                    @property.DisplayName
+                                </th>
+                            }
+                            <th>
+                                Actions
+                            </th>
+                        }
+                        else
+                        {
+                            var properties = typeof(GridItemViewModel).GetProperties()
+                                .Where(p => p.IsDefined(typeof(GridFieldDisplayAttribute), true))
+                                .Select(p => new
+                                {
+                                    DisplayName = p.GetCustomAttributes(typeof(DisplayAttribute), true).Any() ? p.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>().Single().Name : p.Name
+                                });
+
+                            @foreach (var property in properties)
+                            {
+                                <th>
+                                    @property.DisplayName
+                                </th>
+                            }
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Data.Any())
+                    {
+                        @foreach (var item in Data)
+                        {
+                            <tr>
+                                @foreach (var property in item.Properties)
+                                {
+                                    var value = @property.Property.GetValue(item);
+                                    <td>@value</td>
+                                }
+                                <td>
+                                    @{
+                                        var actionsHtml = string.Join(" ", item.ActionsHtml);
+                                    }
+                                    <span id="grid-actions-for-@item.ID">@((MarkupString)actionsHtml)</span>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public IEnumerable<GridItemViewModel> Data { get; set; }
+}

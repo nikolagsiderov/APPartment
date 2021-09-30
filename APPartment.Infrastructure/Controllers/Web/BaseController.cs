@@ -7,8 +7,8 @@ namespace APPartment.Infrastructure.Controllers.Web
 {
     public abstract class BaseController : Controller
     {
-        protected long? CurrentUserID { get; set; }
-        protected long? CurrentHomeID { get; set; }
+        protected string CurrentUserID { get; set; }
+        protected string CurrentHomeID { get; set; }
         protected string CurrentHomeName { get; set; }
         protected string CurrentUserName { get; set; }
         protected string CurrentAreaName { get; set; }
@@ -22,13 +22,13 @@ namespace APPartment.Infrastructure.Controllers.Web
             if (contextAccessor.HttpContext != null && contextAccessor.HttpContext.Session != null)
             {
                 if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("CurrentUserID")))
-                    CurrentUserID = long.Parse(contextAccessor.HttpContext.Session.GetString("CurrentUserID"));
+                    CurrentUserID = contextAccessor.HttpContext.Session.GetString("CurrentUserID");
 
                 if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("CurrentUsername")))
                     CurrentUserName = contextAccessor.HttpContext.Session.GetString("CurrentUsername");
 
                 if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("CurrentHomeID")))
-                    CurrentHomeID = long.Parse(contextAccessor.HttpContext.Session.GetString("CurrentHomeID"));
+                    CurrentHomeID = contextAccessor.HttpContext.Session.GetString("CurrentHomeID");
 
                 if (!string.IsNullOrEmpty(contextAccessor.HttpContext.Session.GetString("CurrentHomeName")))
                     CurrentHomeName = contextAccessor.HttpContext.Session.GetString("CurrentHomeName").ToString();
@@ -56,7 +56,7 @@ namespace APPartment.Infrastructure.Controllers.Web
                 else
                     CurrentAreaName = "Home";
 
-                APPI = new APPI(CurrentUserID, CurrentHomeID, CurrentControllerName, CurrentAreaName);
+                APPI = new APPI();
             }
         }
     }

@@ -5,19 +5,19 @@ namespace APPartment.Infrastructure.UI.Web.Html
 {
     public static class GridItemActionBuilder
     {
-        public static string BuildDetailsAction(string currentArea, string currentController, long modelID)
+        public static string BuildDetailsAction(string currentArea, long modelID)
         {
-            var button = $@"<a href='/{currentArea}/{currentController}/Details/{modelID}' title='Details' class='no-underline btn btn-outline-info btn-xs btn-icon'><i class='fas fa-info-circle'></i></a>";
+            var button = $@"<a href='/{currentArea}/{modelID}' title='Details' class='no-underline btn btn-outline-info btn-xs btn-icon'><i class='fas fa-info-circle'></i></a>";
             return button;
         }
 
-        public static string BuildEditAction(string currentArea, string currentController, long modelID)
+        public static string BuildEditAction(string currentArea, long modelID)
         {
-            var button = $@"<a href='/{currentArea}/{currentController}/Edit/{modelID}' title='Edit' class='no-underline btn btn-outline-primary btn-xs btn-icon'><i class='fas fa-edit'></i></a>";
+            var button = $@"<a href='/{currentArea}/edit/{modelID}' title='Edit' class='no-underline btn btn-outline-primary btn-xs btn-icon'><i class='fas fa-edit'></i></a>";
             return button;
         }
 
-        public static string BuildDeleteAction(string currentArea, string currentController, long modelID)
+        public static string BuildDeleteAction(string currentArea, long modelID)
         {
             var modalID = $"deleteModal-{modelID}";
             var button = $@"<button type='button' title='Delete' class='btn btn-outline-danger btn-xs btn-icon' data-toggle='modal' data-target='#{modalID}'><i class='fas fa-trash-alt'></i></button>";
@@ -35,7 +35,7 @@ namespace APPartment.Infrastructure.UI.Web.Html
                                                     </div>
                                                     <div class='modal-footer'>
                                                         <button type='button' class='btn btn-secondary' data-dismiss='modal'>Cancel</button>
-                                                        <a href='/{currentArea}/{currentController}/Delete/{modelID}' class='no-underline btn btn-danger'>Delete</a>
+                                                        <a href='/{currentArea}/Delete/{modelID}' class='no-underline btn btn-danger'>Delete</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -44,10 +44,10 @@ namespace APPartment.Infrastructure.UI.Web.Html
             return buttonWithModal;
         }
 
-        public static string BuildCustomAction(string currentArea, string currentController, string action, long modelID, string buttonColorClass, string faIconClass, string buttonName = null, bool isModal = false, bool isForDropdown = false)
+        public static string BuildCustomAction(string currentArea, string action, long modelID, string buttonColorClass, string faIconClass, string buttonName = null, bool isModal = false, bool isForDropdown = false)
         {
             var button = string.Empty;
-            var href = $"href='/{currentArea}/{currentController}/{action}/{modelID}'";
+            var href = $"href='/{currentArea}/{action}/{modelID}'";
 
             if (string.IsNullOrEmpty(buttonName))
                 buttonName = action;

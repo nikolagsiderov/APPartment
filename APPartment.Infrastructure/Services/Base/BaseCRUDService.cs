@@ -1,7 +1,6 @@
 ﻿using APPartment.Data.Server.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels;
 using APPartment.ORM.Framework.Declarations;
-using APPartment.ORM.Framework.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

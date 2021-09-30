@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
+using APPArea = APPartment.Infrastructure.Attributes.AreaAttribute;
 using System.Linq.Expressions;
 using System;
 using APPartment.Infrastructure.Controllers.Api;
@@ -9,7 +10,7 @@ using APPartment.Infrastructure.UI.Common.Constants;
 
 namespace APPartment.API.Controllers
 {
-    [Area(APPAreas.Surveys)]
+    [APPArea(APPAreas.Surveys)]
     public class SurveysController : BaseAPICRUDController<SurveyDisplayViewModel, SurveyPostViewModel>
     {
         public SurveysController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

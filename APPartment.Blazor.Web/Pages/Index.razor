@@ -1,0 +1,114 @@
+﻿@page "/"
+@page "/home"
+
+@using APPartment.Infrastructure.UI.Common.ViewModels.Home
+
+@if (Model != null)
+{
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary"><i class="far fa-comment-dots"></i> Chat with housemates</h6>
+                </div>
+                <div class="card-body">
+                    <div class="container">
+                        <input type="hidden" class="form-control" id="userInput" value="@currentUserID" />
+                        <div class="row">
+                            <div class="col-12"><textarea type="text" class="form-control" id="messageInput" rows="5" placeholder="Type a message..."></textarea></div>
+                        </div>
+                        <div class="row">&nbsp;</div>
+                        <div class="row">
+                            <div class="col-6">
+                                <button type="submit" class="btn btn-primary btn-sm" id="sendButton" style="font-size: small;"><i class="fas fa-reply"></i> &nbsp; Send</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <hr />
+                        </div>
+                    </div>
+                    <div class="row" style="height: 200px; overflow-y: scroll;">
+                        <div class="col-12">
+                            <div id="messagesList">
+                                @foreach (var message in Model.Messages)
+                                {
+                                    <div>@message</div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="card border-danger mb-3">
+                <div class="card-body text-danger">
+                    @if (string.IsNullOrEmpty(Model.RentDueDisplay))
+                    {
+                        <p class="card-text">
+                            Go to <a style="text-decoration: none;" asp-area="Home" asp-controller="Home" asp-action="Edit" asp-route-id="test home id">Settings</a> in order to set rent due day.
+                        </p>
+                    }
+                    else
+                    {
+                        <p class="card-text">
+                            Rent due in: <strong>@Model.RentDueDisplay</strong>
+                        </p>
+                        <p class="card-text">
+                            You can manage your rent due day by going to <a style="text-decoration: none;" asp-area="Home" asp-controller="Home" asp-action="Edit" asp-route-id="test home id ">Settings</a>.
+                        </p>
+                    }
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Inventory" asp-controller="Inventory" asp-action="Index" class="no-underline"><i class='fas fa-tasks'></i> Inventory - latest updates</a></h6>
+                    <div style="margin-left: auto;"><a asp-area="Inventory" asp-controller="Inventory" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
+                </div>
+                <div class="card-body" id="inventory-chart-body">
+                    <div class="chart-pie"><canvas id="inventory-pie-chart" width="100%" height="50"></canvas></div>
+                </div>
+                <div class="card-footer small text-muted">@Model.InventoryLastUpdate</div>
+            </div>
+            <br />
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Chores" asp-controller="Chores" asp-action="Index" class="no-underline"><i class='fas fa-shopping-bag'></i> Chores - latest updates</a></h6>
+                    <div style="margin-left: auto;"><a asp-area="Chores" asp-controller="Chores" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
+                </div>
+                <div class="card-body" id="chores-chart-body">
+                    <div class="chart-pie"><canvas id="chores-pie-chart" width="100%" height="50"></canvas></div>
+                </div>
+                <div class="card-footer small text-muted">@Model.ChoresLastUpdate</div>
+            </div>
+            <br />
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary"><a asp-area="Issues" asp-controller="Issues" asp-action="Index" class="no-underline"><i class='fas fa-exclamation-circle'></i> Issues - latest updates</a></h6>
+                    <div style="margin-left: auto;"><a asp-area="Issues" asp-controller="Issues" asp-action="Create" class="no-underline"><i class="fas fa-plus"></i></a></div>
+                </div>
+                <div class="card-body" id="issues-chart-body">
+                    <div class="chart-pie"><canvas id="issues-pie-chart" width="100%" height="50"></canvas></div>
+                </div>
+                <div class="card-footer small text-muted">@Model.IssuesLastUpdate</div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private HomePageDisplayModel Model;
+    private string currentUserID;
+    private string currentHomeID;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUserID = await sessionStorage.GetItemAsync<string>("currentUserID");
+        currentHomeID = await sessionStorage.GetItemAsync<string>("currentHomeID");
+        Model = await _API.RequestAsync<HomePageDisplayModel>(new string[] { "home", "home", "page" }, currentUserID, currentHomeID);
+    }
+}

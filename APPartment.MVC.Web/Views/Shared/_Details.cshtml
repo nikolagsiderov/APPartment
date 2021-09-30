@@ -1,0 +1,108 @@
+﻿@model APPartment.Infrastructure.UI.Common.ViewModels.Base.PostViewModel
+
+@{
+    var canManage = false;
+    var isReadonly = false;
+
+    if (ViewBag.ReadOnly != null)
+    {
+        isReadonly = bool.Parse(ViewBag.ReadOnly.ToString());
+    }
+
+    if (ViewBag.Manage != null)
+    {
+        canManage = bool.Parse(ViewBag.Manage.ToString());
+    }
+}
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-header">
+                @if (canManage)
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.ID" class="btn btn-primary btn-sm" style="font-size:small;"><i class="fas fa-edit"></i>&nbsp; Edit</a>
+                }
+            </div>
+            <div class="card-body">
+                @{
+                    var propertiesWithoutSection = Model.Properties.Where(x => x.Section == null);
+                }
+
+                @foreach (var row in propertiesWithoutSection.Select(x => x.Row).Distinct())
+                {
+                    <div class="row">
+                        @foreach (var propUI in propertiesWithoutSection.Where(x => x.Row == row))
+                        {
+                            if (string.IsNullOrEmpty(propUI.SelectList))
+                            {
+                                <div class="col-md-@propUI.Col">
+                                    <div class="display-field">
+                                        @Html.Display(propUI.Property.Name)
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-@propUI.Col">
+                                    <div class="display-field">
+                                        @Html.LabelFor(m => m, propUI.DisplayName)
+                                        @Html.Display(propUI.Property.Name, nameof(propUI.Template), ViewData[propUI.SelectList])
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+
+                @if (Model.Sections.Any())
+                {
+                    @foreach (var section in Model.Sections)
+                    {
+                        <div class="section">
+                            <h4 style="opacity: 0.8;">@Html.Raw(section)</h4>
+
+                            @{
+                                var propertiesOfCurrentSection = Model.Properties.Where(x => x.Section == section);
+                            }
+
+                            @foreach (var row in propertiesOfCurrentSection.Select(x => x.Row).Distinct())
+                            {
+                                <div class="row">
+                                    @foreach (var propUI in propertiesOfCurrentSection.Where(x => x.Row == row))
+                                    {
+                                        if (string.IsNullOrEmpty(propUI.SelectList))
+                                        {
+                                            <div class="col-md-@propUI.Col">
+                                                <div class="display-field">
+                                                    @Html.Display(propUI.Property.Name)
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="col-md-@propUI.Col">
+                                                <div class="display-field">
+                                                    @Html.LabelFor(m => m, propUI.DisplayName)
+                                                    @Html.Display(propUI.Property.Name, nameof(propUI.Template), ViewData[propUI.SelectList])
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                }
+
+                <br />
+
+                @if (isReadonly == false)
+                {
+                    @await Html.PartialAsync("_ObjectMetadataTab", Model)
+                }
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("_Console", Model) 
+</div>

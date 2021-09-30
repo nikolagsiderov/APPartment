@@ -1,0 +1,7 @@
+﻿@code {
+    protected override void OnInitialized()
+    {
+        var returnURL = NavigationManager.Uri.Remove(0, NavigationManager.BaseUri.Length);
+        NavigationManager.NavigateTo($"/auth?returnURL={returnURL}", true);
+    }
+}

@@ -21,7 +21,6 @@ namespace APPartment.Infrastructure.UI.Common.ViewModels.Home
         public override string Details { get; set; }
 
         [Required(ErrorMessage = "Home password is required.")]
-        [DataType(DataType.Password)]
         [APPUIHint(Templates.Password, Row = 2, Col = 6, Order = 1, Section = "General Information")]
         public string Password { get; set; }
 

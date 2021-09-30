@@ -1,0 +1,97 @@
+﻿<div id="layoutSidenav_nav">
+    <nav class="sidenav shadow-right sidenav-light">
+        <div class="sidenav-menu">
+            <div class="nav accordion" id="accordionSidenav">
+                <div class="sidenav-menu-heading"></div>
+                <a href="/" class="nav-link">
+                    <div class="nav-link-icon"><i class="fas fa-home"></i></div>
+                    Home
+                </a>
+                <a href="/calendar" class="nav-link">
+                    <div class="nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
+                    General Calendar
+                </a>
+                <div class="sidenav-menu-heading">Home Objects</div>
+                <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseInventory" aria-expanded="false" aria-controls="collapseInventory">
+                    <div class="nav-link-icon"><i class='fas fa-tasks'></i></div>
+                    Inventory &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="inventoryBadge"></span>
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseInventory" data-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                        <a href="/inventory/unsupplied" class="nav-link"><i class="fas fa-exclamation-triangle"></i> &nbsp; Unsupplied &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="unsuppliedInventoryBadge"></span></a>
+                        <a href="/inventory/supplied" class="nav-link"><i class="fas fa-check"></i> &nbsp; Supplied &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="suppliedInventoryBadge"></span></a>
+                        <a href="/inventory" class="nav-link"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
+                    </nav>
+                </div>
+                <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseIssues" aria-expanded="false" aria-controls="collapseIssues">
+                    <div class="nav-link-icon"><i class='fas fa-exclamation-circle'></i></div>
+                    Issues &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="issuesBadge"></span>
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseIssues" data-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                        <a href="/issues/open" class="nav-link"><i class="fas fa-exclamation-triangle"></i> &nbsp; Open &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="openIssuesBadge"></span></a>
+                        <a href="/issues/closed" class="nav-link"><i class="fas fa-check"></i> &nbsp; Closed   &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="closedIssuesBadge"></span></a>
+                        <a href="/issues" class="nav-link"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
+                    </nav>
+                </div>
+                <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseChores" aria-expanded="false" aria-controls="collapseChores">
+                    <div class="nav-link-icon"><i class='fas fa-shopping-bag'></i></div>
+                    Chores &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="choresBadge"></span>
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseChores" data-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                        <a href="/chores/mine" class="nav-link"><i class='fas fa-user-tag'></i> &nbsp; Mine &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="mineChoresBadge"></span></a>
+                        <a href="/chores/others" class="nav-link"><i class='fas fa-user-friends'></i> &nbsp; Others &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="othersChoresBadge"></span></a>
+                        <a href="/chores" class="nav-link"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
+                    </nav>
+                </div>
+                <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseSurveys" aria-expanded="false" aria-controls="collapseSurveys">
+                    <div class="nav-link-icon"><i class="fas fa-poll"></i></div>
+                    Surveys &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="surveysBadge"></span>
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseSurveys" data-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav accordion" id="accordionSidenavPages">
+                        <a href="/surveys/pending" class="nav-link"><i class="fas fa-exclamation-triangle"></i> &nbsp; Pending  &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="pendingSurveysBadge"></span></a>
+                        <a href="/surveys/completed" class="nav-link"><i class="fas fa-check"></i> &nbsp; Completed &nbsp; <span class="badge badge-warning badge-pill" style="display: none" id="completedSurveysBadge"></span></a>
+                        <a href="/surveys" class="nav-link"><i class="fas fa-tasks"></i> &nbsp; Manage</a>
+                    </nav>
+                </div>
+                <div class="sidenav-menu-heading">More</div>
+                <a href="/roomates" class="nav-link" asp-area="Roommates">
+                    <div class="nav-link-icon"><i class="fa fa-users"></i></div>
+                    Roommates
+                </a>
+                <a href="/neighbors" class="nav-link" asp-area="Neighbors">
+                    <div class="nav-link-icon"><i class="fas fa-city"></i></div>
+                    Neighbors
+                </a>
+                <a href="/settings" class="nav-link">
+                    <div class="nav-link-icon"><i class="fas fa-cog"></i></div>
+                    Settings
+                </a>
+            </div>
+        </div>
+        @if (string.IsNullOrEmpty(currentUsername) == false)
+        {
+            <div class="sidenav-footer">
+                <div class="sidenav-footer-content">
+                    <div class="sidenav-footer-subtitle">Logged in as:</div>
+                    <div class="sidenav-footer-title">@currentUsername</div>
+                </div>
+            </div>
+        }
+    </nav>
+</div>
+
+@code {
+    private string currentUsername;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUsername = await sessionStorage.GetItemAsync<string>("currentUsername");
+    }
+}

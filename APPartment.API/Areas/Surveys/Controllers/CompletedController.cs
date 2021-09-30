@@ -4,12 +4,12 @@ using APPartment.Infrastructure.Controllers.Api;
 using APPartment.Infrastructure.UI.Common.Constants;
 using APPartment.Infrastructure.UI.Common.ViewModels.Survey;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
+using APPArea = APPartment.Infrastructure.Attributes.AreaAttribute;
 
 namespace APPartment.API.Areas.Surveys.Controllers
 {
-    [Area(APPAreas.Surveys)]
+    [APPArea(APPAreas.Surveys)]
     public class CompletedController : BaseAPICRUDController<SurveyDisplayViewModel, SurveyPostViewModel>
     {
         public CompletedController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

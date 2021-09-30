@@ -1,0 +1,80 @@
+﻿<div class="row" id="images-main-div">
+    @if (Model.Images.Any())
+    {
+        <div class="col-md-12" style="display: contents;">
+            @foreach (var image in Model.Images)
+            {
+                <div style="text-align:center; margin:10px;">
+                    <div class="square" style="margin: 10px; text-align:center;">
+                        <a href="~/fileshare/images/@image.Name" data-fancybox="gallery" data-caption="@image.Name">
+                            <img src="~/fileshare/images/@image.Name" class="image-img" />
+                        </a>
+                    </div>
+
+
+                    <div class="image-metadata" style="font-size: x-small;">
+                        <hr />
+                        <span style="font-weight: bold;">
+                            @{
+                                var imageDisplayName = image.Name.Length <= 15 ? image.Name : image.Name.Substring(0, 15) + "..." + image.Name.Split('.').Last();
+                            }
+
+                            @imageDisplayName
+                            <br />
+                        </span>
+                        <span class="image-metadata-filesize">
+                            @image.FileSize |
+                        </span>
+                        <span class="image-metadata-created-date">
+                            @image.CreatedDate.ToString("dd/MM/yyyy hh:mm:ss tt")
+                        </span>
+
+                        <br />
+                        <a href="~/fileshare/images/@image.Name" style="font-size: unset;" download><i class="fa fa-download"></i> Donwload</a> |
+                        <a href="#" style="color: red; font-size: unset;" onclick="DeleteImage(@image.ID)"><i class="far fa-trash-alt"></i> Delete</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="col-md-12">
+            <span id="no-images-added-message">
+                No images have been added to this object.
+            </span>
+        </div>
+    }
+</div>
+
+<br />
+
+<div class="row">
+    <div class="col-md-12">
+        <form action="/@Controller/UploadImages?targetObjectIDString=@Model.ObjectID" method="post" enctype="multipart/form-data" class="dropzone" id="imagesDropzone">
+            <div class="dz-message">
+                Drop images here or click to upload.
+            </div>
+            <div class="fallback">
+                <input name="file" type="file" multiple />
+            </div>
+        </form>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public PostViewModel Model { get; set; }
+
+    private string Controller
+    {
+        get
+        {
+            var baseUri = NavigationManager.BaseUri;
+            var controller = NavigationManager.Uri.Remove(0, baseUri.Length).Split(new char[] { '/', '?' }).FirstOrDefault();
+            return controller;
+        }
+    }
+
+    // TODO: Create function onclick delete button to send api call to actually delete the image, then refresh the images list
+}

@@ -1,0 +1,98 @@
+﻿@page "/login"
+@attribute [AllowAnonymous]
+@layout UnauthorizedLayout
+
+@using APPartment.Infrastructure.UI.Common.ViewModels.User
+@using APPartment.Infrastructure.UI.Common.ViewModels.Home
+
+@if (user != null && home != null)
+{
+    if (loading)
+    {
+        <Spinner />
+    }
+    else
+    {
+        <div id="layoutAuthentication_content">
+            <main>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-5 col-lg-6 col-md-8 col-sm-11">
+                            <div class="card my-5">
+                                <div class="card-body p-5 text-center">
+                                    <div class="h3 font-weight-light mb-3">Sign-in to your account</div>
+                                </div>
+                                <hr class="my-0" />
+                                <div class="card-body p-5">
+                                    <EditorWrapper Source="user" PropertyName="@nameof(user.Name)" />
+
+                                    <EditorWrapper Source="user" PropertyName="@nameof(user.Password)" />
+
+                                    <EditorWrapper Source="home" PropertyName="@nameof(home.Name)" />
+
+                                    <EditorWrapper Source="home" PropertyName="@nameof(home.Password)" />
+                                    <div class="form-group">
+                                        <button type="button" class="btn btn-primary" @onclick="SignIn">Sign-in</button>
+                                    </div>
+                                </div>
+                                <hr class="my-0" />
+                                <div class="card-body px-5 py-4">
+                                    <div class="small text-center">Don't have an account? <a href="/register">Create an account!</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    }
+}
+else
+{
+    <Spinner />
+}
+
+
+@code {
+    private bool loading;
+    private string returnURL;
+    private UserPostViewModel user;
+    private HomePostViewModel home;
+
+    protected override Task OnInitializedAsync()
+    {
+        NavigationManager.TryGetQueryString<string>("returnURL", out returnURL);
+        user = new UserPostViewModel();
+        home = new HomePostViewModel();
+
+        return base.OnInitializedAsync();
+    }
+
+    private async Task<bool> SignIn()
+    {
+        loading = true;
+
+        // assume user info is valid
+        user = await _API.PostReturnAsync<UserPostViewModel>(user, new string[] { "account", "account", "login" }, "0", "0");
+        home = await _API.PostReturnAsync<HomePostViewModel>(home, new string[] { "home", "home", "login" }, "0", "0");
+
+        if (user != null && home != null
+            && user.ID > 0 && home.ID > 0)
+        {
+            ((APPAuthStateProvider)AuthenticationStateProvider).ChangeAuthState(user.ID.ToString(), user.Name, home.ID.ToString(), home.Name);
+
+            await sessionStorage.SetItemAsync("currentUserID", user.ID);
+            await sessionStorage.SetItemAsync("currentUsername", user.Name);
+            await sessionStorage.SetItemAsync("currentHomeID", home.ID);
+            await sessionStorage.SetItemAsync("currentHomeName", home.Name);
+
+            NavigationManager.NavigateTo($"/{returnURL}");
+        }
+        else
+        {
+            // throw validation message
+        }
+
+        return await Task.FromResult(true);
+    }
+}

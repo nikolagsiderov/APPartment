@@ -2,11 +2,12 @@
 
 namespace APPartment.Infrastructure.Attributes
 {
+    // UIHintAttribute is inherited only for MVC reasons
     public class APPUIHintAttribute : UIHintAttribute
     {
         public APPUIHintAttribute(string template) : base(template)
         {
-            Template = template;
+            this.Template = template;
         }
 
         public string Template { get; set; }

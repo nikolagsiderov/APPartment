@@ -1,0 +1,91 @@
+﻿@page "/{area}/edit/{ID:int}"
+
+@using APPartment.Infrastructure.UI.Common.ViewModels.Inventory
+@using APPartment.Infrastructure.UI.Common.ViewModels.Issue
+@using APPartment.Infrastructure.UI.Common.ViewModels.Chore
+@using APPartment.Infrastructure.UI.Common.ViewModels.Survey
+@using APPartment.Infrastructure.UI.Common.ViewModels.User
+@using APPartment.Infrastructure.UI.Common.ViewModels.Home
+
+@if (this.Model != null && this.Model.ID > 0)
+{
+    <div class="row">
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <button type="button" @onclick="SaveChanges" class="btn btn-success btn-sm" style="font-size: small;">Save</button>
+                </div>
+                <div class="card-body">
+                    <PostViewModelUI Model="this.Model" Editable="true" />
+
+                    <br />
+
+                    <MetadataTab Model="Model" />
+                </div>
+            </div>
+        </div>
+        <ActionConsole Model="Model" Header="@ConsoleHeader" />
+    </div>
+}
+else if (this.Model != null && this.Model.ID == 0)
+{
+    // Create
+}
+
+@code {
+    [Parameter]
+    public string Area { get; set; }
+
+    [Parameter]
+    public int ID { get; set; }
+
+    private string CurrentUserID { get; set; }
+
+    private string CurrentHomeID { get; set; }
+
+    private PostViewModel Model { get; set; }
+
+    private string ConsoleHeader
+    {
+        get
+        {
+            return $"Console [ID: {Model.ID}, Name: {Model.Name}]";
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentUserID = await sessionStorage.GetItemAsync<string>("currentUserID");
+        CurrentHomeID = await sessionStorage.GetItemAsync<string>("currentHomeID");
+
+        switch (Area)
+        {
+            case "inventory":
+                Model = await _API.RequestAsync<InventoryPostViewModel>(new string[] { Area, ID.ToString() }, CurrentUserID, CurrentHomeID);
+                break;
+            case "issues":
+                Model = await _API.RequestAsync<IssuePostViewModel>(new string[] { Area, ID.ToString() }, CurrentUserID, CurrentHomeID);
+                break;
+            case "chores":
+                Model = await _API.RequestAsync<ChorePostViewModel>(new string[] { Area, ID.ToString() }, CurrentUserID, CurrentHomeID);
+                break;
+            case "surveys":
+                Model = await _API.RequestAsync<SurveyPostViewModel>(new string[] { Area, ID.ToString() }, CurrentUserID, CurrentHomeID);
+                break;
+            case "roommates":
+                Model = await _API.RequestAsync<UserPostViewModel>(new string[] { Area, ID.ToString() }, CurrentUserID, CurrentHomeID);
+                break;
+            case "neighbors":
+                Model = await _API.RequestAsync<HomePostViewModel>(new string[] { Area, ID.ToString() }, CurrentUserID, CurrentHomeID);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private async Task SaveChanges()
+    {
+        await _API.PostAsync<PostViewModel>(Model, new string[] { Area }, CurrentUserID, CurrentHomeID);
+        NavigationManager.NavigateTo($"/{Area}");
+    }
+}

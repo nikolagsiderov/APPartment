@@ -5,12 +5,13 @@ using APPartment.Infrastructure.Services.Base;
 using APPartment.Infrastructure.UI.Common.ViewModels.Clingons.Event;
 using APPartment.Infrastructure.UI.Common.ViewModels.GeneralCalendar;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
+using APPArea = APPartment.Infrastructure.Attributes.AreaAttribute;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APPartment.API.Areas.Home.Controllers
 {
-    [Area(APPAreas.Home)]
+    [APPArea(APPAreas.Home)]
     [Route("api/[area]/[controller]")]
     public class CalendarController : BaseAPIController
     {

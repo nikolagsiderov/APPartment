@@ -3,12 +3,12 @@ using System.Linq.Expressions;
 using APPartment.Infrastructure.Controllers.Api;
 using APPartment.Infrastructure.UI.Common.ViewModels.Issue;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using APPAreas = APPartment.Infrastructure.UI.Common.Constants.Areas;
+using APPArea = APPartment.Infrastructure.Attributes.AreaAttribute;
 
 namespace APPartment.API.Areas.Issues.Controllers
 {
-    [Area(APPAreas.Issues)]
+    [APPArea(APPAreas.Issues)]
     public class ClosedController : BaseAPICRUDController<IssueDisplayViewModel, IssuePostViewModel>
     {
         public ClosedController(IHttpContextAccessor contextAccessor) : base(contextAccessor)

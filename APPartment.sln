@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29411.108
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.Web", "APPartment.Web\APPartment.Web.csproj", "{45797B29-1226-4161-A990-A850858C7E7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.MVC.Web", "APPartment.MVC.Web\APPartment.MVC.Web.csproj", "{45797B29-1226-4161-A990-A850858C7E7B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.Infrastructure", "APPartment.Infrastructure\APPartment.Infrastructure.csproj", "{C0D7B9BD-DD7E-4A45-8C01-6C751ECB2057}"
 EndProject
@@ -18,6 +18,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{6D3D93B4-145E-4891-8E76-6E044BA4ADAC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.Common", "APPartment.Common\APPartment.Common.csproj", "{40F75A8C-E121-477B-916F-93C4E91D3980}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APPartment.Blazor.Web", "APPartment.Blazor.Web\APPartment.Blazor.Web.csproj", "{EA5DEFFB-7EDC-49F5-BFA8-ED448B0FDCF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +55,10 @@ Global
 		{40F75A8C-E121-477B-916F-93C4E91D3980}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40F75A8C-E121-477B-916F-93C4E91D3980}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{40F75A8C-E121-477B-916F-93C4E91D3980}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA5DEFFB-7EDC-49F5-BFA8-ED448B0FDCF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA5DEFFB-7EDC-49F5-BFA8-ED448B0FDCF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA5DEFFB-7EDC-49F5-BFA8-ED448B0FDCF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA5DEFFB-7EDC-49F5-BFA8-ED448B0FDCF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

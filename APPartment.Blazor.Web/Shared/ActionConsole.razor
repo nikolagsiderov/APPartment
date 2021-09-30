@@ -1,0 +1,74 @@
+﻿<div class="col-md-3">
+    <div class="card">
+        <div class="card-header">
+            @Header
+        </div>
+        <div class="card-body">
+            @if (Model.ID > 0)
+            {
+                <div id="object-additional-info-for-@Model.ID" style="font-family: monospace;">
+                    Created by ID: @Model.CreatedByID
+                    <br />
+                    Created date: @Model.CreatedDate.ToString("dd'/'MM'/'yyyy HH:mm:ss")
+                    <br />
+                    Modified by ID: @Model.ModifiedByID
+                    <br />
+                    Modified date: @Model.ModifiedDate.Value.ToString("dd'/'MM'/'yyyy HH:mm:ss")
+                </div>
+                <hr />
+                <div id="object-actions-for-@Model.ID">
+                    @{
+                        var actionsHtml = string.Join(" &nbsp;", Model.ActionsHtml);
+                    }
+                    @((MarkupString)actionsHtml)
+                </div>
+                <hr />
+                <div id="add-participants-manually">
+                    <div class="form-group">
+                        <input id="addParticipantField" class="form-control form-control-sm" placeholder="Add new participant" />
+                    </div>
+                    <button type="button" id="addParticipantsBtn" class="btn btn-outline-secondary btn-xs" style="float: right;">Add</button>
+                </div>
+                <br />
+                <div id="object-participants-for-@Model.ID">
+                    <strong><i class="fas fa-user-friends"></i> Participants:</strong>
+                    <div id="object-participants">
+                        @if (Model.Participants.Any())
+                        {
+                            @foreach (var participant in Model.Participants)
+                            {
+                                <div class="object-participant">
+                                    @participant.Username
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div>
+                                None
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div style="font-family: monospace;">
+                    Created by ID: Probably you
+                    <br />
+                    Created date: Probably now
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public PostViewModel Model { get; set; }
+
+    [Parameter]
+    public string Header { get; set; }
+
+    // TODO: Function for adding participants, making api call...
+}
