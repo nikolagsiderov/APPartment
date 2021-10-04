@@ -17,6 +17,7 @@ This was incomplete and the **MVC** architecture was redundant, having to suppor
 * Further understanding of **Entity Framework Core**
 * Further experience with **JavaScript**, **jQuery**, **AJAX** & **JSON**
 * Further experience with **generics**, **abstractions**, **reflection** and **asynchronous programming**
+* Further experience with **Bootstrap**
 * Ability to publish with **Azure**
 * Basic work with **SignalR**
 * Creating custom logos with **Photoshop**
