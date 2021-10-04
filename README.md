@@ -2,9 +2,9 @@
 
 At start, **Entity Framework Core** with **code first** approach was used, then I migrated to **database first**, later on **EF Core** was entirely removed and I developed my **own custom object-relational mapping framework**.
 
-The project was also initially started with a **MVC architecture**, with all the business logic implemented in the controller levels. After which, a new **Web API** project was initialized with a proper business layer where all the business logic was migrated to. Now, the **MVC** project was sending requests to the **API** and retrieving responses in the form of view-models to display in its views.
+The project was also initially started with a **MVC architecture**, with all the business logic implemented in the controller levels. After which, a new **Web API** project was initialized with a proper business layer where the business logic was migrated. The **MVC** project send requests to the **API** and retrieved responses in the form of view-models to display in its views.
 
-This was incomplete and the **MVC** architecture was redundant, having to support its controllers (only to make calls to the **API**). That is when I implemented a new web client under the hood of **Blazor**, using the latest **.NET 5**. Now, the new web client was dynamic and was just that - a web client, nothing more.
+This was incomplete and the **MVC** architecture was redundant, having to support its controllers (only to make calls to the **API**). I implemented a new web client, under the hood of **Blazor**, using latest **.NET 5**. Now, the new web client was dynamic and was just that - a web client, nothing more.
 
 # What I have learned
 
