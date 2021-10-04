@@ -1,5 +1,3 @@
-# APPartment
-
 # Project's development lifecycle:
 
 At start, **Entity Framework Core** with **code first** approach was used, then I migrated to **database first**, later on **EF Core** was entirely removed and I developed my **own custom object-relational mapping framework**.
