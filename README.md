@@ -1,36 +1,34 @@
 # APPartment
 
-APPartment is a project (**ASP.NET Core MVC** with **Web API**) with an original purpose to serve as a platform where housemates keep track of everything in their apartment/house.
-Later on, the purpose changed to an entirely educational one. Throughout the project's development, lots of modifications have been made, for example, at the beginning **Entity Framework Core with code first** approach was used, then I migrated it to **database first**, later **EF Core** was entirely removed and I developed my **own custom object-relational mapping framework with a facade design pattern**.
+# Project's development lifecycle:
+
+At start, **Entity Framework Core** with **code first** approach was used, then I migrated to **database first**, later on **EF Core** was entirely removed and I developed my **own custom object-relational mapping framework**.
+The project was also initially started with a **MVC architecture**, with all the business logic implemented in the controller levels. After which, a new **Web API** project was initialized with a proper business layer where all the business logic was migrated to. Now, the **MVC** project was sending requests to the **API** and retrieving responses in the form of view-models to display in its views.
+This was incomplete and the **MVC** architecture was redundant, having to support its controllers (only to make calls to the **API**). That is when I implemented a new web client under the hood of **Blazor**, using the latest **.NET 5**. Now, the new web client was dynamic and was just that - a web client, nothing more.
 
 # What I have learned
 
+* Working with **.NET 5** & **.NET Core 3.1**
+* Implementing two web clients - **Blazor** and **MVC**, both consuming data from the **API**
+* Working with **Web API**
+* Building my **own custom ORM Framework**
+* Working with **AutoMapper**
+* Incorporating **Facade Design Pattern**
+* Further understanding of **Entity Framework Core**
+* Further experience with **JavaScript**, **jQuery**, **AJAX** & **JSON**
 * Further experience with **generics**, **abstractions**, **reflection** and **asynchronous programming**
 * Ability to publish with **Azure**
 * Basic work with **SignalR**
 * Creating custom logos with **Photoshop**
-* Further understanding of **Entity Framework Core**
-* Further experience with **JavaScript**, **jQuery**, **AJAX** and **JSON**
-* Building my own custom **ORM Framework**
-* Incorporating **Facade Design Pattern**
-* Working with **AutoMapper**
-* Working with **Web API**
 
-# Further description
+# Business description
 
-* Double authentication process - authentication for user, then authentication for home
-* Home presence status, with ability to modify and set custom messages, informing other housemates
+* A platform where housemates keep track and communicate through their apartment/house
+* Double authentication process - user & home
 * Storage and traceability of inventory, hygiene tasks, chores and issues
-* Metadata for all objects. Commenting and image storing functionalities
+* Surveys functionality - grouping questions with answers, applying deadlines and participants status types (started/not started/completed a survey) 
+* Metainfo supported for business objects
+* Comment section functionality over business objects
+* Image storing functionality over business objects
+* Participation functionality over business objects
 * Home settings
-
-# Code base
-
-* `APPartment.Web.csproj` - controllers, views, startup, etc.
-* `APPartment.API.csproj` - all API controllers
-* `APPartment.Common.csproj` - configuration
-* `APPartment.Infrastructure.csproj` - base controllers (check out `BaseCRUDController.cs`), services (check out `BaseCRUDService.cs` and `MapperService.cs`), view models (DTOs), custom UI hint attributes, etc.
-* `APPartment.Data.csproj` - facade, server models, etc.
-* `APPartment.ORM.Framework.csproj` - `DaoContext.cs`, sql query provider, lambda expression to sql clause translator, declarations, attributes, etc.
-* `APPartment.Tests.csproj` - xUnit tests
-* `SQL` folder - all scripts in order to build the database
